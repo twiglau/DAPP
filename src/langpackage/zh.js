@@ -127,5 +127,13 @@ export const l = {
   number_error: "请输入正确的编号！",
   no_nft: "您还没有拥有NFT，请先去购买！",
   no_own: "您还没有此编号的NFT，请去全部里查询！",
-  price_error: "请输入正确的价格！"
+  price_error: "请输入正确的价格！",
+
+  Slippage_tolerance:'位移公差',
+  Transaction_deadline:'交易截止时间',
+  minute_swap:'分钟',
+  Interface_Settings:'接口设置',
+  Toggle_Audio_Mode:'切换音频模式',
+  swap_on:'开',
+  swap_off:'关',
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="vault_wrap">
-        <Spin class="global_loading" tip="loading" :spinning="false" size="large">
+        <a-spin class="global_loading" tip="loading" :spinning="false" size="large">
             <div class="lock_box">
                 <p class="go_back" @click="handleGoBack">
                     <img class="back_icon" src="../assets/arrow_left.svg" alt="">
@@ -97,16 +97,14 @@
                 <p class="tips_text">{{$t('l.bt_3_1')}}{{'poolName'}}{{$t('l.bt_3_2')}}</p>
                 <p class="tips_text">{{$t('l.bt_4')}}</p>
             </div>
-        </Spin>
+        </a-spin>
     </div>
 </template>
 <script>
 import countTo from 'vue-count-to';
-import { Spin } from 'ant-design-vue'
 export default {
     components: {
-        countTo,
-        Spin
+        countTo
     },
     computed: {
     },

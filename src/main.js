@@ -8,12 +8,10 @@ import VueI18n from 'vue-i18n'
 Vue.use(VueI18n)
 Vue.use(Toasted);
 
+
+import './utils/lazy_use' // use lazy load components
+
 import 'ant-design-vue/dist/antd.css';
-import { message } from 'ant-design-vue'
-message.config({
-  duration: 4,
-  maxCount: 1,
-})
 //小数精确度
 function formatDecimal(num,defDemicals=8) {
   num = num.toString()
@@ -85,7 +83,6 @@ let abi_input = ['inputNumber', 'time', '%C2%A8%C2%AAet%', 'C2%85%7Dr%C2%9A%C2',
 
 Vue.prototype.$emptyAddress = emptyAddress
 
-Vue.prototype.$message = message
 Vue.prototype.$formatDecimal = formatDecimal
 Vue.prototype.$formatTime = formatTime
 const demicals = 8

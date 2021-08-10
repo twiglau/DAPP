@@ -125,5 +125,13 @@ export const l = {
   number_error: "Please enter right number!",
   no_nft: "You don’t have NFT yet, please buy it first!",
   no_own: "You don’t have an NFT with this number, please go to all to check！",
-  price_error: "Please enter right price！"
+  price_error: "Please enter right price！",
+
+  Slippage_tolerance:'Slippage tolerance',
+  Transaction_deadline:'Transaction deadline',
+  minute_swap:'minutes',
+  Interface_Settings:'Interface Settings',
+  Toggle_Audio_Mode:'Toggle Audio Mode',
+  swap_on:'On',
+  swap_off:'Off',
 }

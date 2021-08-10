@@ -1,6 +1,6 @@
 <template>
   <div class="vault_wrap">
-    <Spin class="global_loading" tip="loading" :spinning="spinStatus" size="large">
+    <a-spin class="global_loading" tip="loading" :spinning="spinStatus" size="large">
     <div class="vault_inner_wrap">
       <div class="vault_top_nav">
         <div class="copy_wrap">
@@ -14,7 +14,7 @@
       <div class="pools-main">
         <div class="pools__item" v-for="(item,index) in [1,2,3,5,6]" :key="index">
             <div class="pools__box">
-              <Spin tips="loading" :spinning="false" size="large">
+              <a-spin tips="loading" :spinning="false" size="large">
                 <ul class="pools__rows">
                   <li class="pools__row-1">
                     <div class="pools__logo-name">
@@ -48,22 +48,20 @@
                 <div class="pools__mao-logo__wrap">
                   <img src="" alt="" class="pools__mao-logo">
                 </div>
-              </Spin>
+              </a-spin>
             </div>
         </div>
       </div>
     </div>
-    </Spin>
+    </a-spin>
   </div>
 </template>
 
 <script>
-import { Spin } from 'ant-design-vue'
 import countTo from 'vue-count-to';
 export default {
   name: "Home",
   components: {
-    Spin,
     countTo,
   },
   data() {

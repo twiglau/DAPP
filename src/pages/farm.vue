@@ -1,6 +1,6 @@
 <template>
   <div class="vault_wrap">
-    <Spin class="global_loading" tip="loading" :spinning="spinStatus" size="large">
+    <a-spin class="global_loading" tip="loading" :spinning="spinStatus" size="large">
     <div class="vault_inner_wrap">
       <div class="vault_top_nav">
         <ul class="vault_nav shadow">
@@ -18,7 +18,7 @@
       <div class="pools-main">
         <div class="pools__item" v-for="item in [1,2,3,4,5,6]" :key="item">
             <div class="pools__box">
-              <Spin tips="loading" :spinning="false" size="large">
+              <a-spin tips="loading" :spinning="false" size="large">
                 <ul class="pools__rows">
                   <li class="pools__row-1">
                     <div class="pools__logo-name">
@@ -51,11 +51,11 @@
                 <div class="pools__mao-logo__wrap">
                   <img src="" alt="" class="pools__mao-logo">
                 </div>
-              </Spin>
+              </a-spin>
             </div>
         </div>
       </div>
-      <Modal v-model="isModalShow" :footer="null" :width="!$store.state.accounts.isMobile ? '600px' : '90%'" @cancel="handleMCancel" :centered="true">
+      <a-modal v-model="isModalShow" :footer="null" :width="!$store.state.accounts.isMobile ? '600px' : '90%'" @cancel="handleMCancel" :centered="true">
         <div class="pools__dialog-inner pools__dialog-withdraw">
           <div class="pools__dialog__header">{{$t('l.withdrawal')}}</div>
           <ul class="pools__rows">
@@ -88,8 +88,8 @@
             </li>
           </ul>
         </div>
-      </Modal>
-      <Modal v-model="isModalShowSave" :footer="null" :width="!$store.state.accounts.isMobile ? '600px' : '90%'" @cancel="handleMCancel" :centered="true">
+      </a-modal>
+      <a-modal v-model="isModalShowSave" :footer="null" :width="!$store.state.accounts.isMobile ? '600px' : '90%'" @cancel="handleMCancel" :centered="true">
         <div class="pools__dialog-inner pools__dialog-deposite">
           <div class="pools__dialog__header">{{$t('l.deposit')}}</div>
           <ul class="pools__dialog__fields">
@@ -118,23 +118,19 @@
             </li>
           </ul>
         </div>
-      </Modal>
+      </a-modal>
     </div>
-    </Spin>
+    </a-spin>
   </div>
 </template>
 
 <script>
-import { Spin,Modal } from 'ant-design-vue'
 import countTo from 'vue-count-to';
 import Vue from 'vue'
-Vue.use(Modal)
 export default {
   name: "Home",
   components: {
-    Spin,
     countTo,
-    Modal
   },
   data() {
     return {
