@@ -6,42 +6,42 @@
         <div class="copy_wrap">
           <span class="copy_text">{{$t('l.invite_text')}}</span>
           <span class="link_text">
-            {{currentHref+'?address='+getActiveAccount}}
-            <img @click="handleCopyLink" class="invite_icon" alt="" src="../assets/invite_icon.svg">
+            邀请链接
+            <img @click="handleCopyLink" class="invite_icon" alt="" src="../assets/copy_link.png">
           </span>
         </div>
       </div>
       <div class="pools-main">
-        <div class="pools__item" v-for="(item,index) in daoPoolsLists" :key="index">
+        <div class="pools__item" v-for="(item,index) in [1,2,3,5,6]" :key="index">
             <div class="pools__box">
-              <Spin tips="loading" :spinning="item.isLoading" size="large">
+              <Spin tips="loading" :spinning="false" size="large">
                 <ul class="pools__rows">
                   <li class="pools__row-1">
                     <div class="pools__logo-name">
-                      <img class="pools__coin-logo" :src="'./static/token_icons/'+item.logo_url">
-                      <div class="pools__coin-name">{{item.poolName}}</div>
-                      <span class="bandge" :class="'bandge-'+item.lockDay">{{item.lockDay}}</span>
+                      <img class="pools__coin-logo" src="../assets/ETH_coin.png">
+                      <div class="pools__coin-name">dao2WFC-5</div>
+                      <span class="bandge" :class="'bandge-'+30">30</span>
                     </div>
                   </li>
                   <li class="pools__row pools__apy">
                     <div class="pools__labe-field">{{$t('l.nhsyl')}}</div>
-                    <div class="pools__apy-value"><countTo :endVal='item.apy/1' :duration='3000' :decimals="4" suffix="%"></countTo></div>
+                    <div class="pools__apy-value"><countTo :endVal='20.00' :duration='3000' :decimals="4" suffix="%"></countTo></div>
                   </li>
                   <li class="pools__row">
                     <div class="pools__labe-field">{{$t('l.lockDay')}}</div>
-                    <div class="pools__label-value pools__label-value--black">{{item.lockDay}} {{$t('l.days')}}</div>
+                    <div class="pools__label-value pools__label-value--black">30 {{$t('l.days')}}</div>
                   </li>
                   <li class="pools__row">
                     <div class="pools__labe-field">{{$t('l.deposited')}}</div>
-                    <div class="pools__label-value pools__label-value--black"><countTo :endVal='item.yourLock/1' :duration='3000' :decimals="2"></countTo></div>
+                    <div class="pools__label-value pools__label-value--black"><countTo :endVal='30000.00' :duration='3000' :decimals="2"></countTo></div>
                   </li>
                   <li class="pools__row">
                     <div class="pools__labe-field">{{$t('l.VL')}}</div>
-                    <div class="pools__label-value"><countTo :endVal='item.totalLock/1' :duration='3000' :decimals="2"></countTo></div>
+                    <div class="pools__label-value"><countTo :endVal='2000.0' :duration='3000' :decimals="2"></countTo></div>
                   </li>
                   <li class="pools__group-buttons">
                     <div class="pools__button-group">
-                      <button class="g-button pools__dialog__option g-button-heco-theme " @click="handleGoLock(item.index)">{{$t('l.goLock')}}</button>
+                      <button class="g-button pools__dialog__option g-button-heco-theme " @click="handleGoLock({})">{{$t('l.goLock')}}</button>
                     </div>
                   </li>
                 </ul>
@@ -58,11 +58,8 @@
 </template>
 
 <script>
-import { ethers } from 'ethers';
-import { mapGetters } from 'vuex'
 import { Spin } from 'ant-design-vue'
 import countTo from 'vue-count-to';
-import Web3 from 'web3'
 export default {
   name: "Home",
   components: {
@@ -73,14 +70,9 @@ export default {
     return {
       currentHref: window.location.origin+window.location.pathname,
       spinStatus: false,
-      daoPoolsLists: [],
-      contractDao: null,
-      mintTokenAddress: null,// addresses.MintToken[this.$store.state.accounts.mainChainID],
-      getDataInterVal: null,
-      setStoreDataInterval: null,
+     
       currentPoolID: -1,
       currentPoolIndex: -1,
-      WFC_USDT_LPAddress: ""
     }
   },
   computed: {
@@ -93,22 +85,9 @@ export default {
       e.target.classList.remove('tap')
     },
     handleCopyLink() {
-      if(!this.getActiveAccount) {
-        this.$message.error(this.$t('l.error_tips_unconnect'))
-        return
-      }
-      this.$copyText(this.currentHref+'#/dao?address='+this.getActiveAccount).then( () => {
-        this.$message.success('复制成功')
-      }, function () {
-        this.$message.error('复制失败,请重试！')
-      })
     },
     handleGoLock(index) {
-      if(this.getActiveAccount) {
-        this.$router.push({path: "/vault",query: {token: index}})
-      }else {
-        this.$message.error(this.$t('l.error_tips_unconnect'))
-      }
+      this.$router.push({path: "/vault",query: {token: index}})
     }
   },
   created() {
@@ -151,7 +130,7 @@ export default {
     width: 100%;
     height: 28px;
     line-height: 28px;
-    border: 1px solid #52CCC5;
+    border: 1px solid #43318C;
     border-radius: 14px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -167,6 +146,8 @@ export default {
     right: 12px;
     top: 4px;
     cursor: pointer;
+    width: 21px;
+    height: 21px;
   }
   .pools-main {
     width: calc(100% + 15px);
@@ -305,7 +286,7 @@ export default {
     height: 44px;
     outline: none;
     border: none;
-    background-color: rgb(81, 204, 197);
+    background-color: #43318C;
     border-radius: 22px;
     font-size: 14px;
     color: #fff;
@@ -315,8 +296,8 @@ export default {
   .g-button--normal {
     background-image: none;
     background-color: #fff;
-    color: rgb(81, 204, 197);
-    border: 1px solid rgb(81, 204, 197);
+    color: #43318C;
+    border: 1px solid #43318C;
   }
   .pools__mao-logo__wrap {
     position: absolute;
@@ -336,10 +317,10 @@ export default {
     opacity: .3;
   }
   .g-button:hover {
-    background-color: rgb(81, 204, 197);
+    background-color: #43318C;
   }
   .g-button--normal:hover{
-    background-color: rgb(81, 204, 197);
+    background-color: #43318C;
     color:#fff;
     border:none
   }
@@ -406,7 +387,7 @@ export default {
     padding: 0 10px;
     height: 32px;
     font-size: 14px;
-    color: rgb(81, 204, 197);
+    color: #43318C;
   }
   .pools__income-text {
     font-family: DINPro-Bold;

@@ -1,67 +1,53 @@
 <template>
   <div class="home_wrap">
-    <div class="top_banner_wrap white">
-      <img class="banner_img" :src="$store.state.accounts.isMobile ? ($i18n.locale == 'zh-CN' ? zh_banner_mobile : en_banner_mobile ) : ($i18n.locale == 'zh-CN' ? zh_banner_pc : en_banner_pc)" alt="">
+    <div class="top_banner_wrap">
+       <ul class="top_info" style="list-style:none;">
+         <li>Support multiple DeFi protocols.</li>
+         <li>find high-yielding projects within multiple DeFi protocols</li>
+         <li>to help users achieve higher returns.</li>
+       </ul>
     </div>
     <ul class="home_ul">
       <div id="homeDate">
         <table id="PCTable">
-          <tr>
+          <tr class="lightColor">
             <th>{{$t('l.home_n1')}}</th>
             <th>{{$t('l.home_n2')}}</th>
             <th>{{$t('l.home_n3')}}</th>
           </tr>
           <tr>
             <td>
-              <countTo :endVal='tvl/1' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              <countTo :endVal='10000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
             </td>
             <td>
-              <countTo :endVal='dopPrice/1' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              <countTo :endVal='20000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
             </td>
             <td>
-              <countTo :endVal='wfcPrice/1' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              <countTo :endVal='30000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
             </td>
           </tr>
         </table>
         <table id="mobileTable">
           <tr>
-            <th>{{$t('l.home_n1')}}</th>
+            <th class="lightColor">{{$t('l.home_n1')}}</th>
             <td>
-              <countTo :endVal='tvl/1' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              <countTo :endVal='40000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
             </td>
           </tr>
           <tr>
-            <th>{{$t('l.home_n2')}}</th>
+            <th class="lightColor">{{$t('l.home_n2')}}</th>
             <td>
-              <countTo :endVal='dopPrice/1' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              <countTo :endVal='50000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
             </td>
           </tr>
           <tr>
-            <th>{{$t('l.home_n3')}}</th>
+            <th class="lightColor">{{$t('l.home_n3')}}</th>
             <td>
-              <countTo :endVal='wfcPrice/1' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              <countTo :endVal='60000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
             </td>
           </tr>
         </table>
       </div>
-    </ul>
-    <ul class="valut_info_wrap">
-      <li class="valut_info_item">
-        <div><img class="jss90" src="../assets/home_icon1.svg" alt=""></div>
-        <div class="jss89">{{$t('l.home_icon1_text')}}</div>
-      </li>
-      <li class="valut_info_item">
-        <div><img class="jss90" src="../assets/home_icon2.svg" alt=""></div>
-        <div class="jss89">{{$t('l.home_icon2_text')}}</div>
-      </li>
-      <li class="valut_info_item">
-        <div><img class="jss90" src="../assets/home_icon3.svg" alt=""></div>
-        <div class="jss89">{{$t('l.home_icon3_text')}}</div>
-      </li>
-      <li class="valut_info_item">
-        <div><img class="jss90" src="../assets/home_icon4.svg" alt=""></div>
-        <div class="jss89">{{$t('l.home_icon4_text')}}</div>
-      </li>
     </ul>
     <div class="jss107">
       <div class="jss108 jss109">
@@ -74,10 +60,10 @@
             </p>
           </div>
           <div class="jss115">
-            <div class="jss117" v-for="(item,index) in dataListsDB" :key="index">
+            <div class="jss117">
               <div class="jss118">
-                <img class="jss119" :src="'./static/token_icons/'+item.logo_url" alt="">
-                <span class="jss121">{{item.tokenName}}</span>
+                <img class="jss119" src="../assets/ETH_coin.png" alt="">
+                <span class="jss121">ETH</span>
               </div>
               <div class="jss125">
                 <div>
@@ -101,11 +87,11 @@
             </p>
           </div>
           <div class="jss115">
-            <div class="jss117" v-for="(item,index) in dataListsLP" :key="index">
+            <div class="jss117">
               <div class="jss118">
-                <img class="jss119 jss120" :src="'./static/token_icons/'+item.logo_url" alt="">
-                <img class="jss119 jss120 jss_img2" :src="'./static/token_icons/'+item.logo_url2" alt="">
-                <span class="jss121 jss122">{{item.tokenName}}</span>
+                <img class="jss119 jss120" src="../assets/Libra_icon.png" alt="">
+                <img class="jss119 jss120 jss_img2" src="../assets/ETH_coin.png" alt="">
+                <span class="jss121 jss122">Ip Libra/ETH</span>
               </div>
               <div class="jss125">
                 <div>
@@ -120,34 +106,25 @@
         </div>
       </div>
     </div>
-    <div class="parter_wrap">
+    <!-- <div class="parter_wrap">
       <p class="p_title">{{$t('l.partner')}}</p>
       <ul class="parter_logo">
-        <li class="p_item"><img src="../assets/dapp4.svg" alt="bit"></li>
-        <li class="p_item"><img src="../assets/dapp5.svg" alt="bit"></li>
-        <li class="p_item"><img src="../assets/dapp6.svg" alt="bit"></li>
+        <li class="p_item"><img src="" alt="bit"></li>
+        <li class="p_item"><img src="" alt="bit"></li>
+        <li class="p_item"><img src="" alt="bit"></li>
       </ul>
     </div>
     <div class="parter_wrap2">
       <p class="p_title">{{$t('l.sjjg')}}</p>
       <ul class="parter_logo">
-        <a :href="$t('https://attest.im/attestation/searchResult?qurey=18f53a9bb3a54906b416c8ff67dd94ab')" target="_black"><img class="sjjg" src="../assets/lskj.jpg"></a>
+        <a :href="$t('https://attest.im/attestation/searchResult?qurey=18f53a9bb3a54906b416c8ff67dd94ab')" target="_black"><img class="sjjg" src=""></a>
       </ul>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
-const zh_banner_pc = require('../assets/top_banner_zh_pc.svg')
-const zh_banner_mobile = require('../assets/top_banner_zh_mobile.svg')
-const en_banner_pc = require('../assets/top_banner_en_pc.svg')
-const en_banner_mobile = require('../assets/top_banner_en_mobile.svg')
 import countTo from 'vue-count-to';
-import { mapGetters } from 'vuex';
-// import address from '../contracts/addresses.json'
-// import priceOracleJSON from '../contracts/priceOracle.json'
-import { ethers } from 'ethers';
-import Web3 from 'web3'
 export default {
   components: {
     countTo
@@ -156,18 +133,6 @@ export default {
   },
   data() {
     return {
-      zh_banner_pc,
-      zh_banner_mobile,
-      en_banner_pc,
-      en_banner_mobile,
-      dataListsDB: [],
-      dataListsLP: [],
-      address,
-      priceOracleAbi:null,// priceOracleJSON.abi,
-      tvl: 0,
-      dopPrice: 0,
-      wfcPrice: 0,
-      getDataInterVal: null
     }
   },
   methods: {
@@ -176,26 +141,31 @@ export default {
     },
   },
   mounted() {
-    // this.getPoolsData()
   },
   destroyed() {
-    clearInterval(this.getDataInterVal)
   }
 }
 </script>
 
 <style scoped>
   .top_banner_wrap {
-    background: rgba(255,255,255,0.60);
-    border: 1px solid #fff;
+    background: #4C3B92;
+    border: 1px solid #43318C;
     border-radius: 16px;
     max-width: 1200px;
     margin: 20px auto;
     height: 240px;
     overflow: hidden;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 20px;
+    padding: 30px 60px;
   }
-  .white{
-    background-color: white;
+  .top_info {
+    list-style: none;
+    padding: 30px 60px;
+  }
+  .top_banner-wrap li {
+    list-style: none;
   }
   .banner_img {
     width: 100%;
@@ -395,16 +365,14 @@ export default {
     -webkit-tap-highlight-color: transparent;
   }
   .jss126 {
-    color: rgba(53, 154, 108);
-    border: 1px solid;
+    color: #43318C;
     cursor: pointer;
     height: 32px;
     padding: 0 14px;
     font-size: 14px;
     min-width: 96px;
-    background: #FFF;
+    background: rgba(67, 49, 140, 0.1);
     font-weight: 700;
-    border-color: rgba(53, 154, 108);
     border-radius: 22px;
   }
   .jss126 .MuiButton-label {
@@ -552,7 +520,7 @@ export default {
     justify-content: center;
     align-items: center;
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
   }
   #mobileTable tr:first-child {
     width: 100%;
@@ -572,11 +540,14 @@ export default {
     width: 100%;
     max-width: 1200px;
     flex-wrap: wrap;
-    background: linear-gradient(-45deg,#98e0dc,#f4f7fa);
+    background: #4C3B92;
     border-radius: 8px;
     box-sizing: border-box;
     padding: 21px 32px;
-    color: #131D32;
+    color: white;
+  }
+  .lightColor {
+    color: rgba(255, 255, 255, 0.7);
   }
   #homeDate table {
     table-layout: fixed;
@@ -598,8 +569,16 @@ export default {
   }
   @media (max-width: 768px) {
     .top_banner_wrap {
-      margin: 20px 15px 20px;
-      height: 160px;
+      margin: 0px;
+      margin-top: -30px;
+      padding: 20px;
+      height: 100px;
+      font-size: 12px;
+      border-radius: 0px;
+      border: solid 1px transparent;
+    }
+    .top_info {
+      padding: 20px 0px;
     }
     .banner_img {
       max-height: 160px;
@@ -660,7 +639,7 @@ export default {
       margin-left: 0;
     }
     .jss126 {
-      color: rgba(53, 154, 108);
+      color: #43318C;
       border: none;
       height: 32px;
       padding: 0 12px;
@@ -668,7 +647,7 @@ export default {
       min-width: 70px;
       font-weight: 700;
       border-radius: 22px;
-      background-color: rgba(48,120,255,0.1);
+      background: rgba(67, 49, 140, 0.1);
     }
     .parter_wrap2 {
       padding-bottom: 0;
@@ -697,16 +676,19 @@ export default {
       padding-bottom: 24px;
     }
     #homeDate {
-      padding: 16px 9%;
-      border-radius: 24px;
-      margin: 0 15px 0;
+      padding: 16px 20px;
+      border-radius: 0px;
+      margin: 0 0px 0;
     }
     #homeDate td {
-      font-size: 20px;
+      font-size: 15px;
       font-weight: bolder;
     }
     #homeDate th {
-      text-align: center;
+      text-align: left;
+    }
+    #homeDate tr {
+      align-items: flex-start;
     }
     #PCTable {
       display: none;

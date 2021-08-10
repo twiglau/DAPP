@@ -274,7 +274,6 @@ const mutations = {
   setWeb3ModalInstance(state, w3mObject) {
     state.web3Modal = w3mObject;
   },
-
 };
 
 export default {

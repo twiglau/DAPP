@@ -1,6 +1,6 @@
 <template>
     <div class="vault_wrap">
-        <Spin class="global_loading" tip="loading" :spinning="spinStatus" size="large">
+        <Spin class="global_loading" tip="loading" :spinning="false" size="large">
             <div class="lock_box">
                 <p class="go_back" @click="handleGoBack">
                     <img class="back_icon" src="../assets/arrow_left.svg" alt="">
@@ -8,26 +8,26 @@
                 </p>
                 <div class="token_logo_wrap">
                     <img src="" alt="">
-                    <span class="bandge" :class="'bandge-5'">{{currentDaoInfo.lockDay}}</span>
-                    <span class="token_name">{{currentDaoInfo.poolName}}</span>
+                    <span class="bandge" :class="'bandge-5'">5</span>
+                    <span class="token_name">xxxxxxxName</span>
                 </div>
                 <ul class="data_wrap">
                     <li class="data_item">
                         <span class="data_title">{{$t('l.totalLock')}}</span>
                         <span class="data_value">
-                            <countTo :endVal='currentDaoInfo.totalLock/1' :duration='3000' :decimals="2"></countTo>
+                            <countTo :endVal='10000.00' :duration='3000' :decimals="2"></countTo>
                         </span>
                     </li>
                     <li class="data_item">
                         <span class="data_title">{{$t('l.rcl')}}</span>
                         <span class="data_value">
-                            <countTo :endVal='currentDaoInfo.rcl/1' :duration='3000' :decimals="0"></countTo>
+                            <countTo :endVal='3000.00' :duration='3000' :decimals="0"></countTo>
                         </span>
                     </li>
                     <li class="data_item">
                         <span class="data_title">{{$t('l.nhsyl')}}</span>
                         <span class="data_value">
-                            <countTo :endVal='currentDaoInfo.apy/1' :duration='3000' :decimals="4" suffix="%"></countTo>
+                            <countTo :endVal='2000.00' :duration='3000' :decimals="4" suffix="%"></countTo>
                         </span>
                     </li>
                 </ul>
@@ -42,13 +42,13 @@
                                 <p class="title_wrap_left">
                                     <span class="title_text">{{$t('l.wbalance')}}</span>
                                     <span class="title_val">
-                                        <countTo :endVal='wBalance/1' :duration='3000' :decimals="2"></countTo>
+                                        <countTo :endVal='0.00' :duration='3000' :decimals="2"></countTo>
                                     </span>
                                 </p>
                                 <p class="title_wrap_right">
                                     <span class="title_text">{{$t('l.myLocked')}}</span>
                                     <span class="title_val">
-                                        <countTo :endVal='currentDaoInfo.yourLock/1' :duration='3000' :decimals="2"></countTo>
+                                        <countTo :endVal='100.00' :duration='3000' :decimals="2"></countTo>
                                     </span>
                                 </p>
                             </div>
@@ -57,8 +57,8 @@
                                     <input class="ipt_ele" @input="input_num(1)" v-model="iptValue1" type="number" placeholder="0">
                                     <span class="ipt_bandge" @click="handleDoMax(1)">{{$t('l.max')}}</span>
                                 </div>
-                                <div class="c_btn" v-if="!isApproved" @click="handleApprove"><img class="btn_icon" src="../assets/approve_icon.svg" alt=""> {{$t('l.approve')}}</div>
-                                <div class="c_btn" v-else @click="handleDeposit"><img class="btn_icon" src="../assets/approve_icon.svg" alt=""> {{$t('l.goLock')}}</div>
+                                <div class="c_btn" @click="handleApprove"><img class="btn_icon" src="../assets/approve_icon.svg" alt=""> {{$t('l.approve')}}</div>
+                                <div class="c_btn" @click="handleDeposit"><img class="btn_icon" src="../assets/approve_icon.svg" alt=""> {{$t('l.goLock')}}</div>
                             </div>
                         </li>
                     </ul>
@@ -68,20 +68,19 @@
                                 <p class="title_wrap_left">
                                     <span class="title_text">{{$t('l.avaliable')}}</span>
                                     <span class="title_val">
-                                        <countTo :endVal='currentDaoInfo.getNum/1' :duration='3000' :decimals="2"></countTo>
+                                        <countTo :endVal='300.00' :duration='3000' :decimals="2"></countTo>
                                     </span>
                                 </p>
                                 <p class="title_wrap_right">
                                     <span class="title_text">{{$t('l.myLocked')}}</span>
                                     <span class="title_val">
-                                        <countTo :endVal='currentDaoInfo.yourLock/1' :duration='3000' :decimals="2"></countTo>
+                                        <countTo :endVal='200.00' :duration='3000' :decimals="2"></countTo>
                                     </span>
                                 </p>
                                 <div class="clear"></div>
                                 <p class="title_wrap_right">
                                     <span class="title_text">{{$t('l.lockTime')}}</span>
-                                    <span class="title_val">{{currentDaoInfo.yourLock == 0 ? $t('l.noLock') : currentDaoInfo.lockTime}}</span>
-                                    <!-- <span class="title_val"><countTo :endVal='currentDaoInfo.yourLock == 0 ? currentDaoInfo.lockTime  : currentDaoInfo.lockTime' :duration='3000' :decimals="2"></countTo></span> -->
+                                    <span class="title_val">时间状态</span>
                                 </p>
                             </div>
                             <div class="ipt_div">
@@ -93,9 +92,9 @@
             </div>
             <div class="tips_box">
                 <p class="tips_title">{{$t('l.bt_t')}}</p>
-                <p class="tips_text">{{$t('l.bt_1_1')}}{{currentDaoInfo.poolName}}{{$t('l.bt_1_2')}}</p>
-                <p class="tips_text">{{$t('l.bt_2_1')}}{{currentDaoInfo.lockDay}}{{$t('l.bt_2_2')}}</p>
-                <p class="tips_text">{{$t('l.bt_3_1')}}{{currentDaoInfo.poolName}}{{$t('l.bt_3_2')}}</p>
+                <p class="tips_text">{{$t('l.bt_1_1')}}{{'poolName'}}{{$t('l.bt_1_2')}}</p>
+                <p class="tips_text">{{$t('l.bt_2_1')}}{{'锁仓天数'}}{{$t('l.bt_2_2')}}</p>
+                <p class="tips_text">{{$t('l.bt_3_1')}}{{'poolName'}}{{$t('l.bt_3_2')}}</p>
                 <p class="tips_text">{{$t('l.bt_4')}}</p>
             </div>
         </Spin>
@@ -103,10 +102,7 @@
 </template>
 <script>
 import countTo from 'vue-count-to';
-import { ethers } from 'ethers';
-import { mapGetters } from 'vuex'
 import { Spin } from 'ant-design-vue'
-import Web3 from 'web3'
 export default {
     components: {
         countTo,
@@ -116,37 +112,18 @@ export default {
     },
     data() {
         return {
-            spinStatus: false,
             currentIndex: 0,
             currentDaoIndex: undefined,
             navArr: ['deposit1', 'withdrawal1'],
-            daoPoolsLists: [],
-            currentDaoInfo: {
-                index: "",
-                address: "",
-                poolName: "",
-                logo_url: "",
-                lockDay: 0,
-                apy: 0,
-                yourLock: 0,
-                totalLock: 0,
-                rcl: 0,
-                lockTime: 0,
-                getNum: 0,
-            },
-            wBalance: 0,
-            available: 0,
             isApproved: false,
-            setStoreDataInterval: null,
-            getPageDataInterVal: null,
-            getAccountDataInterVal: null,
             iptValue1: undefined,
-            canWithDrawAmount: 10,
             canWithDraw: false,
-            WFC_USDT_LPAddress: ""
         }
     },
     methods: {
+        handleApprove(){},
+        handleDeposit(){},
+        handleWithDraw(){},
         handleContChange(index) {
             this.currentIndex = index
         },
@@ -154,9 +131,7 @@ export default {
             this.$router.push('/dao')
         },
         handleDoMax(index) {
-            if (index == 1) {
-                this.iptValue1 = this.wBalance
-            }
+            
         },
         input_num(index) {
             this['iptValue' + index] = this['iptValue' + index].replace(/[^\d.]/g, "")
@@ -182,12 +157,6 @@ export default {
         }
     },
     mounted() {
-        this.currentDaoIndex = this.$route.query.token
-        if (this.currentDaoIndex !== undefined && this.currentDaoIndex !== '') {
-            
-        } else {
-            this.$router.push('/dao')
-        }
     },
     created() {
     },
@@ -200,7 +169,6 @@ export default {
     width: 100%;
     clear: both;
 }
-
 .lock_box {
     width: 60%;
     max-width: 860px;
@@ -234,7 +202,6 @@ export default {
     margin-top: 32px;
     position: relative;
 }
-
 .bandge {
     position: absolute;
     width: 30px;
@@ -300,7 +267,7 @@ export default {
     height: 100%;
     position: absolute;
     z-index: 1;
-    background-color: rgb(81, 204, 197);
+    background-color: #43318C;
     border-radius: 100px;
     transition: 0.5s;
 }
@@ -393,7 +360,7 @@ export default {
     padding: 4px 24px;
     background-color: #E0EAFA;
     border-radius: 16px;
-    color: #52CCC5;
+    color: #43318C;
     top: 13px;
     right: 24px;
     cursor: pointer;
@@ -403,7 +370,7 @@ export default {
     width: 200px;
     height: 54px;
     cursor: pointer;
-    background-color: #52CCC5;
+    background-color: #43318C;
     margin-left: 8px;
     border-radius: 27px;
     display: flex;

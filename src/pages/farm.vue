@@ -8,43 +8,43 @@
           <div id="donghuaBox" :style="{left:currentIndex*50+'%'}"></div>
         </ul>
         <div class="copy_wrap">
-          <span class="copy_text">{{$t('l.invite_text')}}</span>
+          <span class="copy_text" v-if="!$store.state.accounts.isMobile">{{$t('l.invite_text')}}</span>
           <span class="link_text">
-            {{currentHref+'?address='+getActiveAccount}}
-            <img @click="handleCopyLink" class="invite_icon" alt="" src="../assets/invite_icon.svg">
+            邀请链接
+            <img @click="handleCopyLink" class="invite_icon" alt="" src="../assets/copy_link.png">
           </span>
         </div>
       </div>
       <div class="pools-main">
-        <div class="pools__item" v-for="(item,index) in poolsLists" :key="index">
+        <div class="pools__item" v-for="item in [1,2,3,4,5,6]" :key="item">
             <div class="pools__box">
-              <Spin tips="loading" :spinning="item.isLoading" size="large">
+              <Spin tips="loading" :spinning="false" size="large">
                 <ul class="pools__rows">
                   <li class="pools__row-1">
                     <div class="pools__logo-name">
-                      <img class="pools__coin-logo" :src="'./static/token_icons/'+item.logo_url">
-                      <img v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" :src="'./static/token_icons/'+item.logo_url2">
-                      <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">{{item.tokenName}}</div>
+                      <img class="pools__coin-logo" src="../assets/ETH_coin.png">
+                      <img v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" src="../assets/Libra_icon.png">
+                      <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">ETH</div>
                     </div>
-                    <div class="pools__info">{{$t('l.reward')}} WFC</div>
+                    <div class="pools__info">{{$t('l.reward')}} Libra</div>
                   </li>
                   <li class="pools__row pools__apy">
                     <div class="pools__labe-field">{{$t('l.nhsyl')}}</div>
-                    <div class="pools__apy-value"><countTo :endVal='item.apy/1' :duration='3000' :decimals="4" suffix="%"></countTo></div>
+                    <div class="pools__apy-value"><countTo :endVal='2.5434333' :duration='3000' :decimals="4" suffix="%"></countTo></div>
                   </li>
                   <li class="pools__row">
-                    <div class="pools__labe-field">{{$t('l.deposited')}}({{item.tokenName}})</div>
-                    <div class="pools__label-value pools__label-value--black"><countTo :endVal='item.deposited/1' :duration='3000' :decimals="4"></countTo></div>
+                    <div class="pools__labe-field">{{$t('l.deposited')}}(ETH)</div>
+                    <div class="pools__label-value pools__label-value--black"><countTo :endVal='0.000000' :duration='3000' :decimals="4"></countTo></div>
                   </li>
                   <li class="pools__row">
-                    <div class="pools__labe-field">{{$t('l.VL')}}({{item.tokenName}})</div>
-                    <div class="pools__label-value"><countTo :endVal='item.lock/1' :duration='3000' :decimals="2"></countTo></div>
+                    <div class="pools__labe-field">{{$t('l.VL')}}(ETH)</div>
+                    <div class="pools__label-value"><countTo :endVal='40000.00' :duration='3000' :decimals="2"></countTo></div>
                   </li>
                   <li class="pools__group-buttons">
                     <div class="pools__button-group">
-                      <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal(item.index)">{{$t('l.withdrawal')}}</button>
-                      <button v-if="!item.isApproved" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.index)">{{$t('l.approve')}}</button>
-                      <button v-else class="g-button pools__dialog__option g-button-heco-theme " @click="handleShowDepositModal(item.index)">{{$t('l.deposit')}}</button>
+                      <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal({})">{{$t('l.withdrawal')}}</button>
+                      <button class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(0)">{{$t('l.approve')}}</button>
+                      <button class="g-button pools__dialog__option g-button-heco-theme " @click="handleShowDepositModal(0)">{{$t('l.deposit')}}</button>
                     </div>
                   </li>
                 </ul>
@@ -61,30 +61,30 @@
           <ul class="pools__rows">
             <li class="pools__row-1">
               <div class="pools__logo-name">
-                <img class="pools__coin-logo" :src="currentPoolIndex > -1 ? ('./static/token_icons/'+poolsLists[currentPoolIndex].logo_url) : ''">
-                <img v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" :src="currentPoolIndex > -1 ? ('./static/token_icons/'+poolsLists[currentPoolIndex].logo_url2) : ''">
-                <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">{{currentPoolIndex > -1 ? poolsLists[currentPoolIndex].tokenName : ''}}</div>
+                <img class="pools__coin-logo" src="../assets/ETH_coin.png">
+                <img v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" src="../assets/Libra_icon.png">
+                <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">ETH</div>
               </div>
-              <div class="pools__info">{{$t('l.reward')}} WFC</div>
+              <div class="pools__info">{{$t('l.reward')}} Libra</div>
             </li>
             <li class="pools__income-field">
               <div class="pools__income-label">
                 <p class="pools__income-title">{{$t('l.sygz')}}</p>
-                <p class="pools__income-text"><countTo :endVal='incomeAmount/1' :duration='3000' :decimals="4"></countTo> WFC</p>
+                <p class="pools__income-text"><countTo :endVal='1000.00' :duration='3000' :decimals="4"></countTo> Libra</p>
               </div>
               <div class="pools__income-button">
-                <button @click="handleClaim" :disabled="incomeAmount/1 <= 0" class="g-button g-button-heco-theme ">{{$t('l.claim')}}</button>
+                <button @click="handleClaim" class="g-button g-button-heco-theme ">{{$t('l.claim')}}</button>
               </div>
             </li>
             <li class="pools__dialog__withdraw-field">
-              <span>{{$t('l.deposited')}}({{currentPoolIndex > -1 ? poolsLists[currentPoolIndex].tokenName : ''}})</span><span><countTo :endVal='(currentPoolIndex > -1 ? poolsLists[currentPoolIndex].deposited : 0)/1' :duration='3000' :decimals="4"></countTo></span>
+              <span>{{$t('l.deposited')}}({{currentPoolIndex > -1 ? 'ETH' : ''}})</span><span><countTo :endVal='10000.00' :duration='3000' :decimals="4"></countTo></span>
             </li>
             <li class="pools__dialog__input">
               <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
-              <button @click="handleWithAll" :disabled="(currentPoolIndex > -1 ? poolsLists[currentPoolIndex].deposited : 0) <= 0" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.withdrawall')}}</button>
+              <button @click="handleWithAll" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.withdrawall')}}</button>
             </li>
             <li>
-              <button @click="handleWithDraw" :disabled="(currentPoolIndex > -1 ? poolsLists[currentPoolIndex].deposited : 0) <= 0" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.withdrawal')}}</button>
+              <button @click="handleWithDraw" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.withdrawal')}}</button>
             </li>
           </ul>
         </div>
@@ -95,26 +95,26 @@
           <ul class="pools__dialog__fields">
             <li class="pools__row-1">
               <div class="pools__logo-name">
-                <img class="pools__coin-logo" :src="currentPoolIndex > -1 ? ('./static/token_icons/'+poolsLists[currentPoolIndex].logo_url) : ''">
-                <img v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" :src="currentPoolIndex > -1 ? ('./static/token_icons/'+poolsLists[currentPoolIndex].logo_url2) : ''">
-                <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">{{currentPoolIndex > -1 ? poolsLists[currentPoolIndex].tokenName : ''}}</div>
+                <img class="pools__coin-logo" src="../assets/ETH_coin.png">
+                <img v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" src="../assets/Libra_icon.png">
+                <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">ETH</div>
               </div>
-              <div class="pools__info">{{$t('l.reward')}} WFC</div>
+              <div class="pools__info">{{$t('l.reward')}} Libra</div>
             </li>
             <li class="pools__row">
-              <div class="pools__labe-field">{{$t('l.deposited')}} ({{currentPoolIndex > -1 ? poolsLists[currentPoolIndex].tokenName : ''}})</div>
-              <div class="pools__label-value pools__label-value--black"><countTo :endVal='(currentPoolIndex > -1 ? poolsLists[currentPoolIndex].deposited : 0)/1' :duration='3000' :decimals="4"></countTo></div>
+              <div class="pools__labe-field">{{$t('l.deposited')}} (ETH)</div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='1000.00' :duration='3000' :decimals="4"></countTo></div>
             </li>
             <li class="pools__row">
-              <div class="pools__labe-field">{{$t('l.balance')}}({{currentPoolIndex > -1 ? poolsLists[currentPoolIndex].tokenName : ''}})</div>
-              <div class="pools__label-value pools__label-value--black"><countTo :endVal='currentAccountBalance/1' :duration='3000' :decimals="4"></countTo></div>
+              <div class="pools__labe-field">{{$t('l.balance')}}(ETH)</div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='1000.0' :duration='3000' :decimals="4"></countTo></div>
             </li>
             <li class="pools__dialog__input">
               <input @input="input_num(2)" :placeholder="$t('l.iptPlace')" v-model="iptValue2">
-              <button :disabled="currentAccountBalance <= 0" @click="handleDepositAll" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.depositall')}}</button>
+              <button @click="handleDepositAll" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.depositall')}}</button>
             </li>
             <li>
-              <button :disabled="currentAccountBalance <= 0" @click="handleDepositConfirm" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.deposit')}}</button>
+              <button @click="handleDepositConfirm" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.deposit')}}</button>
             </li>
           </ul>
         </div>
@@ -125,14 +125,10 @@
 </template>
 
 <script>
-import { ethers } from 'ethers';
-import { mapGetters } from 'vuex'
 import { Spin,Modal } from 'ant-design-vue'
 import countTo from 'vue-count-to';
-import Web3 from 'web3'
 import Vue from 'vue'
 Vue.use(Modal)
-// import addresses from '../contracts/addresses.json'
 export default {
   name: "Home",
   components: {
@@ -148,16 +144,9 @@ export default {
       isModalShowSave: false,
       currentIndex: 0,   //0 单币  1 lp
       navArr: ['db','lp'],
-      poolsLists: [],
-      stakeAddress:null,// addresses.StakingPools[this.$store.state.accounts.mainChainID],
-      oracleAddress:null,// addresses.oracle[this.$store.state.accounts.mainChainID],
-      contractStake: null,
       iptValue: undefined,
-      getDataInterVal: null,
-      setStoreDataInterval: null,
       currentPoolID: -1,
       currentPoolIndex: -1,
-      currentAccountBalance: 0,
       incomeAmount: 0,
       iptValue1: undefined,
       iptValue2: undefined,
@@ -175,24 +164,11 @@ export default {
     handleContChange(index) {
       this.$setCookie('vault',index/1,30 * 24 * 60 * 60);
       this.currentIndex = index
-      clearInterval(this.getDataInterVal)
-      this.getPoolsData(this.currentIndex+1)
     },
     handleCopyLink() {
-      if(!this.getActiveAccount) {
-        this.$message.error(this.$t('l.error_tips_unconnect'))
-        return
-      }
-      this.$copyText(this.currentHref+'#/farm?address='+this.getActiveAccount).then( () => {
-        this.$message.success('复制成功')
-      }, function () {
-        this.$message.error('复制失败,请重试！')
-      })
     },
     handleMCancel() {
       this.currentPoolIndex = -1;
-      this.currentPoolID = -1
-      this.currentAccountBalance = 0
       this.incomeAmount = 0
       this.iptValue1 = undefined
       this.iptValue2 = undefined
@@ -200,18 +176,18 @@ export default {
     async handleApprovedFor(index) {
     },
     async handleShowWithdrawModal(index) {
+      this.isModalShow = true
     },
     async handleClaim() {
     },
     handleWithAll() {
-      this.iptValue1 = this.poolsLists[this.currentPoolIndex].deposited
     },
     async handleWithDraw() {
     },
     async handleShowDepositModal(index) {
+      this.isModalShowSave = true
     },
     handleDepositAll() {
-      this.iptValue2 = this.currentAccountBalance
     },
     async handleDepositConfirm() {
     },
@@ -232,10 +208,6 @@ export default {
   created() {
   },
   async mounted() {
-    let inviteAddress = this.$route.query.address ? this.$route.query.address : ''
-    if(inviteAddress) {
-      this.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)
-    }
     let ptype = this.$route.query.ptype ? this.$route.query.ptype : 1
     if(ptype !== undefined) {
       this.handleContChange(ptype - 1)
@@ -256,6 +228,7 @@ export default {
   .vault_top_nav {
     width: 100%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
   }
   .copy_wrap {
@@ -272,7 +245,7 @@ export default {
     width: 100%;
     height: 28px;
     line-height: 28px;
-    border: 1px solid #52CCC5;
+    border: 1px solid #43318C;
     border-radius: 14px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -288,13 +261,15 @@ export default {
     right: 12px;
     top: 4px;
     cursor: pointer;
+    width: 21px;
+    height: 21px;
   }
   #donghuaBox{
     width: 50%;
     height: 100%;
     position: absolute;
     z-index: 1;
-    background-color: rgb(81, 204, 197);
+    background-color: #43318C;
     border-radius: 100px;
     transition: 0.5s;
   }
@@ -435,7 +410,7 @@ export default {
   }
   .pools__apy-value {
     font-size: 24px;
-    color: #00b595;
+    color: #19A569;
     font-weight: 700;
     font-family: DINPro-Black;
   }
@@ -463,7 +438,7 @@ export default {
     height: 44px;
     outline: none;
     border: none;
-    background-color: rgb(81, 204, 197);
+    background-color: #43318C;
     border-radius: 22px;
     font-size: 14px;
     color: #fff;
@@ -473,8 +448,8 @@ export default {
   .g-button--normal {
     background-image: none;
     background-color: #fff;
-    color: rgb(81, 204, 197);
-    border: 1px solid rgb(81, 204, 197);
+    color: #43318C;
+    border: 1px solid #43318C;
   }
   .pools__mao-logo__wrap {
     position: absolute;
@@ -494,10 +469,10 @@ export default {
     opacity: .3;
   }
   .g-button:hover {
-    background-color: rgb(81, 204, 197);
+    background-color: #43318C;
   }
   .g-button--normal:hover{
-    background-color: rgb(81, 204, 197);
+    background-color: #43318C;
     color:#fff;
     border:none
   }
@@ -564,7 +539,7 @@ export default {
     padding: 0 10px;
     height: 32px;
     font-size: 14px;
-    color: rgb(81, 204, 197);
+    color: #43318C;
   }
   .pools__income-text {
     font-family: DINPro-Bold;
@@ -583,9 +558,9 @@ export default {
   }
   @media (max-width: 768px) {
     .vault_nav {
+      margin-left: 15px;
       font-size: 12px;
       width: 94%;
-      margin: 24px auto 16px;
     }
     .pools-main {
       width: 100%;
@@ -639,12 +614,16 @@ export default {
     .pools__income-field {
       padding: 10px 10px;
     }
-    .vault_top_nav {
+    /* .vault_top_nav {
       flex-direction: column;
-    }
+    } */
     .copy_wrap {
-      order: -1;
-      margin: 0;
+      margin: 0px 15px 0px 30px;
+      height: 28px;
+      padding: 0px;
+    }
+    .copy_wrap .link_text {
+      margin-left: 0px;
     }
   }
 </style>

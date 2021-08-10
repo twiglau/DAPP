@@ -2,9 +2,6 @@
   <div id="app">
     <Header />
     <Footer />
-    <!-- <keep-alive>
-      
-    </keep-alive> -->
     <router-view class="route_view" :class="!getIsMainChainID ? 'pt_more' : ''"/>
   </div>
 </template>
