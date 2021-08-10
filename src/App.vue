@@ -8,27 +8,23 @@
 
 <script>
 import Header from './components/Header'
-// import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import { mapGetters } from 'vuex'
 export default {
   name: 'App',
   components: {
-    // Navbar,
     Header,
     Footer
   },
   data() {
     return {
+      getIsMainChainID:false
     }
   },
   methods: {
   },
   computed: {
-    ...mapGetters('accounts',['getIsMainChainID']),
   },
   mounted() {
-    this.$store.dispatch('accounts/getMainChainID');
   }
 }
 </script>
@@ -48,10 +44,10 @@ div {
 ul {margin: 0;padding: 0;}
 #app {
   min-height: 100vh;
-  background-color: rgb(244, 247, 250);
+  background-color: #F5F5F5;
   position: relative;
   padding-bottom: 80px;
-  background-image: url('./assets/h_bg.png');
+  /* background-image: url('./assets/h_bg.png'); */
   background-size: 100% auto;
   background-position: center bottom;
   background-repeat: no-repeat;
@@ -90,56 +86,7 @@ ul {margin: 0;padding: 0;}
   border-radius: 50%;
   padding: 2px;
 }
-/* 全局按钮 */
-.operate_btn {
-  width: 100%;
-  height: 44px;
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(45deg,#0066FF,#009FFF);
-  border-radius: 22px;
-  font-size: 18px;
-  box-shadow: 0 2px 0 rgba(0,0,0,.32),0 2px 0 #0066FF;
-  cursor: pointer;
-  margin-bottom: 16px;
-}
-.operate_btn:last-child {
-  margin-bottom: 0;
-}
-.operate_btn:hover {
-  background: linear-gradient(45deg,#5199ff,#52baff);
-}
-.operate_btn:active {
-  background: linear-gradient(45deg,#0059d6,#0082d6);
-  box-shadow: none;
-}
-/* 小按钮 */
-.v_btn_ele {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 44px;
-  white-space: nowrap;
-  padding: 0 24px;
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: bolder;
-  border-radius: 22px;
-  background: linear-gradient(45deg,#0066FF,#009FFF);
-  box-shadow: 0 2px 0 rgba(0,0,0,.32),0 2px 0 #0066FF;
-  margin-left: 4px;
-}
-.v_btn_ele:hover {
-  color: #ffffff;
-  background: linear-gradient(45deg,#5199ff,#52baff);
-}
-.v_btn_ele:active {
-  color: #ffffff;
-  background: linear-gradient(45deg,#0059d6,#0082d6);
-  box-shadow: none;
-}
+
   /* 全局input */
   .ipt_ele {
     width: 100%;
@@ -172,33 +119,6 @@ ul {margin: 0;padding: 0;}
     text-align: center;
     border-end-end-radius: 22px;
     border-start-end-radius: 22px;
-  }
-/* 百分比显示器 */
-.per_ul {
-  list-style: none;
-  display: flex;
-  margin-top: 20px;
-  margin-bottom: 24px!important;
-}
-.per_ul li {
-  width: 78px;
-  height: 26px;
-  line-height: 24px;
-  border: 1px solid #0066FF;
-  border-radius: 14px;
-  color: #0066FF;
-  font-size: 14px;
-  cursor: pointer;
-  margin-right: 8px;
-  text-align: center;
-}
-.per_ul li:hover {
-  background-color: #0066FF;
-  color: #fff;
-}
-.per_ul li.active {
-  background-color: #0055d6;
-  color: #fff;
 }
 /* 一级大标题 */
 .t_h0 {
@@ -232,24 +152,7 @@ ul {margin: 0;padding: 0;}
   .route_view.pt_more {
     padding: 146px 0 64px 0;
   }
-  /* 全局按钮 */
-  .operate_btn {
-    height: 32px;
-    line-height: 32px;
-    font-size: 16px;
-  }
-  .operate_btn:hover {
-    background: linear-gradient(45deg,#0066FF,#009FFF);
-    box-shadow: 0 2px 0 rgba(0,0,0,.32),0 2px 0 #0066FF;
-  }
-  .operate_btn:active {
-    background: linear-gradient(45deg,#0066FF,#009FFF);
-    box-shadow: 0 2px 0 rgba(0,0,0,.32),0 2px 0 #0066FF;
-  }
-  .operate_btn.tap {
-    background: linear-gradient(45deg,#0059d6,#0082d6);
-    box-shadow: none;
-  }
+  
   /* 输入框 */
   .ipt_ele {
     font-size: 14px;
@@ -259,24 +162,6 @@ ul {margin: 0;padding: 0;}
     height: 32px;
     line-height: 32px;
     font-size: 16px;
-  }
-  /* 小按钮 */
-  .v_btn_ele {
-    height: 32px;
-    font-size: 14px;
-    padding: 0 12px;
-  }
-  .v_btn_ele:hover {
-    background: linear-gradient(45deg,#0066FF,#009FFF);
-    box-shadow: 0 2px 0 rgba(0,0,0,.32),0 2px 0 #0066FF;
-  }
-  .v_btn_ele:active {
-    background: linear-gradient(45deg,#0066FF,#009FFF);
-    box-shadow: 0 2px 0 rgba(0,0,0,.32),0 2px 0 #0066FF;
-  }
-  .v_btn_ele.tap {
-    background: linear-gradient(45deg,#0059d6,#0082d6);
-    box-shadow: none;
   }
   /* 标题字体大小 */
   .t_h0 {
