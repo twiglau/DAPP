@@ -14,7 +14,8 @@
         </ul>
       </div>
       <div class="right_nav">
-        <a @touchstart="handleTapStart" @touchend="handleTapEnd" class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"  @click="handleConnectWeb3Modal"><span class="c_btn_text">{{$t('l.cwallet')}}</span></a>
+        <a v-show="showConnectBtn" @touchstart="handleTapStart" @touchend="handleTapEnd" class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"  @click="handleConnectWeb3Modal"><span class="c_btn_text">{{$t('l.cwallet')}}</span></a>
+        <a v-show="!showConnectBtn" class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"><span class="c_btn_text">{{walletAddress}}</span></a>
         <a class="lang_change" @click="showLangBox" :class="currentIndex == 1 ? 'c_bg':''" ><i class="icon"></i>{{this.lanc}}
           <div id="languageBox" v-show="languageShow" >
             <li :class="this.$i18n.locale == 'en-US' ? 'active' : ''" @click.stop.prevent="changeLangType(1)">English</li>
@@ -27,117 +28,135 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      currentIndex: 3,
-      languageShow: false,
-      lanc:'简体中文',
-      currentHost: ''
-    }
-  },
-  methods: {
-    switchMenu() {
-      this.$store.dispatch('accounts/changeMenuStatus')
-    },
-    showLangBox(){
-      this.languageShow = !this.languageShow;
-    },
-    setLan(){
-      if (this.getLangType == 'zh-CN') {
-        this.lanc = "简体中文";
-      }else if(this.getLangType == 'en-US'){
-        this.lanc = "English";
+
+  import Vue from 'vue'
+  import Web3 from 'web3'
+  import Wallet from '@/utils/Wallet.js'
+
+  export default {
+    data() {
+      return {
+        currentIndex: 3,
+        languageShow: false,
+        lanc:'简体中文',
+        currentHost: '',
+        showConnectBtn: true,
+        walletAddress:'',
       }
     },
-    setCookie(key,value){
+    methods: {
+      switchMenu() {
+        this.$store.dispatch('accounts/changeMenuStatus')
+      },
+      showLangBox(){
+        this.languageShow = !this.languageShow;
+      },
+      setLan(){
+        if (this.getLangType == 'zh-CN') {
+          this.lanc = "简体中文";
+        }else if(this.getLangType == 'en-US'){
+          this.lanc = "English";
+        }
+      },
+      setCookie(key,value){
         var oDate=new Date();
         oDate.setDate(oDate.getDate()+36000);
         document.cookie=key+"="+value+"; expires="+oDate.toDateString();
-    },
-    changeLangType(type) {
-      console.log(type)
-      var llWYf='';
-      if (type == 1) {
-        this.$i18n.locale = 'en-US';
-        this.lanc = "English";
-        llWYf = 'en';
-      }else if (type == 2) {
-        this.$i18n.locale = 'zh-CN';
-        this.lanc = "简体中文";
-        llWYf = 'zh-CN';
+      },
+      changeLangType(type) {
+        console.log(type)
+        var llWYf='';
+        if (type == 1) {
+          this.$i18n.locale = 'en-US';
+          this.lanc = "English";
+          llWYf = 'en';
+        }else if (type == 2) {
+          this.$i18n.locale = 'zh-CN';
+          this.lanc = "简体中文";
+          llWYf = 'zh-CN';
+        }
+        this.showLangBox();
+        // this.$i18n.locale = this.getLangType == 'zh-CN' ? 'en-US' : 'zh-CN'
+        this.$store.commit('accounts/setLangType',this.$i18n.locale)
+        localStorage.setItem('langType',this.$i18n.locale);
+        this.setCookie('pipipSwapLanguage',llWYf);
+      },
+      handleTapStart(e) {
+        e.target.classList.toggle('tap')
+      },
+      handleTapEnd(e) {
+        e.target.classList.toggle('tap')
+      },
+      async handleConnectWeb3Modal() {
+        Vue.prototype.Web3 = Web3;
+        Wallet.initWallet((address)=>{
+          this.walletAddress = address;
+          this.showConnectBtn = false;
+          localStorage.setItem("walletAddress",address);
+        })
+      },
+      formatAddress(address) {
+        if(address !== '' && address !== undefined) {
+          let pre = address.slice(0,6)
+          let suf = address.slice(-4)
+          return  `${pre}...${suf}`
+        }else {
+          return ''
+        }
+      },
+      getIndex(){
+        let str = window.location.href;
+        if (str.indexOf("home") != -1 ) {
+          this.currentIndex = 1
+        }else if (str.indexOf("vault") != -1 ) {
+          this.currentIndex = 4
+        }else if (str.indexOf("farm") != -1 ) {
+          this.currentIndex = 3
+        }else if (str.indexOf("dao") != -1) {
+          this.currentIndex = 4
+        }else if (str.indexOf("swap") != -1) {
+          this.currentIndex = 5
+        }else{
+          this.currentIndex = 1
+        }
+      },
+      handleJump(path,index) {
+        this.currentIndex = index;
+        this.$router.push({path: '/'+path})
+        this.getIndex();
       }
-      this.showLangBox();
-      // this.$i18n.locale = this.getLangType == 'zh-CN' ? 'en-US' : 'zh-CN'
-      this.$store.commit('accounts/setLangType',this.$i18n.locale)
-      localStorage.setItem('langType',this.$i18n.locale);
-      this.setCookie('pipipSwapLanguage',llWYf);
     },
-    handleTapStart(e) {
-      e.target.classList.toggle('tap')
-    },
-    handleTapEnd(e) {
-      e.target.classList.toggle('tap')
-    },
-    async handleConnectWeb3Modal() {
-      
-    },
-    formatAddress(address) {
-      if(address !== '' && address !== undefined) {
-        let pre = address.slice(0,6)
-        let suf = address.slice(-4)
-        return  `${pre}...${suf}`
-      }else {
-        return ''
-      }
-    },
-    getIndex(){
-      let str = window.location.href;
-      if (str.indexOf("home") != -1 ) {
-        this.currentIndex = 1
-      }else if (str.indexOf("vault") != -1 ) {
-        this.currentIndex = 4
-      }else if (str.indexOf("farm") != -1 ) {
-        this.currentIndex = 3
-      }else if (str.indexOf("dao") != -1) {
-        this.currentIndex = 4
-      }else if (str.indexOf("swap") != -1) {
-        this.currentIndex = 5
-      }else{
-        this.currentIndex = 1
-      }
-    },
-    handleJump(path,index) {
-      this.currentIndex = index;
-      this.$router.push({path: '/'+path})
-      this.getIndex();
-    }
-  },
-  computed: {
+    computed: {
 
-    logoImg:function(){
-      if(this.currentIndex == 1){
-        return require('@/assets/logo_white.png')
-      }else{
-        return require('@/assets/logo.png')
+      logoImg:function(){
+        if(this.currentIndex == 1){
+          return require('@/assets/logo_white.png')
+        }else{
+          return require('@/assets/logo.png')
+        }
       }
-    }
-  },
-  mounted() {
-    this.currentHost = location.host
-    this.getIndex();
-    this.setLan();
-  },
-  created() {
-  },
-  watch: {
-    '$route'(to) {
-      this.currentIndex = to.meta.index
+    },
+    mounted() {
+      this.currentHost = location.host
+      this.getIndex();
+      this.setLan();
+
+      Vue.prototype.Web3 = Web3;
+      Wallet.initWallet((address)=>{
+        this.walletAddress = address;
+        this.showConnectBtn = false;
+        localStorage.setItem("walletAddress",address);
+      })
+    },
+    created() {
+    },
+    watch: {
+      '$route'(to) {
+        this.currentIndex = to.meta.index
+      }
     }
   }
-}
 </script>
-
 <style scoped>
   .dashedLine{
     width: 100vw;
