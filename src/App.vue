@@ -65,7 +65,7 @@ ul {margin: 0;padding: 0;}
   padding: 76px 0 0 0;
 }
 .route_view.pt_more {
-  padding: 146px 0 0 0;
+  padding: 130px 0 0 0;
 }
 .ant-modal-content {
   border-radius: 24px!important;

@@ -1,54 +1,58 @@
 <template>
   <div class="home_wrap">
-    <div class="top_banner_wrap">
-       <ul class="top_info" style="list-style:none;">
-         <li>Support multiple DeFi protocols.</li>
-         <li>find high-yielding projects within multiple DeFi protocols</li>
-         <li>to help users achieve higher returns.</li>
-       </ul>
-    </div>
-    <ul class="home_ul">
-      <div id="homeDate">
-        <table id="PCTable">
-          <tr class="lightColor">
-            <th>{{$t('l.home_n1')}}</th>
-            <th>{{$t('l.home_n2')}}</th>
-            <th>{{$t('l.home_n3')}}</th>
-          </tr>
-          <tr>
-            <td>
-              <countTo :endVal='10000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
-            </td>
-            <td>
-              <countTo :endVal='20000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
-            </td>
-            <td>
-              <countTo :endVal='30000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
-            </td>
-          </tr>
-        </table>
-        <table id="mobileTable">
-          <tr>
-            <th class="lightColor">{{$t('l.home_n1')}}</th>
-            <td>
-              <countTo :endVal='40000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
-            </td>
-          </tr>
-          <tr>
-            <th class="lightColor">{{$t('l.home_n2')}}</th>
-            <td>
-              <countTo :endVal='50000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
-            </td>
-          </tr>
-          <tr>
-            <th class="lightColor">{{$t('l.home_n3')}}</th>
-            <td>
-              <countTo :endVal='60000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
-            </td>
-          </tr>
-        </table>
+    <div class="home-info">
+      <img src="../assets/logo_bg_img.png" v-show="$store.state.accounts.isMobile" class="logo_bg" alt="">
+      <div class="top_banner_wrap">
+        <img src="../assets/logo_bg_img.png" v-show="!$store.state.accounts.isMobile" class="logo_bg" alt="">
+        <ul class="top_info" style="list-style:none;">
+          <li>Support multiple DeFi protocols.</li>
+          <li>find high-yielding projects within multiple DeFi protocols</li>
+          <li>to help users achieve higher returns.</li>
+        </ul>
       </div>
-    </ul>
+      <ul class="home_ul">
+        <div id="homeDate">
+          <table id="PCTable">
+            <tr class="lightColor">
+              <th>{{$t('l.home_n1')}}</th>
+              <th>{{$t('l.home_n2')}}</th>
+              <th>{{$t('l.home_n3')}}</th>
+            </tr>
+            <tr>
+              <td>
+                <countTo :endVal='10000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              </td>
+              <td>
+                <countTo :endVal='20000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              </td>
+              <td>
+                <countTo :endVal='30000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              </td>
+            </tr>
+          </table>
+          <table id="mobileTable">
+            <tr>
+              <th class="lightColor">{{$t('l.home_n1')}}</th>
+              <td>
+                <countTo :endVal='40000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              </td>
+            </tr>
+            <tr>
+              <th class="lightColor">{{$t('l.home_n2')}}</th>
+              <td>
+                <countTo :endVal='50000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              </td>
+            </tr>
+            <tr>
+              <th class="lightColor">{{$t('l.home_n3')}}</th>
+              <td>
+                <countTo :endVal='60000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </ul>
+    </div>
     <div class="jss107">
       <div class="jss108 jss109">
         <div class="jss110">
@@ -159,6 +163,19 @@ export default {
     color: rgba(255, 255, 255, 0.7);
     font-size: 20px;
     padding: 30px 60px;
+    position: relative;
+  }
+  .home-info {
+    position: relative;
+    overflow: hidden;
+  }
+  .logo_bg {
+    z-index: 0;
+    position:absolute;
+    bottom: 0;
+    right: -40px;
+    width: 153px;
+    height: 139px;
   }
   .top_info {
     list-style: none;
@@ -568,9 +585,11 @@ export default {
     font-weight: bolder;
   }
   @media (max-width: 768px) {
+    .home-info {
+      margin-top: -50px;
+    }
     .top_banner_wrap {
       margin: 0px;
-      margin-top: -30px;
       padding: 20px;
       height: 100px;
       font-size: 12px;

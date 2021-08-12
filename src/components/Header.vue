@@ -256,8 +256,8 @@ export default {
     color: black;
   }
   .header_wrap .c_btn {
-    height: 44px;
-    line-height: 36px;
+    height: 32px;
+    line-height: 24px;
     padding: 2px;
     /*background: linear-gradient(45deg, #0066FF, #ffffff);*/
     background-color: transparent;
@@ -274,7 +274,7 @@ export default {
     font-size: 14px;
     /*background-color: #282828;*/
     border-radius: 20px;
-    padding: 0 22px;
+    padding: 0 15px;
     /*border: 2px solid #359A6C;*/
   }
   .header_wrap .c_btn:hover {
@@ -292,7 +292,7 @@ export default {
     align-items: center;
     margin-left: auto;
     flex-direction: row;
-    /*margin-top: 10px!important;*/
+    margin-top: 5px!important;
   }
   .right_nav .c_btn{
     border: 2px solid #43318C;
@@ -304,22 +304,6 @@ export default {
     border: 0px solid transparent;
     background: rgba(255, 255, 255, 0.2);
     color: white;
-  }
-  .h_address {
-    float: right;
-    color: #20C7D3;
-    font-size: 16px;
-    /*background-color: rgba(255,255,255,.3);*/
-    /*background-color: #2F2E2D;*/
-    /*box-sizing: border-box;*/
-    border:2px solid #43318C;
-    color: rgb(68, 62, 62);
-    border-radius: 100px;
-    height: 44px;
-    padding: 0 30px;
-    line-height: 40px;
-    position: relative;
-    margin-right: 10px;
   }
   .menu_icon {
     width: 40px;
@@ -333,13 +317,6 @@ export default {
     background-size: 100% 100%;
     background-position: center center;
   }
-  .m_logo {
-    display: none;
-    width: 40px;
-    height: 40px;
-    margin: 0 0 0 24px;
-    vertical-align: middle;
-  }
   .logo_wrap {
     margin-right: 42px;
     width: 76px;
@@ -350,10 +327,10 @@ export default {
     height: 100%;
   }
   .lang_change {
-    height: 44px;
-    width: 100px;
+    height: 32px;
+    width: 90px;
     border-radius: 100px;
-    line-height: 40px;
+    line-height: 30px;
     float: right;
     /*display: flex;*/
     text-align: center;
@@ -363,33 +340,10 @@ export default {
     font-size: 14px;
     border:2px solid #43318C;
   }
-  .lang_change .icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-    margin: 0 16px 0 24px;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-position: center center;
-    display: none!important;
-    /*background-image: url('../assets/lang_icon.svg');*/
-  }
-  .lang_change:hover .icon {
-    display: inline-block;
-    width: 22px;
-    height: 22px;
-    /*background-image: url('../assets/lang_icon_a.svg');*/
-  }
   @media (max-width: 768px) {
     .logo_wrap {
       width: 76px;
       height: 24px;
-    }
-    .h_address {
-      float: left;
-      max-width: 200px;
-      margin: 0 16px 0 auto;
     }
     .header_wrap .c_btn {
       margin: 0 16px 0 auto;
@@ -415,9 +369,6 @@ export default {
     .menu_icon {
       display: inline-block;
     }
-    .m_logo {
-      display: inline-block;
-    }
     .header_wrap .c_btn:hover {
       color: rgb(68, 62, 62);
       background-color: #fff;
@@ -438,9 +389,6 @@ export default {
     }
     .lang_change{
       float: right;
-    }
-    .lang_change .icon {
-      margin: 0 16px 0 0;
     }
   }
 </style>
