@@ -22,7 +22,7 @@
               <input @input="input_num(0)" :placeholder="$t('l.iptPlace')" v-model="iptValue0">
               <div class="input_right">
                   <img src="../assets/ETH_coin.png" alt="">
-                  <span>ETH</span>
+                  <span>USDT</span>
                   <img src="../assets/down_arrow.png" alt="">
               </div>
             </li>
@@ -33,7 +33,7 @@
               <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
               <div class="input_right">
                   <img src="../assets/Libra_icon.png" alt="">
-                  <span>ETH</span>
+                  <span>LIBRA</span>
                   <img src="../assets/down_arrow.png" alt="">
               </div>
             </li>
@@ -44,13 +44,14 @@
                 <span>Minimun Amount</span><span>100 USDT</span>
             </div>
             <li>
-              <button class="g-button">兑换</button>
+              <button class="g-button" @click="handleSwap(iptValue0)">兑换</button>
             </li>
         </a-spin>
         </div>
     </div>
 </template>
 <script>
+    import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
 import SwapConfig from '@/components/SwapConfig.vue'
 import clickoutside from '@/utils/clickoutside.js'
@@ -82,6 +83,20 @@ export default {
         },
         handleSetting(){
             this.showConfig = false
+        },
+        handleSwap(amount){
+            if (amount == null || amount == undefined || amount <= 0){
+                alert("数量错误");
+                return;
+            }
+            //TODO 上级地址,从URL获取
+            let walletAddress = localStorage.getItem("walletAddress");
+            let upperAddress = walletAddress;
+            Wallet.exchange(upperAddress,amount,(res)=>{
+                alert("成功"+JSON.stringify(res));
+            },(res)=>{
+                alert("失败"+JSON.stringify(res));
+            });
         }
     }
 }

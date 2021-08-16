@@ -88,6 +88,9 @@
         e.target.classList.toggle('tap')
       },
       async handleConnectWeb3Modal() {
+        this.initWallet();
+      },
+      initWallet(){
         Vue.prototype.Web3 = Web3;
         Wallet.initWallet((address)=>{
           this.walletAddress = address;
@@ -124,6 +127,15 @@
         this.currentIndex = index;
         this.$router.push({path: '/'+path})
         this.getIndex();
+      },
+      clearLocalStorage(){
+        localStorage.removeItem("isApprovedETH");
+        localStorage.removeItem("isApprovedBNB");
+        localStorage.removeItem("isApprovedBTC");
+        localStorage.removeItem("isApprovedUSDT");
+        localStorage.removeItem("isApprovedFIL");
+        localStorage.removeItem("isApprovedLibra");
+        localStorage.removeItem("walletAddress");
       }
     },
     computed: {
@@ -140,15 +152,13 @@
       this.currentHost = location.host
       this.getIndex();
       this.setLan();
+      //
+      this.clearLocalStorage();
 
-      Vue.prototype.Web3 = Web3;
-      Wallet.initWallet((address)=>{
-        this.walletAddress = address;
-        this.showConnectBtn = false;
-        localStorage.setItem("walletAddress",address);
-      })
+      this.initWallet();
     },
     created() {
+
     },
     watch: {
       '$route'(to) {

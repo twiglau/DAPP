@@ -1,46 +1,18 @@
 // 智能合约地址
 import Vue from "vue";
 
-const contractAddress = '0xa2C0755928053d0DA3c8b05da3F77D434B4EDd29';
-// 智能合约ABI
-const contractABI=[
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_usdtAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_libraAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_ethAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_bnbAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_btcAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_filAddress",
-                "type": "address"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
+const libraIndex=1;
+const btcIndex=2;
+const ethIndex=3;
+const usdtIndex=4;
+const bnbIndex=5;
+const filIndex=6;
+
+// const _owner = "0x7Cc27DDb0361EC4C8807b31f67b81b91b393ffbc";
+
+// const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
+const _contractAddress = '0xDA0bab807633f07f013f94DD0E6A4F96F8742B53';
+const _contractABI = [
     {
         "constant": false,
         "inputs": [
@@ -80,30 +52,20 @@ const contractABI=[
                 "type": "address"
             },
             {
-                "internalType": "string",
-                "name": "_currency1",
-                "type": "string"
+                "internalType": "uint8",
+                "name": "_currencyIndex",
+                "type": "uint8"
             },
             {
                 "internalType": "uint256",
-                "name": "_amount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "string",
-                "name": "_currency2",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount2",
+                "name": "_amount",
                 "type": "uint256"
             }
         ],
-        "name": "deposit",
+        "name": "depositOne",
         "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
+        "payable": true,
+        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -115,20 +77,30 @@ const contractABI=[
                 "type": "address"
             },
             {
-                "internalType": "string",
-                "name": "_currency",
-                "type": "string"
+                "internalType": "uint8",
+                "name": "_currency1Index",
+                "type": "uint8"
             },
             {
                 "internalType": "uint256",
-                "name": "_amount",
+                "name": "_amount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_currency2Index",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount2",
                 "type": "uint256"
             }
         ],
-        "name": "deposit",
+        "name": "depositTwo",
         "outputs": [],
-        "payable": true,
-        "stateMutability": "payable",
+        "payable": false,
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -152,27 +124,12 @@ const contractABI=[
         "type": "function"
     },
     {
-        "constant": true,
-        "inputs": [],
-        "name": "owner",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "constant": false,
         "inputs": [
             {
-                "internalType": "string",
-                "name": "_currency",
-                "type": "string"
+                "internalType": "uint8",
+                "name": "_currencyIndex",
+                "type": "uint8"
             },
             {
                 "internalType": "uint256",
@@ -190,9 +147,9 @@ const contractABI=[
         "constant": false,
         "inputs": [
             {
-                "internalType": "string",
-                "name": "_currency1",
-                "type": "string"
+                "internalType": "uint8",
+                "name": "_currency1Index",
+                "type": "uint8"
             },
             {
                 "internalType": "uint256",
@@ -200,9 +157,9 @@ const contractABI=[
                 "type": "uint256"
             },
             {
-                "internalType": "string",
-                "name": "_currency2",
-                "type": "string"
+                "internalType": "uint8",
+                "name": "_currency2Index",
+                "type": "uint8"
             },
             {
                 "internalType": "uint256",
@@ -215,12 +172,58 @@ const contractABI=[
         "payable": false,
         "stateMutability": "nonpayable",
         "type": "function"
+    },
+    {
+        "inputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_owner",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_spender",
+                "type": "address"
+            }
+        ],
+        "name": "queryAllowance",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "remaining",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
     }
 ];
-var contract=null;
 
 //ETH
-const ethContractAddress = '0xacaEE7d5313945D3bB8c65C1c77034B9a0f998b6';
+const ethContractAddress = '0xc256A3A6Af4561bCBc94678a1f00E5c24b0f50f0';
 const ethContractABI=[
     {
         "constant": true,
@@ -516,9 +519,8 @@ const ethContractABI=[
         "type": "event"
     }
 ];
-var ethContract=null;
 //BNB
-const bnbContractAddress = '0xacaEE7d5313945D3bB8c65C1c77034B9a0f998b6';
+const bnbContractAddress = '0x52FA059Da6Ef9D95b53476D774026821402f9E4E';
 const bnbContractABI=[
     {
         "constant": true,
@@ -814,9 +816,8 @@ const bnbContractABI=[
         "type": "event"
     }
 ];
-var bnbContract=null;
 //BTC
-const btcContractAddress = '0xacaEE7d5313945D3bB8c65C1c77034B9a0f998b6';
+const btcContractAddress = '0xa7f0B0DbaBEc4b6C412b6f92343Fb68b5DF35f6C';
 const btcContractABI=[
     {
         "constant": true,
@@ -1112,9 +1113,8 @@ const btcContractABI=[
         "type": "event"
     }
 ];
-var btcContract=null;
 //USDT
-const usdtContractAddress = '0xacaEE7d5313945D3bB8c65C1c77034B9a0f998b6';
+const usdtContractAddress = '0xc1D586e2649B67C62bCC34E8D220c2353ceCA118';
 const usdtContractABI=[
     {
         "constant": true,
@@ -1410,9 +1410,8 @@ const usdtContractABI=[
         "type": "event"
     }
 ];
-var usdtContract=null;
 //FIL
-const filContractAddress = '0xacaEE7d5313945D3bB8c65C1c77034B9a0f998b6';
+const filContractAddress = '0x0Bb12A9e26a292d7f69F528DEbc23e679516A604';
 const filContractABI=[
     {
         "constant": true,
@@ -1708,9 +1707,8 @@ const filContractABI=[
         "type": "event"
     }
 ];
-var filContract=null;
 //LIBRA
-const libraContractAddress = '0xacaEE7d5313945D3bB8c65C1c77034B9a0f998b6';
+const libraContractAddress = '0x6950C3327FF3cd00Db061A360F75D07f2cB490E1';
 const libraContractABI=[
     {
         "constant": true,
@@ -2006,9 +2004,6 @@ const libraContractABI=[
         "type": "event"
     }
 ];
-var libraContract=null;
-
-
 
 function initWallet(callback){
     //判断用户是否安装MetaMask钱包插件
@@ -2032,7 +2027,6 @@ function initWallet(callback){
             // var Web3 = window.web3js.getWeb3();
             window.web3 = new Vue.prototype.Web3();
             window.web3.setProvider(currentProvider);
-            contract = new window.web3.eth.Contract(contractABI, contractAddress);
             // console.log('地址列表', accounts)
             //这里返回用户钱包地址
             callback(accounts[0]);
@@ -2040,84 +2034,10 @@ function initWallet(callback){
     }
 }
 
-function approveETH(address,value, callback) {
-    ethContract = new window.web3.eth.Contract(ethContractABI, ethContractAddress);
-    ethContract.methods.approve(address,value)
-        .call()
-        .then((res) => {
-            console.log('ETH授权成功', res)
-            callback("授权成功"+res);
-        })
-        .catch((err) => {
-            alert('投资授权失败，稍后再试：', err)
-        });
-}
-function approveBNB(address,value, callback) {
-    bnbContract = new window.web3.eth.Contract(bnbContractABI, bnbContractAddress);
-    bnbContract.methods.approve(address,value)
-        .call()
-        .then((res) => {
-            console.log('BNB授权成功', res)
-            callback("授权成功"+res);
-        })
-        .catch((err) => {
-            alert('投资授权失败，稍后再试：', err)
-        });
-}
-function approveBTC(address,value, callback) {
-    btcContract = new window.web3.eth.Contract(btcContractABI, btcContractAddress);
-    btcContract.methods.approve(address,value)
-        .call()
-        .then((res) => {
-            console.log('BTC授权成功', res)
-            callback("授权成功"+res);
-        })
-        .catch((err) => {
-            alert('投资授权失败，稍后再试：', err)
-        });
-}
-function approveUSDT(address,value, callback) {
-    usdtContract = new window.web3.eth.Contract(usdtContractABI, usdtContractAddress);
-    usdtContract.methods.approve(address,value)
-        .call()
-        .then((res) => {
-            console.log('USDT授权成功', res)
-            callback("授权成功"+res);
-        })
-        .catch((err) => {
-            alert('投资授权失败，稍后再试：', err)
-        });
-}
-function approveFIL(address,value, callback) {
-    filContract = new window.web3.eth.Contract(filContractABI, filContractAddress);
-    filContract.methods.approve(address,value)
-        .call()
-        .then((res) => {
-            console.log('FIL授权成功', res)
-            callback("授权成功"+res);
-        })
-        .catch((err) => {
-            alert('投资授权失败，稍后再试：', err)
-        });
-}
-function approveLibra(address,value, callback) {
-    libraContract = new window.web3.eth.Contract(libraContractABI, libraContractAddress);
-    libraContract.methods.approve(address,value)
-        .call()
-        .then((res) => {
-            console.log('LIBRA授权成功', res)
-            callback("授权成功"+res);
-        })
-        .catch((err) => {
-            alert('投资授权失败，稍后再试：', err)
-        });
-}
-
 function approve(currency,address,value, callback) {
     currency = currency.toUpperCase();
     let contractAddress;
     let contractABI;
-    let contract;
     if(currency == "ETH"){
         contractAddress=ethContractAddress;
         contractABI=ethContractABI;
@@ -2140,9 +2060,10 @@ function approve(currency,address,value, callback) {
         callback(false);
     }
 
-    contract = new window.web3.eth.Contract(contractABI, contractAddress);
-    contract.methods.approve(address,value)
-        .call()
+    let contract = new window.web3.eth.Contract(contractABI, contractAddress);
+    contract.methods.approve(_contractAddress,value)
+        // .call()
+        .send({from: address})
         .then((res) => {
             console.log(currency+'授权成功', res)
             callback(currency+"授权成功"+res);
@@ -2152,14 +2073,156 @@ function approve(currency,address,value, callback) {
         });
 }
 
+//兑换
+function exchange(account,amount,callback,errorCallback){
+    console.log("上级地址："+account);
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    const data = _contract.methods
+        .exchange(
+            account,
+            amount
+        ).encodeABI();
+    sendTransfer(account, data, 0x0, callback, errorCallback)
+}
+
+//存入单币种
+function depositOne(account,currency,amount,callback,errorCallback){
+    console.log("上级地址："+account);
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    const data = _contract.methods
+        .depositOne(
+            account,
+            getCurrencyIndex(currency),
+            amount
+        ).encodeABI();
+    sendTransfer(account, data, 0x0, callback, errorCallback)
+}
+
+//存入双币种
+function depositTwo(account,_amount1,currency2,_amount2,callback,errorCallback){
+    console.log("上级地址："+account);
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    const data = _contract.methods
+        .depositTwo(
+            account,
+            libraIndex,
+            _amount1,
+            getCurrencyIndex(currency2),
+            _amount2
+        ).encodeABI();
+    sendTransfer(account, data, 0x0, callback, errorCallback)
+}
+
+//取出单币种
+function takeoutOne(account,currency,amount, callback, errorCallback){
+    console.log("上级地址："+account);
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    const data = _contract.methods
+        .takeoutOne(
+            getCurrencyIndex(currency),
+            amount
+        ).encodeABI();
+    sendTransfer(account, data, 0x0, callback, errorCallback);
+}
+//取出双币种
+function takeoutTwo(account,amount1,currency2,amount2, callback, errorCallback){
+    console.log("上级地址："+account);
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    const data = _contract.methods
+        .takeoutTwo(
+            libraIndex,
+            amount1,
+            getCurrencyIndex(currency2),
+            amount2
+        ).encodeABI();
+    sendTransfer(account, data, 0x0, callback, errorCallback);
+}
+
+/**
+ * 发送交易
+ * @param {Object} account 用户地址
+ * @param {Object} data 数据
+ * @param {Object} value 转账金额
+ * @param {Object} callback 返回hash
+ * @param {Object} errorCallBack 返回的错误
+ */
+function sendTransfer(account, data, value, callback, errorCallBack) {
+    // estimateGas获取交易的 gas 用量
+    const params = {
+        from: account,
+        to: _contractAddress,
+        data: data,
+        value: value,
+    };
+    window.web3.eth.estimateGas(params, function (error1, gaslimit) {
+        if (error1) {
+            errorCallBack(error1);
+        } else {
+            // gasprice获取当前gas价格
+            window.web3.eth.getGasPrice(function (error2, gasPrice) {
+                if (error2) {
+                    errorCallBack(error2);
+                } else {
+                    gaslimit -= -10000;
+                    let params = [
+                        {
+                            gasPrice: gasPrice,
+                            gasLimit: gaslimit,
+                            from: account,
+                            to: _contractAddress,
+                            data: data,
+                            value: value,
+                        },
+                    ];
+                    //ethereum.sendAsync方法发送以太币、调用智能合约：
+                    window.ethereum.sendAsync(
+                        {
+                            method: "eth_sendTransaction",
+                            params: params,
+                            from: account,
+                        },
+                        function (error, hash) {
+                            if (error) {
+                                // alert(error.message);
+                                errorCallBack(error.message);
+                            } else {
+                                callback(hash);
+                            }
+                        }
+                    );
+                    //监听MetaMask的事件
+                    window.ethereum.on('accountsChanged', function (accounts) {
+                        console.log(accounts[0])
+                    })
+                }
+            });
+        }
+    });
+}
+
+function getCurrencyIndex(currency) {
+    currency=currency.toUpperCase();
+    if (currency=="LIBRA"){
+        return libraIndex;
+    }else if (currency=="BTC"){
+        return btcIndex;
+    }else if (currency=="ETH"){
+        return ethIndex;
+    }else if (currency=="USDT"){
+        return usdtIndex;
+    }else if (currency=="BNB"){
+        return bnbIndex;
+    }else if (currency=="FIL"){
+        return filIndex;
+    }
+}
 //导出相应的方法
 export default {
     initWallet,
-    approveETH,
-    approveBNB,
-    approveBTC,
-    approveUSDT,
-    approveFIL,
-    approveLibra,
     approve,
+    exchange,
+    depositOne,
+    depositTwo,
+    takeoutOne,
+    takeoutTwo,
 }
