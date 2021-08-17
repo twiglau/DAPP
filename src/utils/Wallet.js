@@ -8,39 +8,154 @@ const usdtIndex=4;
 const bnbIndex=5;
 const filIndex=6;
 
-// const _owner = "0x7Cc27DDb0361EC4C8807b31f67b81b91b393ffbc";
-
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
-const _contractAddress = '0xDA0bab807633f07f013f94DD0E6A4F96F8742B53';
+const _contractAddress = '0x5E1C2f91a93d210f18a97c0D693C4705101Dbe1c';
 const _contractABI = [
     {
-        "constant": false,
+        "inputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "constant": true,
         "inputs": [
             {
-                "internalType": "string",
-                "name": "currency1",
-                "type": "string"
-            },
+                "internalType": "uint8",
+                "name": "currencyIndex",
+                "type": "uint8"
+            }
+        ],
+        "name": "allowance",
+        "outputs": [
             {
                 "internalType": "uint256",
-                "name": "amount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "string",
-                "name": "currency2",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "amount2",
+                "name": "remaining",
                 "type": "uint256"
             }
         ],
-        "name": "award",
-        "outputs": [],
         "payable": false,
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "bnbCurrPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "bnbTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "bnbTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "btcCurrPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "btcTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "btcTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "dayDividendAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -69,17 +184,33 @@ const _contractABI = [
         "type": "function"
     },
     {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "_currencyIndex",
+                "type": "uint8"
+            }
+        ],
+        "name": "depositOneDetail",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "total",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "constant": false,
         "inputs": [
             {
                 "internalType": "address",
                 "name": "_upperAddress",
                 "type": "address"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_currency1Index",
-                "type": "uint8"
             },
             {
                 "internalType": "uint256",
@@ -90,11 +221,6 @@ const _contractABI = [
                 "internalType": "uint8",
                 "name": "_currency2Index",
                 "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount2",
-                "type": "uint256"
             }
         ],
         "name": "depositTwo",
@@ -104,16 +230,97 @@ const _contractABI = [
         "type": "function"
     },
     {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "depositUserList",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "dividendRate",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "ethCurrPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "ethTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "ethTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "constant": false,
         "inputs": [
             {
                 "internalType": "address",
-                "name": "upperAddress",
+                "name": "_upperAddress",
                 "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "amount",
+                "name": "_amount",
                 "type": "uint256"
             }
         ],
@@ -121,6 +328,346 @@ const _contractABI = [
         "outputs": [],
         "payable": true,
         "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "feeRateDayIn30",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "feeRateDayOut30",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "filCurrPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "filTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "filTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "incomeAccount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "incomeRecord",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "fromAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "latestDividendTime",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "libraCurrPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "libraTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "libraTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "oneOrderMap",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "currencyIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "useableAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "depositTime",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "precision",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "recommendDeductionMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "upperAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "bool",
+                "name": "hasDeducted",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "subordinateAddressMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "downAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -147,11 +694,6 @@ const _contractABI = [
         "constant": false,
         "inputs": [
             {
-                "internalType": "uint8",
-                "name": "_currency1Index",
-                "type": "uint8"
-            },
-            {
                 "internalType": "uint256",
                 "name": "_amount1",
                 "type": "uint256"
@@ -160,11 +702,6 @@ const _contractABI = [
                 "internalType": "uint8",
                 "name": "_currency2Index",
                 "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount2",
-                "type": "uint256"
             }
         ],
         "name": "takeoutTwo",
@@ -174,20 +711,70 @@ const _contractABI = [
         "type": "function"
     },
     {
-        "inputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
         "constant": true,
-        "inputs": [],
-        "name": "owner",
-        "outputs": [
+        "inputs": [
             {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "twoOrderMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currency1Index",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalAmount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "useableAmount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutAmount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currency2Index",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalAmount2",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "useableAmount2",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutAmount2",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "depositTime",
+                "type": "uint256"
             }
         ],
         "payable": false,
@@ -196,23 +783,42 @@ const _contractABI = [
     },
     {
         "constant": true,
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_owner",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_spender",
-                "type": "address"
-            }
-        ],
-        "name": "queryAllowance",
+        "inputs": [],
+        "name": "usdtCurrPrice",
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "remaining",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "usdtTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "usdtTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
                 "type": "uint256"
             }
         ],
@@ -2035,6 +2641,8 @@ function initWallet(callback){
 }
 
 function approve(currency,address,value, callback) {
+
+    //授权
     currency = currency.toUpperCase();
     let contractAddress;
     let contractABI;
@@ -2061,7 +2669,7 @@ function approve(currency,address,value, callback) {
     }
 
     let contract = new window.web3.eth.Contract(contractABI, contractAddress);
-    contract.methods.approve(_contractAddress,value)
+    contract.methods.approve(_contractAddress,value+"000000000000000000")
         // .call()
         .send({from: address})
         .then((res) => {
@@ -2070,6 +2678,25 @@ function approve(currency,address,value, callback) {
         })
         .catch((err) => {
             alert(currency+'授权失败，稍后再试：', err)
+        });
+
+
+}
+
+/***
+ * 查授权额度
+ * @param address
+ */
+function queryAllowance(account,currency,callback){
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.allowance(getCurrencyIndex(currency))
+        .call()
+        .then((res) => {
+            console.log(currency+'>查询成功:', res)
+            callback(res);
+        })
+        .catch((err) => {
+            alert(currency+'查询失败，稍后再试：', err)
         });
 }
 
@@ -2099,23 +2726,20 @@ function depositOne(account,currency,amount,callback,errorCallback){
 }
 
 //存入双币种
-function depositTwo(account,_amount1,currency2,_amount2,callback,errorCallback){
+function depositTwo(account,_amount1,currency2,callback,errorCallback){
     console.log("上级地址："+account);
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .depositTwo(
             account,
-            libraIndex,
             _amount1,
             getCurrencyIndex(currency2),
-            _amount2
         ).encodeABI();
     sendTransfer(account, data, 0x0, callback, errorCallback)
 }
 
 //取出单币种
 function takeoutOne(account,currency,amount, callback, errorCallback){
-    console.log("上级地址："+account);
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .takeoutOne(
@@ -2125,15 +2749,13 @@ function takeoutOne(account,currency,amount, callback, errorCallback){
     sendTransfer(account, data, 0x0, callback, errorCallback);
 }
 //取出双币种
-function takeoutTwo(account,amount1,currency2,amount2, callback, errorCallback){
+function takeoutTwo(account,amount1,currency2,callback, errorCallback){
     console.log("上级地址："+account);
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .takeoutTwo(
-            libraIndex,
             amount1,
             getCurrencyIndex(currency2),
-            amount2
         ).encodeABI();
     sendTransfer(account, data, 0x0, callback, errorCallback);
 }
@@ -2200,6 +2822,63 @@ function sendTransfer(account, data, value, callback, errorCallBack) {
     });
 }
 
+/***
+ * 累计存入数量(包括已经取出的)
+ * @param currency
+ * @param callback
+ */
+function totalDepositBalance(currency,callback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    currency=currency.toUpperCase();
+    if (currency=="LIBRA"){
+        _contract.methods.libraTotalAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+    }else if (currency=="BTC"){
+        _contract.methods.btcTotalAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+    }else if (currency=="ETH"){
+        _contract.methods.ethTotalAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+    }else if (currency=="USDT"){
+        _contract.methods.usdtTotalAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+    }else if (currency=="BNB"){
+        _contract.methods.bnbTotalAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+    }else if (currency=="FIL"){
+        _contract.methods.filTotalAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+    }
+}
+
+/***
+ * 累计取出数量
+ * @param currency
+ * @param callback
+ */
+function totalTakeoutAmount(currency,callback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    currency=currency.toUpperCase();
+    if (currency=="LIBRA"){
+        _contract.methods.libraTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+    }else if (currency=="BTC"){
+        _contract.methods.btcTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+    }else if (currency=="ETH"){
+        _contract.methods.ethTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+    }else if (currency=="USDT"){
+        _contract.methods.usdtTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+    }else if (currency=="BNB"){
+        _contract.methods.bnbTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+    }else if (currency=="FIL"){
+        _contract.methods.filTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+    }
+}
+
+function test() {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.libraTotalAmount().call()
+        .then((res) => {
+            alert("测试结果  ："+res);
+        })
+        .catch((err) => {
+            console.log('获取失败：', err);
+        });
+}
+
 function getCurrencyIndex(currency) {
     currency=currency.toUpperCase();
     if (currency=="LIBRA"){
@@ -2216,6 +2895,7 @@ function getCurrencyIndex(currency) {
         return filIndex;
     }
 }
+
 //导出相应的方法
 export default {
     initWallet,
@@ -2225,4 +2905,8 @@ export default {
     depositTwo,
     takeoutOne,
     takeoutTwo,
+    queryAllowance,
+    totalDepositBalance,
+    totalTakeoutAmount,
+    test,
 }
