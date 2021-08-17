@@ -81,9 +81,6 @@ export default {
       }
     }
   },
-  created(){
-    this.initLan()
-  },
   methods: {
       onClose() {
         this.$store.commit('accounts/setDrawer',false)
