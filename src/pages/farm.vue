@@ -235,8 +235,6 @@
 <script>
 import countTo from 'vue-count-to';
 import Wallet from '@/utils/Wallet.js';
-import Vue from 'vue';
-import Web3 from 'web3'
 
 export default {
   name: "Home",
@@ -506,7 +504,6 @@ export default {
         alert("数量错误");
         return ;
       }
-      alert("开始取出："+currency);
       Wallet.takeoutOne(this.walletAddress,currency,amount, (res)=>{
         alert("成功："+JSON.stringify(res));
       }, (res)=>{
@@ -522,7 +519,8 @@ export default {
         alert("数量错误");
         return ;
       }
-      Wallet.takeoutTwo(this.walletAddress,amount1,currency2,amount1*4, (res)=>{
+
+      Wallet.takeoutTwo(this.walletAddress,amount1,currency2,(res)=>{
         alert("成功："+JSON.stringify(res));
       }, (res)=>{
         alert("失败: "+JSON.stringify(res));
@@ -568,11 +566,10 @@ export default {
         alert("请输入存入数量");
         return ;
       }
-      let currency2Amount = libraAmount*4;
       //TODO 获取libra价格（libraPrice），和currency2价格（currency2Price），
       //TODO (libraAmount*libraPrice)+currency2Amount*currency2Price 必须大于 100美元
       //调用合约方法存入币种
-      Wallet.depositTwo(this.walletAddress,libraAmount,currency2,currency2Amount,(res)=>{
+      Wallet.depositTwo(this.walletAddress,libraAmount,currency2,(res)=>{
         alert("已存入！"+JSON.stringify(res));
       },(res)=>{
         alert("报错："+res);
