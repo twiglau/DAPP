@@ -109,18 +109,7 @@ module.exports = {
                             name: 'chunk-core_js', // 单独将 howler 拆包
                             priority: 20, // 数字大权重到，满足多个 cacheGroups 的条件时候分到权重高的
                             test: /[\\/]node_modules[\\/]_?core-js(.*)/
-                        },
-                        vantUI: {
-                            name: 'chunk-vantUI', // 单独将 vantUI 拆包
-                            priority: 20, // 数字大权重到，满足多个 cacheGroups 的条件时候分到权重高的
-                            test: /[\\/]node_modules[\\/]_?vant(.*)/
-                        },
-                        html2canvas: {
-                            name: 'chunk-html2canvas', // 单独将 vantUI 拆包
-                            priority: 20, // 数字大权重到，满足多个 cacheGroups 的条件时候分到权重高的
-                            test: /[\\/]node_modules[\\/]_?html2canvas(.*)/
-                        },
-
+                        }
                     }
                 }
             };
@@ -161,10 +150,10 @@ module.exports = {
             less: {
                 javascriptEnabled: true
             }
-        },
-        extract: true, // 是否使用css分离插件 ExtractTextPlugin
-        sourceMap: false, // 开启 CSS source maps
-        requireModuleExtension: false // 启用 CSS modules for all css / pre-processor files.
+        }
+        // extract: true, // 是否使用css分离插件 ExtractTextPlugin
+        // sourceMap: false, // 开启 CSS source maps
+        // requireModuleExtension: false // 启用 CSS modules for all css / pre-processor files.
     },
     chainWebpack: config => {
 
