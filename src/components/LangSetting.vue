@@ -33,6 +33,9 @@ export default {
   computed:{
     ...mapGetters('accounts',['getShowDrawer','getLangType'])
   },
+  mounted(){
+    this.initLan()
+  },
   methods: {
     
       initLan(){
