@@ -2713,12 +2713,11 @@ function exchange(account,amount,callback,errorCallback){
 }
 
 //存入单币种
-function depositOne(account,currency,amount,callback,errorCallback){
-    console.log("上级地址："+account);
+function depositOne(upperAddress,account,currency,amount,callback,errorCallback){
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .depositOne(
-            account,
+            upperAddress,
             getCurrencyIndex(currency),
             amount
         ).encodeABI();
@@ -2726,12 +2725,11 @@ function depositOne(account,currency,amount,callback,errorCallback){
 }
 
 //存入双币种
-function depositTwo(account,_amount1,currency2,callback,errorCallback){
-    console.log("上级地址："+account);
+function depositTwo(upperAddress,account,_amount1,currency2,callback,errorCallback){
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .depositTwo(
-            account,
+            upperAddress,
             _amount1,
             getCurrencyIndex(currency2),
         ).encodeABI();

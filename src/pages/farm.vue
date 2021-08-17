@@ -551,7 +551,7 @@ export default {
       //TODO 判断账户Currency余额
 
       //调用合约方法存入币种
-      Wallet.depositOne(this.walletAddress,currency,amount,(res)=>{
+      Wallet.depositOne(this.walletAddress,this.walletAddress,currency,amount,(res)=>{
         alert("已存入");
       },(res)=>{
         alert("报错："+res);
@@ -569,7 +569,7 @@ export default {
       //TODO 获取libra价格（libraPrice），和currency2价格（currency2Price），
       //TODO (libraAmount*libraPrice)+currency2Amount*currency2Price 必须大于 100美元
       //调用合约方法存入币种
-      Wallet.depositTwo(this.walletAddress,libraAmount,currency2,(res)=>{
+      Wallet.depositTwo(this.walletAddress,this.walletAddress,libraAmount,currency2,(res)=>{
         alert("已存入！"+JSON.stringify(res));
       },(res)=>{
         alert("报错："+res);
