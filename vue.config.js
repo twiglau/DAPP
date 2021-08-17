@@ -36,7 +36,7 @@ module.exports = {
     //webpack配置
     configureWebpack: config => {
         config.module.rules.push({
-            test: /\.(swf|ts|ttf|eot|svg|woff(2))(\?[a-z0-9]+)?$/,
+            test: /\.(swf|ts|ttf|eot|woff(2))(\?[a-z0-9]+)?$/,
             loader: 'file-loader',
         })
 
@@ -182,7 +182,7 @@ module.exports = {
 
 
         //5. svg 图片处理 sprite 是不是与图片处理冲突了? 不起作用?
-        const dir = path.resolve(__dirname, 'src/icons')
+        // const dir = path.resolve(__dirname, 'src/icons')
         config.module.rules.delete("svg"); //重点:删除默认配置中处理svg,
         config.module
             .rule('svg-sprite-loader')
@@ -193,17 +193,12 @@ module.exports = {
             .use('svg-sprite-loader')
             .loader('svg-sprite-loader')
             .options({
-                extract: false,
                 symbolId: 'icon-[name]',
             })
-            .end() //进一步优化图标
-            .use('svgo-loader')
-            .loader('svgo-loader')
-            .tap(options => ({...options, plugins: [{ removeAttrs: { attrs: 'fill' } }] }))
-            .end();
+            .end()
 
         config.plugin('svg-sprite').use(require('svg-sprite-loader/plugin'), [{ plainSprite: true }])
-        config.module.rule('svg').exclude.add(dir)
+        // config.module.rule('svg').exclude.add(dir)
 
         if (isProduction) {
             config.plugin('html').tap(args => {

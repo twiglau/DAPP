@@ -6,22 +6,24 @@
         <div class="logo_wrap">
           <img :src="logoImg" alt="" class="logo">
         </div>
-        <ul class="nav_text">
+        <ul class="nav_text" v-if="!getIsMobile">
           <li class="nav_item" :class="currentIndex == 1 ? 'clickedWhiteNav': ''"><a @click="handleJump('home',1)">{{$t('l.h_n1')}}</a><div class="whiteLine"></div></li>
-          <li class="nav_item" :class="currentIndex == 5 ? 'clickedNav': ''"><a @click="handleJump('swap',5)">{{$t('l.h_n3')}}</a><div class="line"></div></li>
-          <li class="nav_item" :class="currentIndex == 3 ? 'clickedNav': ''"><a @click="handleJump('farm',3)">{{$t('l.h_n4')}}</a><div class="line"></div></li>
-          <li class="nav_item" :class="currentIndex == 4 ? 'clickedNav': ''"><a @click="handleJump('dao',4)">{{$t('l.h_n5')}}</a><div class="line"></div></li>
+          <li class="nav_item" :class="currentIndex == 2 ? 'clickedNav': ''"><a @click="handleJump('farm',2)">{{$t('l.h_n2')}}</a><div class="line"></div></li>
+          <li class="nav_item" :class="currentIndex == 3 ? 'clickedNav': ''"><a @click="handleJump('swap',3)">{{$t('l.h_n3')}}</a><div class="line"></div></li>
+          <li class="nav_item" :class="currentIndex == 4 ? 'clickedNav': ''"><a @click="handleJump('market',4)">{{$t('l.h_n4')}}</a><div class="line"></div></li>
+          <li class="nav_item" :class="currentIndex == 5 ? 'clickedNav': ''"><a @click="handleJump('mine',5)">{{$t('l.h_n5')}}</a><div class="line"></div></li>
         </ul>
       </div>
       <div class="right_nav">
         <a v-show="showConnectBtn" @touchstart="handleTapStart" @touchend="handleTapEnd" class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"  @click="handleConnectWeb3Modal"><span class="c_btn_text">{{$t('l.cwallet')}}</span></a>
-        <a v-show="!showConnectBtn" class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"><span class="c_btn_text">{{walletAddress}}</span></a>
-        <a class="lang_change" @click="showLangBox" :class="currentIndex == 1 ? 'c_bg':''" ><i class="icon"></i>{{this.lanc}}
+        <a v-show="!showConnectBtn"  class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"><span class="c_btn_text">{{walletAddress}}</span></a>
+        <a class="lang_change" v-if="!getIsMobile" @click="showLangBox" :class="currentIndex == 1 ? 'c_bg':''" ><i class="icon"></i>{{this.lanc}}
           <div id="languageBox" v-show="languageShow" >
             <li :class="this.$i18n.locale == 'en-US' ? 'active' : ''" @click.stop.prevent="changeLangType(1)">English</li>
             <li :class="this.$i18n.locale == 'zh-CN' ? 'active' : ''" @click.stop.prevent="changeLangType(2)">简体中文</li>
           </div>
         </a>
+        <img :src="menuImg" v-if="getIsMobile" @click="switchMenu" alt="" class="menu_icon">
       </div>
     </div>
   </div>
@@ -32,11 +34,11 @@
   import Vue from 'vue'
   import Web3 from 'web3'
   import Wallet from '@/utils/Wallet.js'
-
+  import { mapGetters } from 'vuex'
   export default {
     data() {
       return {
-        currentIndex: 3,
+        currentIndex: 1,
         languageShow: false,
         lanc:'简体中文',
         currentHost: '',
@@ -46,7 +48,8 @@
     },
     methods: {
       switchMenu() {
-        this.$store.dispatch('accounts/changeMenuStatus')
+        console.log('Clicked Menu')
+        this.$store.commit('accounts/setDrawer',true)
       },
       showLangBox(){
         this.languageShow = !this.languageShow;
@@ -76,10 +79,8 @@
           llWYf = 'zh-CN';
         }
         this.showLangBox();
-        // this.$i18n.locale = this.getLangType == 'zh-CN' ? 'en-US' : 'zh-CN'
         this.$store.commit('accounts/setLangType',this.$i18n.locale)
         localStorage.setItem('langType',this.$i18n.locale);
-        this.setCookie('pipipSwapLanguage',llWYf);
       },
       handleTapStart(e) {
         e.target.classList.toggle('tap')
@@ -111,13 +112,13 @@
         let str = window.location.href;
         if (str.indexOf("home") != -1 ) {
           this.currentIndex = 1
-        }else if (str.indexOf("vault") != -1 ) {
-          this.currentIndex = 4
         }else if (str.indexOf("farm") != -1 ) {
-          this.currentIndex = 3
-        }else if (str.indexOf("dao") != -1) {
+          this.currentIndex = 2
+        }else if (str.indexOf("market") != -1) {
           this.currentIndex = 4
         }else if (str.indexOf("swap") != -1) {
+          this.currentIndex = 3
+        }else if (str.indexOf("mine") != -1) {
           this.currentIndex = 5
         }else{
           this.currentIndex = 1
@@ -139,12 +140,19 @@
       }
     },
     computed: {
-
+      ...mapGetters('accounts',['getLangType','getIsMobile']),
       logoImg:function(){
         if(this.currentIndex == 1){
           return require('@/assets/logo_white.png')
         }else{
           return require('@/assets/logo.png')
+        }
+      },
+      menuImg:function(){
+        if(this.currentIndex == 1){
+          return require('@/assets/menu_white_icon.png')
+        }else{
+          return require('@/assets/menu_black_icon.png')
         }
       }
     },
@@ -246,19 +254,17 @@
     right: 0;
     z-index: 90;
     /*padding: 10px 24px;*/
-    padding: 0 24px;
+    padding: 0 0px 0 24px;
     height: 60px;
   }
   .header_inner_wrap {
     width: 100%;
     margin: 0 auto;
-    /*background-color: #282828;*/
     display: flex;
     -webkit-box-align: center;
     align-items: center;
     -webkit-box-pack: justify;
     justify-content: space-between;
-    /*background: rgb(61, 61, 61);*/
     flex-wrap: wrap;
     margin-top: 10px;
   }
@@ -317,16 +323,14 @@
   }
   .right_nav {
     display: flex;
-    flex-wrap: nowrap;
+    justify-content: flex-end;
     align-items: center;
-    margin-left: auto;
     flex-direction: row;
     margin-top: 5px!important;
   }
   .right_nav .c_btn{
     border: 2px solid #43318C;
-    float: right;
-    margin-right: 15px;
+    margin-right: 10px;
   }
 
   .right_nav .c_bg{
@@ -338,7 +342,6 @@
     width: 40px;
     height: 40px;
     border-radius: 8px;
-    margin: 0 0 0 16px;
     cursor: pointer;
     display: none;
     /* background-image: url('../assets/m_menu_icon.svg'); */
@@ -389,14 +392,11 @@
     .dashedLine{
       top: 55px;
     }
-    .right_nav {
-      margin: 0 auto 0 0;
-      margin-top: 20px!important;
-      display: block;
-      width: 100%;
-    }
     .menu_icon {
       display: inline-block;
+    }
+    .header_wrap .c_btn {
+      margin-right: 0px;
     }
     .header_wrap .c_btn:hover {
       color: rgb(68, 62, 62);
@@ -413,7 +413,7 @@
       color: rgb(68, 62, 62);
     }
     .header_wrap {
-      padding: 10px 24px;
+      padding: 10px 15px 10px 24px;
       height: auto!important;
     }
     .lang_change{

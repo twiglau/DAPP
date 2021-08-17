@@ -23,7 +23,7 @@ if (getCookie('pipipSwapLanguage') == 'en') {
 }
 const state = {
   isMobile: document.body.clientWidth < 768 ? true : false,
-  showMenu: document.body.clientWidth < 768 ? false : true,
+  showDrawer: false,
   langType: lan,
   activeAccount: null,
   activeBalance: 0,
@@ -43,11 +43,14 @@ const state = {
 };
 
 const getters = {
+  getIsMobile(state){
+    return state.isMobile
+  },
   getIsMainChainID(state) {
     return state.isMainChainID
   },
-  getIsShowMenu(state) {
-    return state.showMenu
+  getShowDrawer(state) {
+    return state.showDrawer
   },
   getLangType(state) {
     return state.langType
@@ -179,9 +182,6 @@ const actions = {
     let balance = await state.providerEthers.getBalance(state.activeAccount);
     commit("setActiveBalance", balance);
   },
-  changeMenuStatus({commit}) {
-    commit('setMenuStatus',!state.showMenu)
-  },
   async getMainChainID({commit,rootState}) {
     //判断本地有没有存储钱包登录状态，
     //如果登录过就先走钱包自动登录，然后判断主链
@@ -213,8 +213,8 @@ const mutations = {
     location.reload() // redirect to the Main page
   },
 
-  setMenuStatus(state,status) {
-    state.showMenu = status
+  setDrawer(state,status) {
+    state.showDrawer = status
   },
   setLangType(state,type) {
     state.langType = type

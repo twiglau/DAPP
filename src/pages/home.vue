@@ -60,7 +60,7 @@
             <p class="jss112">{{$t('l.home_t1')}}</p>
             <p class="jss113" @click="handleToMore(1)">
               <span class="jss114">{{$t("l.home_seemore")}}</span>
-              <img src="../assets/icon-more.svg" alt="">
+              <svg-icon icon-class="icon-more" />
             </p>
           </div>
           <div class="jss115">
@@ -87,7 +87,7 @@
             <p class="jss112">{{$t('l.home_t2')}}</p>
             <p class="jss113">
               <span class="jss114" @click="handleToMore(2)">{{$t('l.home_seemore')}}</span>
-              <img src="../assets/icon-more.svg" alt="">
+              <svg-icon icon-class="icon-more" />
             </p>
           </div>
           <div class="jss115">

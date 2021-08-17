@@ -8,11 +8,13 @@ import {
   Dropdown,
   Spin,
   Drawer,
+  Menu,
   Tooltip,
   Alert,
   Popconfirm,
   message,
-  notification
+  notification,
+  Button
 } from 'ant-design-vue'
 
 Vue.use(Switch)
@@ -24,6 +26,8 @@ Vue.use(Drawer)
 Vue.use(Tooltip)
 Vue.use(Alert)
 Vue.use(Popconfirm)
+Vue.use(Menu)
+Vue.use(Button)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message

@@ -3,7 +3,7 @@
         <a-spin class="global_loading" tip="loading" :spinning="false" size="large">
             <div class="lock_box">
                 <p class="go_back" @click="handleGoBack">
-                    <img class="back_icon" src="../assets/arrow_left.svg" alt="">
+                    <svg-icon class="back_icon" icon-class="arrow_left" />
                     {{$t('l.back')}}
                 </p>
                 <div class="token_logo_wrap">
@@ -57,8 +57,8 @@
                                     <input class="ipt_ele" @input="input_num(1)" v-model="iptValue1" type="number" placeholder="0">
                                     <span class="ipt_bandge" @click="handleDoMax(1)">{{$t('l.max')}}</span>
                                 </div>
-                                <div class="c_btn" @click="handleApprove"><img class="btn_icon" src="../assets/approve_icon.svg" alt=""> {{$t('l.approve')}}</div>
-                                <div class="c_btn" @click="handleDeposit"><img class="btn_icon" src="../assets/approve_icon.svg" alt=""> {{$t('l.goLock')}}</div>
+                                <div class="c_btn" @click="handleApprove"> {{$t('l.approve')}}</div>
+                                <div class="c_btn" @click="handleDeposit"> {{$t('l.goLock')}}</div>
                             </div>
                         </li>
                     </ul>
@@ -84,7 +84,7 @@
                                 </p>
                             </div>
                             <div class="ipt_div">
-                                <div class="c_btn c_btn_large" :class="canWithDraw ? '' : 'disabled'" @click="handleWithDraw"><img class="btn_icon" src="../assets/approve_icon.svg" alt=""> {{$t('l.withdrawal')}}</div>
+                                <div class="c_btn c_btn_large" :class="canWithDraw ? '' : 'disabled'" @click="handleWithDraw"> {{$t('l.withdrawal')}}</div>
                             </div>
                         </li>
                     </ul>

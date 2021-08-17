@@ -9,7 +9,9 @@ Vue.use(VueI18n)
 Vue.use(Toasted);
 
 
+
 import './utils/lazy_use' // use lazy load components
+import './icons/index'
 
 import 'ant-design-vue/dist/antd.css';
 //小数精确度

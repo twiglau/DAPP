@@ -2,18 +2,21 @@
   <div id="app">
     <Header />
     <Footer />
+    <side-navi-bar/>
     <router-view class="route_view" :class="!getIsMainChainID ? 'pt_more' : ''"/>
   </div>
 </template>
 
 <script>
+import SideNaviBar from './components/SideNaviBar.vue'
 import Header from './components/Header'
-import Footer from './components/Footer';
+import Footer from './components/Footer'
 export default {
   name: 'App',
   components: {
     Header,
-    Footer
+    Footer,
+    SideNaviBar
   },
   data() {
     return {
@@ -81,6 +84,14 @@ ul {margin: 0;padding: 0;}
 .ant-message-error .anticon {
   color: #f5222d!important;
   border: 1px solid #f5222d;
+}
+
+.ant-drawer-content {
+  background: #43318C !important;
+}
+.ant-menu-dark, .ant-menu-dark .ant-menu-sub {
+    color: rgba(255, 255, 255, 0.65);
+    background: #43318C;
 }
 .anticon {
   border-radius: 50%;

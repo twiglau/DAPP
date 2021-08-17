@@ -7,16 +7,23 @@
         <a href="#" target="_blank">{{$t('l.footer3')}}</a>
       </ul>
     </div>
+    <tab-bar v-show="getIsMobile"/>
   </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+import TabBar from './TabBar.vue'
 export default {
   data() {
     return {
       hasTap: false
     }
   },
+  computed:{
+    ...mapGetters('accounts',['getIsMobile'])
+  },
+  components:{TabBar},
   methods: {
     
   }
@@ -26,7 +33,6 @@ export default {
 <style scoped>
   .footer_wrap {
     width: 100%;
-    /*padding: 20px 0;*/
     height: 50px;
     background-color: transparent;
     position: absolute;
@@ -60,14 +66,7 @@ export default {
     color: black;
     margin: 0px 12px;
     text-decoration: none;
-  }
-  /*.text_item:first-child {
-    margin-left: 0;
-  }
-  .text_item a {
-    color: white;
-  }
-*/  .icon_ul {
+  } .icon_ul {
     list-style: none;
     display: flex;
     margin: 0 0 0 auto;
@@ -80,33 +79,6 @@ export default {
     background-size: 100% 100%;
     cursor: pointer;
     margin-right: 32px;
-  }
- /* .icon_item:last-child {
-    margin-right: 0;
-  }*/
-  .icon_item1 {
-    /* background-image: url('../assets/b_icon_d_5.svg'); */
-  }
-  .icon_item1:hover {
-    /* background-image: url('../assets/b_icon_a_5.svg'); */
-  }
-  .icon_item2 {
-    /* background-image: url('../assets/b_icon_d_2.png'); */
-  }
-  .icon_item2:hover {
-    /* background-image: url('../assets/b_icon_a_2.png'); */
-  }
-  .icon_item3 {
-    /* background-image: url('../assets/b_icon_d_3.png'); */
-  }
-  .icon_item3:hover {
-    /* background-image: url('../assets/b_icon_a_3.png'); */
-  }
-  .icon_item4 {
-    /* background-image: url('../assets/b_icon_d_4.png'); */
-  }
-  .icon_item4:hover {
-    /* background-image: url('../assets/b_icon_a_4.png'); */
   }
   @media (max-width: 768px) {
     .footer_wrap {
@@ -138,30 +110,6 @@ export default {
     }
     .text_item a.tap {
       color: #51007A;
-    }
-    .icon_item1:active,.icon_item1:hover {
-      /* background-image: url('../assets/b_icon_d_1.png'); */
-    }
-    .icon_item2:active,.icon_item2:hover {
-      /* background-image: url('../assets/b_icon_d_2.png'); */
-    }
-    .icon_item3:active,.icon_item3:hover {
-      /* background-image: url('../assets/b_icon_d_3.png'); */
-    }
-    .icon_item4:active,.icon_item4:hover {
-      /* background-image: url('../assets/b_icon_d_4.png'); */
-    }
-    .icon_item1.tap {
-      /* background-image: url('../assets/b_icon_a_1.png'); */
-    }
-    .icon_item2.tap {
-      /* background-image: url('../assets/b_icon_a_2.png'); */
-    }
-    .icon_item3.tap {
-      /* background-image: url('../assets/b_icon_a_3.png'); */
-    }
-    .icon_item4.tap {
-      /* background-image: url('../assets/b_icon_a_4.png'); */
     }
   }
 </style>
