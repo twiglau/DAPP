@@ -3,6 +3,9 @@ var token1 = 'WFC';
 
 export const l = {
   
+  t_home3:'to help users achieve higher returns.',
+  t_home2:'find high-yielding projects within multiple DeFi protocols',
+  t_home1:'Support multiple DeFi protocols.',
   t_tre:'Total revenue',
   t_ttt:'Total deposit',
   t_num:'Number',
@@ -41,7 +44,7 @@ export const l = {
   h_n6: "Ranking",
   home_n1: "TVL",
   home_n2: "DOP Price",
-  home_n3: "WFC Price",
+  home_n3: "LBR Price",
   cwallet: "Connect Wallet",
   langtype: "简体中文",
   reward: 'Harvest',

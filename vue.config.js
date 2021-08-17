@@ -11,7 +11,7 @@ function resolve(dir) {
 }
 // 项目部署基础
 const BASE_URL = process.env.NODE_ENV === 'production' ?
-    '/' :
+    './' :
     '/'
 
 const assetsCDN = {
@@ -164,7 +164,7 @@ module.exports = {
         },
         extract: true, // 是否使用css分离插件 ExtractTextPlugin
         sourceMap: false, // 开启 CSS source maps
-        modules: false // 启用 CSS modules for all css / pre-processor files.
+        requireModuleExtension: false // 启用 CSS modules for all css / pre-processor files.
     },
     chainWebpack: config => {
 

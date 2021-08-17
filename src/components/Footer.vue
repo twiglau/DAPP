@@ -2,9 +2,10 @@
   <div class="footer_wrap">
     <div class="footer_inner">
       <ul class="text_ul">
-        <a :href="$t('l.sjurl')" target="_blank">{{$t('l.footer1')}}</a>
-        <a href="#" target="_blank">{{$t('l.footer2')}}</a>
-        <a href="#" target="_blank">{{$t('l.footer3')}}</a>
+        <a :href="$t('l.sjurl')" target="_blank">Github</a>
+        <a href="#" target="_blank">Facebook</a>
+        <a href="#" target="_blank">Twitter</a>
+        <a href="#" target="_blank">Telegram</a>
       </ul>
     </div>
     <tab-bar v-show="getIsMobile"/>

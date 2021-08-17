@@ -2,8 +2,9 @@ var token1 = 'WFC';
 
 
 export const l = {
-  
-  
+  t_home3:'帮助用户获得更高的回报。',
+  t_home2:'多个 DeFi 协议中找到高收益项目',
+  t_home1:'支持多种 DeFi 协议。',
   t_tre:'团队收益',
   t_ttt:'团队业绩',
   t_num:'团队人数',
@@ -42,7 +43,7 @@ export const l = {
   h_n6: "排行榜",
   home_n1: "总锁仓金额",
   home_n2: "DOP 价格",
-  home_n3: "WFC 价格",
+  home_n3: "LBR 价格",
   cwallet: "连接钱包",
   langtype: "English",
   reward: '收获',

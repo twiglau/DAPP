@@ -5,9 +5,9 @@
       <div class="top_banner_wrap">
         <img src="../assets/logo_bg_img.png" v-show="!$store.state.accounts.isMobile" class="logo_bg" alt="">
         <ul class="top_info" style="list-style:none;">
-          <li>Support multiple DeFi protocols.</li>
-          <li>find high-yielding projects within multiple DeFi protocols</li>
-          <li>to help users achieve higher returns.</li>
+          <li>{{$t('l.t_home1')}}</li>
+          <li>{{$t('l.t_home2')}}</li>
+          <li>{{$t('l.t_home3')}}</li>
         </ul>
       </div>
       <ul class="home_ul">
@@ -276,7 +276,7 @@ export default {
     font-size: 12px;
     font-weight: 400;
   }
-  .jss113 img {
+  .jss113 .svg-icon {
     width: 10px;
     margin-left: 4px;
   }
