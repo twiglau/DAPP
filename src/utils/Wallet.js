@@ -2758,13 +2758,11 @@ function queryAllowance(account,currency,callback){
     _contract.methods.allowance(getCurrencyIndex(currency))
         .call()
         .then((res) => {
+            console.log({res})
             callback(res);
         })
         .catch((err) => {
-            notification.error({
-                message: 'Error',
-                description:currency + err.message
-            })
+            callback(null);
         });
 }
 
@@ -2802,7 +2800,7 @@ function balanceOf(currency,address,callback) {
             callback(res);
         })
         .catch((err) => {
-            alert(err)
+            callback(null);
         });
 }
 
@@ -2983,7 +2981,7 @@ function oneDepositOrder(address,index,callback) {
             callback(res);
         })
         .catch((err) => {
-            console.log('获取失败：', err);
+            callback(null);
         });
 }
 /**
@@ -2997,7 +2995,7 @@ function twoDepositOrder(address,index,callback) {
             callback(res);
         })
         .catch((err) => {
-            console.log('获取失败：', err);
+            callback(null);
         });
 }
 

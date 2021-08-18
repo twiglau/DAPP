@@ -63,11 +63,11 @@
               <svg-icon icon-class="icon-more" />
             </p>
           </div>
-          <div class="jss115">
+          <div class="jss115" v-for="(item,index) in oneTokens" :key="index">
             <div class="jss117">
               <div class="jss118">
-                <img class="jss119" src="../assets/ETH_coin.png" alt="">
-                <span class="jss121">ETH</span>
+                <svg-icon class="jss119" :icon-class="item.currency + '_coin'" alt="" />
+                <span class="jss121">{{item.currency}}</span>
               </div>
               <div class="jss125">
                 <div>
@@ -90,12 +90,12 @@
               <svg-icon icon-class="icon-more" />
             </p>
           </div>
-          <div class="jss115">
+          <div class="jss115" v-for="(item,index) in twoTokens" :key="index">
             <div class="jss117">
               <div class="jss118">
-                <img class="jss119 jss120" src="../assets/Libra_icon.png" alt="">
-                <img class="jss119 jss120 jss_img2" src="../assets/ETH_coin.png" alt="">
-                <span class="jss121 jss122">Ip Libra/ETH</span>
+                <svg-icon class="jss119 jss120" :icon-class="item.currency1 + '_coin'"  />
+                <svg-icon class="jss119 jss120 jss_img2" :icon-class="item.currency2 + '_coin'" />
+                <span class="jss121 jss122">{{item.currency1 + '/' + item.currency2}}</span>
               </div>
               <div class="jss125">
                 <div>
@@ -137,6 +137,98 @@ export default {
   },
   data() {
     return {
+
+      oneTokens:[
+        {
+          currency:"ETH",
+          rateOfAnnualized:12.1101,
+          lockAmount:0,
+          totalLockAmount:0,
+          isApproved:false,
+          isLoading:true,
+        },
+        {
+          currency:"BNB",
+          rateOfAnnualized:22.22,
+          lockAmount:0,
+          totalLockAmount:0,
+          isApproved:false,
+          isLoading:true,
+        },
+        {
+          currency:"BTC",
+          rateOfAnnualized:33.33,
+          lockAmount:0,
+          totalLockAmount:0,
+          isApproved:false,
+          isLoading:true,
+        },
+        {
+          currency:"USDT",
+          rateOfAnnualized:44.44,
+          lockAmount:0,
+          totalLockAmount:0,
+          isApproved:false,
+          isLoading:true,
+        },
+      ],
+      twoTokens:[
+        {
+          currency1:"Libra",
+          currency2:"ETH",
+          rateOfAnnualized:12.1101,
+          lockAmount1:0,
+          lockAmount2:0,
+          totalLockAmount1:0,
+          totalLockAmount2:0,
+          isApproved:false,
+          isLoading:true,
+        },
+        {
+          currency1:"Libra",
+          currency2:"BNB",
+          rateOfAnnualized:22.22,
+          lockAmount1:0,
+          lockAmount2:0,
+          totalLockAmount1:0,
+          totalLockAmount2:0,
+          isApproved:false,
+          isLoading:true,
+        },
+        {
+          currency1:"Libra",
+          currency2:"USDT",
+          rateOfAnnualized:33.33,
+          lockAmount1:0,
+          lockAmount2:0,
+          totalLockAmount1:0,
+          totalLockAmount2:0,
+          isApproved:false,
+          isLoading:true,
+        },
+        {
+          currency1:"Libra",
+          currency2:"BTC",
+          rateOfAnnualized:44.44,
+          lockAmount1:0,
+          lockAmount2:0,
+          totalLockAmount1:0,
+          totalLockAmount2:0,
+          isApproved:false,
+          isLoading:true,
+        },
+        {
+          currency1:"Libra",
+          currency2:"FIL",
+          rateOfAnnualized:55.55,
+          lockAmount1:0,
+          lockAmount2:0,
+          totalLockAmount1:0,
+          totalLockAmount2:0,
+          isApproved:false,
+          isLoading:true,
+        }
+      ]
     }
   },
   methods: {

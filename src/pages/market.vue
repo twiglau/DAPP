@@ -1,5 +1,6 @@
 <template>
   <div class="market">
+    <a-spin class="global_loading" tip="loading" :spinning="spinStatus" size="large">
       <div class="team-amount">
         <div class="amount-item">
           <span>{{$t('l.t_tolp')}}</span><span>LBR + USDT</span><span>1000.00</span>
@@ -63,10 +64,12 @@
           </div>
         </div>
       </div>
+    </a-spin>
   </div>
 </template>
 
 <script>
+import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
 export default {
   name: "Market",
@@ -75,15 +78,23 @@ export default {
   },
   data() {
     return {
+      spinStatus:false,
+      walletAddress:'',
     }
   },
   computed: {
   },
   methods: {
+    async getTeamData(){
+      new Promise((resolve,reject) => {
+          
+      })
+    }
   },
   created() {
   },
   mounted() {
+      this.walletAddress = localStorage.getItem("walletAddress") || '';
   },
   destroyed() {
   }
@@ -238,4 +249,17 @@ export default {
     margin-top: 0px;
   }
 }
+</style>
+<style>
+  .global_loading.ant-spin-nested-loading > div > .ant-spin {
+    width: 100%;height: 100vh;
+    position: fixed!important;
+    top: 0!important;
+    bottom: 0!important;
+    left: 0!important;
+    right: 0!important;
+    z-index: 99999!important;
+    max-height: 10000px!important;
+    background-color: rgba(255,255,255,.6);
+  }
 </style>

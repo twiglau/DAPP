@@ -10,7 +10,7 @@
         <div class="copy_wrap">
           <span class="copy_text" v-if="!$store.state.accounts.isMobile">{{$t('l.invite_text')}}</span>
           <span class="link_text">
-            http://127.0.0.1:10086/farm?address={{walletAddress}}
+            {{currentHref + '?address=' +walletAddress}}
             <img @click="handleCopyLink" class="invite_icon" alt="" src="../assets/copy_link.png">
           </span>
         </div>
@@ -18,12 +18,11 @@
       <div v-show="currentIndex==0" class="pools-main">
         <div class="pools__item" v-for="item in oneTokens" :key="item.currency">
             <div class="pools__box">
-              <a-spin tips="loading" :spinning="false" size="large">
+              <a-spin tips="loading" :spinning="item.isLoading" size="large">
                 <ul class="pools__rows">
                   <li class="pools__row-1">
                     <div class="pools__logo-name">
-                      <img class="pools__coin-logo" src="../assets/ETH_coin.png">
-                      <img v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" src="../assets/Libra_icon.png">
+                      <svg-icon class="pools__coin-logo" :icon-class="item.currency + '_coin'" />
                       <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">{{item.currency}}</div>
                     </div>
                     <div class="pools__info">{{$t('l.reward')}} Libra</div>
@@ -42,9 +41,9 @@
                   </li>
                   <li class="pools__group-buttons">
                     <div class="pools__button-group">
-                      <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal(0,item.currency)">{{$t('l.withdrawal')}}</button>
+                      <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal(0,item)">{{$t('l.withdrawal')}}</button>
                       <button v-show="!item.isApproved" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency,null)">{{$t('l.approve')}}</button>
-                      <button v-show="item.isApproved" class="g-button pools__dialog__option g-button-heco-theme " @click="handleShowDepositModal(0,item.currency)">{{$t('l.deposit')}}</button>
+                      <button v-show="item.isApproved" class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(0,item)">{{$t('l.deposit')}}</button>
                     </div>
                   </li>
                 </ul>
@@ -58,12 +57,12 @@
       <div v-show="currentIndex==1" class="pools-main">
         <div class="pools__item" v-for="item in twoTokens" :key="item.currency2">
           <div class="pools__box">
-            <a-spin tips="loading" :spinning="false" size="large">
+            <a-spin tips="loading" :spinning="item.isLoading" size="large">
               <ul class="pools__rows">
                 <li class="pools__row-1">
                   <div class="pools__logo-name">
-                    <img class="pools__coin-logo" src="../assets/ETH_coin.png">
-                    <img v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" src="../assets/Libra_icon.png">
+                    <svg-icon class="pools__coin-logo" :icon-class="item.currency1 + '_coin'"/>
+                    <svg-icon v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" :icon-class="item.currency2 + '_coin'"/>
                     <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">{{item.currency1}}/{{item.currency2}}</div>
                   </div>
                   <div class="pools__info">{{$t('l.reward')}} Libra</div>
@@ -74,17 +73,25 @@
                 </li>
                 <li class="pools__row">
                   <div class="pools__labe-field">{{$t('l.deposited')}}({{item.currency1}}/{{item.currency2}})</div>
-                  <div class="pools__label-value pools__label-value--black"><countTo :endVal='item.lockAmount' :duration='3000' :decimals="4"></countTo></div>
+                  <div class="pools__label-value pools__label-value--black">
+                    <countTo :endVal='item.lockAmount1' :duration='3000' :decimals="4"></countTo>
+                    /
+                    <countTo :endVal='item.lockAmount2' :duration='3000' :decimals="4"></countTo>
+                    </div>
                 </li>
                 <li class="pools__row">
                   <div class="pools__labe-field">{{$t('l.VL')}}({{item.currency1}}/{{item.currency2}})</div>
-                  <div class="pools__label-value"><countTo :endVal='item.totalLockAmount' :duration='3000' :decimals="2"></countTo></div>
+                  <div class="pools__label-value">
+                    <countTo :endVal='item.totalLockAmount1' :duration='3000' :decimals="2"></countTo>
+                    /
+                    <countTo :endVal='item.totalLockAmount2' :duration='3000' :decimals="2"></countTo>
+                    </div>
                 </li>
                 <li class="pools__group-buttons">
                   <div class="pools__button-group">
-                    <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal(1,item.currency2)">{{$t('l.withdrawal')}}</button>
+                    <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal(1,item)">{{$t('l.withdrawal')}}</button>
                     <button v-show="!item.isApproved" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency1,item.currency2)">{{$t('l.approve')}}</button>
-                    <button v-show="item.isApproved" class="g-button pools__dialog__option g-button-heco-theme " @click="handleShowDepositModal(1,item.currency2)">{{$t('l.deposit')}}</button>
+                    <button v-show="item.isApproved" class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(1,item)">{{$t('l.deposit')}}</button>
                   </div>
                 </li>
               </ul>
@@ -102,30 +109,21 @@
           <ul class="pools__rows">
             <li class="pools__row-1">
               <div class="pools__logo-name">
-                <img class="pools__coin-logo" src="../assets/ETH_coin.png">
+                <svg-icon class="pools__coin-logo" :icon-class="withdrawalInfo.currency + '_coin'" />
                 <img v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" src="../assets/Libra_icon.png">
-                <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">{{withdrawalCurrency}}</div>
+                <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">{{withdrawalInfo.currency}}</div>
               </div>
-              <div class="pools__info">{{$t('l.reward')}} {{withdrawalCurrency}}</div>
-            </li>
-            <li class="pools__income-field">
-              <div class="pools__income-label">
-                <p class="pools__income-title">{{$t('l.sygz')}}</p>
-                <p class="pools__income-text"><countTo :endVal='1000.00' :duration='3000' :decimals="4"></countTo> {{withdrawalCurrency}}</p>
-              </div>
-              <div class="pools__income-button">
-                <button @click="handleClaim" class="g-button g-button-heco-theme ">{{$t('l.claim')}}</button>
-              </div>
+              <div class="pools__info">{{$t('l.reward')}} {{withdrawalInfo.currency}}</div>
             </li>
             <li class="pools__dialog__withdraw-field">
-              <span>{{$t('l.deposited')}}({{currentPoolIndex > -1 ? 'ETH' : ''}})</span><span><countTo :endVal='10000.00' :duration='3000' :decimals="4"></countTo></span>
+              <span>{{$t('l.deposited')}}({{withdrawalInfo.currency}})</span><span><countTo :endVal='withdrawalInfo.lockAmount' :duration='3000' :decimals="4"></countTo></span>
             </li>
             <li class="pools__dialog__input">
               <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
-              <button @click="handleWithAll" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.withdrawall')}}</button>
+              <button @click="iptValue1 = withdrawalInfo.lockAmount" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.withdrawall')}}</button>
             </li>
             <li>
-              <button @click="handleWithDrawOne(withdrawalCurrency,iptValue1)" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.withdrawal')}}</button>
+              <button @click="handleWithDrawOne(withdrawalInfo.currency,iptValue1)" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.withdrawal')}}</button>
             </li>
           </ul>
         </div>
@@ -137,30 +135,21 @@
           <ul class="pools__rows">
             <li class="pools__row-1">
               <div class="pools__logo-name">
-                <img class="pools__coin-logo" src="../assets/ETH_coin.png">
-                <img v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" src="../assets/Libra_icon.png">
-                <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">Libra/{{withdrawalCurrency}}</div>
+                <svg-icon class="pools__coin-logo" :icon-class="withdrawalInfo.currency1 + '_coin'" />
+                <svg-icon v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" :icon-class="withdrawalInfo.currency2 + '_coin'" />
+                <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">{{withdrawalInfo.currency1 + "/" + withdrawalInfo.currency2}}</div>
               </div>
-              <div class="pools__info">{{$t('l.reward')}} Libra/{{withdrawalCurrency}}</div>
-            </li>
-            <li class="pools__income-field">
-              <div class="pools__income-label">
-                <p class="pools__income-title">{{$t('l.sygz')}}</p>
-                <p class="pools__income-text"><countTo :endVal='1000.00' :duration='3000' :decimals="4"></countTo> Libra/{{withdrawalCurrency}}</p>
-              </div>
-              <div class="pools__income-button">
-                <button @click="handleClaim" class="g-button g-button-heco-theme ">{{$t('l.claim')}}</button>
-              </div>
+              <div class="pools__info">{{$t('l.reward')}} {{withdrawalInfo.currency1}}</div>
             </li>
             <li class="pools__dialog__withdraw-field">
-              <span>{{$t('l.deposited')}}({{currentPoolIndex > -1 ? 'ETH' : ''}})</span><span><countTo :endVal='10000.00' :duration='3000' :decimals="4"></countTo></span>
+              <span>{{$t('l.deposited')}}({{withdrawalInfo.currency1}})</span><span><countTo :endVal='withdrawalInfo.lockAmount1' :duration='3000' :decimals="4"></countTo></span>
             </li>
             <li class="pools__dialog__input">
               <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
-              <button @click="handleWithAll" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.withdrawall')}}</button>
+              <button @click="iptValue1 = withdrawalInfo.lockAmount1" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.withdrawall')}}</button>
             </li>
             <li>
-              <button @click="handleWithDrawTwo(iptValue1,withdrawalCurrency)" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.withdrawal')}}</button>
+              <button @click="handleWithDrawTwo(iptValue1,withdrawalInfo.currency2)" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.withdrawal')}}</button>
             </li>
           </ul>
         </div>
@@ -172,26 +161,26 @@
           <ul class="pools__dialog__fields">
             <li class="pools__row-1">
               <div class="pools__logo-name">
-                <img class="pools__coin-logo" src="../assets/ETH_coin.png">
-                <img v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" src="../assets/Libra_icon.png">
-                <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">{{modalCurrencyOne}}</div>
+                <svg-icon class="pools__coin-logo" :icon-class="depositInfo.currency + '_coin'" />
+                <svg-icon v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" :icon-class="depositInfo.currency + '_coin'" />
+                <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">{{depositInfo.currency}}</div>
               </div>
               <div class="pools__info">{{$t('l.reward')}} Libra</div>
             </li>
             <li class="pools__row">
-              <div class="pools__labe-field">{{$t('l.deposited')}} ({{modalCurrencyOne}})</div>
-              <div class="pools__label-value pools__label-value--black"><countTo :endVal='1000.00' :duration='3000' :decimals="4"></countTo></div>
+              <div class="pools__labe-field">{{$t('l.deposited')}} ({{depositInfo.currency}})</div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.lockAmount' :duration='3000' :decimals="4"></countTo></div>
             </li>
             <li class="pools__row">
-              <div class="pools__labe-field">{{$t('l.balance')}}({{modalCurrencyOne}})</div>
-              <div class="pools__label-value pools__label-value--black"><countTo :endVal='1000.0' :duration='3000' :decimals="4"></countTo></div>
+              <div class="pools__labe-field">{{$t('l.balance')}}({{depositInfo.currency}})</div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.balance' :duration='3000' :decimals="4"></countTo></div>
             </li>
             <li class="pools__dialog__input">
               <input @input="input_num(2)" :placeholder="$t('l.iptPlace')" v-model="iptValue2">
-              <button @click="handleDepositAll" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.depositall')}}</button>
+              <button @click="iptValue2=depositInfo.balance" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.depositall')}}</button>
             </li>
             <li>
-              <button @click="handleDepositConfirmOne(modalCurrencyOne,iptValue2)" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.deposit')}}</button>
+              <button @click="handleDepositConfirmOne(depositInfo.currency,iptValue2)" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.deposit')}}</button>
             </li>
           </ul>
         </div>
@@ -203,26 +192,26 @@
           <ul class="pools__dialog__fields">
             <li class="pools__row-1">
               <div class="pools__logo-name">
-                <img class="pools__coin-logo" src="../assets/ETH_coin.png">
-                <img v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" src="../assets/Libra_icon.png">
-                <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">Libra/{{modalCurrencyTwo}}</div>
+                <svg-icon class="pools__coin-logo" :icon-class="depositInfo.currency1 + '_coin'" />
+                <svg-icon v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" :icon-class="depositInfo.currency2 + '_icon'" />
+                <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">Libra/{{depositInfo.currency2}}</div>
               </div>
               <div class="pools__info">{{$t('l.reward')}} Libra</div>
             </li>
             <li class="pools__row">
-              <div class="pools__labe-field">{{$t('l.deposited')}} (Libra/{{modalCurrencyTwo}})</div>
-              <div class="pools__label-value pools__label-value--black"><countTo :endVal='0' :duration='3000' :decimals="4"></countTo></div>
+              <div class="pools__labe-field">{{$t('l.deposited')}} (Libra/{{depositInfo.currency2}})</div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.lockAmount2' :duration='3000' :decimals="4"></countTo></div>
             </li>
             <li class="pools__row">
-              <div class="pools__labe-field">{{$t('l.balance')}}(Libra/{{modalCurrencyTwo}})</div>
-              <div class="pools__label-value pools__label-value--black"><countTo :endVal='0' :duration='3000' :decimals="4"></countTo></div>
+              <div class="pools__labe-field">{{$t('l.balance')}}(Libra/{{depositInfo.currency2}})</div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.balance' :duration='3000' :decimals="4"></countTo></div>
             </li>
             <li class="pools__dialog__input">
               <input @input="input_num(2)" :placeholder="$t('l.iptPlace')" v-model="iptValue2">
-              <button @click="handleDepositAll" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.depositall')}}</button>
+              <button @click="iptValue2=depositInfo.balance" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.depositall')}}</button>
             </li>
             <li>
-              <button @click="handleDepositConfirmTwo(iptValue2,modalCurrencyTwo)" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.deposit')}}</button>
+              <button @click="handleDepositConfirmTwo(iptValue2,depositInfo.currency2)" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.deposit')}}</button>
             </li>
           </ul>
         </div>
@@ -235,11 +224,11 @@
 <script>
 import countTo from 'vue-count-to';
 import Wallet from '@/utils/Wallet.js';
-
+import {getRate,postWithdrawalData,postExchangeData} from '@/utils/api'
 export default {
   name: "Home",
   components: {
-    countTo,
+    countTo
   },
   data() {
     return {
@@ -249,9 +238,12 @@ export default {
       isModalShowWithTwo:false,
       isModalShowSaveOne: false,
       isModalShowSaveTwo: false,
+      inviteAddress:null,
       modalCurrencyOne:'',
       modalCurrencyTwo:'',
       withdrawalCurrency:'',
+      withdrawalInfo:{},
+      depositInfo:{},
       currentIndex: 0,   //0 单币  1 lp
       navArr: ['db','lp'],
       iptValue: undefined,
@@ -307,8 +299,10 @@ export default {
           currency1:"Libra",
           currency2:"ETH",
           rateOfAnnualized:12.1101,
-          lockAmount:0,
-          totalLockAmount:0,
+          lockAmount1:0,
+          lockAmount2:0,
+          totalLockAmount1:0,
+          totalLockAmount2:0,
           isApproved:false,
           isLoading:true,
         },
@@ -316,8 +310,10 @@ export default {
           currency1:"Libra",
           currency2:"BNB",
           rateOfAnnualized:22.22,
-          lockAmount:0,
-          totalLockAmount:0,
+          lockAmount1:0,
+          lockAmount2:0,
+          totalLockAmount1:0,
+          totalLockAmount2:0,
           isApproved:false,
           isLoading:true,
         },
@@ -325,8 +321,10 @@ export default {
           currency1:"Libra",
           currency2:"USDT",
           rateOfAnnualized:33.33,
-          lockAmount:0,
-          totalLockAmount:0,
+          lockAmount1:0,
+          lockAmount2:0,
+          totalLockAmount1:0,
+          totalLockAmount2:0,
           isApproved:false,
           isLoading:true,
         },
@@ -334,8 +332,10 @@ export default {
           currency1:"Libra",
           currency2:"BTC",
           rateOfAnnualized:44.44,
-          lockAmount:0,
-          totalLockAmount:0,
+          lockAmount1:0,
+          lockAmount2:0,
+          totalLockAmount1:0,
+          totalLockAmount2:0,
           isApproved:false,
           isLoading:true,
         },
@@ -343,8 +343,10 @@ export default {
           currency1:"Libra",
           currency2:"FIL",
           rateOfAnnualized:55.55,
-          lockAmount:0,
-          totalLockAmount:0,
+          lockAmount1:0,
+          lockAmount2:0,
+          totalLockAmount1:0,
+          totalLockAmount2:0,
           isApproved:false,
           isLoading:true,
         },
@@ -495,7 +497,7 @@ export default {
     },
 
     async handleShowWithdrawModal(index,currency) {
-      this.withdrawalCurrency = currency;
+      this.withdrawalInfo = currency;
       if (index==0){
         this.isModalShowWithOne=true;
       }else {
@@ -508,19 +510,37 @@ export default {
     },
     async handleWithDrawOne(currency,amount) {
       let _this = this
+      let aUp = +amount;
       if (currency == null || currency == undefined){
         _this.$message.error("币种错误")
         return ;
       }
-      if (amount == null || amount == undefined || amount <=0){
+      if (aUp > _this.withdrawalInfo.lockAmount || !amount){
         _this.$message.error("数量错误")
-        return ;
+        return;
       }
-      Wallet.takeoutOne(this.walletAddress,currency,amount, (res)=>{
+      Wallet.takeoutOne(this.walletAddress,currency,aUp, (res)=>{
+        console.log(res)
+         if(res){
+           postWithdrawalData({address:_this.walletAddress,amount:amount,parentAddress:_this.inviteAddress,token1:currency})
+           .then(res => {
+              const {status} = res
+              if(status == 200){
+                 _this.isModalShowWithOne = false
+                 _this.$success({
+                   title:'提取',
+                   content:'提取成功'
+                 })
 
-        _this.$message.success("成功")
+              }
+           })
+         }
+        
       }, (res)=>{
-        _this.$message.error("失败")
+        _this.$error({
+          title:'提取',
+          content:res.message || '提取失败'
+        })
       });
     },
     async handleWithDrawTwo(amount1,currency2) {
@@ -529,28 +549,49 @@ export default {
         _this.$message.error("币种错误")
         return ;
       }
-      if (amount1 == null || amount1 == undefined || amount1 <=0){
+      if (!amount1 || amount1 > _this.withdrawalInfo.lockAmount1){
         _this.$message.error("数量错误")
         return ;
       }
-
+      console.log(amount1,currency2)
       Wallet.takeoutTwo(this.walletAddress,amount1,currency2,(res)=>{
 
-        _this.$message.success("成功")
+         if(res){
+           postWithdrawalData({address:_this.walletAddress,amount:amount1,parentAddress:_this.inviteAddress,token1:_this.withdrawalInfo.currency1,token2:currency2})
+           .then(res => {
+              const {status} = res
+              if(status == 200){
+                 _this.isModalShowWithOne = false
+                 _this.$success({
+                   title:'提取',
+                   content:'提取成功'
+                 })
+
+              }
+           })
+         }
       }, (res)=>{
-        _this.$message.error("失败")
+        _this.$error({
+          title:'提取',
+          content:res.message || '提取失败'
+        })
       });
     },
-    async handleShowDepositModal(index,currency) {
+    async handleShowDepositModal(index,item) {
+      let _self = this
+      _self.depositInfo = item
       if(index==0){
-        this.isModalShowSaveOne = true
-        this.modalCurrencyOne=currency;
-      }else if(index==1){
-        this.isModalShowSaveTwo = true
-        this.modalCurrencyTwo=currency;
-      }
-    },
-    handleDepositAll() {
+          _self.isModalShowSaveOne = true
+        }else if(index==1){
+          _self.isModalShowSaveTwo = true
+        }
+      // _self.$message.loading({ content: 'Loading...',key:'lang'})
+      // let currency = _self.depositInfo.currency ? _self.depositInfo.currency : _self.depositInfo.currency2;
+      // Wallet.balanceOf(currency,_self.walletAddress,(res)=>{
+      //   _self.$message.success({ content: 'Loaded!',key:'lang' ,duration: 2 });
+      //    _self.depositInfo.balance = res ? res : 0
+        
+      // })
     },
     async handleDepositConfirmOne(currency,amount) {
       let _this = this
@@ -560,10 +601,10 @@ export default {
       }
       if (amount == undefined || amount == null || amount <= 0){
         _this.$message.error("请输入存入数量")
-        return ;
+        return;
       }
       //TODO 获取币种currency的价格price，amount*price 必须 大于 100美元
-
+      
       //TODO 判断账户Currency余额
 
       //调用合约方法存入币种
@@ -576,7 +617,7 @@ export default {
     async handleDepositConfirmTwo(libraAmount,currency2) {
       if (currency2 == undefined||currency2 ==  null){
         _this.$message.error("请选择币种")
-        return ;
+        return;
       }
       if (libraAmount == undefined || libraAmount == null || libraAmount <= 0){
         _this.$message.error("请输入存入数量")
@@ -590,6 +631,206 @@ export default {
       },(res)=>{
         _this.$message.error(res.message || "报错")
       });
+    },
+    async getMyPairLockAmount(start = 0,end = 5){
+      let _self = this
+      new Promise((resolve,reject) => {
+        try {
+          let promiseMyLockArr = [],resultLockArr = [];
+          let i = start;
+          do {
+            ++i;
+            promiseMyLockArr[i] = new Promise((res,rej) => {
+                Wallet.twoDepositOrder(_self.walletAddress,i,(record) => {
+                  if(record){
+                    resultLockArr.push(record)
+                    res(record)
+                  }else{
+                    rej('error')
+                  }
+                })
+            })
+
+          } while (i < end);
+
+          //全部请求
+          Promise.all(promiseMyLockArr)
+          .finally(() => {
+            resolve('success')
+            //格式化数据 0-Libra/ETH  1-Libra/BNB 3-Libar/USDT 4-Libra/BTC 5-Libra/FIL
+            //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
+            _self.twoTokens[0].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,3,resultLockArr)
+            _self.twoTokens[0].lockAmount2 += _self.caluUseable('ETH','useableAmount2',1,3,resultLockArr)
+
+            _self.twoTokens[1].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,5,resultLockArr)
+            _self.twoTokens[1].lockAmount2 += _self.caluUseable('BNB','useableAmount2',1,5,resultLockArr)
+
+            _self.twoTokens[2].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,4,resultLockArr)
+            _self.twoTokens[2].lockAmount2 += _self.caluUseable('USDT','useableAmount2',1,4,resultLockArr)
+
+            _self.twoTokens[3].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,2,resultLockArr)
+            _self.twoTokens[3].lockAmount2 += _self.caluUseable('BTC','useableAmount2',1,2,resultLockArr)
+
+            _self.twoTokens[4].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,6,resultLockArr)
+            _self.twoTokens[4].lockAmount2 += _self.caluUseable('FIL','useableAmount2',1,6,resultLockArr)
+            
+            //这里过滤数据, 递归
+            if(resultLockArr.length == end){
+              _self.getMyPairLockAmount(end,end + 5)
+            }
+          })
+        } catch (error) {
+            reject(error)
+            _self.$message.error(_self.$t('l.catch_err'))
+        }
+      })
+    },
+    caluUseable(currency,key,index1,index2,array){
+        let libra_eth_1 = array.filter(ele => index2 == -1 ? ele.currencyIndex == index1 :  ele.currency1Index == index1 && ele.currency2Index == index2)
+                                        .reduce((currentTotal,item) => {
+                                          let num = +item[key]
+                                            return num + currentTotal
+                                        },0)  || 0
+        
+        libra_eth_1 > 0 && (libra_eth_1 = Number(libra_eth_1 / Wallet.Precisions(currency)))
+        console.log(currency,libra_eth_1)
+        return libra_eth_1
+    },
+    async getMyLockAmount(start = 0, end = 5){
+      let _self = this
+      new Promise((resolve,reject) => {
+        try {
+          let promiseMyLockArr = [],resultLockArr = [];
+          let i = start;
+          do {
+            ++i;
+            promiseMyLockArr[i] = new Promise((res,rej) => {
+                Wallet.oneDepositOrder(_self.walletAddress,i,(record) => {
+                  if(record){
+                    resultLockArr.push(record)
+                    res(record)
+                  }else{
+                    rej('error')
+                  }
+                })
+            })
+
+          } while (i < end);
+
+          //全部请求
+          Promise.all(promiseMyLockArr).finally(() => {
+            resolve('success')
+            console.log(resultLockArr)
+            //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
+            //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
+            _self.oneTokens[0].lockAmount += _self.caluUseable('ETH','useableAmount',3,-1,resultLockArr)
+
+            _self.oneTokens[1].lockAmount += _self.caluUseable('BNB','useableAmount',5,-1,resultLockArr)
+
+            _self.oneTokens[2].lockAmount += _self.caluUseable('BTC','useableAmount',2,-1,resultLockArr)
+
+            _self.oneTokens[3].lockAmount += _self.caluUseable('USDT','useableAmount',4,-1,resultLockArr)
+            
+            //这里过滤数据, 递归
+            if(resultLockArr.length == end){
+              _self.getMyLockAmount(end,end + 5)
+            }
+
+          })
+          
+        } catch (error) {
+            reject(error)
+            _self.$message.error(_self.$t('l.catch_err'))
+        }
+      })
+    },
+    //计算交易对锁仓
+    async getPairLockAmount(){
+      let _self = this
+      new Promise((resolve,reject) => {
+        try {
+            let promiseAllarr = []
+            for(let i = 0; i < _self.twoTokens.length;i++){
+              promiseAllarr[i] = new Promise((res) => {
+
+                Promise.all([
+                  new Promise((res1) => {
+                    Wallet.totalDepositBalance(_self.twoTokens[i].currency1,(in_a)=>{
+                      let val = in_a
+                      in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.twoTokens[i].currency1)))
+                      val < -0.01 && (val = 0)
+                      res1(val)
+                    })
+                  }),
+                  new Promise((res2) => {
+                    Wallet.totalTakeoutAmount(_self.twoTokens[i].currency1,(out_a)=>{
+                      let val = out_a
+                      out_a > 0 && (val = Number(out_a / Wallet.Precisions(_self.twoTokens[i].currency1)))
+                      val < -0.01 && (val = 0)
+                      res2(val)
+                    })
+                  }),
+                  new Promise((res3) => {
+                    Wallet.totalDepositBalance(_self.twoTokens[i].currency2,(in_a)=>{
+                      let val = in_a
+                      in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.twoTokens[i].currency2)))
+                      val < -0.01 && (val = 0)
+                      res3(val)
+                    })
+                  }),
+                  new Promise((res4) => {
+                    Wallet.totalTakeoutAmount(_self.twoTokens[i].currency2,(out_a)=>{
+                      let val = out_a
+                      out_a > 0 && (val = Number(out_a / Wallet.Precisions(_self.twoTokens[i].currency2)))
+                      val < -0.01 && (val = 0)
+                      res4(val)
+                    })
+                  }),
+                  new Promise((res5) => {
+
+                      Wallet.queryAllowance('',_self.twoTokens[i].currency1,(res)=>{
+                        if(res._hex && res._hex > 0) {
+                            res5(true)
+                        }else {
+                            res5(false)
+                        }
+                         
+                      })
+                  }),
+                  new Promise((res6) => {
+                      Wallet.queryAllowance('',_self.twoTokens[i].currency2,(res)=>{
+                        if(res._hex && res._hex > 0) {
+                            res6(true)
+                        }else {
+                            res6(false)
+                        }
+                      });
+                  })
+                ])
+                .then((in_out) => {
+                    _self.twoTokens[i].totalLockAmount1 = in_out[0] - in_out[1]
+                    _self.twoTokens[i].totalLockAmount2 = in_out[2] - in_out[3]
+                    // _self.twoTokens[i].isApproved = in_out[4]&&in_out[5] ? true : false
+                    _self.twoTokens[i].isLoading = false
+                    res('success')
+                })
+                .catch((err) => {
+                    _self.twoTokens[i].isLoading = false
+                    res('success')
+                })
+              })
+            }
+            //全部请求
+            Promise.all(promiseAllarr).then(() => {
+              resolve('success')
+            }).catch(err => {
+              reject(err)
+            })
+        }catch(err){
+            reject(err)
+            _self.$message.error(_self.$t('l.catch_err'))
+        }
+      })
     },
     //计算总锁仓
     async getLockAmount(){
@@ -616,11 +857,20 @@ export default {
                       val < -0.01 && (val = 0)
                       res2(val)
                     })
+                  }),
+                  new Promise((res3) => {
+                    Wallet.queryAllowance('',_self.oneTokens[i].currency,(pro)=>{
+                        if(res._hex && res._hex > 0) {
+                            res3(true)
+                        }else {
+                            res3(false)
+                        }
+                    });
                   })
                 ])
                 .then((in_out) => {
-                    console.table(in_out)
                     _self.oneTokens[i].totalLockAmount = in_out[0] - in_out[1]
+                    // _self.oneTokens[i].isApproved = true // in_out[2]
                     _self.oneTokens[i].isLoading = false
                     res('success')
                 })
@@ -640,6 +890,25 @@ export default {
             reject(err)
             _self.$message.error(_self.$t('l.catch_err'))
         }
+      })
+    },
+    //年收益率
+    async getRatePairs(){
+      let _self = this
+      const res = await Promise.all([getRate({type:1}),getRate({type:2})])
+      const result1 = res[0].result, result2 = res[1].result;
+      _self.oneTokens = _self.oneTokens.map(ele => {
+        const data = {...ele}
+        const find = result1.find(fd => fd.token1 == ele.currency).rate || 0
+        data.rateOfAnnualized = find
+        return data
+      })
+
+      _self.twoTokens = _self.twoTokens.map(ele => {
+        const data = {...ele}
+        const find = result2.find(fd => fd.token1 == ele.currency2.toUpperCase() && fd.token2 == ele.currency1.toUpperCase()).rate || 0
+        data.rateOfAnnualized = find
+        return data
       })
     },
     input_num(index) {
@@ -662,12 +931,23 @@ export default {
     this.updateApproveStatus(null);
   },
   mounted() {
+
+    let inviteAddress = this.$route.query.address ? this.$route.query.address : ''
+    if(inviteAddress) {
+      this.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)
+    }
+
+    this.inviteAddress = this.$getCookie('inviteAddress') ? this.$getCookie('inviteAddress') : this.$emptyAddress()
     let ptype = this.$route.query.ptype ? this.$route.query.ptype : 1
     if(ptype !== undefined) {
       this.handleContChange(ptype - 1)
     }
     setTimeout(async () => {
        await this.getLockAmount()
+       await this.getPairLockAmount()
+       await this.getMyLockAmount()
+       await this.getMyPairLockAmount()
+       await this.getRatePairs()
     },500)
   },
   destroyed() {
@@ -898,6 +1178,10 @@ export default {
     font-weight: 700;
     cursor: pointer;
   }
+  .g-button--approved {
+    background-image: none;
+    background-color: #19A569;
+  }
   .g-button--normal {
     background-image: none;
     background-color: #fff;
@@ -922,10 +1206,14 @@ export default {
     opacity: .3;
   }
   .g-button:hover {
-    background-color: #43318C;
+    background-color: hsl(252, 74%, 21%);
+  }
+  .g-button--approved:hover {
+    background-image: none;
+    background-color: #183f2e;
   }
   .g-button--normal:hover{
-    background-color: #43318C;
+    background-color: #1d0c63;
     color:#fff;
     border:none
   }
