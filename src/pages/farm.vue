@@ -267,7 +267,6 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
-          isLoading:true,
         },
         {
           currency:"BNB",
@@ -275,7 +274,6 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
-          isLoading:true,
         },
         {
           currency:"BTC",
@@ -283,7 +281,6 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
-          isLoading:true,
         },
         {
           currency:"USDT",
@@ -291,7 +288,6 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
-          isLoading:true,
         },
       ],
       twoTokens:[
@@ -304,7 +300,6 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:true,
         },
         {
           currency1:"Libra",
@@ -315,7 +310,6 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:true,
         },
         {
           currency1:"Libra",
@@ -326,7 +320,6 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:true,
         },
         {
           currency1:"Libra",
@@ -337,7 +330,6 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:true,
         },
         {
           currency1:"Libra",
@@ -348,7 +340,6 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:true,
         },
       ],
       walletAddress:'',
@@ -357,8 +348,6 @@ export default {
   computed: {
   },
   methods: {
-
-    
     handleTapStart(e) {
       e.target.classList.add('tap')
     },
@@ -511,10 +500,6 @@ export default {
     async handleWithDrawOne(currency,amount) {
       let _this = this
       let aUp = +amount;
-      if (currency == null || currency == undefined){
-        _this.$message.error("币种错误")
-        return ;
-      }
       if (aUp > _this.withdrawalInfo.lockAmount || !amount){
         _this.$message.error("数量错误")
         return;
@@ -546,7 +531,7 @@ export default {
     async handleWithDrawTwo(amount1,currency2) {
       let _this = this
       if (currency2 == null || currency2 == undefined){
-        _this.$message.error("币种错误")
+        _this.$message.error("币种错误");
         return ;
       }
       if (!amount1 || amount1 > _this.withdrawalInfo.lockAmount1){
@@ -594,9 +579,8 @@ export default {
       // })
     },
     async handleDepositConfirmOne(currency,amount) {
-      let _this = this
       if (currency == undefined||currency ==  null){
-        _this.$message.error("请选择币种")
+        alert("请选择币种");
         return ;
       }
       if (amount == undefined || amount == null || amount <= 0){
@@ -609,27 +593,28 @@ export default {
 
       //调用合约方法存入币种
       Wallet.depositOne(this.walletAddress,this.walletAddress,currency,amount,(res)=>{
-        _this.$message.success("已存入")
+        alert("已存入");
       },(res)=>{
-        _this.$message.error(res.message || "报错")
+        alert("报错："+res);
       });
     },
     async handleDepositConfirmTwo(libraAmount,currency2) {
+      let _this = this
       if (currency2 == undefined||currency2 ==  null){
         _this.$message.error("请选择币种")
         return;
       }
       if (libraAmount == undefined || libraAmount == null || libraAmount <= 0){
-        _this.$message.error("请输入存入数量")
+        _this.$message.error("请输入存入数量");
         return ;
       }
       //TODO 获取libra价格（libraPrice），和currency2价格（currency2Price），
       //TOoneDepositOrderDO (libraAmount*libraPrice)+currency2Amount*currency2Price 必须大于 100美元
       //调用合约方法存入币种
       Wallet.depositTwo(this.walletAddress,this.walletAddress,libraAmount,currency2,(res)=>{
-        _this.$message.success("已存入!")
+        _this.$message.success("已存入！"+JSON.stringify(res));
       },(res)=>{
-        _this.$message.error(res.message || "报错")
+        _this.$message.error("报错："+res);
       });
     },
     async getMyPairLockAmount(start = 0,end = 5){
@@ -818,10 +803,11 @@ export default {
                     _self.twoTokens[i].isLoading = false
                     res('success')
                 })
-                .catch((err) => {
+                .finally(() => {
                     _self.twoTokens[i].isLoading = false
                     res('success')
                 })
+
               })
             }
             //全部请求
@@ -864,7 +850,8 @@ export default {
                   }),
                   new Promise((res3) => {
                     Wallet.queryAllowance('',_self.oneTokens[i].currency,(pro)=>{
-                        if(res._hex && res._hex > 0) {
+                        console.log({pro})
+                        if(pro._hex && pro._hex > 0) {
                             res3(true)
                         }else {
                             res3(false)
@@ -874,11 +861,11 @@ export default {
                 ])
                 .then((in_out) => {
                     _self.oneTokens[i].totalLockAmount = in_out[0] - in_out[1]
-                    // _self.oneTokens[i].isApproved = true // in_out[2]
+                    // _self.oneTokens[i].isApproved = in_out[2]
                     _self.oneTokens[i].isLoading = false
                     res('success')
                 })
-                .catch((err) => {
+                .finally(() => {
                     _self.oneTokens[i].isLoading = false
                     res('success')
                 })
@@ -936,12 +923,11 @@ export default {
   },
   mounted() {
 
+    //上级地址
     let inviteAddress = this.$route.query.address ? this.$route.query.address : ''
-    if(inviteAddress) {
-      this.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)
-    }
-
+    inviteAddress && this.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)
     this.inviteAddress = this.$getCookie('inviteAddress') ? this.$getCookie('inviteAddress') : this.$emptyAddress()
+
     let ptype = this.$route.query.ptype ? this.$route.query.ptype : 1
     if(ptype !== undefined) {
       this.handleContChange(ptype - 1)

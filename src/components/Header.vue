@@ -1,7 +1,7 @@
 <template>
   <div class="header_wrap" :style="[{backgroundColor:currentIndex == 1? '#43318C':'white'}]">
-    
     <div class="header_inner_wrap">
+
       <div class="left_nav">
         <div class="logo_wrap">
           <img :src="logoImg" alt="" class="logo">
@@ -140,7 +140,7 @@
       }
     },
     computed: {
-      ...mapGetters('accounts',['getLangType','getIsMobile','getIsMainChainID']),
+      ...mapGetters('accounts',['getLangType','getIsMobile']),
       logoImg:function(){
         if(this.currentIndex == 1){
           return require('@/assets/logo_white.png')

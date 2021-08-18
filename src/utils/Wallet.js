@@ -20,21 +20,24 @@ const PrecisionsObj = [
 
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链
-const _contractAddress = '0x8331fc71a0730F582c431cfA2A42A3753d651C05';
+const _contractAddress = '0xB47408e96F02b885fBefDa0f008Fe016e328ac9e';
 const _contractABI = [
     {
         "inputs": [],
-        "payable": false,
         "stateMutability": "nonpayable",
         "type": "constructor"
     },
     {
-        "constant": true,
         "inputs": [
             {
                 "internalType": "uint8",
                 "name": "currencyIndex",
                 "type": "uint8"
+            },
+            {
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
             }
         ],
         "name": "allowance",
@@ -45,21 +48,17 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": false,
         "inputs": [],
         "name": "award",
         "outputs": [],
-        "payable": true,
         "stateMutability": "payable",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "bnbCurrPrice",
         "outputs": [
@@ -69,12 +68,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "bnbTakeoutAmount",
         "outputs": [
@@ -84,12 +81,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "bnbTotalAmount",
         "outputs": [
@@ -99,12 +94,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "btcCurrPrice",
         "outputs": [
@@ -114,12 +107,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "btcTakeoutAmount",
         "outputs": [
@@ -129,12 +120,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "btcTotalAmount",
         "outputs": [
@@ -144,12 +133,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "dayDividendAmount",
         "outputs": [
@@ -159,12 +146,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "decimals",
         "outputs": [
@@ -174,12 +159,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": false,
         "inputs": [
             {
                 "internalType": "address",
@@ -199,12 +182,10 @@ const _contractABI = [
         ],
         "name": "depositOne",
         "outputs": [],
-        "payable": true,
         "stateMutability": "payable",
         "type": "function"
     },
     {
-        "constant": false,
         "inputs": [
             {
                 "internalType": "address",
@@ -224,12 +205,10 @@ const _contractABI = [
         ],
         "name": "depositTwo",
         "outputs": [],
-        "payable": false,
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [
             {
                 "internalType": "uint256",
@@ -245,12 +224,10 @@ const _contractABI = [
                 "type": "address"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "dividendRate",
         "outputs": [
@@ -260,12 +237,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "ethCurrPrice",
         "outputs": [
@@ -275,12 +250,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "ethTakeoutAmount",
         "outputs": [
@@ -290,12 +263,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "ethTotalAmount",
         "outputs": [
@@ -305,12 +276,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": false,
         "inputs": [
             {
                 "internalType": "address",
@@ -325,12 +294,10 @@ const _contractABI = [
         ],
         "name": "exchange",
         "outputs": [],
-        "payable": true,
         "stateMutability": "payable",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "feeRateDayIn30",
         "outputs": [
@@ -340,12 +307,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "feeRateDayOut30",
         "outputs": [
@@ -355,12 +320,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "filCurrPrice",
         "outputs": [
@@ -370,12 +333,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "filTakeoutAmount",
         "outputs": [
@@ -385,12 +346,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "filTotalAmount",
         "outputs": [
@@ -400,12 +359,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [
             {
                 "internalType": "address",
@@ -441,12 +398,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [
             {
                 "internalType": "address",
@@ -482,12 +437,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "latestDividendTime",
         "outputs": [
@@ -497,12 +450,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "libraCurrPrice",
         "outputs": [
@@ -512,12 +463,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "libraTakeoutAmount",
         "outputs": [
@@ -527,12 +476,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "libraTotalAmount",
         "outputs": [
@@ -542,12 +489,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [
             {
                 "internalType": "address",
@@ -593,12 +538,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "owner",
         "outputs": [
@@ -608,12 +551,10 @@ const _contractABI = [
                 "type": "address"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "precision",
         "outputs": [
@@ -623,12 +564,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [
             {
                 "internalType": "address",
@@ -636,7 +575,7 @@ const _contractABI = [
                 "type": "address"
             }
         ],
-        "name": "recommendDeductionMap",
+        "name": "recommendMap",
         "outputs": [
             {
                 "internalType": "address",
@@ -654,12 +593,10 @@ const _contractABI = [
                 "type": "bool"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [
             {
                 "internalType": "address",
@@ -685,12 +622,10 @@ const _contractABI = [
                 "type": "address"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": false,
         "inputs": [
             {
                 "internalType": "uint256",
@@ -706,12 +641,10 @@ const _contractABI = [
                 "type": "bool"
             }
         ],
-        "payable": true,
         "stateMutability": "payable",
         "type": "function"
     },
     {
-        "constant": false,
         "inputs": [
             {
                 "internalType": "uint8",
@@ -726,12 +659,10 @@ const _contractABI = [
         ],
         "name": "takeoutOne",
         "outputs": [],
-        "payable": true,
         "stateMutability": "payable",
         "type": "function"
     },
     {
-        "constant": false,
         "inputs": [
             {
                 "internalType": "uint256",
@@ -746,12 +677,10 @@ const _contractABI = [
         ],
         "name": "takeoutTwo",
         "outputs": [],
-        "payable": false,
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [
             {
                 "internalType": "address",
@@ -817,27 +746,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
-        "inputs": [],
-        "name": "usdtCurrPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
         "inputs": [],
         "name": "usdtTakeoutAmount",
         "outputs": [
@@ -847,12 +759,10 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
         "name": "usdtTotalAmount",
         "outputs": [
@@ -862,7 +772,6 @@ const _contractABI = [
                 "type": "uint256"
             }
         ],
-        "payable": false,
         "stateMutability": "view",
         "type": "function"
     }
@@ -2363,297 +2272,757 @@ const filContractABI=[
 ];
 const libraContractABI=[
     {
-        "constant": true,
         "inputs": [],
-        "name": "name",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
+        "stateMutability": "nonpayable",
+        "type": "constructor"
     },
     {
-        "constant": false,
         "inputs": [
             {
-                "name": "_spender",
-                "type": "address"
-            },
-            {
-                "name": "_value",
-                "type": "uint256"
-            }
-        ],
-        "name": "approve",
-        "outputs": [
-            {
-                "name": "success",
-                "type": "bool"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "totalSupply",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_from",
-                "type": "address"
-            },
-            {
-                "name": "_to",
-                "type": "address"
-            },
-            {
-                "name": "_value",
-                "type": "uint256"
-            }
-        ],
-        "name": "transferFrom",
-        "outputs": [
-            {
-                "name": "success",
-                "type": "bool"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "decimals",
-        "outputs": [
-            {
-                "name": "",
+                "internalType": "uint8",
+                "name": "currencyIndex",
                 "type": "uint8"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_value",
-                "type": "uint256"
-            }
-        ],
-        "name": "burn",
-        "outputs": [
-            {
-                "name": "success",
-                "type": "bool"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "balanceOf",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_from",
-                "type": "address"
             },
             {
-                "name": "_value",
-                "type": "uint256"
-            }
-        ],
-        "name": "burnFrom",
-        "outputs": [
-            {
-                "name": "success",
-                "type": "bool"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "symbol",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_to",
-                "type": "address"
-            },
-            {
-                "name": "_value",
-                "type": "uint256"
-            }
-        ],
-        "name": "transfer",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_spender",
-                "type": "address"
-            },
-            {
-                "name": "_value",
-                "type": "uint256"
-            },
-            {
-                "name": "_extraData",
-                "type": "bytes"
-            }
-        ],
-        "name": "approveAndCall",
-        "outputs": [
-            {
-                "name": "success",
-                "type": "bool"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "",
-                "type": "address"
-            },
-            {
-                "name": "",
+                "internalType": "address",
+                "name": "from",
                 "type": "address"
             }
         ],
         "name": "allowance",
         "outputs": [
             {
+                "internalType": "uint256",
+                "name": "remaining",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "award",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "bnbCurrPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
             }
         ],
-        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "bnbTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "bnbTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "btcCurrPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "btcTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "btcTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "dayDividendAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
         "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
             {
-                "name": "initialSupply",
+                "internalType": "address",
+                "name": "_upperAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_currencyIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "depositOne",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_upperAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount1",
                 "type": "uint256"
             },
             {
-                "name": "tokenName",
-                "type": "string"
-            },
-            {
-                "name": "tokenSymbol",
-                "type": "string"
+                "internalType": "uint8",
+                "name": "_currency2Index",
+                "type": "uint8"
             }
         ],
-        "payable": false,
+        "name": "depositTwo",
+        "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "constructor"
+        "type": "function"
     },
     {
-        "anonymous": false,
         "inputs": [
             {
-                "indexed": true,
-                "name": "from",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "name": "value",
+                "internalType": "uint256",
+                "name": "",
                 "type": "uint256"
             }
         ],
-        "name": "Transfer",
-        "type": "event"
+        "name": "depositUserList",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
     },
     {
-        "anonymous": false,
-        "inputs": [
+        "inputs": [],
+        "name": "dividendRate",
+        "outputs": [
             {
-                "indexed": true,
-                "name": "from",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "name": "value",
+                "internalType": "uint256",
+                "name": "",
                 "type": "uint256"
             }
         ],
-        "name": "Burn",
-        "type": "event"
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "ethCurrPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "ethTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "ethTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_upperAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "exchange",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "feeRateDayIn30",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "feeRateDayOut30",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "filCurrPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "filTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "filTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "ia_map",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "total",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeout",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "todayDividend",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "todayShareAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "todayGlobalAmount",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "incomeRecord",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "fromAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "latestDividendTime",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "libraCurrPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "libraTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "libraTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "oneOrderMap",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "currencyIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "useableAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "depositTime",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "precision",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "recommendMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "upperAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "bool",
+                "name": "hasDeducted",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "subordinateAddressMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "downAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "takeoutIncome",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "_currencyIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "takeoutOne",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_amount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_currency2Index",
+                "type": "uint8"
+            }
+        ],
+        "name": "takeoutTwo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "twoOrderMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currency1Index",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalAmount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "useableAmount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutAmount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currency2Index",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalAmount2",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "useableAmount2",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutAmount2",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "depositTime",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "usdtTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "usdtTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
     }
 ];
 function Precisions(currency){
@@ -3050,6 +3419,40 @@ function takeoutIncome(account,amount, callback, errorCallback){
     sendTransfer(account, data, 0x0, callback, errorCallback);
 }
 
+/***
+ * 查上级
+ * @param account
+ * @param callback
+ */
+function queryUpUser(account,callback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.recommendMap(account)
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            console.log('获取失败：', err);
+        });
+}
+
+/***
+ * 查下级
+ * @param account
+ * @param callback
+ */
+function queryDownUser(account,index,callback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.subordinateAddressMap(account,index)
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            console.log('获取失败：', err);
+        });
+}
+
 function test() {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.libraTotalAmount().call()
@@ -3096,6 +3499,8 @@ export default {
     twoDepositOrder,
     incomeAccount,
     takeoutIncome,
+    queryUpUser,
+    queryDownUser,
     test,
     Precisions,
 }
