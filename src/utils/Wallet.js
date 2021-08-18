@@ -3127,7 +3127,6 @@ function queryAllowance(account,currency,callback){
     _contract.methods.allowance(getCurrencyIndex(currency),account)
         .call()
         .then((res) => {
-            console.log({res})
             callback(res);
         })
         .catch((err) => {

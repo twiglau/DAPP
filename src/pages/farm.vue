@@ -736,6 +736,7 @@ export default {
     //计算交易对锁仓
     async getPairLockAmount(){
       let _self = this
+      _self.walletAddress = localStorage.getItem("walletAddress");
       new Promise((resolve,reject) => {
         try {
             let promiseAllarr = []
@@ -777,8 +778,8 @@ export default {
                   }),
                   new Promise((res5) => {
 
-                      Wallet.queryAllowance('',_self.twoTokens[i].currency1,(res)=>{
-                        if(res._hex && res._hex > 0) {
+                      Wallet.queryAllowance(_self.walletAddress,_self.twoTokens[i].currency1,(res)=>{
+                        if(res && res > 0) {
                             res5(true)
                         }else {
                             res5(false)
@@ -787,8 +788,8 @@ export default {
                       })
                   }),
                   new Promise((res6) => {
-                      Wallet.queryAllowance('',_self.twoTokens[i].currency2,(res)=>{
-                        if(res._hex && res._hex > 0) {
+                      Wallet.queryAllowance(_self.walletAddress,_self.twoTokens[i].currency2,(res)=>{
+                        if(res && res > 0) {
                             res6(true)
                         }else {
                             res6(false)
@@ -799,7 +800,7 @@ export default {
                 .then((in_out) => {
                     _self.twoTokens[i].totalLockAmount1 = in_out[0] - in_out[1]
                     _self.twoTokens[i].totalLockAmount2 = in_out[2] - in_out[3]
-                    // _self.twoTokens[i].isApproved = in_out[4]&&in_out[5] ? true : false
+                    _self.twoTokens[i].isApproved = in_out[4]&&in_out[5] ? true : false
                     _self.twoTokens[i].isLoading = false
                     res('success')
                 })
@@ -825,6 +826,7 @@ export default {
     //计算总锁仓
     async getLockAmount(){
       let _self = this
+      _self.walletAddress = localStorage.getItem("walletAddress");
       new Promise((resolve,reject) => {
         try {
             let promiseAllarr = []
@@ -849,9 +851,9 @@ export default {
                     })
                   }),
                   new Promise((res3) => {
-                    Wallet.queryAllowance('',_self.oneTokens[i].currency,(pro)=>{
+                    Wallet.queryAllowance(_self.walletAddress,_self.oneTokens[i].currency,(pro)=>{
                         console.log({pro})
-                        if(pro._hex && pro._hex > 0) {
+                        if(pro && pro > 0) {
                             res3(true)
                         }else {
                             res3(false)
@@ -861,7 +863,7 @@ export default {
                 ])
                 .then((in_out) => {
                     _self.oneTokens[i].totalLockAmount = in_out[0] - in_out[1]
-                    // _self.oneTokens[i].isApproved = in_out[2]
+                    _self.oneTokens[i].isApproved = in_out[2]
                     _self.oneTokens[i].isLoading = false
                     res('success')
                 })
