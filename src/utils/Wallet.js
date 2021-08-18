@@ -9,10 +9,19 @@ const usdtIndex=4;
 const bnbIndex=5;
 const filIndex=6;
 
+const PrecisionsObj = [
+    {coin:'LIBRA',precision:Math.pow(10,18)},
+    {coin:'USDT',precision:Math.pow(10,18)},
+    {coin:'ETH',precision:Math.pow(10,18)},
+    {coin:'BNB',precision:Math.pow(10,18)},
+    {coin:'BTC',precision:Math.pow(10,18)},
+    {coin:'FIL',precision:Math.pow(10,18)}
+]
+
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
-const _contractAddress = '0x62A23352e8EF27Ea83ce74fAb4DF2cd64696A402';
+// const _contractAddress = '0x62A23352e8EF27Ea83ce74fAb4DF2cd64696A402';
 //币安测试链
-// const _contractAddress = '0x8331fc71a0730F582c431cfA2A42A3753d651C05';
+const _contractAddress = '0x8331fc71a0730F582c431cfA2A42A3753d651C05';
 const _contractABI = [
     {
         "inputs": [],
@@ -832,21 +841,21 @@ const _contractABI = [
 ];
 
 /////////////////////////////////////////////////////////////////////////////本地测试 - start
-const btcContractAddress = '0xa7f0B0DbaBEc4b6C412b6f92343Fb68b5DF35f6C';
-const ethContractAddress = '0xc256A3A6Af4561bCBc94678a1f00E5c24b0f50f0';
-const usdtContractAddress = '0xc1D586e2649B67C62bCC34E8D220c2353ceCA118';
-const bnbContractAddress = '0x52FA059Da6Ef9D95b53476D774026821402f9E4E';
-const filContractAddress = '0x0Bb12A9e26a292d7f69F528DEbc23e679516A604';
-const libraContractAddress = '0x6950C3327FF3cd00Db061A360F75D07f2cB490E1';
+// const btcContractAddress = '0xa7f0B0DbaBEc4b6C412b6f92343Fb68b5DF35f6C';
+// const ethContractAddress = '0xc256A3A6Af4561bCBc94678a1f00E5c24b0f50f0';
+// const usdtContractAddress = '0xc1D586e2649B67C62bCC34E8D220c2353ceCA118';
+// const bnbContractAddress = '0x52FA059Da6Ef9D95b53476D774026821402f9E4E';
+// const filContractAddress = '0x0Bb12A9e26a292d7f69F528DEbc23e679516A604';
+// const libraContractAddress = '0x6950C3327FF3cd00Db061A360F75D07f2cB490E1';
 /////////////////////////////////////////////////////////////////////////////本地测试 - end
 
 /////////////////////////////////////////////////////////////////////////////币安测试网测试 - start
-// const ethContractAddress = '0x44BAd5d45e9486454a0FF1c255396C4272590d73';
-// const bnbContractAddress = '0xE0d9BEF8C1800733598032b4922cf16584cef010';
-// const btcContractAddress = '0x29cCf34548bd9120685Ad80fE15C7Be461801a57';
-// const usdtContractAddress = '0x106F04642B9c62Ea1A2Bc50fadF0897E32fAcD6c';
-// const filContractAddress = '0xEbdDdd143d18865164F6353F09aB595eB76C6153';
-// const libraContractAddress = '0xE21e5CA7985E1ED751D4396246a4BFc56656A055';
+const ethContractAddress = '0x44BAd5d45e9486454a0FF1c255396C4272590d73';
+const bnbContractAddress = '0xE0d9BEF8C1800733598032b4922cf16584cef010';
+const btcContractAddress = '0x29cCf34548bd9120685Ad80fE15C7Be461801a57';
+const usdtContractAddress = '0x106F04642B9c62Ea1A2Bc50fadF0897E32fAcD6c';
+const filContractAddress = '0xEbdDdd143d18865164F6353F09aB595eB76C6153';
+const libraContractAddress = '0xE21e5CA7985E1ED751D4396246a4BFc56656A055';
 /////////////////////////////////////////////////////////////////////////////币安测试网测试 - end
 
 const ethContractABI=[
@@ -2619,7 +2628,9 @@ const libraContractABI=[
         "type": "event"
     }
 ];
-
+function Precisions(currency){
+    return PrecisionsObj.find(ele => ele.coin === currency.toUpperCase()).precision;
+}
 function initWallet(callback){
     //判断用户是否安装MetaMask钱包插件
     if (typeof window.ethereum === "undefined") {
@@ -2687,17 +2698,27 @@ function approve(currency,address,value, callback) {
         // .call()
         .send({from: address})
         .then((res) => {
-            console.log(currency+'授权成功', res)
-            callback(currency+"授权成功"+res);
+            const {status} = res
+            if(status){
+                notification.success({
+                    message: 'Success',
+                    description:currency + '授权成功'
+                })
+                callback(res)
+            }else {
+                notification.error({
+                    message: 'Error',
+                    description:currency + "授权发生错误"
+                })
+            }
         })
         .catch((err) => {
+            console.log(err);
             notification.error({
                 message: 'Error',
-                description:currency +'授权失败，稍后再试：' + err
+                description:currency + err.message || "失败"
             })
         });
-
-
 }
 
 /***
@@ -2709,13 +2730,12 @@ function queryAllowance(account,currency,callback){
     _contract.methods.allowance(getCurrencyIndex(currency))
         .call()
         .then((res) => {
-            console.log(currency+'>查询成功:', res)
             callback(res);
         })
         .catch((err) => {
             notification.error({
                 message: 'Error',
-                description:currency+'查询失败，稍后再试：' + err
+                description:currency + err.message
             })
         });
 }
@@ -2887,17 +2907,17 @@ function totalDepositBalance(currency,callback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     currency=currency.toUpperCase();
     if (currency=="LIBRA"){
-        _contract.methods.libraTotalAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+        _contract.methods.libraTotalAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0); });
     }else if (currency=="BTC"){
-        _contract.methods.btcTotalAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+        _contract.methods.btcTotalAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
     }else if (currency=="ETH"){
-        _contract.methods.ethTotalAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+        _contract.methods.ethTotalAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
     }else if (currency=="USDT"){
-        _contract.methods.usdtTotalAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+        _contract.methods.usdtTotalAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
     }else if (currency=="BNB"){
-        _contract.methods.bnbTotalAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+        _contract.methods.bnbTotalAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
     }else if (currency=="FIL"){
-        _contract.methods.filTotalAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+        _contract.methods.filTotalAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
     }
 }
 
@@ -2910,17 +2930,17 @@ function totalTakeoutAmount(currency,callback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     currency=currency.toUpperCase();
     if (currency=="LIBRA"){
-        _contract.methods.libraTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+        _contract.methods.libraTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
     }else if (currency=="BTC"){
-        _contract.methods.btcTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+        _contract.methods.btcTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
     }else if (currency=="ETH"){
-        _contract.methods.ethTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+        _contract.methods.ethTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
     }else if (currency=="USDT"){
-        _contract.methods.usdtTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+        _contract.methods.usdtTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
     }else if (currency=="BNB"){
-        _contract.methods.bnbTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+        _contract.methods.bnbTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0); });
     }else if (currency=="FIL"){
-        _contract.methods.filTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { console.log('获取失败：', err); });
+        _contract.methods.filTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0); });
     }
 }
 
@@ -2967,4 +2987,5 @@ export default {
     totalTakeoutAmount,
     balanceOf,
     test,
+    Precisions,
 }

@@ -275,6 +275,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
+          isLoading:true,
         },
         {
           currency:"BNB",
@@ -282,6 +283,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
+          isLoading:true,
         },
         {
           currency:"BTC",
@@ -289,6 +291,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
+          isLoading:true,
         },
         {
           currency:"USDT",
@@ -296,6 +299,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
+          isLoading:true,
         },
       ],
       twoTokens:[
@@ -306,6 +310,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
+          isLoading:true,
         },
         {
           currency1:"Libra",
@@ -314,6 +319,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
+          isLoading:true,
         },
         {
           currency1:"Libra",
@@ -322,6 +328,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
+          isLoading:true,
         },
         {
           currency1:"Libra",
@@ -330,6 +337,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
+          isLoading:true,
         },
         {
           currency1:"Libra",
@@ -338,6 +346,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
+          isLoading:true,
         },
       ],
       walletAddress:'',
@@ -346,6 +355,8 @@ export default {
   computed: {
   },
   methods: {
+
+    
     handleTapStart(e) {
       e.target.classList.add('tap')
     },
@@ -496,34 +507,38 @@ export default {
     handleWithAll() {
     },
     async handleWithDrawOne(currency,amount) {
+      let _this = this
       if (currency == null || currency == undefined){
-        alert("币种错误");
+        _this.$message.error("币种错误")
         return ;
       }
       if (amount == null || amount == undefined || amount <=0){
-        alert("数量错误");
+        _this.$message.error("数量错误")
         return ;
       }
       Wallet.takeoutOne(this.walletAddress,currency,amount, (res)=>{
-        alert("成功："+JSON.stringify(res));
+
+        _this.$message.success("成功")
       }, (res)=>{
-        alert("失败: "+JSON.stringify(res));
+        _this.$message.error("失败")
       });
     },
     async handleWithDrawTwo(amount1,currency2) {
+      let _this = this
       if (currency2 == null || currency2 == undefined){
-        alert("币种错误");
+        _this.$message.error("币种错误")
         return ;
       }
       if (amount1 == null || amount1 == undefined || amount1 <=0){
-        alert("数量错误");
+        _this.$message.error("数量错误")
         return ;
       }
 
       Wallet.takeoutTwo(this.walletAddress,amount1,currency2,(res)=>{
-        alert("成功："+JSON.stringify(res));
+
+        _this.$message.success("成功")
       }, (res)=>{
-        alert("失败: "+JSON.stringify(res));
+        _this.$message.error("失败")
       });
     },
     async handleShowDepositModal(index,currency) {
@@ -538,12 +553,13 @@ export default {
     handleDepositAll() {
     },
     async handleDepositConfirmOne(currency,amount) {
+      let _this = this
       if (currency == undefined||currency ==  null){
-        alert("请选择币种");
+        _this.$message.error("请选择币种")
         return ;
       }
       if (amount == undefined || amount == null || amount <= 0){
-        alert("请输入存入数量");
+        _this.$message.error("请输入存入数量")
         return ;
       }
       //TODO 获取币种currency的价格price，amount*price 必须 大于 100美元
@@ -552,33 +568,79 @@ export default {
 
       //调用合约方法存入币种
       Wallet.depositOne(this.walletAddress,this.walletAddress,currency,amount,(res)=>{
-        alert("已存入");
+        _this.$message.success("已存入")
       },(res)=>{
-        alert("报错："+res);
+        _this.$message.error(res.message || "报错")
       });
     },
     async handleDepositConfirmTwo(libraAmount,currency2) {
       if (currency2 == undefined||currency2 ==  null){
-        alert("请选择币种");
+        _this.$message.error("请选择币种")
         return ;
       }
       if (libraAmount == undefined || libraAmount == null || libraAmount <= 0){
-        alert("请输入存入数量");
+        _this.$message.error("请输入存入数量")
         return ;
       }
       //TODO 获取libra价格（libraPrice），和currency2价格（currency2Price），
       //TODO (libraAmount*libraPrice)+currency2Amount*currency2Price 必须大于 100美元
       //调用合约方法存入币种
       Wallet.depositTwo(this.walletAddress,this.walletAddress,libraAmount,currency2,(res)=>{
-        alert("已存入！"+JSON.stringify(res));
+        _this.$message.success("已存入!")
       },(res)=>{
-        alert("报错："+res);
+        _this.$message.error(res.message || "报错")
       });
     },
-    //此函数处理所有的数据，两个分支，只判断有没有已连接账号，没有账号统一按照rpc连接
-    async handleGetPoolsItemData() {
-    },
-    async getPoolsData(poolType) {
+    //计算总锁仓
+    async getLockAmount(){
+      let _self = this
+      new Promise((resolve,reject) => {
+        try {
+            let promiseAllarr = []
+            for(let i = 0; i < _self.oneTokens.length;i++){
+              promiseAllarr[i] = new Promise((res) => {
+
+                Promise.all([
+                  new Promise((res1) => {
+                    Wallet.totalDepositBalance(_self.oneTokens[i].currency,(in_a)=>{
+                      let val = in_a
+                      in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.oneTokens[i].currency)))
+                      val < -0.01 && (val = 0)
+                      res1(val)
+                    })
+                  }),
+                  new Promise((res2) => {
+                    Wallet.totalTakeoutAmount(_self.oneTokens[i].currency,(out_a)=>{
+                      let val = out_a
+                      out_a > 0 && (val = Number(out_a / Wallet.Precisions(_self.oneTokens[i].currency)))
+                      val < -0.01 && (val = 0)
+                      res2(val)
+                    })
+                  })
+                ])
+                .then((in_out) => {
+                    console.table(in_out)
+                    _self.oneTokens[i].totalLockAmount = in_out[0] - in_out[1]
+                    _self.oneTokens[i].isLoading = false
+                    res('success')
+                })
+                .catch((err) => {
+                    _self.oneTokens[i].isLoading = false
+                    res('success')
+                })
+              })
+            }
+            //全部请求
+            Promise.all(promiseAllarr).then(() => {
+              resolve('success')
+            }).catch(err => {
+              reject(err)
+            })
+        }catch(err){
+            reject(err)
+            _self.$message.error(_self.$t('l.catch_err'))
+        }
+      })
     },
     input_num(index) {
       this['currentPerIndex' + index] = -1
@@ -599,14 +661,13 @@ export default {
     this.isApprovedLibra=localStorage.getItem("isApprovedLibra");
     this.updateApproveStatus(null);
   },
-  async mounted() {
+  mounted() {
     let ptype = this.$route.query.ptype ? this.$route.query.ptype : 1
     if(ptype !== undefined) {
       this.handleContChange(ptype - 1)
-      return
     }
     setTimeout(async () => {
-      await this.getPoolsData(1)
+       await this.getLockAmount()
     },500)
   },
   destroyed() {
