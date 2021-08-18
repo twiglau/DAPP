@@ -3124,7 +3124,7 @@ function approve(currency,address,value, callback) {
  */
 function queryAllowance(account,currency,callback){
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.allowance(getCurrencyIndex(currency))
+    _contract.methods.allowance(getCurrencyIndex(currency),account)
         .call()
         .then((res) => {
             callback(res);
