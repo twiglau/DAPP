@@ -3003,6 +3003,22 @@ function incomeRecord(address,index,callback) {
         });
 }
 
+/***
+ * 取出收益
+ * @param amount
+ */
+function takeoutIncome(account,amount, callback, errorCallback){
+    if(amount.parseInt <= 0){
+        return;
+    }
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    const data = _contract.methods
+        .takeoutIncome(
+            amount
+        ).encodeABI();
+    sendTransfer(account, data, 0x0, callback, errorCallback);
+}
+
 function test() {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.libraTotalAmount().call()
@@ -3047,5 +3063,6 @@ export default {
     oneDepositOrder,
     twoDepositOrder,
     incomeAccount,
+    takeoutIncome,
     test,
 }
