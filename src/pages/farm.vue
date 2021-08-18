@@ -565,26 +565,25 @@ export default {
     async handleShowDepositModal(index,item) {
       let _self = this
       _self.depositInfo = item
-      if(index==0){
+      _self.$message.loading({ content: 'Loading...',key:'lang'})
+      let currency = _self.depositInfo.currency ? _self.depositInfo.currency : _self.depositInfo.currency2;
+      Wallet.balanceOf(currency,_self.walletAddress,(res)=>{
+         _self.$message.success({ content: 'Loaded!',key:'lang' ,duration: 2 });
+         _self.depositInfo.balance = Number((res ? res : 0) / Wallet.Precisions(currency))
+        if(index==0){
           _self.isModalShowSaveOne = true
         }else if(index==1){
           _self.isModalShowSaveTwo = true
         }
-      // _self.$message.loading({ content: 'Loading...',key:'lang'})
-      // let currency = _self.depositInfo.currency ? _self.depositInfo.currency : _self.depositInfo.currency2;
-      // Wallet.balanceOf(currency,_self.walletAddress,(res)=>{
-      //   _self.$message.success({ content: 'Loaded!',key:'lang' ,duration: 2 });
-      //    _self.depositInfo.balance = res ? res : 0
-        
-      // })
+      })
     },
     async handleDepositConfirmOne(currency,amount) {
       if (currency == undefined||currency ==  null){
         alert("请选择币种");
         return ;
       }
-      if (amount == undefined || amount == null || amount <= 0){
-        _this.$message.error("请输入存入数量")
+      if (!amount || amount > _self.depositInfo.balance){
+        _this.$message.error("存入数量不正确")
         return;
       }
       //TODO 获取币种currency的价格price，amount*price 必须 大于 100美元
