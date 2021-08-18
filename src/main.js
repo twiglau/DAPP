@@ -2,11 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from "./store/index.js";
 import router from "./router.js";
-import Toasted from 'vue-toasted';
 
 import VueI18n from 'vue-i18n'
 Vue.use(VueI18n)
-Vue.use(Toasted);
 
 
 
@@ -14,17 +12,6 @@ import './utils/lazy_use' // use lazy load components
 import './icons/index'
 import './global.less' // global style
 
-//小数精确度
-function formatDecimal(num,defDemicals=8) {
-  num = num.toString()
-  let index = num.indexOf('.')
-  if (index !== -1) {
-      num = num.substring(0, defDemicals + index + 1)
-  } else {
-      num = num.substring(0)
-  }
-  return parseFloat(num).toFixed(defDemicals)
-}
 //时间戳---》时间
 function formatTime(time, type) {
   if (time == '') {
@@ -85,7 +72,6 @@ let abi_input = ['inputNumber', 'time', '%C2%A8%C2%AAet%', 'C2%85%7Dr%C2%9A%C2',
 
 Vue.prototype.$emptyAddress = emptyAddress
 
-Vue.prototype.$formatDecimal = formatDecimal
 Vue.prototype.$formatTime = formatTime
 const demicals = 8
 Vue.prototype.$demicals = demicals
