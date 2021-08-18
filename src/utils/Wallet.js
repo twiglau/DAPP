@@ -9,9 +9,9 @@ const bnbIndex=5;
 const filIndex=6;
 
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
-// const _contractAddress = '0x5E1C2f91a93d210f18a97c0D693C4705101Dbe1c';
+const _contractAddress = '0x62A23352e8EF27Ea83ce74fAb4DF2cd64696A402';
 //币安测试链
-const _contractAddress = '0x8331fc71a0730F582c431cfA2A42A3753d651C05';
+// const _contractAddress = '0x8331fc71a0730F582c431cfA2A42A3753d651C05';
 const _contractABI = [
     {
         "inputs": [],
@@ -831,21 +831,21 @@ const _contractABI = [
 ];
 
 /////////////////////////////////////////////////////////////////////////////本地测试 - start
-// const btcContractAddress = '0xa7f0B0DbaBEc4b6C412b6f92343Fb68b5DF35f6C';
-// const ethContractAddress = '0xc256A3A6Af4561bCBc94678a1f00E5c24b0f50f0';
-// const usdtContractAddress = '0xc1D586e2649B67C62bCC34E8D220c2353ceCA118';
-// const bnbContractAddress = '0x52FA059Da6Ef9D95b53476D774026821402f9E4E';
-// const filContractAddress = '0x0Bb12A9e26a292d7f69F528DEbc23e679516A604';
-// const libraContractAddress = '0x6950C3327FF3cd00Db061A360F75D07f2cB490E1';
+const btcContractAddress = '0xa7f0B0DbaBEc4b6C412b6f92343Fb68b5DF35f6C';
+const ethContractAddress = '0xc256A3A6Af4561bCBc94678a1f00E5c24b0f50f0';
+const usdtContractAddress = '0xc1D586e2649B67C62bCC34E8D220c2353ceCA118';
+const bnbContractAddress = '0x52FA059Da6Ef9D95b53476D774026821402f9E4E';
+const filContractAddress = '0x0Bb12A9e26a292d7f69F528DEbc23e679516A604';
+const libraContractAddress = '0x6950C3327FF3cd00Db061A360F75D07f2cB490E1';
 /////////////////////////////////////////////////////////////////////////////本地测试 - end
 
 /////////////////////////////////////////////////////////////////////////////币安测试网测试 - start
-const ethContractAddress = '0x44BAd5d45e9486454a0FF1c255396C4272590d73';
-const bnbContractAddress = '0xE0d9BEF8C1800733598032b4922cf16584cef010';
-const btcContractAddress = '0x29cCf34548bd9120685Ad80fE15C7Be461801a57';
-const usdtContractAddress = '0x106F04642B9c62Ea1A2Bc50fadF0897E32fAcD6c';
-const filContractAddress = '0xEbdDdd143d18865164F6353F09aB595eB76C6153';
-const libraContractAddress = '0xE21e5CA7985E1ED751D4396246a4BFc56656A055';
+// const ethContractAddress = '0x44BAd5d45e9486454a0FF1c255396C4272590d73';
+// const bnbContractAddress = '0xE0d9BEF8C1800733598032b4922cf16584cef010';
+// const btcContractAddress = '0x29cCf34548bd9120685Ad80fE15C7Be461801a57';
+// const usdtContractAddress = '0x106F04642B9c62Ea1A2Bc50fadF0897E32fAcD6c';
+// const filContractAddress = '0xEbdDdd143d18865164F6353F09aB595eB76C6153';
+// const libraContractAddress = '0xE21e5CA7985E1ED751D4396246a4BFc56656A055';
 /////////////////////////////////////////////////////////////////////////////币安测试网测试 - end
 
 const ethContractABI=[
@@ -2708,6 +2708,44 @@ function queryAllowance(account,currency,callback){
         });
 }
 
+function balanceOf(currency,address,callback) {
+    //授权
+    currency = currency.toUpperCase();
+    let contractAddress;
+    let contractABI;
+    if(currency == "ETH"){
+        contractAddress=ethContractAddress;
+        contractABI=ethContractABI;
+    }else if(currency == "BNB"){
+        contractAddress=bnbContractAddress;
+        contractABI=bnbContractABI;
+    }else if(currency == "BTC"){
+        contractAddress=btcContractAddress;
+        contractABI=btcContractABI;
+    }else if(currency == "USDT"){
+        contractAddress=usdtContractAddress;
+        contractABI=usdtContractABI;
+    }else if(currency == "FIL"){
+        contractAddress=filContractAddress;
+        contractABI=filContractABI;
+    }else if(currency == "LIBRA"){
+        contractAddress=libraContractAddress;
+        contractABI=libraContractABI;
+    }else {
+        callback(false);
+    }
+
+    let contract = new window.web3.eth.Contract(contractABI, contractAddress);
+    contract.methods.balanceOf(address)
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            alert(err)
+        });
+}
+
 //兑换
 function exchange(account,amount,callback,errorCallback){
     console.log("上级地址："+account);
@@ -2914,5 +2952,6 @@ export default {
     queryAllowance,
     totalDepositBalance,
     totalTakeoutAmount,
+    balanceOf,
     test,
 }
