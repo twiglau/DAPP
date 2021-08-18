@@ -583,7 +583,7 @@ export default {
         return ;
       }
       //TODO 获取libra价格（libraPrice），和currency2价格（currency2Price），
-      //TODO (libraAmount*libraPrice)+currency2Amount*currency2Price 必须大于 100美元
+      //TOoneDepositOrderDO (libraAmount*libraPrice)+currency2Amount*currency2Price 必须大于 100美元
       //调用合约方法存入币种
       Wallet.depositTwo(this.walletAddress,this.walletAddress,libraAmount,currency2,(res)=>{
         _this.$message.success("已存入!")
