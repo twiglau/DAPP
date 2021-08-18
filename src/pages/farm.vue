@@ -653,10 +653,12 @@ export default {
 
           } while (i < end);
 
-          //全部请求
+          //全部请求可能失败, finally接收
           Promise.all(promiseMyLockArr)
           .finally(() => {
             resolve('success')
+            // TODO: 放入定时器后, 需要清除lockAmount,防止累加
+
             //格式化数据 0-Libra/ETH  1-Libra/BNB 3-Libar/USDT 4-Libra/BTC 5-Libra/FIL
             //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
             _self.twoTokens[0].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,3,resultLockArr)
@@ -688,7 +690,7 @@ export default {
     caluUseable(currency,key,index1,index2,array){
         let libra_eth_1 = array.filter(ele => index2 == -1 ? ele.currencyIndex == index1 :  ele.currency1Index == index1 && ele.currency2Index == index2)
                                         .reduce((currentTotal,item) => {
-                                          let num = +item[key]
+                                            let num = +item[key]
                                             return num + currentTotal
                                         },0)  || 0
         
@@ -717,10 +719,12 @@ export default {
 
           } while (i < end);
 
-          //全部请求
+          //全部请求,可能失败, finally接收
           Promise.all(promiseMyLockArr).finally(() => {
             resolve('success')
             console.log(resultLockArr)
+            // TODO: 放入定时器后, 需要清除lockAmount,防止累加
+
             //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
             //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
             _self.oneTokens[0].lockAmount += _self.caluUseable('ETH','useableAmount',3,-1,resultLockArr)
