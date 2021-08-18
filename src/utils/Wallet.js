@@ -9,7 +9,7 @@ const bnbIndex=5;
 const filIndex=6;
 
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
-const _contractAddress = '0x62A23352e8EF27Ea83ce74fAb4DF2cd64696A402';
+const _contractAddress = '0x9Be32714FA00787732d42ec14666ca366d2E447a';
 //币安测试链
 // const _contractAddress = '0x8331fc71a0730F582c431cfA2A42A3753d651C05';
 const _contractABI = [
@@ -38,6 +38,15 @@ const _contractABI = [
         ],
         "payable": false,
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "award",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -183,27 +192,6 @@ const _contractABI = [
         "outputs": [],
         "payable": true,
         "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "internalType": "uint8",
-                "name": "_currencyIndex",
-                "type": "uint8"
-            }
-        ],
-        "name": "depositOneDetail",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "total",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -416,11 +404,31 @@ const _contractABI = [
                 "type": "address"
             }
         ],
-        "name": "incomeAccount",
+        "name": "ia_map",
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "",
+                "name": "total",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeout",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "todayDividend",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "todayShareAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "todayGlobalAmount",
                 "type": "uint256"
             }
         ],
@@ -670,6 +678,27 @@ const _contractABI = [
         ],
         "payable": false,
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "takeoutIncome",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": true,
+        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -2687,8 +2716,6 @@ function approve(currency,address,value, callback) {
         .catch((err) => {
             alert(currency+'授权失败，稍后再试：', err)
         });
-
-
 }
 
 /***
@@ -2912,6 +2939,70 @@ function totalTakeoutAmount(currency,callback) {
     }
 }
 
+/**
+ * 1币种存入记录
+ */
+function oneDepositOrder(address,index,callback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.oneOrderMap(address,index)
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            console.log('获取失败：', err);
+        });
+}
+/**
+ * 2币种存入记录
+ */
+function twoDepositOrder(address,index,callback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.twoOrderMap(address,index)
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            console.log('获取失败：', err);
+        });
+}
+
+/***
+ * 我的收益
+ * @param address
+ * @param index
+ * @param callback
+ */
+function incomeAccount(address,callback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.ia_map(address)
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            console.log('获取失败：', err);
+        });
+}
+/***
+ * 收益记录
+ * @param address
+ * @param index
+ * @param callback
+ */
+function incomeRecord(address,index,callback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.twoOrderMap(address,index)
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            console.log('获取失败：', err);
+        });
+}
+
 function test() {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.libraTotalAmount().call()
@@ -2953,5 +3044,8 @@ export default {
     totalDepositBalance,
     totalTakeoutAmount,
     balanceOf,
+    oneDepositOrder,
+    twoDepositOrder,
+    incomeAccount,
     test,
 }
