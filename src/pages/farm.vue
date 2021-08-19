@@ -520,7 +520,7 @@ export default {
               }
            })
          }
-        
+
       }, (res)=>{
         _this.$error({
           title:'提取',
@@ -575,7 +575,7 @@ export default {
       // Wallet.balanceOf(currency,_self.walletAddress,(res)=>{
       //   _self.$message.success({ content: 'Loaded!',key:'lang' ,duration: 2 });
       //    _self.depositInfo.balance = res ? res : 0
-        
+
       // })
     },
     async handleDepositConfirmOne(currency,amount) {
@@ -588,7 +588,7 @@ export default {
         return;
       }
       //TODO 获取币种currency的价格price，amount*price 必须 大于 100美元
-      
+
       //TODO 判断账户Currency余额
 
       //调用合约方法存入币种
@@ -660,7 +660,7 @@ export default {
 
             _self.twoTokens[4].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,6,resultLockArr)
             _self.twoTokens[4].lockAmount2 += _self.caluUseable('FIL','useableAmount2',1,6,resultLockArr)
-            
+
             //这里过滤数据, 递归
             if(resultLockArr.length == end){
               _self.getMyPairLockAmount(end,end + 5)
@@ -678,7 +678,7 @@ export default {
                                             let num = +item[key]
                                             return num + currentTotal
                                         },0)  || 0
-        
+
         libra_eth_1 > 0 && (libra_eth_1 = Number(libra_eth_1 / Wallet.Precisions(currency)))
         console.log(currency,libra_eth_1)
         return libra_eth_1
@@ -719,14 +719,14 @@ export default {
             _self.oneTokens[2].lockAmount += _self.caluUseable('BTC','useableAmount',2,-1,resultLockArr)
 
             _self.oneTokens[3].lockAmount += _self.caluUseable('USDT','useableAmount',4,-1,resultLockArr)
-            
+
             //这里过滤数据, 递归
             if(resultLockArr.length == end){
               _self.getMyLockAmount(end,end + 5)
             }
 
           })
-          
+
         } catch (error) {
             reject(error)
             _self.$message.error(_self.$t('l.catch_err'))
@@ -784,7 +784,7 @@ export default {
                         }else {
                             res5(false)
                         }
-                         
+
                       })
                   }),
                   new Promise((res6) => {
