@@ -2,6 +2,13 @@ var token1 = 'WFC';
 
 
 export const l = {
+  t_MinPA:'最低金额',
+  t_Price:'价格',
+  t_to:'到',
+  t_from:'从',
+  t_Duic:'兑换',
+  t_SWAP:'交易',
+  t_approving:'授权中...',
   t_cuntip:'存入比例',
   t_value:'金额',
   t_home3:'帮助用户获得更高的回报。',

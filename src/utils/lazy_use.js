@@ -14,7 +14,8 @@ import {
   Popconfirm,
   message,
   notification,
-  Button
+  Button,
+  Empty
 } from 'ant-design-vue'
 
 Vue.use(Switch)
@@ -28,6 +29,7 @@ Vue.use(Alert)
 Vue.use(Popconfirm)
 Vue.use(Menu)
 Vue.use(Button)
+Vue.use(Empty)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message

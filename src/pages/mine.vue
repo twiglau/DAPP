@@ -4,8 +4,8 @@
       <div class="total-item">
           <div class="total">
             <div>{{$t('l.t_tolIn')}}</div>
-            <div><span>8349.00</span><span>LBR</span></div>
-            <div>≈$900.0</div>
+            <div><span><countTo :endVal='totalProfit' :duration='3000' :decimals="2" /></span><span>LBR</span></div>
+            <div>≈<countTo :endVal='totalValue' :duration='3000' :decimals="2" prefit="$" /></div>
           </div>
           <div class="detail-c" @click="detailClick('/income-detail')">
             <div class="detail"><span>{{$t('l.t_de')}}</span><svg-icon icon-class="enter_icon"></svg-icon></div>
@@ -17,8 +17,9 @@
           {{$t('l.t_int')}}
         </div>
         <div class="invite-detail">
-          <div class="invite-link">https://dapp.libraswap.io/#/home?code=0xeDe04aE5354f9B97434Df068b50714C8cF5eB049</div>
-          <svg-icon icon-class="Button"></svg-icon>
+          <div class="invite-link">{{currentHref+'#/mine?address='+walletAddress}}</div>
+          <div @click="handleCopyLink"><svg-icon icon-class="Button"></svg-icon></div>
+          
         </div>
       </div>
     </div>
@@ -41,6 +42,8 @@
 </template>
 
 <script>
+import {getPrice} from '@/utils/api'
+import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
 export default {
   name: "Mine",
@@ -49,18 +52,71 @@ export default {
   },
   data() {
     return {
+      currentHref: window.location.origin+window.location.pathname,
+      walletAddress:'',
+      inviteAddress:'',
+      totalProfit:0,
+      price:0,
     }
   },
   computed: {
+    totalValue:function(){
+      return (+this.totalProfit) * (+this.price)
+    }
   },
   methods: {
     detailClick(path){
       this.$router.push({path:path,query:{}})
     },
+    async getPairPrice(){
+        let _self = this
+        getPrice({symbol:'librausdt'})
+        .then((res) => {
+            let plc =  res.price
+            _self.price = plc
+        })
+    },
+    async getIncomeData(){
+      let _self = this
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      new Promise((resolve) => {
+          Wallet.incomeAccount(_self.walletAddress,(res)=>{
+             resolve(res)
+          })
+      })
+    },
+    handleCopyLink() {
+      this.walletAddress = localStorage.getItem("walletAddress") || '';
+      if(!this.walletAddress) {
+        this.$message.error(this.$t('l.error_tips_unconnect'))
+        return
+      }
+      this.$copyText(this.currentHref+'#/mine?address='+this.walletAddress).then( () => {
+        this.$message.success('复制成功')
+      }, function () {
+        this.$message.error('复制失败,请重试！')
+      })
+    },
   },
   created() {
   },
-  mounted() {
+  async mounted() {
+      let _self = this
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      let inviteAddress = _self.$route.query.address ? _self.$route.query.address : ''
+      if(inviteAddress && inviteAddress.length > 0) {
+          _self.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)
+      }
+      _self.inviteAddress = _self.$getCookie('inviteAddress') ? _self.$getCookie('inviteAddress') : _self.inviteAddress
+
+      _self.getPairPrice()
+      const res = await _self.getIncomeData()
+      if(res){
+          const {
+            total  //总收益
+                } = res
+          _self.totalProfit = total || 0
+      }
   },
   destroyed() {
   }

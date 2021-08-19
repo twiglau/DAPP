@@ -8,15 +8,14 @@
             <span>{{$t('l.back')}}</span>
           </div>
       </div>
-      <div class="pools-main">
-        <div class="pools__item" v-for="(item,index) in [1,2,3,5,6]" :key="index">
+      <div class="pools-main" v-if="records.length > 0">
+        <div class="pools__item" v-for="(item,index) in records" :key="index">
             <div class="pools__box">
-              <a-spin tips="loading" :spinning="false" size="large">
                 <ul class="pools__rows">
                   <li class="pools__row-1">
                     <div class="pools__logo-name">
-                      <img class="pools__coin-logo" src="../assets/ETH_coin.png">
-                      <div class="pools__coin-name">ETH</div>
+                      <svg-icon class="pools__coin-logo" icon-class="Libra_coin" />
+                      <div class="pools__coin-name">Libra</div>
                     </div>
                     <div class="pools__logo-name">
                       <div class="pools__coin-name pools__apy-value">+90.0</div>
@@ -30,25 +29,26 @@
                 <div class="pools__mao-logo__wrap">
                   <img src="" alt="" class="pools__mao-logo">
                 </div>
-              </a-spin>
             </div>
         </div>
       </div>
+      <a-empty v-else description="no records" />
     </div>
     </a-spin>
   </div>
 </template>
 
 <script>
-import countTo from 'vue-count-to';
+import Wallet from '@/utils/Wallet.js';
 export default {
   name: "IncomeDetail",
   components: {
-    countTo,
   },
   data() {
     return {
-      spinStatus: false,
+      spinStatus: true,
+      walletAddress:'',
+      records:[],
     }
   },
   computed: {
@@ -57,10 +57,53 @@ export default {
     goBack(){
       this.$router.go(-1);
     },
+    async getProfitRecord(start = 0, end = 5){
+      let _self = this
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      new Promise((resolve,reject) => {
+        try {
+          let promiseRecordArr = [],resultRecordArr = [];
+          let i = start;
+          do {
+            ++i;
+            promiseRecordArr[i] = new Promise((res,rej) => {
+                Wallet.incomeRecord(_self.walletAddress,i,(record) => {
+                  if(record){
+                    resultRecordArr.push(record)
+                    res(record)
+                  }else{
+                    rej('error')
+                  }
+                })
+            })
+
+          } while (i < end);
+
+          //全部请求,可能失败, finally接收
+          Promise.all(promiseRecordArr).finally(() => {
+            resolve('success')
+            console.log(resultRecordArr)
+            _self.records.push(...resultRecordArr)
+            //这里过滤数据, 递归
+            if(resultRecordArr.length == end){
+              _self.getProfitRecord(end,end + 5)
+            }
+
+          })
+
+        } catch (error) {
+            reject(error)
+            _self.$message.error(_self.$t('l.catch_err'))
+        }
+      })
+    },
   },
   created() {
   },
   async mounted() {
+    this.spinStatus = true
+    const res = await this.getProfitRecord()
+    this.spinStatus = false
   },
   destroyed() {
   }

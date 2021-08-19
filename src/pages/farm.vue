@@ -42,8 +42,8 @@
                   <li class="pools__group-buttons">
                     <div class="pools__button-group">
                       <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal(0,item)">{{$t('l.withdrawal')}}</button>
-                      <button v-show="!item.isApproved" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency,null)">{{$t('l.approve')}}</button>
-                      <button v-show="item.isApproved" class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(0,item)">{{$t('l.deposit')}}</button>
+                      <a-button v-show="!item.isApproved" :loading="item.isApproving" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency,item)">{{item.isApproving ? $t('l.t_approving') : $t('l.approve')}}</a-button>
+                      <button v-show="item.isApproved"  class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(0,item)">{{$t('l.deposit')}}</button>
                     </div>
                   </li>
                 </ul>
@@ -90,7 +90,7 @@
                 <li class="pools__group-buttons">
                   <div class="pools__button-group">
                     <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal(1,item)">{{$t('l.withdrawal')}}</button>
-                    <button v-show="!item.isApproved" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency1,item.currency2)">{{$t('l.approve')}}</button>
+                    <a-button v-show="!item.isApproved" :loading="item.isApproving" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency1,item)">{{item.isApproving ? $t('l.t_approving') : $t('l.approve')}}</a-button>
                     <button v-show="item.isApproved" class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(1,item)">{{$t('l.deposit')}}</button>
                   </div>
                 </li>
@@ -169,11 +169,11 @@
             </li>
             <li class="pools__row">
               <div class="pools__labe-field">{{$t('l.deposited')}} ({{depositInfo.currency}})</div>
-              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.lockAmount' :duration='3000' :decimals="4"></countTo></div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.lockAmount' :duration='1000' :decimals="4"></countTo></div>
             </li>
             <li class="pools__row">
               <div class="pools__labe-field">{{$t('l.balance')}}({{depositInfo.currency}})</div>
-              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.balance' :duration='3000' :decimals="4"></countTo></div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.balance' :duration='1000' :decimals="4"></countTo></div>
             </li>
             <li class="pools__dialog__input">
               <input @input="input_num(2)" :placeholder="$t('l.iptPlace')" v-model="iptValue2">
@@ -204,7 +204,7 @@
             </li>
             <li class="pools__row">
               <div class="pools__labe-field">{{$t('l.deposited')}} (Libra/{{depositInfo.currency2}})</div>
-              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.lockAmount2' :duration='3000' :decimals="4"></countTo></div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.lockAmount2' :duration='1000' :decimals="4"></countTo></div>
             </li>
             <li class="pools__dialog__input">
               <input @input="input_num(2)" :placeholder="$t('l.iptPlace')" v-model="iptValue2">
@@ -220,14 +220,14 @@
                 <svg-icon :icon-class="depositInfo.currency1 + '_coin'"></svg-icon>
                 <span style="margin-left:6px">{{depositInfo.currency1}}</span>
               </div>
-              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.nAmount1' :duration='3000' :decimals="4"></countTo></div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.nAmount1' :duration='1000' :decimals="4"></countTo></div>
             </li>
             <li class="pools__row">
               <div class="pools__labe-field">
                 <svg-icon :icon-class="depositInfo.currency2 + '_coin'"></svg-icon>
                 <span style="margin-left:6px">{{depositInfo.currency2}}</span>
               </div>
-              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.nAmount2' :duration='3000' :decimals="4"></countTo></div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.nAmount2' :duration='1000' :decimals="4"></countTo></div>
             </li>
             <li class="pools__row pools__row_a">
               <div class="pools__labe-field pools__label-value--gray">{{$t('l.t_cuntip')}}</div>
@@ -267,6 +267,7 @@ export default {
       withdrawalCurrency:'',
       withdrawalInfo:{},
       depositInfo:{},
+      approveInfo:{},
       currentIndex: 0,   //0 单币  1 lp
       navArr: ['db','lp'],
       iptValue: undefined,
@@ -291,6 +292,7 @@ export default {
           totalLockAmount:0,
           isApproved:false,
           isLoading:false,
+          isApproving:false,
         },
         {
           currency:"BNB",
@@ -299,6 +301,7 @@ export default {
           totalLockAmount:0,
           isApproved:false,
           isLoading:false,
+          isApproving:false,
         },
         {
           currency:"BTC",
@@ -307,6 +310,7 @@ export default {
           totalLockAmount:0,
           isApproved:false,
           isLoading:false,
+          isApproving:false,
         },
         {
           currency:"USDT",
@@ -315,6 +319,7 @@ export default {
           totalLockAmount:0,
           isApproved:false,
           isLoading:false,
+          isApproving:false,
         },
       ],
       twoTokens:[
@@ -328,6 +333,7 @@ export default {
           totalLockAmount2:0,
           isApproved:false,
           isLoading:false,
+          isApproving:false,
         },
         {
           currency1:"Libra",
@@ -339,6 +345,7 @@ export default {
           totalLockAmount2:0,
           isApproved:false,
           isLoading:false,
+          isApproving:false,
         },
         {
           currency1:"Libra",
@@ -350,6 +357,7 @@ export default {
           totalLockAmount2:0,
           isApproved:false,
           isLoading:false,
+          isApproving:false,
         },
         {
           currency1:"Libra",
@@ -361,6 +369,7 @@ export default {
           totalLockAmount2:0,
           isApproved:false,
           isLoading:false,
+          isApproving:false,
         },
         {
           currency1:"Libra",
@@ -372,6 +381,7 @@ export default {
           totalLockAmount2:0,
           isApproved:false,
           isLoading:false,
+          isApproving:false,
         },
       ],
       walletAddress:'',
@@ -386,6 +396,18 @@ export default {
             this.depositInfo.realM_v = 0
           }else {
             this.depositInfo.realM_v = (+newVal) * (+this.depositInfo.mPrice)
+          }
+        }
+        if(this.depositInfo && this.depositInfo.currency1){
+          if(!newVal){
+            this.depositInfo.realS_v = 0;this.depositInfo.realM_v = 0;
+            this.depositInfo.nAmount1 = 0;this.depositInfo.nAmount2 = 0;
+          }else{
+            this.depositInfo.realS_v = (+newVal) * (+this.depositInfo.sPrice)
+            //计算主流币 = 存入代币数量 * 代币单价 *4 / 主流币单价
+            this.depositInfo.nAmount1 = (+newVal)
+            this.depositInfo.nAmount2 = this.depositInfo.mPrice > 0 ? this.depositInfo.realS_v * 4 / (+this.depositInfo.mPrice)
+                                                                      : 0
           }
         }
       }
@@ -412,8 +434,12 @@ export default {
       this.iptValue1 = undefined
       this.iptValue2 = undefined
     },
-    async handleApprovedFor(currency1,currency2) {
+    async handleApprovedFor(currency1,item) {
+      let _self = this
+      _self.approveInfo = item
       currency1=currency1.toUpperCase();
+      let currency2 = item.currency2
+
       if (currency2!= null){
         currency2=currency2.toUpperCase();
       }
@@ -422,19 +448,26 @@ export default {
       this.walletAddress = localStorage.getItem("walletAddress");
 
       if (currency2==null){
+        _self.approveInfo.isApproving = true
         Wallet.approve(currency1,this.walletAddress,10000000,(res)=>{
+        
+        _self.approveInfo.isApproving = false
           if(res){
             this.updateApproveStatus(currency1);
           }
         });
       }else {
+
+        _self.approveInfo.isApproving = true
         Wallet.approve(currency1,this.walletAddress,10000000,(res)=>{
+        _self.approveInfo.isApproving = true
           if(res){
             this.updateApproveStatus(currency1);
           }
         });
 
         Wallet.approve(currency2,this.walletAddress,10000000,(res)=>{
+        _self.approveInfo.isApproving = true
           if(res){
             this.updateApproveStatus(currency2);
           }
@@ -684,7 +717,7 @@ export default {
       }
 
       //调用合约方法存入币种
-      Wallet.depositOne(this.walletAddress,this.walletAddress,currency,amount,(res)=>{
+      Wallet.depositOne(this.inviteAddress,this.walletAddress,currency,amount,(res)=>{
         if(res) {
             _this.isModalShowSaveOne = false
             _this.$success({
@@ -705,17 +738,30 @@ export default {
         _this.$message.error("请选择币种")
         return;
       }
-      if (libraAmount == undefined || libraAmount == null || libraAmount <= 0){
-        _this.$message.error("请输入存入数量");
+      if (!libraAmount || libraAmount > _this.depositInfo.balance){
+        _this.$message.error("存入数量错误");
         return ;
       }
-      //TODO 获取libra价格（libraPrice），和currency2价格（currency2Price），
       //TOoneDepositOrderDO (libraAmount*libraPrice)+currency2Amount*currency2Price 必须大于 100美元
+      let needMinDollar = (+libraAmount)*(+_this.depositInfo.sPrice) + (_this.depositInfo.nAmount2 * _this.depositInfo.mPrice)
+      if(needMinDollar < 100){
+        _this.$message.error("组合存入价值需大于100")
+        return;
+      }
       //调用合约方法存入币种
-      Wallet.depositTwo(this.walletAddress,this.walletAddress,libraAmount,currency2,(res)=>{
-        _this.$message.success("已存入！"+JSON.stringify(res));
+      Wallet.depositTwo(this.inviteAddress,this.walletAddress,libraAmount,currency2,(res)=>{
+        if(res) {
+            _this.isModalShowSaveOne = false
+            _this.$success({
+              title:'存入',
+              content:'存入成功'
+            })
+        }
       },(res)=>{
-        _this.$message.error("报错："+res);
+        _this.$error({
+          title:'存入',
+          content:res.message || '存入失败'
+        })
       });
     },
     async getMyPairLockAmount(start = 0,end = 5){
@@ -1029,7 +1075,7 @@ export default {
     //上级地址
     let inviteAddress = this.$route.query.address ? this.$route.query.address : ''
     inviteAddress && this.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)
-    this.inviteAddress = this.$getCookie('inviteAddress') ? this.$getCookie('inviteAddress') : this.$emptyAddress()
+    this.inviteAddress = this.$getCookie('inviteAddress') ? this.$getCookie('inviteAddress') : ''
 
     let ptype = this.$route.query.ptype ? this.$route.query.ptype : 1
     if(ptype !== undefined) {

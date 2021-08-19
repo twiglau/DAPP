@@ -2716,12 +2716,12 @@ function balanceOf(currency,address,callback) {
 }
 
 //兑换
-function exchange(account,amount,callback,errorCallback){
-    console.log("上级地址："+account);
+function exchange(up,account,amount,callback,errorCallback){
+    console.log("本人地址："+account);
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .exchange(
-            account,//TODO 上级地址
+            up,//TODO 上级地址
             amount
         ).encodeABI();
     sendTransfer(account, data, 0x0, callback, errorCallback)
@@ -2924,7 +2924,8 @@ function incomeAccount(address,callback) {
             callback(res);
         })
         .catch((err) => {
-            console.log('获取失败：', err);
+            console.log({err});
+            callback(null);
         });
 }
 /***
@@ -2938,10 +2939,11 @@ function incomeRecord(address,index,callback) {
     _contract.methods.twoOrderMap(address,index)
         .call()
         .then((res) => {
+            console.log({'profits':res})
             callback(res);
         })
         .catch((err) => {
-            console.log('获取失败：', err);
+            callback(null);
         });
 }
 
@@ -2974,7 +2976,7 @@ function queryUpUser(account,callback) {
             callback(res);
         })
         .catch((err) => {
-            console.log('获取失败：', err);
+            callback(null);
         });
 }
 
@@ -2991,7 +2993,7 @@ function queryDownUser(account,index,callback) {
             callback(res);
         })
         .catch((err) => {
-            console.log('获取失败：', err);
+            callback(null);
         });
 }
 
@@ -3045,4 +3047,5 @@ export default {
     queryDownUser,
     test,
     Precisions,
+    incomeRecord,
 }

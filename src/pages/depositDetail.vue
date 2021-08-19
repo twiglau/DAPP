@@ -8,16 +8,17 @@
             <span>{{$t('l.back')}}</span>
           </div>
       </div>
-      <div class="pools-main">
-        <div class="pools__item" v-for="(item,index) in [1,2,3,5,6]" :key="index">
+      <div class="pools-main" v-if="records.length > 0">
+        <div class="pools__item" v-for="(item,index) in records" :key="index">
             <div class="pools__box">
-              <a-spin tips="loading" :spinning="false" size="large">
                 <ul class="pools__rows">
                   <li class="pools__row-1">
                     <div class="pools__logo-name">
-                      <img class="pools__coin-logo" src="../assets/ETH_coin.png">
-                      <div class="pools__coin-name">ETH</div>
+                      <svg-icon class="pools__coin-logo" :icon-class="item.currency1 + '_coin'"/>
+                      <svg-icon v-if="item.currency2" class="pools__coin-logo logo_lp_2" :icon-class="item.currency2 + '_coin'"/>
+                      <div class="pools__coin-name" :class="item.currency2 ? 'name_lp_2' : ''">{{item.currency1}}/{{item.currency2}}</div>
                     </div>
+                    <div class="pools__info">{{$t('l.reward')}} Libra</div>
                   </li>
                   <li class="pools__row pools__apy">
                     <div class="pools__labe-field">LBR {{$t('l.t_deposit')}}</div>
@@ -35,16 +36,17 @@
                 <div class="pools__mao-logo__wrap">
                   <img src="" alt="" class="pools__mao-logo">
                 </div>
-              </a-spin>
             </div>
         </div>
       </div>
+      <a-empty v-else description="no records" />
     </div>
     </a-spin>
   </div>
 </template>
 
 <script>
+import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
 export default {
   name: "DepositDetail",
@@ -54,6 +56,8 @@ export default {
   data() {
     return {
       spinStatus: false,
+      records:[],
+      walletAddress:'',
     }
   },
   computed: {
@@ -62,10 +66,93 @@ export default {
     goBack(){
       this.$router.go(-1);
     },
+    async getMyPairLockAmount(start = 0,end = 5){
+      let _self = this
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      new Promise((resolve,reject) => {
+        try {
+          let promiseMyLockArr = [],resultLockArr = [];
+          let i = start;
+          do {
+            ++i;
+            promiseMyLockArr[i] = new Promise((res,rej) => {
+                Wallet.twoDepositOrder(_self.walletAddress,i,(record) => {
+                  if(record){
+                    resultLockArr.push(record)
+                    res(record)
+                  }else{
+                    rej('error')
+                  }
+                })
+            })
+
+          } while (i < end);
+
+          //全部请求可能失败, finally接收
+          Promise.all(promiseMyLockArr)
+          .finally(() => {
+            resolve('success')
+            // TODO: 放入定时器后, 需要清除lockAmount,防止累加
+            
+            //这里过滤数据, 递归
+            if(resultLockArr.length == end){
+              _self.getMyPairLockAmount(end,end + 5)
+            }
+          })
+        } catch (error) {
+            reject(error)
+            _self.$message.error(_self.$t('l.catch_err'))
+        }
+      })
+    },
+    async getMyLockAmount(start = 0, end = 5){
+      let _self = this
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      new Promise((resolve,reject) => {
+        try {
+          let promiseMyLockArr = [],resultLockArr = [];
+          let i = start;
+          do {
+            ++i;
+            promiseMyLockArr[i] = new Promise((res,rej) => {
+                Wallet.oneDepositOrder(_self.walletAddress,i,(record) => {
+                  if(record){
+                    resultLockArr.push(record)
+                    res(record)
+                  }else{
+                    rej('error')
+                  }
+                })
+            })
+
+          } while (i < end);
+
+          //全部请求,可能失败, finally接收
+          Promise.all(promiseMyLockArr).finally(() => {
+            resolve('success')
+            console.log(resultLockArr)
+
+            //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
+            //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
+            //这里过滤数据, 递归
+            if(resultLockArr.length == end){
+              _self.getMyLockAmount(end,end + 5)
+            }
+
+          })
+
+        } catch (error) {
+            reject(error)
+            _self.$message.error(_self.$t('l.catch_err'))
+        }
+      })
+    },
   },
   created() {
   },
   async mounted() {
+    this.getMyPairLockAmount()
+    this.getMyLockAmount()
   },
   destroyed() {
   }

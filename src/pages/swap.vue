@@ -4,10 +4,10 @@
             <a-spin class="global_loading" tip="loading" :spinning="spinStatus" size="large">
                 <div class="top_info">
                     <div class="top_info_left">
-                        <div class="top_info-title">SWAP</div>
+                        <div class="top_info-title">{{$t('l.t_SWAP')}}</div>
                         <div class="top_info-sub">
                             <img src="../assets/Star_icon.png" alt="">
-                            <span>Swap 100 USDT for 100 LBR</span>
+                            <span>{{$t('l.t_SWAP') + ' ' + (iptValue0 || 0) + ' ' + iptCoin0 + $t('l.t_Duic') + ' ' + (iptValue1 || 0) + ' ' + iptCoin1}}</span>
                         </div>
                     </div>
                     <div class="top_info_right" v-clickoutside="handleSetting">
@@ -16,42 +16,46 @@
                     </div>
                 </div>
                 <div class="text-label">
-                    From
+                    {{$t('l.t_from')}}
                 </div>
                 <li class="pools__dialog__input">
                     <input @input="input_num(0)" :placeholder="$t('l.iptPlace')" v-model="iptValue0">
                     <div class="input_right">
-                        <img src="../assets/ETH_coin.png" alt="">
-                        <span>USDT</span>
+                        <svg-icon icon-class="USDT_coin" alt="" />
+                        <span>{{iptCoin0}}</span>
                         <img src="../assets/down_arrow.png" alt="">
                     </div>
                 </li>
+                <div class="span-info">
+                    <span>{{$t('l.balance')}}({{iptCoin0}})</span><span><countTo :endVal='usdtAmount' :duration='1000' :decimals="4"></countTo></span>
+                </div>
                 <div class="text-label">
-                    To
+                    {{$t('l.t_to')}}
                 </div>
                 <li class="pools__dialog__input">
                     <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
                     <div class="input_right">
-                        <img src="../assets/Libra_icon.png" alt="">
-                        <span>LIBRA</span>
+                        <svg-icon icon-class="LBR_coin" alt="" />
+                        <span>{{iptCoin1}}</span>
                         <img src="../assets/down_arrow.png" alt="">
                     </div>
                 </li>
                 <div class="span-info">
-                    <span>Price</span><span>1 USDT = 1 LBR</span>
+                    <span>{{$t('l.t_Price')}}</span><span>1 USDT = <countTo :endVal='usdt_lbr_p' :duration='1000' :decimals="4"></countTo> LBR</span>
                 </div>
-                <div class="span-info">
-                    <span>Minimun Amount</span><span>100 USDT</span>
-                </div>
+                <!-- <div class="span-info">
+                    <span>{{$t('l.t_MinPA')}}</span><span>100 USDT</span>
+                </div> -->
                 <li>
-                    <button v-show="!isApprovedUSDT" class="g-button" @click="handleApprovedFor()">授权</button>
-                    <button v-show="isApprovedUSDT" class="g-button" @click="handleSwap(iptValue0)">兑换</button>
+                    <a-button v-show="!isApprovedUSDT" :loading="isApproving" class="g-button" @click="handleApprovedFor()">{{isApproving ? $t('l.t_approving') : $t('l.approve')}}</a-button>
+                    <button v-show="isApprovedUSDT" class="g-button" @click="handleSwap(iptValue0)">{{$t('l.t_Duic')}}</button>
                 </li>
             </a-spin>
         </div>
     </div>
 </template>
 <script>
+    import {getPrice,postExchangeData} from '@/utils/api'
     import Wallet from '@/utils/Wallet.js';
     import countTo from 'vue-count-to';
     import SwapConfig from '@/components/SwapConfig.vue'
@@ -65,17 +69,84 @@
         directives:{clickoutside},
         computed: {
         },
+        watch:{
+            iptValue0:{
+                immediate:true,
+                handler:function(newVal){
+                    if(!newVal){
+                        this.iptValue1 = null
+                    }else {
+                        if(!this.LBR_price || this.LBR_price < 0.000001){
+                            this.iptValue1 = null
+                        }else {
+                            this.iptValue1 = ((+newVal) * ( 1 / +this.LBR_price)).toFixed(2)
+                        }
+                    }
+                }
+            }
+        },
+        mounted(){
+
+            let inviteAddress = this.$route.query.address ? this.$route.query.address : ''
+            if(inviteAddress && inviteAddress.length > 0) {
+                this.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)
+            }
+            this.inviteAddress = this.$getCookie('inviteAddress') ? this.$getCookie('inviteAddress') : this.inviteAddress
+
+
+            this.getPairPrice()
+            this.queryBalance()
+            this.queryApporve()
+        },
         data() {
             return {
                 spinStatus:false,
                 iptValue0:null,
+                iptCoin0:'USDT',
                 iptValue1:null,
+                iptCoin1:'LBR',
+                isDui_sToken:true,
+                usdt_lbr_p:0,
+                LBR_price:0,
+                usdtAmount:0,
                 showConfig:false,
-                isApprovedUSDT:false
+                isApprovedUSDT:false,
+                isApproving:false,
+                inviteAddress:'',
             }
         },
         methods: {
-
+            async queryBalance(){
+                let _self = this
+                let walletAddress = localStorage.getItem("walletAddress");
+                _self.walletAddress = walletAddress;
+                Wallet.balanceOf('USDT',_self.walletAddress,(res)=>{
+                    _self.usdtAmount = Number((res ? res : 0) / Wallet.Precisions('USDT'))
+                })
+            },
+            async queryApporve(){
+                let _self = this
+                let walletAddress = localStorage.getItem("walletAddress");
+                _self.walletAddress = walletAddress;
+                Wallet.queryAllowance(_self.walletAddress,'USDT',(res)=>{
+                    if(res && res > 0) {
+                        _self.isApprovedUSDT = true
+                    }else {
+                        _self.isApprovedUSDT = true
+                    }
+                })
+            },
+            async getPairPrice(){
+               let _self = this
+               getPrice({symbol:'librausdt'})
+               .then((res) => {
+                   let plc =  res.price
+                   _self.LBR_price = plc
+                   if(plc > 0){
+                       _self.usdt_lbr_p = 1 / +plc
+                   }
+               })
+            },
             input_num(index) {
                 this['iptValue' + index] = this['iptValue' + index].replace(/[^\d.]/g, "")
                 this['iptValue' + index] = this['iptValue' + index].replace(/\.{4,}/g, ".")
@@ -87,24 +158,53 @@
                 this.showConfig = false
             },
             handleSwap(amount){
-                if (amount == null || amount == undefined || amount <= 0){
-                    alert("数量错误");
+                let _self = this
+                if (!amount || amount > _self.usdtAmount){
+                    _self.$message.error("数量错误");
                     return;
                 }
                 //TODO 上级地址,从URL获取
                 let walletAddress = localStorage.getItem("walletAddress");
-                let upperAddress = walletAddress;
-                Wallet.exchange(upperAddress,amount,(res)=>{
-                    alert("成功"+JSON.stringify(res));
-                },(res)=>{
-                    alert("失败"+JSON.stringify(res));
+                let upperAddress = _self.inviteAddress;
+                _self.spinStatus = true
+                Wallet.exchange(upperAddress,walletAddress,amount,(res)=>{
+                    _self.spinStatus = false
+                    if(res){
+                        postExchangeData({
+                           address:walletAddress,
+                           parentAddress:upperAddress,
+                           fromAmount:amount,
+                           fromToken:_this.iptCoin0,
+                           toAmount:_this.iptValue1,
+                           toToken:_this.iptCoin1
+                        })
+                        .then((result) => {
+                            const {status} = result
+                            if(status == 200){
+                                _self.iptValue0 = null;
+                                _self.$success({
+                                    title:_self.$t('l.t_SWAP'),
+                                    content:_self.$t('l.t_SWAP') + ' success!'
+                                })
+                            }
+                        })
+                    }
+                },(err)=>{
+                    _self.spinStatus = false
+                    _self.$error({
+                        title:_self.$t('l.t_SWAP'),
+                        content:err.message || 'error unknown'
+                    })
                 });
             },
             async handleApprovedFor() {
+                let _self = this
+                _self.isApproving = true
                 this.walletAddress = localStorage.getItem("walletAddress");
                 Wallet.approve('USDT',this.walletAddress,10000000,(res)=>{
+                    _self.isApproving = false
                     if(res){
-                        this.updateApproveStatus('USDT');
+                        _self.updateApproveStatus('USDT');
                     }
                 });
             },
@@ -192,11 +292,11 @@
     .input_right span {
         margin: 0px 6px;
     }
-    .input_right img:nth-of-type(1) {
+    .input_right .svg-coin {
         width: 24px;
         height: 24px;
     }
-    .input_right img:nth-of-type(2) {
+    .input_right img:nth-of-type(1) {
         width: 11px;
         height: 11px;
     }
@@ -235,4 +335,13 @@
         color: #43318C;
         border: 1px solid #43318C;
     }
+@media (max-width: 768px) {
+    .swap-info {
+        border-radius: 0px;
+        padding: 20px;
+        border: 0px solid transparent;
+        margin: 0 auto;
+    }
+
+}
 </style>

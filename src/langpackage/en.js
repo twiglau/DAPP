@@ -2,7 +2,13 @@ var token1 = 'WFC';
  
 
 export const l = {
-  
+  t_MinPA:'Minimun Amount',
+  t_Price:'Price',
+  t_to:'To',
+  t_from:'From',
+  t_Duic:'for',
+  t_SWAP:'SWAP',
+  t_approving:'approvaling...',
   t_cuntip:'Deposit currency ratio',
   t_value:'Money',
   t_home3:'to help users achieve higher returns.',
