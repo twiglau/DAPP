@@ -23,7 +23,7 @@ const PrecisionsObj = [
 const tokensContractAddress = "0x5F8Bc83B6285A495c13347130352E9f20cebA63D";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链
-const _contractAddress = '0x82080E29A29903332F3C0ADC2A49abe38D95eF22';
+const _contractAddress = '0x3053964720b88424a83A0D0113a7CAAaB40cE1A6';
 const _contractABI = [
     {
         "inputs": [],
