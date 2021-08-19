@@ -23,7 +23,7 @@ const PrecisionsObj = [
 const tokensContractAddress = "0x5F8Bc83B6285A495c13347130352E9f20cebA63D";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链
-const _contractAddress = '0x3053964720b88424a83A0D0113a7CAAaB40cE1A6';
+const _contractAddress = '0x304a8b3ce30954d8d92F8912b1113000D0aB33AD';
 const _contractABI = [
     {
         "inputs": [],
@@ -755,19 +755,6 @@ const _contractABI = [
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "price",
-                "type": "uint256"
-            }
-        ],
-        "name": "setLibraPrice",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
@@ -847,6 +834,19 @@ const _contractABI = [
         "name": "takeoutTwo",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_a",
+                "type": "uint256"
+            }
+        ],
+        "name": "tlip",
+        "outputs": [],
+        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -2938,7 +2938,7 @@ function takeoutOne(account,currency,amount, callback, errorCallback){
     const data = _contract.methods
         .takeoutOne(
             getCurrencyIndex(currency),
-            amount
+            Number(amount)*systemPrecisions,
         ).encodeABI();
     sendTransfer(account, data, 0x0, callback, errorCallback);
 }
@@ -2948,7 +2948,7 @@ function takeoutTwo(account,amount1,currency2,callback, errorCallback){
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .takeoutTwo(
-            amount1,
+            Number(amount1)*systemPrecisions,
             getCurrencyIndex(currency2),
         ).encodeABI();
     sendTransfer(account, data, 0x0, callback, errorCallback);
@@ -3139,7 +3139,7 @@ function takeoutIncome(account,amount, callback, errorCallback){
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .takeoutIncome(
-            amount
+            Number(amount)*systemPrecisions,
         ).encodeABI();
     sendTransfer(account, data, 0x0, callback, errorCallback);
 }
