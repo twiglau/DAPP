@@ -295,7 +295,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -304,7 +304,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -313,7 +313,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -322,7 +322,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
       ],
@@ -336,7 +336,7 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -348,7 +348,7 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -360,7 +360,7 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -372,7 +372,7 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -384,11 +384,12 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
       ],
       walletAddress:'',
+      getDataInterVal: null,
     }
   },
   watch:{
@@ -846,6 +847,7 @@ export default {
     },
     async checkHasMyPairLockData(){
       let _self = this
+      _self.twoTokens.forEach(ele => {ele.lockAmount1 = 0;ele.lockAmount2 = 0;})
       Wallet.queryTwosSize((res) =>{
           _self.twoSize = res || 0
           (_self.twoSize > 0) && _self.getMyPairLockAmount()
@@ -855,6 +857,7 @@ export default {
     },
     async checkHasMyLockData(){
       let _self = this
+      _self.oneTokens.forEach(ele => ele.lockAmount = 0)
       Wallet.queryOnesSize((res) =>{
           _self.oneSize = res || 0
           (_self.oneSize > 0) &&  _self.getMyLockAmount()
@@ -1092,6 +1095,17 @@ export default {
       this['iptValue' + index] = this['iptValue' + index].replace(".", "$#$").replace(/\./g, "").replace("$#$", ".")
       this['iptValue' + index] = this['iptValue' + index].replace(/^(-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3')
     },
+    async getPoolsData() {
+      clearInterval(this.getDataInterVal)
+      this.getDataInterVal = setInterval(async () => {
+         
+          await this.getLockAmount()
+          await this.getPairLockAmount()
+          await this.checkHasMyLockData()
+          await this.checkHasMyPairLockData()
+      },this.getDataUpdateTime*1000)
+      
+    },
   },
   created() {
     this.walletAddress = localStorage.getItem("walletAddress");
@@ -1121,10 +1135,11 @@ export default {
        await this.checkHasMyPairLockData()
        await this.getRatePairs()
     },500)
+    this.getPoolsData()
   },
+
   destroyed() {
     clearInterval(this.getDataInterVal)
-    clearInterval(this.setStoreDataInterval)
   }
 }
 </script>
