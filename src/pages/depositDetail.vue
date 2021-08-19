@@ -58,6 +58,8 @@ export default {
       spinStatus: false,
       records:[],
       walletAddress:'',
+      oneSize:0,
+      twoSize:0,
     }
   },
   computed: {
@@ -66,6 +68,24 @@ export default {
     goBack(){
       this.$router.go(-1);
     },
+    async checkHasMyPairLockData(){
+      let _self = this
+      Wallet.queryTwosSize((res) =>{
+          _self.twoSize = res || 0
+          (_self.twoSize > 0) && _self.getMyPairLockAmount()
+      },(err) => {
+          reject(err)
+      })
+    },
+    async checkHasMyLockData(){
+      let _self = this
+      Wallet.queryOnesSize((res) =>{
+          _self.oneSize = res || 0
+          (_self.oneSize > 0) && _self.getMyLockAmount()
+      },(err) => {
+          reject(err)
+      })
+    },
     async getMyPairLockAmount(start = 0,end = 5){
       let _self = this
       _self.walletAddress = localStorage.getItem("walletAddress") || '';
@@ -73,6 +93,7 @@ export default {
         try {
           let promiseMyLockArr = [],resultLockArr = [];
           let i = start;
+          end = end > _self.twoSize ? _self.twoSize : end
           do {
             ++i;
             promiseMyLockArr[i] = new Promise((res,rej) => {
@@ -83,7 +104,7 @@ export default {
                   }else{
                     rej('error')
                   }
-                })
+                },(err) => {rej(err)})
             })
 
           } while (i < end);
@@ -112,6 +133,7 @@ export default {
         try {
           let promiseMyLockArr = [],resultLockArr = [];
           let i = start;
+          end = end > _self.oneSize ? _self.oneSize : end
           do {
             ++i;
             promiseMyLockArr[i] = new Promise((res,rej) => {
@@ -122,7 +144,7 @@ export default {
                   }else{
                     rej('error')
                   }
-                })
+                },(err) => {rej(err)})
             })
 
           } while (i < end);
@@ -151,8 +173,8 @@ export default {
   created() {
   },
   async mounted() {
-    this.getMyPairLockAmount()
-    this.getMyLockAmount()
+    this.checkHasMyLockData()
+    this.checkHasMyPairLockData()
   },
   destroyed() {
   }

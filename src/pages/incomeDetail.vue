@@ -49,6 +49,7 @@ export default {
       spinStatus: true,
       walletAddress:'',
       records:[],
+      dataSize:0,
     }
   },
   computed: {
@@ -56,6 +57,15 @@ export default {
   methods: {
     goBack(){
       this.$router.go(-1);
+    },
+    async checkHasIncomeData(){
+      let _self = this
+      Wallet.queryIncomeSize((res) =>{
+          _self.dataSize = res || 0
+          (_self.data > 0)&&_self.getProfitRecord()
+      },(err) => {
+          reject(err)
+      })
     },
     async getProfitRecord(start = 0, end = 5){
       let _self = this
@@ -66,6 +76,7 @@ export default {
           let i = start;
           do {
             ++i;
+            end = end > _self.dataSize ? +_self.dataSize : end
             promiseRecordArr[i] = new Promise((res,rej) => {
                 Wallet.incomeRecord(_self.walletAddress,i,(record) => {
                   if(record){
@@ -101,9 +112,7 @@ export default {
   created() {
   },
   async mounted() {
-    this.spinStatus = true
-    const res = await this.getProfitRecord()
-    this.spinStatus = false
+    this.checkHasIncomeData()
   },
   destroyed() {
   }

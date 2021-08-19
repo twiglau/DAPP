@@ -284,6 +284,9 @@ export default {
       isApprovedFIL:false,
       isApprovedLibra:false,
 
+      oneSize:0,
+      twoSize:0,
+
       oneTokens:[
         {
           currency:"ETH",
@@ -656,7 +659,7 @@ export default {
         new Promise((resolve,rej) => {
               Wallet.balanceOf(currency,_self.walletAddress,(res)=>{
                   resolve(Number((res ? res : 0) / Wallet.Precisions(currency)))
-              })
+              },(err) =>{rej(err)})
         }),
         new Promise((resolve,rej) => {
              getPrice({symobl:(_self.depositInfo.currency + 'usdt').toLowerCase()})
@@ -672,7 +675,7 @@ export default {
         new Promise((resolve) => {
               Wallet.balanceOf(_self.depositInfo.currency1,_self.walletAddress,(res)=>{
                   resolve(Number((res ? res : 0) / Wallet.Precisions(_self.depositInfo.currency1)))
-              })
+              },(err) =>{rej(err)})
         }),
         new Promise((resolve,reject) => {
              getPrice({symobl:(_self.depositInfo.currency2 + 'usdt').toLowerCase()})
@@ -780,6 +783,8 @@ export default {
         try {
           let promiseMyLockArr = [],resultLockArr = [];
           let i = start;
+          //不超过最大条数
+          end = end > _self.twoSize ? +_self.twoSize : end
           do {
             ++i;
             promiseMyLockArr[i] = new Promise((res,rej) => {
@@ -787,10 +792,8 @@ export default {
                   if(record){
                     resultLockArr.push(record)
                     res(record)
-                  }else{
-                    rej('error')
                   }
-                })
+                },(err) =>{rej(err)})
             })
 
           } while (i < end);
@@ -839,12 +842,31 @@ export default {
         libra_eth_1 > 0 && (libra_eth_1 = Number(libra_eth_1 / Wallet.Precisions(currency)))
         return libra_eth_1
     },
+    async checkHasMyPairLockData(){
+      let _self = this
+      Wallet.queryTwosSize((res) =>{
+          _self.twoSize = res || 0
+          (_self.twoSize > 0) && _self.getMyPairLockAmount()
+      },(err) => {
+          reject(err)
+      })
+    },
+    async checkHasMyLockData(){
+      let _self = this
+      Wallet.queryOnesSize((res) =>{
+          _self.oneSize = res || 0
+          (_self.oneSize > 0) &&  _self.getMyLockAmount()
+      },(err) => {
+          reject(err)
+      })
+    },
     async getMyLockAmount(start = 0, end = 5){
       let _self = this
       new Promise((resolve,reject) => {
         try {
           let promiseMyLockArr = [],resultLockArr = [];
           let i = start;
+          end = end > _self.oneSize ? +_self.oneSize : end
           do {
             ++i;
             promiseMyLockArr[i] = new Promise((res,rej) => {
@@ -855,7 +877,7 @@ export default {
                   }else{
                     rej('error')
                   }
-                })
+                },(err) =>{rej(err)})
             })
 
           } while (i < end);
@@ -900,39 +922,39 @@ export default {
               promiseAllarr[i] = new Promise((res) => {
 
                 Promise.all([
-                  new Promise((res1) => {
+                  new Promise((res1,rej) => {
                     Wallet.totalDepositBalance(_self.twoTokens[i].currency1,(in_a)=>{
                       let val = in_a
                       in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.twoTokens[i].currency1)))
                       val < -0.01 && (val = 0)
                       res1(val)
-                    })
+                    },(err) =>{rej(err)})
                   }),
-                  new Promise((res2) => {
+                  new Promise((res2,rej) => {
                     Wallet.totalTakeoutAmount(_self.twoTokens[i].currency1,(out_a)=>{
                       let val = out_a
                       out_a > 0 && (val = Number(out_a / Wallet.Precisions(_self.twoTokens[i].currency1)))
                       val < -0.01 && (val = 0)
                       res2(val)
-                    })
+                    },(err) =>{rej(err)})
                   }),
-                  new Promise((res3) => {
+                  new Promise((res3,rej) => {
                     Wallet.totalDepositBalance(_self.twoTokens[i].currency2,(in_a)=>{
                       let val = in_a
                       in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.twoTokens[i].currency2)))
                       val < -0.01 && (val = 0)
                       res3(val)
-                    })
+                    },(err) =>{rej(err)})
                   }),
-                  new Promise((res4) => {
+                  new Promise((res4,rej) => {
                     Wallet.totalTakeoutAmount(_self.twoTokens[i].currency2,(out_a)=>{
                       let val = out_a
                       out_a > 0 && (val = Number(out_a / Wallet.Precisions(_self.twoTokens[i].currency2)))
                       val < -0.01 && (val = 0)
                       res4(val)
-                    })
+                    },(err) =>{rej(err)})
                   }),
-                  new Promise((res5) => {
+                  new Promise((res5,rej) => {
 
                       Wallet.queryAllowance(_self.walletAddress,_self.twoTokens[i].currency1,(res)=>{
                         if(res && res > 0) {
@@ -941,16 +963,16 @@ export default {
                             res5(false)
                         }
 
-                      })
+                      },(err) =>{rej(err)})
                   }),
-                  new Promise((res6) => {
+                  new Promise((res6,rej) => {
                       Wallet.queryAllowance(_self.walletAddress,_self.twoTokens[i].currency2,(res)=>{
                         if(res && res > 0) {
                             res6(true)
                         }else {
                             res6(false)
                         }
-                      });
+                      },(err) =>{rej(err)});
                   })
                 ])
                 .then((in_out) => {
@@ -990,23 +1012,23 @@ export default {
               promiseAllarr[i] = new Promise((res) => {
 
                 Promise.all([
-                  new Promise((res1) => {
+                  new Promise((res1,rej) => {
                     Wallet.totalDepositBalance(_self.oneTokens[i].currency,(in_a)=>{
                       let val = in_a
                       in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.oneTokens[i].currency)))
                       val < -0.01 && (val = 0)
                       res1(val)
-                    })
+                    },(err) =>{rej(err)})
                   }),
-                  new Promise((res2) => {
+                  new Promise((res2,rej) => {
                     Wallet.totalTakeoutAmount(_self.oneTokens[i].currency,(out_a)=>{
                       let val = out_a
                       out_a > 0 && (val = Number(out_a / Wallet.Precisions(_self.oneTokens[i].currency)))
                       val < -0.01 && (val = 0)
                       res2(val)
-                    })
+                    },(err) =>{rej(err)})
                   }),
-                  new Promise((res3) => {
+                  new Promise((res3,rej) => {
                     Wallet.queryAllowance(_self.walletAddress,_self.oneTokens[i].currency,(pro)=>{
                         console.log({'授权: ': pro})
                         if(pro && pro > 0) {
@@ -1014,7 +1036,7 @@ export default {
                         }else {
                             res3(false)
                         }
-                    });
+                    },(err) =>{rej(err)});
                   })
                 ])
                 .then((in_out) => {
@@ -1093,8 +1115,8 @@ export default {
     setTimeout(async () => {
        await this.getLockAmount()
        await this.getPairLockAmount()
-       await this.getMyLockAmount()
-       await this.getMyPairLockAmount()
+       await this.checkHasMyLockData()
+       await this.checkHasMyPairLockData()
        await this.getRatePairs()
     },500)
   },
