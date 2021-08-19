@@ -3,6 +3,7 @@ var token1 = 'WFC';
 
 export const l = {
   
+  t_cuntip:'Deposit currency ratio',
   t_value:'Money',
   t_home3:'to help users achieve higher returns.',
   t_home2:'find high-yielding projects within multiple DeFi protocols',

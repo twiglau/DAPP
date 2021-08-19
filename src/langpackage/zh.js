@@ -2,6 +2,7 @@ var token1 = 'WFC';
 
 
 export const l = {
+  t_cuntip:'存入比例',
   t_value:'金额',
   t_home3:'帮助用户获得更高的回报。',
   t_home2:'多个 DeFi 协议中找到高收益项目',

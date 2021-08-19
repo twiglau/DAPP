@@ -197,7 +197,7 @@
             <li class="pools__row-1">
               <div class="pools__logo-name">
                 <svg-icon class="pools__coin-logo" :icon-class="depositInfo.currency1 + '_coin'" />
-                <svg-icon v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" :icon-class="depositInfo.currency2 + '_icon'" />
+                <svg-icon v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" :icon-class="depositInfo.currency2 + '_coin'" />
                 <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">Libra/{{depositInfo.currency2}}</div>
               </div>
               <div class="pools__info">{{$t('l.reward')}} Libra</div>
@@ -206,13 +206,32 @@
               <div class="pools__labe-field">{{$t('l.deposited')}} (Libra/{{depositInfo.currency2}})</div>
               <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.lockAmount2' :duration='3000' :decimals="4"></countTo></div>
             </li>
-            <li class="pools__row">
-              <div class="pools__labe-field">{{$t('l.balance')}}(Libra/{{depositInfo.currency2}})</div>
-              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.balance' :duration='3000' :decimals="4"></countTo></div>
-            </li>
             <li class="pools__dialog__input">
               <input @input="input_num(2)" :placeholder="$t('l.iptPlace')" v-model="iptValue2">
               <button @click="iptValue2=depositInfo.balance" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.depositall')}}</button>
+            </li>
+            <li class="pools__row pools__row_a">
+              <svg-icon class="down-arrow" icon-class="down_icon"></svg-icon>
+              <div class="pools__labe-field pools__label-value--gray">≈<countTo :endVal='depositInfo.realS_v' :duration='1000' :decimals="2" prefix="$"></countTo></div>
+              <div class="pools__label-value pools__label-value--gray">{{$t('l.balance')}}<countTo :endVal='depositInfo.balance' :duration='1000' :decimals="4"></countTo></div>
+            </li>
+            <li class="pools__row">
+              <div class="pools__labe-field">
+                <svg-icon :icon-class="depositInfo.currency1 + '_coin'"></svg-icon>
+                <span style="margin-left:6px">{{depositInfo.currency1}}</span>
+              </div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.nAmount1' :duration='3000' :decimals="4"></countTo></div>
+            </li>
+            <li class="pools__row">
+              <div class="pools__labe-field">
+                <svg-icon :icon-class="depositInfo.currency2 + '_coin'"></svg-icon>
+                <span style="margin-left:6px">{{depositInfo.currency2}}</span>
+              </div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.nAmount2' :duration='3000' :decimals="4"></countTo></div>
+            </li>
+            <li class="pools__row pools__row_a">
+              <div class="pools__labe-field pools__label-value--gray">{{$t('l.t_cuntip')}}</div>
+              <div class="pools__label-value pools__label-value--gray">{{depositInfo.currency1 + ' 20% + ' + depositInfo.currency2 + ' 80% '}}</div>
             </li>
             <li>
               <button @click="handleDepositConfirmTwo(iptValue2,depositInfo.currency2)" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.deposit')}}</button>
@@ -271,6 +290,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
+          isLoading:false,
         },
         {
           currency:"BNB",
@@ -278,6 +298,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
+          isLoading:false,
         },
         {
           currency:"BTC",
@@ -285,6 +306,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
+          isLoading:false,
         },
         {
           currency:"USDT",
@@ -292,6 +314,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
+          isLoading:false,
         },
       ],
       twoTokens:[
@@ -304,6 +327,7 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
+          isLoading:false,
         },
         {
           currency1:"Libra",
@@ -314,6 +338,7 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
+          isLoading:false,
         },
         {
           currency1:"Libra",
@@ -324,6 +349,7 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
+          isLoading:false,
         },
         {
           currency1:"Libra",
@@ -334,6 +360,7 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
+          isLoading:false,
         },
         {
           currency1:"Libra",
@@ -344,6 +371,7 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
+          isLoading:false,
         },
       ],
       walletAddress:'',
@@ -511,10 +539,6 @@ export default {
         this.isModalShowWithTwo=true;
       }
     },
-    async handleClaim() {
-    },
-    handleWithAll() {
-    },
     async handleWithDrawOne(currency,amount) {
       let _this = this
       let aUp = +amount;
@@ -534,11 +558,10 @@ export default {
                    title:'提取',
                    content:'提取成功'
                  })
-
               }
            })
          }
-        
+
       }, (res)=>{
         _this.$error({
           title:'提取',
@@ -633,6 +656,7 @@ export default {
       _self.$message.success({ content: 'Loaded!',key:'lang' ,duration: 2 });
       _self.depositInfo.balance = 0;_self.depositInfo.mPrice = 0; _self.depositInfo.sPrice = 0;
       _self.depositInfo.realM_v = 0;_self.depositInfo.realS_v = 0;
+      _self.depositInfo.nAmount1 = 0; _self.depositInfo.nAmount2 = 0;
       (res.length > 0) && (_self.depositInfo.balance = res[0]);
       (res.length > 1) && (_self.depositInfo.mPrice = res[1]);
       (res.length > 2) && (_self.depositInfo.sPrice = res[2]);
@@ -737,7 +761,7 @@ export default {
 
             _self.twoTokens[4].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,6,resultLockArr)
             _self.twoTokens[4].lockAmount2 += _self.caluUseable('FIL','useableAmount2',1,6,resultLockArr)
-            
+
             //这里过滤数据, 递归
             if(resultLockArr.length == end){
               _self.getMyPairLockAmount(end,end + 5)
@@ -755,7 +779,7 @@ export default {
                                             let num = +item[key]
                                             return num + currentTotal
                                         },0)  || 0
-        
+
         libra_eth_1 > 0 && (libra_eth_1 = Number(libra_eth_1 / Wallet.Precisions(currency)))
         console.log(currency,libra_eth_1)
         return libra_eth_1
@@ -796,14 +820,14 @@ export default {
             _self.oneTokens[2].lockAmount += _self.caluUseable('BTC','useableAmount',2,-1,resultLockArr)
 
             _self.oneTokens[3].lockAmount += _self.caluUseable('USDT','useableAmount',4,-1,resultLockArr)
-            
+
             //这里过滤数据, 递归
             if(resultLockArr.length == end){
               _self.getMyLockAmount(end,end + 5)
             }
 
           })
-          
+
         } catch (error) {
             reject(error)
             _self.$message.error(_self.$t('l.catch_err'))
@@ -861,7 +885,7 @@ export default {
                         }else {
                             res5(false)
                         }
-                         
+
                       })
                   }),
                   new Promise((res6) => {
@@ -1159,6 +1183,17 @@ export default {
     align-items: center;
     justify-content: space-between;
   }
+  .pools__row_a {
+    position: relative;
+  }
+  .pools__row_a > .down-arrow {
+    width: 32px;
+    height:32px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%);
+  }
   .pools__row {
     flex-wrap: wrap;
   }
@@ -1224,6 +1259,10 @@ export default {
   }
   .pools__label-value--black {
     color: #131d32;
+  }
+  .pools__label-value--gray {
+    color: #9C9C9C;
+    font-size: 12px;
   }
   .pools__button-group {
     display: flex;
