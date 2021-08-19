@@ -1100,6 +1100,11 @@ export default {
     this.isApprovedFIL=localStorage.getItem("isApprovedFIL");
     this.isApprovedLibra=localStorage.getItem("isApprovedLibra");
     this.updateApproveStatus(null);
+    Wallet.queryOnesSize(this.walletAddress,(r)=>{
+      alert(JSON.stringify(r));
+    },(r)=>{
+      alert(JSON.stringify(r));
+    });
   },
   mounted() {
 

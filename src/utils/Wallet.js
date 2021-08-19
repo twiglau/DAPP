@@ -23,147 +23,8 @@ const PrecisionsObj = [
 const tokensContractAddress = "0x5F8Bc83B6285A495c13347130352E9f20cebA63D";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链
-const _contractAddress = '0x46416c2700BeE2a5BBEbCD6e6c9E9beF715cf533';
+const _contractAddress = '0x82080E29A29903332F3C0ADC2A49abe38D95eF22';
 const _contractABI = [
-    {
-        "inputs": [],
-        "name": "award",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_upperAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_currencyIndex",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "depositOne",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_upperAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_currency2Index",
-                "type": "uint8"
-            }
-        ],
-        "name": "depositTwo",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_upperAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "exchange",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "price",
-                "type": "uint256"
-            }
-        ],
-        "name": "setLibraPrice",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "takeoutIncome",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint8",
-                "name": "_currencyIndex",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "takeoutOne",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_amount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_currency2Index",
-                "type": "uint8"
-            }
-        ],
-        "name": "takeoutTwo",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
     {
         "inputs": [],
         "stateMutability": "nonpayable",
@@ -191,6 +52,13 @@ const _contractABI = [
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "award",
+        "outputs": [],
+        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -287,6 +155,52 @@ const _contractABI = [
     {
         "inputs": [
             {
+                "internalType": "address",
+                "name": "_upperAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_currencyIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "depositOne",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_upperAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_currency2Index",
+                "type": "uint8"
+            }
+        ],
+        "name": "depositTwo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
@@ -353,6 +267,24 @@ const _contractABI = [
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_upperAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "exchange",
+        "outputs": [],
+        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -449,6 +381,25 @@ const _contractABI = [
     {
         "inputs": [],
         "name": "filTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "currIndex",
+                "type": "uint256"
+            }
+        ],
+        "name": "getThePrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -678,7 +629,13 @@ const _contractABI = [
         "type": "function"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_from",
+                "type": "address"
+            }
+        ],
         "name": "queryDownsSize",
         "outputs": [
             {
@@ -691,7 +648,13 @@ const _contractABI = [
         "type": "function"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_from",
+                "type": "address"
+            }
+        ],
         "name": "queryExchangeSize",
         "outputs": [
             {
@@ -704,7 +667,13 @@ const _contractABI = [
         "type": "function"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_from",
+                "type": "address"
+            }
+        ],
         "name": "queryIncomeSize",
         "outputs": [
             {
@@ -717,7 +686,13 @@ const _contractABI = [
         "type": "function"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_from",
+                "type": "address"
+            }
+        ],
         "name": "queryOnesSize",
         "outputs": [
             {
@@ -730,7 +705,13 @@ const _contractABI = [
         "type": "function"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_from",
+                "type": "address"
+            }
+        ],
         "name": "queryTwosSize",
         "outputs": [
             {
@@ -774,6 +755,19 @@ const _contractABI = [
     {
         "inputs": [
             {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+            }
+        ],
+        "name": "setLibraPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
@@ -798,6 +792,61 @@ const _contractABI = [
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "takeoutIncome",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "_currencyIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "takeoutOne",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_amount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_currency2Index",
+                "type": "uint8"
+            }
+        ],
+        "name": "takeoutTwo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -3134,9 +3183,9 @@ function queryDownUser(account,index,callback,errorCallback) {
  * @param callback
  * @param errorCallback
  */
-function queryOnesSize(callback,errorCallback) {
+function queryOnesSize(address,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.queryOnesSize()
+    _contract.methods.queryOnesSize(address)
         .call()
         .then((res) => {
             callback(res);
@@ -3151,9 +3200,9 @@ function queryOnesSize(callback,errorCallback) {
  * @param callback
  * @param errorCallback
  */
-function queryTwosSize(callback,errorCallback) {
+function queryTwosSize(address,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.queryTwosSize()
+    _contract.methods.queryTwosSize(address)
         .call()
         .then((res) => {
             callback(res);
@@ -3167,9 +3216,9 @@ function queryTwosSize(callback,errorCallback) {
  * @param callback
  * @param errorCallback
  */
-function queryDownsSize(callback,errorCallback) {
+function queryDownsSize(address,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.queryDownsSize()
+    _contract.methods.queryDownsSize(address)
         .call()
         .then((res) => {
             callback(res);
@@ -3183,9 +3232,9 @@ function queryDownsSize(callback,errorCallback) {
  * @param callback
  * @param errorCallback
  */
-function queryExchangeSize(callback,errorCallback) {
+function queryExchangeSize(address,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.queryExchangeSize()
+    _contract.methods.queryExchangeSize(address)
         .call()
         .then((res) => {
             callback(res);
@@ -3199,9 +3248,9 @@ function queryExchangeSize(callback,errorCallback) {
  * @param callback
  * @param errorCallback
  */
-function queryIncomeSize(callback,errorCallback) {
+function queryIncomeSize(address,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.queryIncomeSize()
+    _contract.methods.queryIncomeSize(address)
         .call()
         .then((res) => {
             callback(res);
