@@ -2,6 +2,9 @@ var token1 = 'WFC';
 
 
 export const l = {
+  t_isbottom:'已是底部',
+  t_loadMore:'点击加载更多',
+  t_loading:'加载中...',
   t_MinPA:'最低金额',
   t_Price:'价格',
   t_to:'到',

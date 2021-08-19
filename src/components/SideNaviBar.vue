@@ -65,6 +65,7 @@ export default {
   data() {
     return {
       visible: true,
+      walletAddress:'',
     }
   },
   components:{LangSetting},
@@ -81,10 +82,25 @@ export default {
       }
     }
   },
+  mounted() {
+    this.walletAddress = localStorage.getItem("walletAddress") || '';
+  },
   methods: {
       onClose() {
         this.$store.commit('accounts/setDrawer',false)
-      }
+      },
+      handleCopyLink() {
+        let walletAddress = localStorage.getItem("walletAddress") || '';
+        if(!walletAddress) {
+          this.$message.error(this.$t('l.error_tips_unconnect'))
+          return
+        }
+        this.$copyText(this.currentHref+'#/home?address='+walletAddress).then( () => {
+          this.$message.success('复制成功')
+        }, function () {
+          this.$message.error('复制失败,请重试！')
+        })
+      },
   }
 }
 </script>

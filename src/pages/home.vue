@@ -15,18 +15,18 @@
           <table id="PCTable">
             <tr class="lightColor">
               <th>{{$t('l.home_n1')}}</th>
-              <th>{{$t('l.home_n2')}}</th>
+              <!-- <th>{{$t('l.home_n2')}}</th> -->
               <th>{{$t('l.home_n3')}}</th>
             </tr>
             <tr>
               <td>
-                <countTo :endVal='10000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+                <countTo :endVal='totalLock' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
-              <td>
+              <!-- <td>
                 <countTo :endVal='20000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
-              </td>
+              </td> -->
               <td>
-                <countTo :endVal='30000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+                <countTo :endVal='coinPrice' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
             </tr>
           </table>
@@ -34,19 +34,19 @@
             <tr>
               <th class="lightColor">{{$t('l.home_n1')}}</th>
               <td>
-                <countTo :endVal='40000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+                <countTo :endVal='totalLock' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
             </tr>
-            <tr>
+            <!-- <tr>
               <th class="lightColor">{{$t('l.home_n2')}}</th>
               <td>
                 <countTo :endVal='50000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
-            </tr>
+            </tr> -->
             <tr>
               <th class="lightColor">{{$t('l.home_n3')}}</th>
               <td>
-                <countTo :endVal='60000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+                <countTo :endVal='coinPrice' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
             </tr>
           </table>
@@ -128,6 +128,8 @@
 </template>
 
 <script>
+    import {getPrice} from '@/utils/api'
+import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
 export default {
   components: {
@@ -137,7 +139,10 @@ export default {
   },
   data() {
     return {
-
+      currentHref: window.location.origin+window.location.pathname,
+      totalLock:0,
+      coinPrice:0,
+      walletAddress:'',
       oneTokens:[
         {
           currency:"ETH",
@@ -235,8 +240,42 @@ export default {
     handleToMore(index) {
       this.$router.push({path: '/farm',query: {ptype: index}})
     },
+    async getIncomeData(){
+      let _self = this
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      new Promise((resolve) => {
+          Wallet.incomeAccount(_self.walletAddress,(res)=>{
+             resolve(res)
+          })
+      })
+    },
+    async getPairPrice(){
+        let _self = this
+        getPrice({symbol:'librausdt'})
+        .then((res) => {
+            let plc =  res.price
+            _self.coinPrice = +plc
+        })
+    },
   },
-  mounted() {
+  async mounted() {
+      let _self = this
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      let inviteAddress = _self.$route.query.address ? _self.$route.query.address : ''
+      if(inviteAddress && inviteAddress.length > 0) {
+          _self.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)
+      }
+      _self.inviteAddress = _self.$getCookie('inviteAddress') ? _self.$getCookie('inviteAddress') : _self.inviteAddress
+      _self.getPairPrice()
+      const res = await _self.getIncomeData()
+      if(res){
+          const {
+            total,  //总收益
+            takeout, //总取出
+          } = res
+          _self.totalLock = (total || 0) - (takeout || 0)
+      }
+
   },
   destroyed() {
   }

@@ -1,9 +1,6 @@
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
-// import BurnerConnectProvider from "@burner-wallet/burner-connect-provider";
-// import Authereum from "authereum";
-// import DcentProvider from "dcent-provider";
-// import WalletConnectProvider from "@walletconnect/web3-provider";
+
 function getCookie(key){
     var arr1=document.cookie.split("; ");//由于cookie是通过一个分号+空格的形式串联起来的，所以这里需要先按分号空格截断,变成[name=Jack,pwd=123456,age=22]数组类型；
     for(var i=0;i<arr1.length;i++){
@@ -39,7 +36,6 @@ const state = {
   dataUpdateTime: 10, //页面数据刷新时间
   mainChainID: 56,
   isMainChainID: true,
-  huobiNetWork: {56: "https://bsc-dataseed1.binance.org/",128: 'https://http-mainnet.hecochain.com',256: 'https://http-testnet.hecochain.com'},
 };
 
 const getters = {

@@ -43,3 +43,25 @@ export function postExchangeData(data){
        })
     })
 }
+export function queryExchangeRecords(data){
+    return new Promise((resolve,reject) => {
+       axios.post('/libar/queryExchangeRecord',data)
+       .then(res => {
+          resolve(res)
+       })
+       .catch((err) =>{
+         reject(err)
+       })
+    })
+}
+export function queryWithdrawalRecords(data){
+    return new Promise((resolve,reject) => {
+       axios.post('/libar/queryExchangeRecord',data)
+       .then(res => {
+          resolve(res)
+       })
+       .catch((err) =>{
+         reject(err)
+       })
+    })
+}

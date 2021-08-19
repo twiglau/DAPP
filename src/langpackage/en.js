@@ -2,6 +2,9 @@ var token1 = 'WFC';
  
 
 export const l = {
+  t_isbottom:'bottom line',
+  t_loadMore:'click it load more',
+  t_loading:'loading...',
   t_MinPA:'Minimun Amount',
   t_Price:'Price',
   t_to:'To',
