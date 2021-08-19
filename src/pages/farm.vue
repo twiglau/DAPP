@@ -179,6 +179,10 @@
               <input @input="input_num(2)" :placeholder="$t('l.iptPlace')" v-model="iptValue2">
               <button @click="iptValue2=depositInfo.balance" class="g-button pools__dialog__deposit-all g-button-heco-theme  g-button--normal">{{$t('l.depositall')}}</button>
             </li>
+            <li class="pools__row">
+              <div class="pools__labe-field">{{$t('l.t_value')}}(≈)</div>
+              <div class="pools__label-value pools__label-value--black"><countTo :endVal='depositInfo.realM_v' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo></div>
+            </li>
             <li>
               <button @click="handleDepositConfirmOne(depositInfo.currency,iptValue2)" class="g-button pools__dialog__option g-button-heco-theme ">{{$t('l.deposit')}}</button>
             </li>
@@ -224,7 +228,7 @@
 <script>
 import countTo from 'vue-count-to';
 import Wallet from '@/utils/Wallet.js';
-import {getRate,postWithdrawalData,postExchangeData} from '@/utils/api'
+import {getRate,getPrice,postWithdrawalData} from '@/utils/api'
 export default {
   name: "Home",
   components: {
@@ -343,6 +347,20 @@ export default {
         },
       ],
       walletAddress:'',
+    }
+  },
+  watch:{
+    iptValue2:{
+      immediate:true,
+      handler:function(newVal) {
+        if(this.depositInfo && this.depositInfo.currency){
+          if(!newVal){
+            this.depositInfo.realM_v = 0
+          }else {
+            this.depositInfo.realM_v = (+newVal) * (+this.depositInfo.mPrice)
+          }
+        }
+      }
     }
   },
   computed: {
@@ -564,37 +582,97 @@ export default {
     },
     async handleShowDepositModal(index,item) {
       let _self = this
+
       _self.depositInfo = item
       _self.$message.loading({ content: 'Loading...',key:'lang'})
       let currency = _self.depositInfo.currency ? _self.depositInfo.currency : _self.depositInfo.currency2;
-      Wallet.balanceOf(currency,_self.walletAddress,(res)=>{
-         _self.$message.success({ content: 'Loaded!',key:'lang' ,duration: 2 });
-         _self.depositInfo.balance = Number((res ? res : 0) / Wallet.Precisions(currency))
-        if(index==0){
-          _self.isModalShowSaveOne = true
-        }else if(index==1){
-          _self.isModalShowSaveTwo = true
-        }
-      })
+      let needData = _self.depositInfo.currency ? [
+        new Promise((resolve,rej) => {
+              Wallet.balanceOf(currency,_self.walletAddress,(res)=>{
+                  resolve(Number((res ? res : 0) / Wallet.Precisions(currency)))
+              })
+        }),
+        new Promise((resolve,rej) => {
+             getPrice({symobl:(_self.depositInfo.currency + 'usdt').toLowerCase()})
+             .then(res => {
+               const {price} = res
+               resolve(price)
+             })
+             .catch((err) => {
+               rej(err)
+             })
+        })
+      ] : [
+        new Promise((resolve) => {
+              Wallet.balanceOf(_self.depositInfo.currency1,_self.walletAddress,(res)=>{
+                  resolve(Number((res ? res : 0) / Wallet.Precisions(_self.depositInfo.currency1)))
+              })
+        }),
+        new Promise((resolve,reject) => {
+             getPrice({symobl:(_self.depositInfo.currency2 + 'usdt').toLowerCase()})
+             .then(res => {
+               const {price} = res
+               resolve(price)
+             })
+             .catch((err) => {
+               reject(err)
+             })
+        }),
+        new Promise((resolve,reject) => {
+             getPrice({symobl:(_self.depositInfo.currency1 + 'usdt').toLowerCase()})
+             .then(res => {
+               const {price} = res
+               resolve(price)
+             })
+             .catch((err) => {
+               reject(err)
+             })
+        })
+      ]
+      const res = await Promise.all(needData)
+      _self.$message.success({ content: 'Loaded!',key:'lang' ,duration: 2 });
+      _self.depositInfo.balance = 0;_self.depositInfo.mPrice = 0; _self.depositInfo.sPrice = 0;
+      _self.depositInfo.realM_v = 0;_self.depositInfo.realS_v = 0;
+      (res.length > 0) && (_self.depositInfo.balance = res[0]);
+      (res.length > 1) && (_self.depositInfo.mPrice = res[1]);
+      (res.length > 2) && (_self.depositInfo.sPrice = res[2]);
+      if(index==0){
+        _self.isModalShowSaveOne = true
+      }else if(index==1){
+        _self.isModalShowSaveTwo = true
+      }
     },
     async handleDepositConfirmOne(currency,amount) {
+      let _this = this
       if (currency == undefined||currency ==  null){
-        alert("请选择币种");
-        return ;
+        _this.$message.error("请选择币种");
+        return;
       }
-      if (!amount || amount > _self.depositInfo.balance){
+      if (!amount || amount > _this.depositInfo.balance){
         _this.$message.error("存入数量不正确")
         return;
       }
       //TODO 获取币种currency的价格price，amount*price 必须 大于 100美元
-      
-      //TODO 判断账户Currency余额
+      let value = (+_this.depositInfo.mPrice) * (+amount) 
+      if(value < 100){
+        _this.$message.error("存入存入价值需大于100")
+        return;
+      }
 
       //调用合约方法存入币种
       Wallet.depositOne(this.walletAddress,this.walletAddress,currency,amount,(res)=>{
-        alert("已存入");
+        if(res) {
+            _this.isModalShowSaveOne = false
+            _this.$success({
+              title:'存入',
+              content:'存入成功'
+            })
+        }
       },(res)=>{
-        alert("报错："+res);
+        _this.$error({
+          title:'存入',
+          content:res.message || '存入失败'
+        })
       });
     },
     async handleDepositConfirmTwo(libraAmount,currency2) {

@@ -1,5 +1,15 @@
 import axios from "./axios";
-
+export function getPrice(data){
+   return new Promise((resolve,reject) => {
+       axios.get('/bian/querySymbloPriceV2',data)
+       .then(res =>{
+          resolve(res)
+       })
+       .catch((err) =>{
+         reject(err)
+       })
+   })
+}
 export function getRate(data){
     return new Promise((resolve,reject) => {
         axios.post('/libar/queryMiningToken',data)
