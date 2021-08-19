@@ -21,7 +21,7 @@ export const l = {
   t_ttt:'团队业绩',
   t_num:'团队人数',
   t_info:'团队信息',
-  t_desc1:'达到该级别可享受的团队收益比例为4%',
+  t_desc1:'达到该级别可享受的团队收益比例为 ',
   t_desc:'需要团队业绩',
   t_todayp:'今日收益',
   t_tolp:'总收益',

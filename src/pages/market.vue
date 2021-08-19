@@ -13,23 +13,23 @@
 
         <div class="level-desc">
           <span>{{$t('l.t_level')}}</span>
-          <span>Completed</span>
+          <span>-</span>
         </div>
         <div class="level">
             <div class="line-docr">
-              <div class="line"></div>
-              <div class="line"></div>
+              <div class="line" :style="[{background:team.leftLevel ? '#43318C':'white'}]"></div>
+              <div class="line" :style="[{background:team.rightLevel ? '#43318C':'white'}]"></div>
             </div>
-            <div class="level-item" style="justify-content: flex-start;">
-              <svg-icon icon-class="left_icon"></svg-icon>
-              <span style="left:5px">LV2</span>
+            <div class="level-item" style="justify-content: flex-start;" >
+              <svg-icon v-show="team.leftLevel" icon-class="left_icon"></svg-icon>
+              <span v-show="team.leftLevel" style="left:5px">{{team.leftLevel}}</span>
             </div>
             <div class="level-item" style="justify-content: center;">
-              <svg-icon class="team-level-icon" icon-class="LV2_icon"></svg-icon>
+              <svg-icon class="team-level-icon" :icon-class="team.level + '_icon'"></svg-icon>
             </div>
-            <div class="level-item" style="justify-content: flex-end;">
-              <svg-icon icon-class="right_icon"></svg-icon>
-              <span style="right:5px">LV4</span>
+            <div class="level-item" style="justify-content: flex-end;" >
+              <svg-icon v-show="team.rightLevel" icon-class="right_icon"></svg-icon>
+              <span v-show="team.rightLevel" style="right:5px">{{team.rightLevel}}</span>
             </div>
         </div>
         <div class="team-level-desc-nor">
@@ -37,7 +37,7 @@
         </div>
         <div class="team-level-amount"><countTo :endVal='team.needTeamProfor' :duration='3000' :decimals="2" prefix="$"></countTo></div>
         <div class="team-level-desc">
-          {{$t('l.t_desc1')}}
+          {{$t('l.t_desc1')}}{{team.enjoyRatio}}
         </div>
         <a-button size="default" class="invite-btn" @click="handleCopyLink">Invite</a-button>
       </div>
@@ -89,44 +89,243 @@ export default {
         teamProformance:0,
         needTeamProfor:0,
         teamProfit:0,
+        leftLevel:null,
+        level:'LV1',
+        enjoyRatio:'2%',
+        rightLevel:null,
       },
+      layers:0,
+      layers_one_Record: [],
+      layers_two_Record: [],
+      layers_profit_Record: [],
+      teamLevels:[
+        {level:'LV1',value:Math.pow(10,6),ratio:'2%'},
+        {level:'LV2',value:13*Math.pow(10,6),ratio:'3%'},
+        {level:'LV3',value:19*Math.pow(10,6),ratio:'4%'},
+        {level:'LV4',value:27*Math.pow(10,6),ratio:'5%'},
+        {level:'LV5',value:81*Math.pow(10,6),ratio:'6%'},
+        {level:'LV6',value:243*Math.pow(10,6),ratio:'7%'},
+        {level:'LV7',value:729*Math.pow(10,6),ratio:'8%'},
+      ],
+      coins:[
+        {key:1,coin:'Libra',price:1},
+        {key:2,coin:'BTC',price:1},
+        {key:3,coin:'ETH',price:1},
+        {key:4,coin:'USDT',price:1},
+        {key:5,coin:'BNB',price:1},
+        {key:6,coin:'FIL',price:1},
+      ]
     }
   },
   computed: {
   },
   methods: {
-    //查一个节点的所有下级
-    async getTeamDown(address,start = 0, end = 1){
-      let _self = this
-      if(!address) return
+    //{"0":"4","1":"0xFaC462928525FAEA834d8000796B7843f822AF1d",
+//"2":"10000000000","3":"10000000000","4":"0","5":"1629387212",
+//"currencyIndex":"4","userAddress":"0xFaC462928525FAEA834d8000796B7843f822AF1d",
+//"totalAmount":"10000000000","useableAmount":"10000000000","takeoutAmount":"0",
+//"depositTime":"1629387212"}
 
-      new Promise((resolve,reject) => {
+//{"0":"0xFaC462928525FAEA834d8000796B7843f822AF1d","1":"1","2":"10000000000",
+//"3":"10000000000","4":"0","5":"5","6":"94449209",
+//"7":"94449209","8":"0","9":"1629389428",
+//"userAddress":"0xFaC462928525FAEA834d8000796B7843f822AF1d",
+//"currency1Index":"1","totalAmount1":"10000000000",
+//"useableAmount1":"10000000000","takeoutAmount1":"0",
+//"currency2Index":"5","totalAmount2":"94449209","useableAmount2":"94449209",
+//"takeoutAmount2":"0","depositTime":"1629389428"}
+    calculateTeamPerformance(){
+      //1. Libra 数量
+      let libra_amount = this.layers_two_Record.reduce((prev,item) => {
+        return prev + Number(item.useableAmount1 / Wallet.Precisions())
+      },0)
+      //2. BTC 数量
+      let btc_amount = this.layers_one_Record.filter(ele => ele.currencyIndex == 2)
+                                             .reduce((prev,item) =>{
+                                                return prev + Number(item.useableAmount / Wallet.Precisions())
+                                             },0)
+      //3. ETH 数量
+      let eth_amount = this.layers_one_Record.filter(ele => ele.currencyIndex == 3)
+                                             .reduce((prev,item) =>{
+                                                return prev + Number(item.useableAmount / Wallet.Precisions())
+                                             },0)
+      //4. USDT 数量
+      let usdt_amount = this.layers_one_Record.filter(ele => ele.currencyIndex == 4)
+                                             .reduce((prev,item) =>{
+                                                return prev + Number(item.useableAmount / Wallet.Precisions())
+                                             },0)
+      //5. BNB 数量
+      let bnb_amount = this.layers_one_Record.filter(ele => ele.currencyIndex == 5)
+                                             .reduce((prev,item) =>{
+                                                return prev + Number(item.useableAmount / Wallet.Precisions())
+                                             },0)
+      //6. FIL 数量
+      let fil_amount = this.layers_one_Record.filter(ele => ele.currencyIndex == 6)
+                                             .reduce((prev,item) =>{
+                                                return prev + Number(item.useableAmount / Wallet.Precisions())
+                                             },0)
+      //8. Libra 收益数量
+      let libra_profit_amount = this.layers_profit_Record.reduce((prev,item) => {
+                                                return prev + Number(item.amount / Wallet.Precisions())
+                                            },0)
+      
+      //团队业绩
+      this.team.teamProformance = libra_amount * this.coins[0].price +
+                                  btc_amount * this.coins[1].price + 
+                                  eth_amount * this.coins[2].price +
+                                  usdt_amount * this.coins[3].price +
+                                  bnb_amount * this.coins[4].price +
+                                  fil_amount * this.coins[5].price;
+
+      //团队收益
+      this.team.teamProfit = libra_profit_amount * this.coins[0].price;  
+      
+      //根据业绩判断信息
+      this.checkTeam()
+      
+    },
+    checkTeam(){
+      const {teamProformance} = this.team
+      if(teamProformance < this.teamLevels[0].value){
+        this.team.needTeamProfor = this.teamLevels[0].value - teamProformance
+        this.team.enjoyRatio = this.teamLevels[0].ratio
+        this.team.leftLevel = null
+        this.team.level = 'LV1'
+        this.team.rightLevel = 'LV2'
+      }else if (teamProformance > this.teamLevels[0].value && teamProformance < this.teamLevels[1].value){
+        this.team.needTeamProfor = this.teamLevels[1].value - teamProformance
+        this.team.enjoyRatio = this.teamLevels[1].ratio
+        this.team.leftLevel = 'LV1'
+        this.team.level = 'LV2'
+        this.team.rightLevel = 'LV3'
+      }else if (teamProformance > this.teamLevels[1].value && teamProformance < this.teamLevels[2].value){
+        this.team.needTeamProfor = this.teamLevels[2].value - teamProformance
+        this.team.enjoyRatio = this.teamLevels[2].ratio
+        this.team.leftLevel = 'LV2'
+        this.team.level = 'LV3'
+        this.team.rightLevel = 'LV4'
+      }else if (teamProformance > this.teamLevels[2].value && teamProformance < this.teamLevels[3].value){
+        this.team.needTeamProfor = this.teamLevels[3].value - teamProformance
+        this.team.enjoyRatio = this.teamLevels[3].ratio
+        this.team.leftLevel = 'LV2'
+        this.team.level = 'LV3'
+        this.team.rightLevel = 'LV4'
+      }else if (teamProformance > this.teamLevels[3].value && teamProformance < this.teamLevels[4].value){
+        this.team.needTeamProfor = this.teamLevels[4].value - teamProformance
+        this.team.enjoyRatio = this.teamLevels[4].ratio
+        this.team.leftLevel = 'LV3'
+        this.team.level = 'LV4'
+        this.team.rightLevel = 'LV5'
+      }else if (teamProformance > this.teamLevels[4].value && teamProformance < this.teamLevels[5].value){
+        this.team.needTeamProfor = this.teamLevels[5].value - teamProformance
+        this.team.enjoyRatio = this.teamLevels[5].ratio
+        this.team.leftLevel = 'LV4'
+        this.team.level = 'LV5'
+        this.team.rightLevel = 'LV6'
+      }else if (teamProformance > this.teamLevels[5].value && teamProformance < this.teamLevels[6].value){
+        this.team.needTeamProfor = this.teamLevels[6].value - teamProformance
+        this.team.enjoyRatio = this.teamLevels[6].ratio
+        this.team.leftLevel = 'LV5'
+        this.team.level = 'LV6'
+        this.team.rightLevel = 'LV7'
+      }else if (teamProformance > this.teamLevels[7].value){
+        this.team.needTeamProfor = this.teamLevels[7].value - teamProformance
+        this.team.enjoyRatio = this.teamLevels[7].ratio
+        this.team.leftLevel = 'LV6'
+        this.team.level = 'LV7'
+        this.team.rightLevel = null
+      }
+    },
+    async calculateTeamInfo(address) {
+      let _self = this
+      //1. 获得 address 下直接数量
+      const total_a = await _self.checkNodeCount(address)
+      const total_num = +total_a
+      if(total_num > 0){
+        //2. 获得 address 下直推下级的地址信息, 获得团队人数
+        const info_a = await _self.getNodeTeamDown(address,0,total_num,total_num)
+        //3. 根据下级地址获得存入记录: 单币记录,双币记录,  返利记录 --> 计算团队业绩,  团队总收益
+        if(!info_a || info_a.length == 0) return
+
+        _self.layers++; //层数
+        //3.x
+        for(item of info_a){
+          const item_address = item.userAddress
+          //3.1
+          const oneCount = await _self.checkHasMyLockData(item_address)
+          if(oneCount > 0){
+            const oneRecord = await _self.getMyLockAmount(item_address,0,oneCount,oneCount)
+            _self.layers_one_Record.push(...oneRecord)
+          }
+          //3.2
+          const twoCount = await _self.checkHasMyPairLockData(item_address)
+          if(twoCount > 0){
+            const twoRecord = await _self.getMyPairLockAmount(item_address,0,twoCount,twoCount)
+            _self.layers_two_Record.push(...twoRecord)
+          }
+          //3.3
+          const profitCount = await _self.checkHasIncomeData(item_address)
+          if(profitCount > 0){
+            const profitCount = await _self.getProfitRecord(item_address,0,profitCount,profitCount)
+            _self.layers_profit_Record.push(...profitCount)
+          }
+          //3.4 --> 节点地址往下递归
+          _self.calculateTeamInfo(item_address)
+        }
+      }
+      _self.calculateTeamPerformance()
+    },
+    /**
+     * 节点 address 直推下级 所有数量
+     */
+    async checkNodeCount(address){
+      let _self = this
+      return new Promise((resolve,reject) => {
+          Wallet.queryDownsSize(address,(res) =>{
+            resolve(res)
+          },(err) => {
+            reject(err)
+          })
+      })
+    },
+
+    /**
+     * 节点 address 下级信息
+     * "upperAddress":"0x678B95f105c414A5A6014Db225930b1B0fd93f88",
+     * "userAddress":"0x678B95f105c414A5A6014Db225930b1B0fd93f88",
+     * "hasDeducted":true}
+     */
+    async getNodeTeamDown(address,start = 0, end = 1,total = 1){
+      let _self = this
+      return new Promise((resolve,reject) => {
         try {
           let promiseDownArr = [],resultDownArr = [];
           let i = start;
+          end = end > total ? total : end
           do {
-            ++i;
             promiseDownArr[i] = new Promise((res,rej) => {
                 Wallet.queryDownUser(address,i,(info) => {
-                  if(record){
+                  if(info){
                     resultDownArr.push(info)
                     res(info)
                   }else{
                     rej('error')
                   }
-                })
+                },(err) => {rej(err)})
             })
+            ++i;
 
           } while (i < end);
 
           Promise.all(promiseDownArr)
-          .finally(() => {
-            resolve('success')
-            //这里过滤数据, 递归
-            if(resultDownArr.length == end){
+          .then((res) => {
+            resolve(res)
+            //这里过滤数据, 递归,或者 total == end 时,不用递归
+            if(resultDownArr.length == end && total > end){
               _self.getTeamDown(end,end + 1)
             }
           })
+          .catch((err) => { reject(err)})
         } catch (error) {
             reject(error)
             _self.$message.error(_self.$t('l.catch_err'))
@@ -140,6 +339,162 @@ export default {
           Wallet.incomeAccount(_self.walletAddress,(res)=>{
              resolve(res)
           })
+      })
+    },
+    //2币判断
+    async checkHasMyPairLockData(address){
+      let _self = this
+      return new Promise((resolve,reject) => {
+          Wallet.queryTwosSize(address,(res) =>{
+              resolve(+res || 0)
+          },(err) => {
+              reject(err)
+          })
+
+      })
+    },
+    //1币判断
+    async checkHasMyLockData(address){
+      let _self = this
+      return new Promise((resolve,reject) => {
+        Wallet.queryOnesSize(address,(res) =>{
+            resolve(+res || 0) 
+        },(err) => {
+            reject(err)
+        })
+      })
+    },
+    //2币记录
+    async getMyPairLockAmount(address,start = 0,end = 1,twoSize = 1){
+      let _self = this
+      return new Promise((resolve,reject) => {
+        try {
+          let promiseMyLockArr = [],resultLockArr = [];
+          let i = start;
+          end = end > twoSize ? twoSize : end
+          do {
+            promiseMyLockArr[i] = new Promise((res,rej) => {
+                Wallet.twoDepositOrder(address,i,(record) => {
+                  if(record){
+                    resultLockArr.push(record)
+                    res(record)
+                  }else{
+                    rej('error')
+                  }
+                },(err) => {rej(err)})
+            })
+            ++i;
+
+          } while (i < end);
+
+          //全部请求可能失败, finally接收
+          Promise.all(promiseMyLockArr)
+          .then((res) => {
+            resolve(res)
+            //这里过滤数据, 递归
+            if(resultLockArr.length == end && end < twoSize){
+              _self.getMyPairLockAmount(address,end,end + 1,twoSize)
+            }
+          })
+          .catch((err) => {reject(err)})
+        } catch (error) {
+            reject(error)
+        }
+      })
+    },
+    //1币记录
+    async getMyLockAmount(address,start = 0, end = 1,oneSize){
+      let _self = this
+      new Promise((resolve,reject) => {
+        try {
+          let promiseMyLockArr = [],resultLockArr = [];
+          let i = start;
+          end = end > oneSize ? oneSize : end
+          do {
+            promiseMyLockArr[i] = new Promise((res,rej) => {
+                Wallet.oneDepositOrder(address,i,(record) => {
+                  
+                  if(record){
+                    resultLockArr.push(record)
+                    res(record)
+                  }else{
+                    rej('error')
+                  }
+                },(err) => {rej(err)})
+            })
+            ++i;
+
+          } while (i < end);
+
+          //全部请求,可能失败
+          Promise.all(promiseMyLockArr).then((res) => {
+            resolve(res)
+            //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
+            //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
+            //这里过滤数据, 递归
+            if(resultLockArr.length == end && end < oneSize){
+              _self.getMyLockAmount(address,end,end + 1,oneSize)
+            }
+
+          })
+          .catch((err) => {
+            reject(err)
+          })
+
+        } catch (error) {
+            reject(error)
+        }
+      })
+    },
+    //返利判断
+    async checkHasIncomeData(address){
+      let _self = this
+      return new Promise((resolve,reject) => {
+        Wallet.queryIncomeSize(_self.walletAddress,(res) =>{
+            resolve(+res || 0) 
+        },(err) => {
+            reject(err)
+        })
+      })
+    },
+    //返利记录
+    async getProfitRecord(address,start = 0, end = 1,dataSize = 1){
+      let _self = this
+      return new Promise((resolve,reject) => {
+        try {
+          let promiseRecordArr = [],resultRecordArr = [];
+          let i = start;
+          do {
+            end = end > dataSize ? dataSize : end
+            promiseRecordArr[i] = new Promise((res,rej) => {
+                Wallet.incomeRecord(address,i,(record) => {
+                  if(record){
+                    resultRecordArr.push(record)
+                    res(record)
+                  }else{
+                    rej('error')
+                  }
+                })
+            })
+            ++i;
+
+          } while (i < end);
+
+          //全部请求,可能失败, finally接收
+          Promise.all(promiseRecordArr).then((res) => {
+            resolve(res)
+            //这里过滤数据, 递归
+            if(resultRecordArr.length == end && dataSize > end){
+              _self.getProfitRecord(end,end + 1)
+            }
+          })
+          .catch((err) => {
+            reject(err)
+          })
+
+        } catch (error) {
+            reject(error)
+        }
       })
     },
     handleCopyLink() {
@@ -166,6 +521,11 @@ export default {
           _self.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)
       }
       _self.inviteAddress = _self.$getCookie('inviteAddress') ? _self.$getCookie('inviteAddress') : _self.inviteAddress
+
+      setTimeout(async ()=>{
+        if(!_self.walletAddress) return
+         await _self.calculateTeamInfo(_self.walletAddress);
+      },);
 
       const res = await _self.getIncomeData()
       if(res){

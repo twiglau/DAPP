@@ -108,7 +108,6 @@ export default {
             if(resultRecordArr.length == end && _self.dataSize > end){
               _self.getProfitRecord(end,end + 1)
             }
-
           })
 
         } catch (error) {

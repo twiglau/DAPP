@@ -21,7 +21,7 @@ export const l = {
   t_ttt:'Total deposit',
   t_num:'Number',
   t_info:'Team Information',
-  t_desc1:'The proportion of team income that can be enjoyed by reaching the level is 4%',
+  t_desc1:'The proportion of team income that can be enjoyed by reaching the level is ',
   t_desc:'Team deposit required',
   t_todayp:'Earnings today',
   t_tolp:'Total market revenue',
