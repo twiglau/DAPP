@@ -16,21 +16,21 @@
                     <div class="pools__logo-name">
                       <svg-icon class="pools__coin-logo" :icon-class="coin1(item) + '_coin'"/>
                       <svg-icon v-if="item.currency2Index" class="pools__coin-logo logo_lp_2" :icon-class="coin2(item) + '_coin'"/>
-                      <div class="pools__coin-name" :class="item.currency2Index ? 'name_lp_2' : ''">{{}}</div>
+                      <div class="pools__coin-name" :class="item.currency2Index ? 'name_lp_2' : ''">{{item.currency2Index ? coin1(item) : `${coin1(item) + '/' + coin2(item)}`}}</div>
                     </div>
                     <div class="pools__info">{{$t('l.reward')}} Libra</div>
                   </li>
                   <li class="pools__row pools__apy">
-                    <div class="pools__labe-field">LBR {{$t('l.t_deposit')}}</div>
-                    <div class="pools__label-value pools__label-value--black">100</div>
+                    <div class="pools__labe-field">{{coin1(item)}} {{$t('l.t_deposit')}}</div>
+                    <div class="pools__label-value pools__label-value--black">{{amt1(item)}}</div>
                   </li>
-                  <li class="pools__row">
-                    <div class="pools__labe-field">USDT {{$t('l.t_deposit')}}</div>
-                    <div class="pools__label-value pools__label-value--black">300</div>
+                  <li class="pools__row" v-if="item.currency2Index">
+                    <div class="pools__labe-field">{{coin2(item)}} {{$t('l.t_deposit')}}</div>
+                    <div class="pools__label-value pools__label-value--black">{{amt2(item)}}</div>
                   </li>
                   <li class="pools__row">
                     <div class="pools__labe-field">{{$t('l.t_dedata')}}</div>
-                    <div class="pools__label-value">2021-10-10</div>
+                    <div class="pools__label-value">{{formatTimeStr(item)}}</div>
                   </li>
                 </ul>
                 <div class="pools__mao-logo__wrap">
@@ -98,25 +98,43 @@ export default {
       let index = item.currency2Index
       return this.coins.find(ele => ele.key == index).coin
     },
+    amt1(item){
+      let coin = this.coin1(item)
+      let amount = item.useableAmount ? item.useableAmount : item.useableAmount1
+      return  (amount / Wallet.Precisions(coin.toUpperCase())).toFixed(4)
+    },
+    amt2(item){
+      let coin = this.coin2(item)
+      let amount = item.useableAmount2
+      return  (amount / Wallet.Precisions(coin.toUpperCase())).toFixed(4)
+    },
+    formatTimeStr(item){
+      return this.$formatTime(item.depositTime,'YYYY-MM-DD HH:MM')
+    },
     async checkHasMyPairLockData(){
       let _self = this
-      Wallet.queryTwosSize((res) =>{
-          _self.twoSize = res || 0
-          (_self.twoSize > 0) && _self.getMyPairLockAmount()
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      if(!_self.walletAddress)return
+      Wallet.queryTwosSize(_self.walletAddress,(res) =>{
+          _self.twoSize = +res || 0
+          if(_self.twoSize > 0)_self.getMyPairLockAmount()
       },(err) => {
           reject(err)
       })
     },
     async checkHasMyLockData(){
       let _self = this
-      Wallet.queryOnesSize((res) =>{
-          _self.oneSize = res || 0
-          (_self.oneSize > 0) && _self.getMyLockAmount()
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      if(!_self.walletAddress)return
+      Wallet.queryOnesSize(_self.walletAddress,(res) =>{
+          
+          _self.oneSize = +res || 0
+          if(_self.oneSize > 0) _self.getMyLockAmount()
       },(err) => {
           reject(err)
       })
     },
-    async getMyPairLockAmount(start = 0,end = 5){
+    async getMyPairLockAmount(start = 0,end = 1){
       let _self = this
       _self.walletAddress = localStorage.getItem("walletAddress") || '';
       new Promise((resolve,reject) => {
@@ -125,7 +143,6 @@ export default {
           let i = start;
           end = end > _self.twoSize ? _self.twoSize : end
           do {
-            ++i;
             promiseMyLockArr[i] = new Promise((res,rej) => {
                 Wallet.twoDepositOrder(_self.walletAddress,i,(record) => {
                   if(record){
@@ -136,6 +153,7 @@ export default {
                   }
                 },(err) => {rej(err)})
             })
+            ++i;
 
           } while (i < end);
 
@@ -146,8 +164,8 @@ export default {
             // TODO: 放入定时器后, 需要清除lockAmount,防止累加
             _self.records.push(...resultLockArr)
             //这里过滤数据, 递归
-            if(resultLockArr.length == end){
-              _self.getMyPairLockAmount(end,end + 5)
+            if(resultLockArr.length == end && end < _this.twoSize){
+              _self.getMyPairLockAmount(end,end + 1)
             }
           })
         } catch (error) {
@@ -156,7 +174,7 @@ export default {
         }
       })
     },
-    async getMyLockAmount(start = 0, end = 5){
+    async getMyLockAmount(start = 0, end = 1){
       let _self = this
       _self.walletAddress = localStorage.getItem("walletAddress") || '';
       new Promise((resolve,reject) => {
@@ -165,11 +183,9 @@ export default {
           let i = start;
           end = end > _self.oneSize ? _self.oneSize : end
           do {
-            ++i;
-            console.log(_self.walletAddress)
             promiseMyLockArr[i] = new Promise((res,rej) => {
                 Wallet.oneDepositOrder(_self.walletAddress,i,(record) => {
-                
+                  
                   if(record){
                     resultLockArr.push(record)
                     res(record)
@@ -178,20 +194,22 @@ export default {
                   }
                 },(err) => {rej(err)})
             })
+            ++i;
 
           } while (i < end);
 
           //全部请求,可能失败, finally接收
           Promise.all(promiseMyLockArr).finally(() => {
             resolve('success')
+            console.log({resultLockArr})
             _self.records.push(...resultLockArr)
             
 
             //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
             //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
             //这里过滤数据, 递归
-            if(resultLockArr.length == end){
-              _self.getMyLockAmount(end,end + 5)
+            if(resultLockArr.length == end && end < _self.oneSize){
+              _self.getMyLockAmount(end,end + 1)
             }
 
           })
@@ -208,8 +226,6 @@ export default {
   async mounted() {
     this.checkHasMyLockData()
     this.checkHasMyPairLockData()
-    this.getMyLockAmount()
-    this.getMyPairLockAmount()
   },
   destroyed() {
   }
