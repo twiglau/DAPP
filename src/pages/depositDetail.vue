@@ -14,9 +14,9 @@
                 <ul class="pools__rows">
                   <li class="pools__row-1">
                     <div class="pools__logo-name">
-                      <svg-icon class="pools__coin-logo" :icon-class="item.currency1 + '_coin'"/>
-                      <svg-icon v-if="item.currency2" class="pools__coin-logo logo_lp_2" :icon-class="item.currency2 + '_coin'"/>
-                      <div class="pools__coin-name" :class="item.currency2 ? 'name_lp_2' : ''">{{item.currency1}}/{{item.currency2}}</div>
+                      <svg-icon class="pools__coin-logo" :icon-class="coin1(item) + '_coin'"/>
+                      <svg-icon v-if="item.currency2Index" class="pools__coin-logo logo_lp_2" :icon-class="coin2(item) + '_coin'"/>
+                      <div class="pools__coin-name" :class="item.currency2Index ? 'name_lp_2' : ''">{{}}</div>
                     </div>
                     <div class="pools__info">{{$t('l.reward')}} Libra</div>
                   </li>
@@ -46,6 +46,20 @@
 </template>
 
 <script>
+//{"0":"4","1":"0xFaC462928525FAEA834d8000796B7843f822AF1d",
+//"2":"10000000000","3":"10000000000","4":"0","5":"1629387212",
+//"currencyIndex":"4","userAddress":"0xFaC462928525FAEA834d8000796B7843f822AF1d",
+//"totalAmount":"10000000000","useableAmount":"10000000000","takeoutAmount":"0",
+//"depositTime":"1629387212"}
+
+//{"0":"0xFaC462928525FAEA834d8000796B7843f822AF1d","1":"1","2":"10000000000",
+//"3":"10000000000","4":"0","5":"5","6":"94449209",
+//"7":"94449209","8":"0","9":"1629389428",
+//"userAddress":"0xFaC462928525FAEA834d8000796B7843f822AF1d",
+//"currency1Index":"1","totalAmount1":"10000000000",
+//"useableAmount1":"10000000000","takeoutAmount1":"0",
+//"currency2Index":"5","totalAmount2":"94449209","useableAmount2":"94449209",
+//"takeoutAmount2":"0","depositTime":"1629389428"}
 import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
 export default {
@@ -60,6 +74,14 @@ export default {
       walletAddress:'',
       oneSize:0,
       twoSize:0,
+      coins:[
+        {key:1,coin:'Libra'},
+        {key:2,coin:'BTC'},
+        {key:3,coin:'ETH'},
+        {key:4,coin:'USDT'},
+        {key:5,coin:'BNB'},
+        {key:6,coin:'FIL'},
+      ]
     }
   },
   computed: {
@@ -67,6 +89,14 @@ export default {
   methods: {
     goBack(){
       this.$router.go(-1);
+    },
+    coin1(item){
+      let index = item.currencyIndex ? item.currencyIndex : item.currency1Index
+      return this.coins.find(ele => ele.key == index).coin
+    },
+    coin2(item){
+      let index = item.currency2Index
+      return this.coins.find(ele => ele.key == index).coin
     },
     async checkHasMyPairLockData(){
       let _self = this
@@ -114,7 +144,7 @@ export default {
           .finally(() => {
             resolve('success')
             // TODO: 放入定时器后, 需要清除lockAmount,防止累加
-            
+            _self.records.push(...resultLockArr)
             //这里过滤数据, 递归
             if(resultLockArr.length == end){
               _self.getMyPairLockAmount(end,end + 5)
@@ -136,8 +166,10 @@ export default {
           end = end > _self.oneSize ? _self.oneSize : end
           do {
             ++i;
+            console.log(_self.walletAddress)
             promiseMyLockArr[i] = new Promise((res,rej) => {
                 Wallet.oneDepositOrder(_self.walletAddress,i,(record) => {
+                
                   if(record){
                     resultLockArr.push(record)
                     res(record)
@@ -152,7 +184,8 @@ export default {
           //全部请求,可能失败, finally接收
           Promise.all(promiseMyLockArr).finally(() => {
             resolve('success')
-            console.log(resultLockArr)
+            _self.records.push(...resultLockArr)
+            
 
             //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
             //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
@@ -175,6 +208,8 @@ export default {
   async mounted() {
     this.checkHasMyLockData()
     this.checkHasMyPairLockData()
+    this.getMyLockAmount()
+    this.getMyPairLockAmount()
   },
   destroyed() {
   }

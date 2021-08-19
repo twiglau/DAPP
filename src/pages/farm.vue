@@ -1099,10 +1099,10 @@ export default {
       clearInterval(this.getDataInterVal)
       this.getDataInterVal = setInterval(async () => {
          
-          await this.getLockAmount()
-          await this.getPairLockAmount()
-          await this.checkHasMyLockData()
-          await this.checkHasMyPairLockData()
+          this.getLockAmount()
+          this.getPairLockAmount()
+          this.checkHasMyLockData()
+          this.checkHasMyPairLockData()
       },this.getDataUpdateTime*1000)
       
     },
