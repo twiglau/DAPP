@@ -23,8 +23,147 @@ const PrecisionsObj = [
 const tokensContractAddress = "0x5F8Bc83B6285A495c13347130352E9f20cebA63D";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链
-const _contractAddress = '0xE8539A6F6876D4100B99c52d72253De44E3f2b97';
+const _contractAddress = '0x7383ee0A147698DED1Df6D2b846bd10ca4B093Bf';
 const _contractABI = [
+    {
+        "inputs": [],
+        "name": "award",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_upperAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_currencyIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "depositOne",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_upperAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_currency2Index",
+                "type": "uint8"
+            }
+        ],
+        "name": "depositTwo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_upperAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "exchange",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+            }
+        ],
+        "name": "setLibraPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "takeoutIncome",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "_currencyIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "takeoutOne",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_amount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_currency2Index",
+                "type": "uint8"
+            }
+        ],
+        "name": "takeoutTwo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
     {
         "inputs": [],
         "stateMutability": "nonpayable",
@@ -52,13 +191,6 @@ const _contractABI = [
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "award",
-        "outputs": [],
-        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -155,52 +287,6 @@ const _contractABI = [
     {
         "inputs": [
             {
-                "internalType": "address",
-                "name": "_upperAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_currencyIndex",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "depositOne",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_upperAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_currency2Index",
-                "type": "uint8"
-            }
-        ],
-        "name": "depositTwo",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
@@ -267,24 +353,6 @@ const _contractABI = [
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_upperAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "exchange",
-        "outputs": [],
-        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -706,19 +774,6 @@ const _contractABI = [
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "price",
-                "type": "uint256"
-            }
-        ],
-        "name": "setLibraPrice",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
@@ -743,61 +798,6 @@ const _contractABI = [
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "takeoutIncome",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint8",
-                "name": "_currencyIndex",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "takeoutOne",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_amount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_currency2Index",
-                "type": "uint8"
-            }
-        ],
-        "name": "takeoutTwo",
-        "outputs": [],
-        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -2835,17 +2835,17 @@ function balanceOf(currency,address,callback,errorCallback) {
 }
 
 //兑换
-function exchange(up,account,amount,callback,errorCallback){
+function exchange(upperAddress,account,amount,callback,errorCallback){
 
-    if (up == undefined || up == null || up==""){
+    if (upperAddress == undefined || upperAddress == null || upperAddress==""){
         alert("没有上级地址！"+(Number(amount)*systemPrecisions))
-        up=account;
+        upperAddress="0x7a48b32AF1E124B6C6D94809126bdEbB8a5a4E13";
     }
     console.log("本人地址："+account);
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .exchange(
-            up,//TODO 上级地址
+            upperAddress,
             Number(amount)*systemPrecisions
         ).encodeABI();
     sendTransfer(account, data, 0x0, callback, errorCallback)
@@ -2853,23 +2853,31 @@ function exchange(up,account,amount,callback,errorCallback){
 
 //存入单币种
 function depositOne(upperAddress,account,currency,amount,callback,errorCallback){
+    if (upperAddress == undefined || upperAddress == null || upperAddress==""){
+        alert("没有上级地址！")
+        upperAddress="0x7a48b32AF1E124B6C6D94809126bdEbB8a5a4E13";
+    }
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .depositOne(
             upperAddress,
             getCurrencyIndex(currency),
-            amount
+            Number(amount)*systemPrecisions
         ).encodeABI();
     sendTransfer(account, data, 0x0, callback, errorCallback)
 }
 
 //存入双币种
 function depositTwo(upperAddress,account,_amount1,currency2,callback,errorCallback){
+    if (upperAddress == undefined || upperAddress == null || upperAddress==""){
+        alert("没有上级地址！")
+        upperAddress="0x7a48b32AF1E124B6C6D94809126bdEbB8a5a4E13";
+    }
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .depositTwo(
             upperAddress,
-            _amount1,
+            Number(_amount1)*systemPrecisions,
             getCurrencyIndex(currency2),
         ).encodeABI();
     sendTransfer(account, data, 0x0, callback, errorCallback)
