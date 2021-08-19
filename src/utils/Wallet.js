@@ -18,9 +18,11 @@ const PrecisionsObj = [
     {coin:'FIL',precision:Math.pow(10,18)}
 ]
 
+//币
+const tokensContractAddress = "0x9305deBEdAa535C4C1243d347Cfea10c5E6Ca9f7";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链
-const _contractAddress = '0x9cf3C61B175BdDC8B36e3BacdF60BcBE6f8Be53C';
+const _contractAddress = '0xbAAdc6325551b0bEE9edDEE382A5d387bB433808';
 const _contractABI = [
     {
         "inputs": [],
@@ -2603,6 +2605,7 @@ function initWallet(callback){
 }
 
 function approve(currency,address,value, callback) {
+    alert(currency+"     "+address+"      "+value);
     //授权
     currency = currency.toUpperCase();
     let contractAddress;
@@ -2631,7 +2634,7 @@ function approve(currency,address,value, callback) {
     }
 
     let contract = new window.web3.eth.Contract(abi, contractAddress);
-    contract.methods.approve(_contractAddress,value+"000000000000000000")
+    contract.methods.approve(tokensContractAddress,value+"000000000000000000")
         // .call()
         .send({from: address})
         .then((res) => {
@@ -2718,7 +2721,7 @@ function exchange(account,amount,callback,errorCallback){
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .exchange(
-            account,
+            account,//TODO 上级地址
             amount
         ).encodeABI();
     sendTransfer(account, data, 0x0, callback, errorCallback)
