@@ -450,7 +450,7 @@ export default {
       if (currency2==null){
         _self.approveInfo.isApproving = true
         Wallet.approve(currency1,this.walletAddress,10000000,(res)=>{
-        
+
         _self.approveInfo.isApproving = false
           if(res){
             this.updateApproveStatus(currency1);
@@ -710,7 +710,7 @@ export default {
         return;
       }
       //TODO 获取币种currency的价格price，amount*price 必须 大于 100美元
-      let value = (+_this.depositInfo.mPrice) * (+amount) 
+      let value = (+_this.depositInfo.mPrice) * (+amount)
       if(value < 100){
         _this.$message.error("存入存入价值需大于100")
         return;

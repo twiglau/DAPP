@@ -8,6 +8,7 @@ const ethIndex=3;
 const usdtIndex=4;
 const bnbIndex=5;
 const filIndex=6;
+const systemPrecisions=100000000;
 
 const PrecisionsObj = [
     {coin:'LIBRA',precision:Math.pow(10,18)},
@@ -22,7 +23,7 @@ const PrecisionsObj = [
 const tokensContractAddress = "0x9305deBEdAa535C4C1243d347Cfea10c5E6Ca9f7";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链
-const _contractAddress = '0xbAAdc6325551b0bEE9edDEE382A5d387bB433808';
+const _contractAddress = '0x164D4218aa558c50e60617b9E3b79A3E34023AF4';
 const _contractABI = [
     {
         "inputs": [],
@@ -2581,18 +2582,18 @@ function initWallet(callback){
     } else {
         //如果用户安装了MetaMask，你可以要求他们授权应用登录并获取其账号
         window.ethereum.enable().catch(function (reason) {
-                //如果用户拒绝了登录请求
-                if (reason === "User rejected provider access") {
-                    // 用户拒绝登录后执行语句；
-                } else {
-                    // 本不该执行到这里，但是真到这里了，说明发生了意外
-                    notification.error({
-                        message: 'Error',
-                        description:"There was an issue signing you in."
-                    })
-                }
-            }).then(function (accounts) {
-                //如果用户同意了登录请求，你就可以拿到用户的账号
+            //如果用户拒绝了登录请求
+            if (reason === "User rejected provider access") {
+                // 用户拒绝登录后执行语句；
+            } else {
+                // 本不该执行到这里，但是真到这里了，说明发生了意外
+                notification.error({
+                    message: 'Error',
+                    description:"There was an issue signing you in."
+                })
+            }
+        }).then(function (accounts) {
+            //如果用户同意了登录请求，你就可以拿到用户的账号
             var currentProvider = window.web3.currentProvider;
             // var Web3 = window.web3js.getWeb3();
             window.web3 = new Vue.prototype.Web3();
@@ -2717,12 +2718,17 @@ function balanceOf(currency,address,callback) {
 
 //兑换
 function exchange(up,account,amount,callback,errorCallback){
+
+    if (up == undefined || up == null || up==""){
+        alert("没有上级地址！"+(Number(amount)*systemPrecisions))
+        up=account;
+    }
     console.log("本人地址："+account);
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .exchange(
             up,//TODO 上级地址
-            amount
+            Number(amount)*systemPrecisions
         ).encodeABI();
     sendTransfer(account, data, 0x0, callback, errorCallback)
 }
