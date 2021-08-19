@@ -25,8 +25,10 @@ const state = {
   activeAccount: null,
   chainId: null,
   chainName: null,
+  providerEthers: null, // this is "provider" for Ethers.js
   isConnected: false,
   providerW3m: null, // this is "provider" from Web3Modal
+  web3Modal: null,
   dataUpdateTime: 10, //页面数据刷新时间
   mainChainID: 56,
   isMainChainID: true,
@@ -59,7 +61,13 @@ const getters = {
   },
   isUserConnected(state) {
     return state.isConnected;
-  }
+  },
+  getProviderEthers(state) {
+    return state.providerEthers;
+  },
+  getWeb3Modal(state) {
+    return state.web3Modal;
+  },
 };
 
 const actions = {
@@ -81,7 +89,6 @@ const actions = {
           commit("setActiveAccount", window.ethereum.selectedAddress || window.ethereum.address);
           commit("setChainData", window.ethereum.chainId);
           commit("setEthersProvider", providerW3m);
-          actions.fetchActiveBalance({ commit });
         }
         commit("setWeb3ModalInstance", w3mObject);
       }
@@ -91,18 +98,9 @@ const actions = {
   async connectWeb3Modal({ commit }) {
     commit("setIsConnected", true);
     location.reload()
-    // if(state.web3Modal) {
-    //   commit("setActiveAccount", window.ethereum.selectedAddress || window.ethereum.address);
-    //   commit("setChainData", window.ethereum.chainId);
-    //   commit("setEthersProvider", providerW3m);
-    //   actions.fetchActiveBalance({ commit });
-    // }else {
-    //   commit("setIsConnected", true);
-    //   await actions.initWeb3Modal({commit})
-    // }
   },
 
-  async disconnectWeb3Modal({ commit }) {
+  async disconnectWeb3({ commit }) {
     commit("setIsConnected", false);
     commit("disconnectWallet");
   },
@@ -115,7 +113,6 @@ const actions = {
           commit("setActiveAccount", accounts[0]);
           commit("setEthersProvider", state.providerW3m);
           location.reload()
-          actions.fetchActiveBalance({ commit });
         }
       });
   
@@ -134,12 +131,7 @@ const actions = {
     setTimeout(async () => {
       if(window.ethereum) {
         commit('setIsMainChainID',parseInt(window.ethereum.chainId) == rootState.accounts.mainChainID)
-        // if(window.ethereum.chainId && rootState.accounts.providerEthers) {
-        // }else {
-        //   await rootState.accounts.web3Modal.connect()
-        //   commit('setIsMainChainID',parseInt(window.ethereum.chainId) == rootState.accounts.mainChainID)
-        // }
-      } 
+      }
     },600)
   }
 };
@@ -148,7 +140,6 @@ const mutations = {
 
   async disconnectWallet(state) {
     state.activeAccount = null;
-    state.activeBalance = 0;
     state.providerEthers = null;
     if (state.providerW3m.close && state.providerW3m !== null) {
       await state.providerW3m.close();
@@ -168,9 +159,6 @@ const mutations = {
     state.activeAccount = selectedAddress;
   },
 
-  setActiveBalance(state, balance) {
-    state.activeBalance = balance;
-  },
 
   setChainData(state, chainId) {
     state.chainId = chainId;

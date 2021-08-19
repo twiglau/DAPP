@@ -11,6 +11,7 @@
 import SideNaviBar from './components/SideNaviBar.vue'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import { mapGetters } from 'vuex'
 export default {
   name: 'App',
   components: {
@@ -20,14 +21,15 @@ export default {
   },
   data() {
     return {
-      getIsMainChainID:false
     }
   },
   methods: {
   },
   computed: {
+    ...mapGetters('accounts',['getIsMainChainID']),
   },
   mounted() {
+    this.$store.dispatch('accounts/getMainChainID');
   }
 }
 </script>
