@@ -20,10 +20,10 @@ const PrecisionsObj = [
 ]
 
 //币
-const tokensContractAddress = "0x9305deBEdAa535C4C1243d347Cfea10c5E6Ca9f7";
+const tokensContractAddress = "0x5F8Bc83B6285A495c13347130352E9f20cebA63D";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链
-const _contractAddress = '0xa97CE32A50caD0CBb6a79E70D481cF0fc2e5767F';
+const _contractAddress = '0xE8539A6F6876D4100B99c52d72253De44E3f2b97';
 const _contractABI = [
     {
         "inputs": [],
