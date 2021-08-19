@@ -248,6 +248,7 @@
 import countTo from 'vue-count-to';
 import Wallet from '@/utils/Wallet.js';
 import {getRate,getPrice,postWithdrawalData} from '@/utils/api'
+import {mapGetters} from 'vuex'
 export default {
   name: "Farm",
   components: {
@@ -417,6 +418,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('accounts',['getActiveAccount','getDataUpdateTime','getIsMainChainID']),
   },
   methods: {
     handleTapStart(e) {
@@ -1030,7 +1032,7 @@ export default {
                   }),
                   new Promise((res3,rej) => {
                     Wallet.queryAllowance(_self.walletAddress,_self.oneTokens[i].currency,(pro)=>{
-                        console.log({'授权: ': pro})
+                        
                         if(pro && pro > 0) {
                             res3(true)
                         }else {
