@@ -23,7 +23,7 @@ const PrecisionsObj = [
 const tokensContractAddress = "0x9305deBEdAa535C4C1243d347Cfea10c5E6Ca9f7";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链
-const _contractAddress = '0x164D4218aa558c50e60617b9E3b79A3E34023AF4';
+const _contractAddress = '0xa97CE32A50caD0CBb6a79E70D481cF0fc2e5767F';
 const _contractABI = [
     {
         "inputs": [],
@@ -34,7 +34,7 @@ const _contractABI = [
         "inputs": [
             {
                 "internalType": "uint8",
-                "name": "currencyIndex",
+                "name": "cIndex",
                 "type": "uint8"
             },
             {
@@ -142,19 +142,6 @@ const _contractABI = [
     {
         "inputs": [],
         "name": "dayDividendAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "decimals",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -298,6 +285,45 @@ const _contractABI = [
         "name": "exchange",
         "outputs": [],
         "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "exchangeMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "usdtAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -458,7 +484,7 @@ const _contractABI = [
     },
     {
         "inputs": [],
-        "name": "libraCurrPrice",
+        "name": "libraPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -571,6 +597,84 @@ const _contractABI = [
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "queryDepositUserSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "queryDownsSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "queryExchangeSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "queryIncomeSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "queryOnesSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "queryTwosSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "address",
@@ -597,6 +701,19 @@ const _contractABI = [
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+            }
+        ],
+        "name": "setLibraPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -2605,7 +2722,7 @@ function initWallet(callback){
     }
 }
 
-function approve(currency,address,value, callback) {
+function approve(currency,address,value, callback,errorCallback) {
     alert(currency+"     "+address+"      "+value);
     //授权
     currency = currency.toUpperCase();
@@ -2630,7 +2747,7 @@ function approve(currency,address,value, callback) {
         contractAddress=libraContractAddress;
         abi=libraContractABI;
     }else {
-        callback(false);
+        errorCallback(false);
         return;
     }
 
@@ -2655,6 +2772,7 @@ function approve(currency,address,value, callback) {
         })
         .catch((err) => {
             console.log(err);
+            errorCallback(err);
             notification.error({
                 message: 'Error',
                 description:currency + err.message || "失败"
@@ -2666,7 +2784,7 @@ function approve(currency,address,value, callback) {
  * 查授权额度
  * @param address
  */
-function queryAllowance(account,currency,callback){
+function queryAllowance(account,currency,callback,errorCallback){
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.allowance(getCurrencyIndex(currency),account)
         .call()
@@ -2674,11 +2792,11 @@ function queryAllowance(account,currency,callback){
             callback(res);
         })
         .catch((err) => {
-            callback(err);
+            errorCallback(err);
         });
 }
 
-function balanceOf(currency,address,callback) {
+function balanceOf(currency,address,callback,errorCallback) {
     //授权
     currency = currency.toUpperCase();
     let contractAddress;
@@ -2702,7 +2820,7 @@ function balanceOf(currency,address,callback) {
         contractAddress=libraContractAddress;
         contractABI=libraContractABI;
     }else {
-        callback(false);
+        errorCallback(false);
     }
 
     let contract = new window.web3.eth.Contract(contractABI, contractAddress);
@@ -2712,7 +2830,7 @@ function balanceOf(currency,address,callback) {
             callback(res);
         })
         .catch((err) => {
-            callback(err);
+            errorCallback(err);
         });
 }
 
@@ -2846,21 +2964,21 @@ function sendTransfer(account, data, value, callback, errorCallBack) {
  * @param currency
  * @param callback
  */
-function totalDepositBalance(currency,callback) {
+function totalDepositBalance(currency,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     currency=currency.toUpperCase();
     if (currency=="LIBRA"){
-        _contract.methods.libraTotalAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0); });
+        _contract.methods.libraTotalAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
     }else if (currency=="BTC"){
-        _contract.methods.btcTotalAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
+        _contract.methods.btcTotalAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
     }else if (currency=="ETH"){
-        _contract.methods.ethTotalAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
+        _contract.methods.ethTotalAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
     }else if (currency=="USDT"){
-        _contract.methods.usdtTotalAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
+        _contract.methods.usdtTotalAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
     }else if (currency=="BNB"){
-        _contract.methods.bnbTotalAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
+        _contract.methods.bnbTotalAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
     }else if (currency=="FIL"){
-        _contract.methods.filTotalAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
+        _contract.methods.filTotalAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
     }
 }
 
@@ -2869,28 +2987,28 @@ function totalDepositBalance(currency,callback) {
  * @param currency
  * @param callback
  */
-function totalTakeoutAmount(currency,callback) {
+function totalTakeoutAmount(currency,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     currency=currency.toUpperCase();
     if (currency=="LIBRA"){
-        _contract.methods.libraTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
+        _contract.methods.libraTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
     }else if (currency=="BTC"){
-        _contract.methods.btcTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
+        _contract.methods.btcTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
     }else if (currency=="ETH"){
-        _contract.methods.ethTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
+        _contract.methods.ethTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
     }else if (currency=="USDT"){
-        _contract.methods.usdtTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0);  });
+        _contract.methods.usdtTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
     }else if (currency=="BNB"){
-        _contract.methods.bnbTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0); });
+        _contract.methods.bnbTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
     }else if (currency=="FIL"){
-        _contract.methods.filTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { callback(0); });
+        _contract.methods.filTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
     }
 }
 
 /**
  * 1币种存入记录
  */
-function oneDepositOrder(address,index,callback) {
+function oneDepositOrder(address,index,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.oneOrderMap(address,index)
         .call()
@@ -2898,13 +3016,13 @@ function oneDepositOrder(address,index,callback) {
             callback(res);
         })
         .catch((err) => {
-            callback(null);
+            errorCallback(err);
         });
 }
 /**
  * 2币种存入记录
  */
-function twoDepositOrder(address,index,callback) {
+function twoDepositOrder(address,index,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.twoOrderMap(address,index)
         .call()
@@ -2912,7 +3030,7 @@ function twoDepositOrder(address,index,callback) {
             callback(res);
         })
         .catch((err) => {
-            callback(null);
+            errorCallback(err);
         });
 }
 
@@ -2922,7 +3040,7 @@ function twoDepositOrder(address,index,callback) {
  * @param index
  * @param callback
  */
-function incomeAccount(address,callback) {
+function incomeAccount(address,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.ia_map(address)
         .call()
@@ -2931,7 +3049,7 @@ function incomeAccount(address,callback) {
         })
         .catch((err) => {
             console.log({err});
-            callback(null);
+            errorCallback(err);
         });
 }
 /***
@@ -2940,7 +3058,7 @@ function incomeAccount(address,callback) {
  * @param index
  * @param callback
  */
-function incomeRecord(address,index,callback) {
+function incomeRecord(address,index,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.twoOrderMap(address,index)
         .call()
@@ -2949,7 +3067,7 @@ function incomeRecord(address,index,callback) {
             callback(res);
         })
         .catch((err) => {
-            callback(null);
+            errorCallback(err);
         });
 }
 
@@ -2974,7 +3092,7 @@ function takeoutIncome(account,amount, callback, errorCallback){
  * @param account
  * @param callback
  */
-function queryUpUser(account,callback) {
+function queryUpUser(account,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.recommendMap(account)
         .call()
@@ -2982,7 +3100,7 @@ function queryUpUser(account,callback) {
             callback(res);
         })
         .catch((err) => {
-            callback(null);
+            errorCallback(err);
         });
 }
 
@@ -2991,7 +3109,7 @@ function queryUpUser(account,callback) {
  * @param account
  * @param callback
  */
-function queryDownUser(account,index,callback) {
+function queryDownUser(account,index,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.subordinateAddressMap(account,index)
         .call()
@@ -2999,7 +3117,105 @@ function queryDownUser(account,index,callback) {
             callback(res);
         })
         .catch((err) => {
-            callback(null);
+            errorCallback(err);
+        });
+}
+
+/***
+ * 单币种存入总笔数
+ * @param callback
+ * @param errorCallback
+ */
+function queryOnesSize(callback,errorCallback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.queryOnesSize()
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            errorCallback(err);
+        });
+}
+
+/***
+ * 双币种存入总笔数
+ * @param callback
+ * @param errorCallback
+ */
+function queryTwosSize(callback,errorCallback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.queryTwosSize()
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            errorCallback(err);
+        });
+}
+/***
+ * 我的 !!!"直接"!!! 下级 人数
+ * @param callback
+ * @param errorCallback
+ */
+function queryDownsSize(callback,errorCallback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.queryDownsSize()
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            errorCallback(err);
+        });
+}
+/***
+ * 我兑换了多少笔
+ * @param callback
+ * @param errorCallback
+ */
+function queryExchangeSize(callback,errorCallback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.queryExchangeSize()
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            errorCallback(err);
+        });
+}
+/**
+ * 我的收入记录笔数
+ * @param callback
+ * @param errorCallback
+ */
+function queryIncomeSize(callback,errorCallback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.queryIncomeSize()
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            errorCallback(err);
+        });
+}
+/**
+ * 总共有多少人存
+ * @param callback
+ * @param errorCallback
+ */
+function queryDepositUserSize(callback,errorCallback) {
+    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
+    _contract.methods.queryDepositUserSize()
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            errorCallback(err);
         });
 }
 
@@ -3054,4 +3270,10 @@ export default {
     test,
     Precisions,
     incomeRecord,
+    queryOnesSize,
+    queryTwosSize,
+    queryDownsSize,
+    queryExchangeSize,
+    queryIncomeSize,
+    queryDepositUserSize,
 }
