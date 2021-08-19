@@ -18,12 +18,12 @@
                       <div class="pools__coin-name">Libra</div>
                     </div>
                     <div class="pools__logo-name">
-                      <div class="pools__coin-name pools__apy-value">+90.0</div>
+                      <div class="pools__coin-name pools__apy-value">+{{amt(item)}}</div>
                     </div>
                   </li>
                   <li class="pools__row">
                     <div class="pools__labe-field">{{$t('l.t_jiedata')}}</div>
-                    <div class="pools__label-value">2021-10-10</div>
+                    <div class="pools__label-value">{{formatTimeStr(item)}}</div>
                   </li>
                 </ul>
                 <div class="pools__mao-logo__wrap">
@@ -46,7 +46,7 @@ export default {
   },
   data() {
     return {
-      spinStatus: true,
+      spinStatus: false,
       walletAddress:'',
       records:[],
       dataSize:0,
@@ -58,16 +58,25 @@ export default {
     goBack(){
       this.$router.go(-1);
     },
+    formatTimeStr(item){
+      let timestamp = +item.time * 1000
+      return this.$formatTime(timestamp,'YYYY-MM-DD HH:MM')
+    },
+    amt(item){
+      let amount = item.amount
+      return  (amount / Wallet.Precisions(coin.toUpperCase())).toFixed(4)
+    },
     async checkHasIncomeData(){
       let _self = this
-      Wallet.queryIncomeSize((res) =>{
-          _self.dataSize = res || 0
-          (_self.data > 0)&&_self.getProfitRecord()
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      Wallet.queryIncomeSize(_self.walletAddress,(res) =>{
+          _self.dataSize = +res || 0
+          if(_self.data > 0) _self.getProfitRecord()
       },(err) => {
           reject(err)
       })
     },
-    async getProfitRecord(start = 0, end = 5){
+    async getProfitRecord(start = 0, end = 1){
       let _self = this
       _self.walletAddress = localStorage.getItem("walletAddress") || '';
       new Promise((resolve,reject) => {
@@ -75,8 +84,7 @@ export default {
           let promiseRecordArr = [],resultRecordArr = [];
           let i = start;
           do {
-            ++i;
-            end = end > _self.dataSize ? +_self.dataSize : end
+            end = end > _self.dataSize ? _self.dataSize : end
             promiseRecordArr[i] = new Promise((res,rej) => {
                 Wallet.incomeRecord(_self.walletAddress,i,(record) => {
                   if(record){
@@ -87,6 +95,7 @@ export default {
                   }
                 })
             })
+            ++i;
 
           } while (i < end);
 
@@ -96,8 +105,8 @@ export default {
             console.log(resultRecordArr)
             _self.records.push(...resultRecordArr)
             //这里过滤数据, 递归
-            if(resultRecordArr.length == end){
-              _self.getProfitRecord(end,end + 5)
+            if(resultRecordArr.length == end && _self.dataSize > end){
+              _self.getProfitRecord(end,end + 1)
             }
 
           })

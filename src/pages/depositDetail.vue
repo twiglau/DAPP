@@ -15,8 +15,8 @@
                   <li class="pools__row-1">
                     <div class="pools__logo-name">
                       <svg-icon class="pools__coin-logo" :icon-class="coin1(item) + '_coin'"/>
-                      <svg-icon v-if="item.currency2Index" class="pools__coin-logo logo_lp_2" :icon-class="coin2(item) + '_coin'"/>
-                      <div class="pools__coin-name" :class="item.currency2Index ? 'name_lp_2' : ''">{{item.currency2Index ? coin1(item) : `${coin1(item) + '/' + coin2(item)}`}}</div>
+                      <svg-icon v-if="item.currency2Index && item.currency2Index.length > 0" class="pools__coin-logo logo_lp_2" :icon-class="coin2(item) + '_coin'"/>
+                      <div class="pools__coin-name" :class="item.currency2Index&& item.currency2Index.length > 0 ? 'name_lp_2' : ''">{{item.currency2Index&& item.currency2Index.length > 0 ? `${coin1(item) + '/' + coin2(item)}` : coin1(item)}}</div>
                     </div>
                     <div class="pools__info">{{$t('l.reward')}} Libra</div>
                   </li>
@@ -24,7 +24,7 @@
                     <div class="pools__labe-field">{{coin1(item)}} {{$t('l.t_deposit')}}</div>
                     <div class="pools__label-value pools__label-value--black">{{amt1(item)}}</div>
                   </li>
-                  <li class="pools__row" v-if="item.currency2Index">
+                  <li class="pools__row" v-if="item.currency2Index && item.currency2Index.length > 0">
                     <div class="pools__labe-field">{{coin2(item)}} {{$t('l.t_deposit')}}</div>
                     <div class="pools__label-value pools__label-value--black">{{amt2(item)}}</div>
                   </li>
@@ -96,7 +96,12 @@ export default {
     },
     coin2(item){
       let index = item.currency2Index
-      return this.coins.find(ele => ele.key == index).coin
+      let item_a = this.coins.find(ele => ele.key == index)
+      if(item_a){
+        return item_a.coin
+      }else {
+        return 'Libra'
+      }
     },
     amt1(item){
       let coin = this.coin1(item)
@@ -109,7 +114,8 @@ export default {
       return  (amount / Wallet.Precisions(coin.toUpperCase())).toFixed(4)
     },
     formatTimeStr(item){
-      return this.$formatTime(item.depositTime,'YYYY-MM-DD HH:MM')
+      let timestamp = +item.depositTime * 1000
+      return this.$formatTime(timestamp,'YYYY-MM-DD HH:MM')
     },
     async checkHasMyPairLockData(){
       let _self = this
