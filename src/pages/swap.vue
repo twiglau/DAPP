@@ -129,6 +129,7 @@
                 let walletAddress = localStorage.getItem("walletAddress");
                 _self.walletAddress = walletAddress;
                 Wallet.queryAllowance(_self.walletAddress,'USDT',(res)=>{
+                    console.log({res})
                     if(res && res > 0) {
                         _self.isApprovedUSDT = true
                     }else {
