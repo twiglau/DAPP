@@ -8,44 +8,36 @@
             <span>{{$t('l.back')}}</span>
           </div>
       </div>
-      <div class="pools-main">
-        <div class="pools__item" v-for="(item,index) in [1,2,3,5,6]" :key="index">
+      <div class="pools-main" v-if="records.length > 0">
+        <div class="pools__item" v-for="(item,index) in records" :key="index">
             <div class="pools__box">
-              <a-spin tips="loading" :spinning="false" size="large">
                 <ul class="pools__rows">
                   <li class="pools__row-1">
                     <div class="pools__logo-name">
-                      <img class="pools__coin-logo" src="../assets/ETH_coin.png">
-                      <div class="pools__coin-name">ETH</div>
+                      <svg-icon class="pools__coin-logo" :icon-class="item.token1 + '_coin'"/>
+                      <svg-icon v-if="item.token2" class="pools__coin-logo logo_lp_2" :icon-class="item.token2 + '_coin'"/>
+                      <div class="pools__coin-name" :class="item.token2 ? 'name_lp_2' : ''">{{item.token2 ? `${item.token1}/${item.token2}` : `${item.token1}`}}</div>
                     </div>
+                    <div class="pools__info">{{$t('l.reward')}} Libra</div>
                   </li>
                   <li class="pools__row pools__apy">
-                    <div class="pools__labe-field">LBR {{$t('l.t_transA')}}</div>
-                    <div class="pools__label-value pools__label-value--black">100</div>
-                  </li>
-                  <li class="pools__row pools__apy">
-                    <div class="pools__labe-field">USDT {{$t('l.t_transA')}}</div>
-                    <div class="pools__label-value pools__label-value--black">0</div>
-                  </li>
-                  <li class="pools__row pools__apy">
-                    <div class="pools__labe-field">{{$t('l.t_servicege')}}(LBR)</div>
-                    <div class="pools__label-value pools__label-value--black">100</div>
-                  </li>
-                  <li class="pools__row pools__apy">
-                    <div class="pools__labe-field">{{$t('l.t_totalWith')}}</div>
-                    <div class="pools__label-value pools__label-value--black">100</div>
+                    <div class="pools__labe-field">{{item.token1}} {{$t('l.t_transA')}}</div>
+                    <div class="pools__label-value pools__label-value--black">{{item.amount}}</div>
                   </li>
                   <li class="pools__row">
                     <div class="pools__labe-field">{{$t('l.t_transdate')}}</div>
-                    <div class="pools__label-value">2021-10-10</div>
+                    <div class="pools__label-value">{{formatTimeStr(item.createDateTime)}}</div>
                   </li>
                 </ul>
                 <div class="pools__mao-logo__wrap">
                   <img src="" alt="" class="pools__mao-logo">
                 </div>
-              </a-spin>
             </div>
         </div>
+      </div>
+      <a-empty v-else description="no records" />
+      <div class="more-navi" v-if="records.length > 0">
+        <a-button @click="loadMore" :loading="loading" :disabled="!showMoreBtn">{{showText}}</a-button>
       </div>
     </div>
     </a-spin>
@@ -53,6 +45,7 @@
 </template>
 
 <script>
+import {queryWithdrawalRecords} from '@/utils/api'
 import countTo from 'vue-count-to';
 export default {
   name: "SwapDetail",
@@ -61,19 +54,65 @@ export default {
   },
   data() {
     return {
+      address:null,
       spinStatus: false,
+      records:[],
+      pageSize:10,
+      pageNo:1,
+      showMoreBtn:true,
+      loading:false,
     }
   },
   computed: {
+    showText:function(){
+      if(this.loading){
+        return this.$t('l.t_loading')
+      }else if(!this.loading && this.showMoreBtn){
+        return this.$t('l.t_loadMore')
+      }else {
+        return this.$t('l.t_isbottom')
+      }
+    }
   },
   methods: {
     goBack(){
       this.$router.go(-1);
     },
+    formatTimeStr(time){
+      return this.$formatTime(time,'YYYY-MM-DD HH:MM')
+    },
+    loadMore(){
+      this.pageNo += 1;
+      this.loading = true;
+      this.queryRecords();
+    },
+    async queryRecords(){
+      let _self = this
+      _self.address = localStorage.getItem("walletAddress") || '';
+      const {pageNo,pageSize,address} = this
+      if(!address || address.length < 5){
+        _self.$message.error(this.$t('l.error_tips_unconnect'))
+        _self.loading = false;
+        return
+      }
+      const res = await queryWithdrawalRecords({pageNo,pageSize,address})
+      const {status,result} = res
+      _self.loading = false;
+      if(status == 200){
+        const {content,totalElements} = result
+        if(pageNo == 1){
+          _self.records = content
+        }else {
+          _self.records.push(...content)
+        }
+        _self.showMoreBtn = _self.records.length >= totalElements ? false : true
+      }
+    }
   },
   created() {
   },
   async mounted() {
+    this.queryRecords()
   },
   destroyed() {
   }

@@ -10,7 +10,7 @@
         <div class="copy_wrap">
           <span class="copy_text" v-if="!$store.state.accounts.isMobile">{{$t('l.invite_text')}}</span>
           <span class="link_text">
-            {{currentHref + '?address=' +walletAddress}}
+            {{currentHref + '#/farm?address=' + walletAddress}}
             <img @click="handleCopyLink" class="invite_icon" alt="" src="../assets/copy_link.png">
           </span>
         </div>
@@ -249,13 +249,13 @@ import countTo from 'vue-count-to';
 import Wallet from '@/utils/Wallet.js';
 import {getRate,getPrice,postWithdrawalData} from '@/utils/api'
 export default {
-  name: "Home",
+  name: "Farm",
   components: {
     countTo
   },
   data() {
     return {
-      currentHref: window.location.origin+window.location.pathname,
+      currentHref: window.location.origin + window.location.pathname,
       spinStatus: false,
       isModalShowWithOne:false,
       isModalShowWithTwo:false,
@@ -427,6 +427,16 @@ export default {
       this.currentIndex = index
     },
     handleCopyLink() {
+      this.walletAddress = localStorage.getItem("walletAddress") || '';
+      if(!this.walletAddress) {
+        this.$message.error(this.$t('l.error_tips_unconnect'))
+        return
+      }
+      this.$copyText(this.currentHref+'#/farm?address='+this.walletAddress).then( () => {
+        this.$message.success('复制成功')
+      }, function () {
+        this.$message.error('复制失败,请重试！')
+      })
     },
     handleMCancel() {
       this.currentPoolIndex = -1;
@@ -827,7 +837,6 @@ export default {
                                         },0)  || 0
 
         libra_eth_1 > 0 && (libra_eth_1 = Number(libra_eth_1 / Wallet.Precisions(currency)))
-        console.log(currency,libra_eth_1)
         return libra_eth_1
     },
     async getMyLockAmount(start = 0, end = 5){
@@ -999,7 +1008,7 @@ export default {
                   }),
                   new Promise((res3) => {
                     Wallet.queryAllowance(_self.walletAddress,_self.oneTokens[i].currency,(pro)=>{
-                        console.log({pro})
+                        console.log({'授权: ': pro})
                         if(pro && pro > 0) {
                             res3(true)
                         }else {
