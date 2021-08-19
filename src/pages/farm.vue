@@ -248,6 +248,7 @@
 import countTo from 'vue-count-to';
 import Wallet from '@/utils/Wallet.js';
 import {getRate,getPrice,postWithdrawalData} from '@/utils/api'
+import {mapGetters} from 'vuex'
 export default {
   name: "Farm",
   components: {
@@ -294,7 +295,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -303,7 +304,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -312,7 +313,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -321,7 +322,7 @@ export default {
           lockAmount:0,
           totalLockAmount:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
       ],
@@ -335,7 +336,7 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -347,7 +348,7 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -359,7 +360,7 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -371,7 +372,7 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
         {
@@ -383,11 +384,12 @@ export default {
           totalLockAmount1:0,
           totalLockAmount2:0,
           isApproved:false,
-          isLoading:false,
+          isLoading:true,
           isApproving:false,
         },
       ],
       walletAddress:'',
+      getDataInterVal: null,
     }
   },
   watch:{
@@ -417,6 +419,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('accounts',['getActiveAccount','getDataUpdateTime','getIsMainChainID']),
   },
   methods: {
     handleTapStart(e) {
@@ -777,16 +780,15 @@ export default {
         })
       });
     },
-    async getMyPairLockAmount(start = 0,end = 5){
+    async getMyPairLockAmount(start = 0,end = 1){
       let _self = this
       new Promise((resolve,reject) => {
         try {
           let promiseMyLockArr = [],resultLockArr = [];
           let i = start;
           //不超过最大条数
-          end = end > _self.twoSize ? +_self.twoSize : end
+          end = end > _self.twoSize ? _self.twoSize : end
           do {
-            ++i;
             promiseMyLockArr[i] = new Promise((res,rej) => {
                 Wallet.twoDepositOrder(_self.walletAddress,i,(record) => {
                   if(record){
@@ -795,6 +797,7 @@ export default {
                   }
                 },(err) =>{rej(err)})
             })
+            ++i;
 
           } while (i < end);
 
@@ -822,8 +825,8 @@ export default {
             _self.twoTokens[4].lockAmount2 += _self.caluUseable('FIL','useableAmount2',1,6,resultLockArr)
 
             //这里过滤数据, 递归
-            if(resultLockArr.length == end){
-              _self.getMyPairLockAmount(end,end + 5)
+            if(resultLockArr.length == end && end < _self.twoSize){
+              _self.getMyPairLockAmount(end,end + 1)
             }
           })
         } catch (error) {
@@ -844,31 +847,34 @@ export default {
     },
     async checkHasMyPairLockData(){
       let _self = this
-      Wallet.queryTwosSize((res) =>{
-          _self.twoSize = res || 0
-          (_self.twoSize > 0) && _self.getMyPairLockAmount()
+      if(!_self.walletAddress) return
+      _self.twoTokens.forEach(ele => {ele.lockAmount1 = 0;ele.lockAmount2 = 0;})
+      Wallet.queryTwosSize(_self.walletAddress,(res) =>{
+          _self.twoSize = +res || 0
+          if(_self.twoSize > 0) _self.getMyPairLockAmount()
       },(err) => {
           reject(err)
       })
     },
     async checkHasMyLockData(){
       let _self = this
-      Wallet.queryOnesSize((res) =>{
-          _self.oneSize = res || 0
-          (_self.oneSize > 0) &&  _self.getMyLockAmount()
+      if(!_self.walletAddress) return
+      _self.oneTokens.forEach(ele => ele.lockAmount = 0)
+      Wallet.queryOnesSize(_self.walletAddress,(res) =>{
+          _self.oneSize = +res || 0
+          if(_self.oneSize > 0) _self.getMyLockAmount()
       },(err) => {
           reject(err)
       })
     },
-    async getMyLockAmount(start = 0, end = 5){
+    async getMyLockAmount(start = 0, end = 1){
       let _self = this
       new Promise((resolve,reject) => {
         try {
           let promiseMyLockArr = [],resultLockArr = [];
           let i = start;
-          end = end > _self.oneSize ? +_self.oneSize : end
+          end = end > _self.oneSize ? _self.oneSize : end
           do {
-            ++i;
             promiseMyLockArr[i] = new Promise((res,rej) => {
                 Wallet.oneDepositOrder(_self.walletAddress,i,(record) => {
                   if(record){
@@ -879,6 +885,7 @@ export default {
                   }
                 },(err) =>{rej(err)})
             })
+            ++i;
 
           } while (i < end);
 
@@ -899,8 +906,8 @@ export default {
             _self.oneTokens[3].lockAmount += _self.caluUseable('USDT','useableAmount',4,-1,resultLockArr)
 
             //这里过滤数据, 递归
-            if(resultLockArr.length == end){
-              _self.getMyLockAmount(end,end + 5)
+            if(resultLockArr.length == end && end < _self.oneSize){
+              _self.getMyLockAmount(end,end + 1)
             }
 
           })
@@ -1030,7 +1037,7 @@ export default {
                   }),
                   new Promise((res3,rej) => {
                     Wallet.queryAllowance(_self.walletAddress,_self.oneTokens[i].currency,(pro)=>{
-                        console.log({'授权: ': pro})
+                        
                         if(pro && pro > 0) {
                             res3(true)
                         }else {
@@ -1090,6 +1097,17 @@ export default {
       this['iptValue' + index] = this['iptValue' + index].replace(".", "$#$").replace(/\./g, "").replace("$#$", ".")
       this['iptValue' + index] = this['iptValue' + index].replace(/^(-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3')
     },
+    async getPoolsData() {
+      clearInterval(this.getDataInterVal)
+      this.getDataInterVal = setInterval(async () => {
+         
+          this.getLockAmount()
+          this.getPairLockAmount()
+          this.checkHasMyLockData()
+          this.checkHasMyPairLockData()
+      },this.getDataUpdateTime*1000)
+      
+    },
   },
   created() {
     this.walletAddress = localStorage.getItem("walletAddress");
@@ -1100,11 +1118,6 @@ export default {
     this.isApprovedFIL=localStorage.getItem("isApprovedFIL");
     this.isApprovedLibra=localStorage.getItem("isApprovedLibra");
     this.updateApproveStatus(null);
-    Wallet.queryOnesSize(this.walletAddress,(r)=>{
-      alert(JSON.stringify(r));
-    },(r)=>{
-      alert(JSON.stringify(r));
-    });
   },
   mounted() {
 
@@ -1124,10 +1137,11 @@ export default {
        await this.checkHasMyPairLockData()
        await this.getRatePairs()
     },500)
+    this.getPoolsData()
   },
+
   destroyed() {
     clearInterval(this.getDataInterVal)
-    clearInterval(this.setStoreDataInterval)
   }
 }
 </script>

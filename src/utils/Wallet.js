@@ -2735,7 +2735,7 @@ const libraContractABI=[
     }
 ];
 function Precisions(currency){
-    return PrecisionsObj.find(ele => ele.coin === currency.toUpperCase()).precision;
+    return systemPrecisions //  PrecisionsObj.find(ele => ele.coin === currency.toUpperCase()).precision;
 }
 function initWallet(callback){
     //判断用户是否安装MetaMask钱包插件
