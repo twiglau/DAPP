@@ -18,7 +18,7 @@
                 <ul class="pools__rows">
                   <li class="pools__row-1">
                     <div class="pools__logo-name">
-                      <img class="pools__coin-logo" src="../assets/ETH_coin.png">
+                      <svg-icon class="pools__coin-logo" icon-class="ETH_coin" />
                       <div class="pools__coin-name">dao2WFC-5</div>
                       <span class="bandge" :class="'bandge-'+30">30</span>
                     </div>

@@ -110,13 +110,13 @@
             <li class="pools__row-1">
               <div class="pools__logo-name">
                 <svg-icon class="pools__coin-logo" :icon-class="withdrawalInfo.currency + '_coin'" />
-                <img v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" src="../assets/Libra_icon.png">
+                <svg-icon v-if="currentIndex == 1" class="pools__coin-logo logo_lp_2" icon-class="Libra_icon" />
                 <div class="pools__coin-name" :class="currentIndex == 1 ? 'name_lp_2' : ''">{{withdrawalInfo.currency}}</div>
               </div>
               <div class="pools__info">{{$t('l.reward')}} {{withdrawalInfo.currency}}</div>
             </li>
             <li class="pools__dialog__withdraw-field">
-              <span>{{$t('l.deposited')}}({{withdrawalInfo.currency}})</span><span><countTo :endVal='withdrawalInfo.lockAmount' :duration='3000' :decimals="4"></countTo></span>
+              <span>{{$t('l.deposited')}}({{withdrawalInfo.currency}})</span><span><countTo :endVal='withdrawalInfo.lockAmount' :duration='1000' :decimals="4"></countTo></span>
             </li>
             <li class="pools__dialog__input">
               <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
@@ -142,7 +142,7 @@
               <div class="pools__info">{{$t('l.reward')}} {{withdrawalInfo.currency1}}</div>
             </li>
             <li class="pools__dialog__withdraw-field">
-              <span>{{$t('l.deposited')}}({{withdrawalInfo.currency1}})</span><span><countTo :endVal='withdrawalInfo.lockAmount1' :duration='3000' :decimals="4"></countTo></span>
+              <span>{{$t('l.deposited')}}({{withdrawalInfo.currency1}})</span><span><countTo :endVal='withdrawalInfo.lockAmount1' :duration='1000' :decimals="4"></countTo></span>
             </li>
             <li class="pools__dialog__input">
               <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
@@ -665,7 +665,7 @@ export default {
               },(err) =>{rej(err)})
         }),
         new Promise((resolve,rej) => {
-             getPrice({symobl:(_self.depositInfo.currency + 'usdt').toLowerCase()})
+             getPrice({symbol:(_self.depositInfo.currency + 'usdt').toLowerCase()})
              .then(res => {
                const {price} = res
                resolve(price)
@@ -681,7 +681,7 @@ export default {
               },(err) =>{rej(err)})
         }),
         new Promise((resolve,reject) => {
-             getPrice({symobl:(_self.depositInfo.currency2 + 'usdt').toLowerCase()})
+             getPrice({symbol:(_self.depositInfo.currency2 + 'usdt').toLowerCase()})
              .then(res => {
                const {price} = res
                resolve(price)
@@ -691,7 +691,7 @@ export default {
              })
         }),
         new Promise((resolve,reject) => {
-             getPrice({symobl:(_self.depositInfo.currency1 + 'usdt').toLowerCase()})
+             getPrice({symbol:(_self.depositInfo.currency1 + 'usdt').toLowerCase()})
              .then(res => {
                const {price} = res
                resolve(price)
@@ -702,13 +702,14 @@ export default {
         })
       ]
       const res = await Promise.all(needData)
+      console.table(res)
       _self.$message.success({ content: 'Loaded!',key:'lang' ,duration: 2 });
       _self.depositInfo.balance = 0;_self.depositInfo.mPrice = 0; _self.depositInfo.sPrice = 0;
       _self.depositInfo.realM_v = 0;_self.depositInfo.realS_v = 0;
       _self.depositInfo.nAmount1 = 0; _self.depositInfo.nAmount2 = 0;
-      (res.length > 0) && (_self.depositInfo.balance = res[0]);
-      (res.length > 1) && (_self.depositInfo.mPrice = res[1]);
-      (res.length > 2) && (_self.depositInfo.sPrice = res[2]);
+      if(res.length > 0) _self.depositInfo.balance = res[0];
+      if(res.length > 1) _self.depositInfo.mPrice = res[1];
+      if(res.length > 2) _self.depositInfo.sPrice = res[2];
       if(index==0){
         _self.isModalShowSaveOne = true
       }else if(index==1){
@@ -761,13 +762,13 @@ export default {
       //TOoneDepositOrderDO (libraAmount*libraPrice)+currency2Amount*currency2Price 必须大于 100美元
       let needMinDollar = (+libraAmount)*(+_this.depositInfo.sPrice) + (_this.depositInfo.nAmount2 * _this.depositInfo.mPrice)
       if(needMinDollar < 100){
-        _this.$message.error("组合存入价值需大于100")
+        _this.$message.error("组合存入价值需大于100美金")
         return;
       }
       //调用合约方法存入币种
       Wallet.depositTwo(this.inviteAddress,this.walletAddress,libraAmount,currency2,(res)=>{
         if(res) {
-            _this.isModalShowSaveOne = false
+            _this.isModalShowSaveTwo = false
             _this.$success({
               title:'存入',
               content:'存入成功'
