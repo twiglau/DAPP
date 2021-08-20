@@ -1,7 +1,6 @@
 <template>
   <div class="header_wrap" :style="[{backgroundColor:currentIndex == 1? '#43318C':'white'}]">
     <div class="header_inner_wrap">
-
       <div class="left_nav">
         <div class="logo_wrap">
           <img :src="logoImg" alt="" class="logo">
@@ -15,8 +14,9 @@
         </ul>
       </div>
       <div class="right_nav">
-        <a v-show="showConnectBtn" @touchstart="handleTapStart" @touchend="handleTapEnd" class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"  @click="handleConnectWeb3Modal"><span class="c_btn_text">{{$t('l.cwallet')}}</span></a>
-        <a v-show="!showConnectBtn"  class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"><span class="c_btn_text">{{walletAddress}}</span></a>
+        <!-- v-show="showConnectBtn" -->
+        <a v-if="!isUserConnected" @touchstart="handleTapStart" @touchend="handleTapEnd" class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"  @click="handleConnectWeb3Modal"><span class="c_btn_text">{{$t('l.cwallet')}}</span></a>
+        <a v-if="isUserConnected"  @click="disconnectWeb3Modal"  class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"><span class="c_btn_text">{{formatAddress(getActiveAccount)}}</span></a>
         <a class="lang_change" v-if="!getIsMobile" @click="showLangBox" :class="currentIndex == 1 ? 'c_bg':''" ><i class="icon"></i>{{this.lanc}}
           <div id="languageBox" v-show="languageShow" >
             <li :class="this.$i18n.locale == 'en-US' ? 'active' : ''" @click.stop.prevent="changeLangType(1)">English</li>
@@ -26,6 +26,14 @@
         <img :src="menuImg" v-if="getIsMobile" @click="switchMenu" alt="" class="menu_icon">
       </div>
     </div>
+    <a-alert
+        v-if="!getIsMainChainID"
+        style="margin:0 auto;width:94%"
+        :message="$t('l.notmainnet_title')"
+        :description="$t('l.notmainnet_tips')"
+        type="warning"
+        show-icon
+      />
   </div>
 </template>
 
@@ -34,7 +42,7 @@
   import Vue from 'vue'
   import Web3 from 'web3'
   import Wallet from '@/utils/Wallet.js'
-  import { mapGetters } from 'vuex'
+  import { mapGetters,mapActions } from 'vuex'
   export default {
     data() {
       return {
@@ -47,6 +55,7 @@
       }
     },
     methods: {
+      ...mapActions('accounts',["initWeb3Modal","connectWeb3Modal", "disconnectWeb3Modal"]),
       switchMenu() {
         console.log('Clicked Menu')
         this.$store.commit('accounts/setDrawer',true)
@@ -90,6 +99,11 @@
       },
       async handleConnectWeb3Modal() {
         this.initWallet();
+
+        let result = await this.connectWeb3Modal()
+        if(result && result.status == 400) {
+          this.$message.warning(this.$t('l.no_metamask_tips'))
+        }
       },
       initWallet(){
         Vue.prototype.Web3 = Web3;
@@ -140,7 +154,7 @@
       }
     },
     computed: {
-      ...mapGetters('accounts',['getLangType','getIsMobile']),
+      ...mapGetters('accounts',['getLangType','getIsMobile',"getActiveAccount", "isUserConnected",'getIsMainChainID']),
       logoImg:function(){
         if(this.currentIndex == 1){
           return require('@/assets/logo_white.png')
@@ -164,6 +178,8 @@
       this.clearLocalStorage();
 
       this.initWallet();
+      this.$store.dispatch('accounts/initWeb3Modal');
+      this.$store.dispatch('accounts/ethereumListener');
     },
     created() {
 

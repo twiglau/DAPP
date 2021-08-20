@@ -717,7 +717,7 @@ export default {
   }
   @media (max-width: 768px) {
     .home-info {
-      margin-top: -50px;
+      margin-top: 0px;
     }
     .top_banner_wrap {
       margin: 0px;
