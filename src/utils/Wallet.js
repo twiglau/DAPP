@@ -23,7 +23,7 @@ const PrecisionsObj = [
 const tokensContractAddress = "0x5F8Bc83B6285A495c13347130352E9f20cebA63D";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链
-const _contractAddress = '0x304a8b3ce30954d8d92F8912b1113000D0aB33AD';
+const _contractAddress = '0xdf37368A01CFC94c2dE610ba4690c6CA04941aDf';
 const _contractABI = [
     {
         "inputs": [],
@@ -2877,7 +2877,6 @@ function balanceOf(currency,address,callback,errorCallback) {
         .call()
         .then((res) => {
             let balance = Number(res)/Number("1000000000000000000");
-            alert(balance)
             callback(balance);
         })
         .catch((err) => {
