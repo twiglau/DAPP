@@ -43,10 +43,11 @@ axios.interceptors.response.use(undefined, function axiosRetryInterceptor(err) {
 const request = (url, options,baseUrl,noBaseUrl) => {
   return new Promise((resolve, reject) => {
     let api = url
+    //[filter[options.method]]
     axios({
       url: noBaseUrl ? api : baseUrl + api,
       method: options.method,
-      [filter[options.method]]: options.data,
+      params: options.data,
       processData: false,
       header: {
         'Content-Type': 'application/json; charset=UTF-8'
@@ -67,7 +68,7 @@ const get = (url, options = {},noBaseUrl = false) => {
 const post = (url, options,noBaseUrl = false) => {
   return request(url, {
     method: 'post',
-    data: Qs.stringify(options)
+    data:options
   }, baseUrl,noBaseUrl)
 }
 

@@ -86,7 +86,7 @@ export default {
       team:{
         totalProfit:0,
         todayProfit:0,
-        teamPeople:0,
+        teamPeople:1,
         teamProformance:0,
         needTeamProfor:0,
         teamProfit:0,
@@ -258,10 +258,15 @@ export default {
       _self.calculateTeamPerformance()
       
     },
-    async calculateTeamInfo(address) {
+    async calculateTeamInfo(address,isTop) {
       let _self = this
+      //0. 
+      if(isTop){ //本人自己
+        await _self.calculNodeInfo(address)
+      }
       //1. 获得 address 下直接数量
       const total_a = await _self.checkNodeCount(address)
+      _self.team.teamPeople += Number(total_a)
       const total_num = +total_a
       if(total_num > 0){
         //2. 获得 address 下直推下级的地址信息, 获得团队人数
@@ -270,32 +275,71 @@ export default {
         if(!info_a || info_a.length == 0) return
 
         _self.layers++; //层数
+        console.table(info_a)
         //3.x
-        for(item of info_a){
-          const item_address = item.userAddress
+        for(let i = 0,len = info_a.length; i < len; i++){
+          
           //3.1
-          const oneCount = await _self.checkHasMyLockData(item_address)
-          if(oneCount > 0){
-            const oneRecord = await _self.getMyLockAmount(item_address,0,oneCount,oneCount)
-            _self.layers_one_Record.push(...oneRecord)
-          }
-          //3.2
-          const twoCount = await _self.checkHasMyPairLockData(item_address)
-          if(twoCount > 0){
-            const twoRecord = await _self.getMyPairLockAmount(item_address,0,twoCount,twoCount)
-            _self.layers_two_Record.push(...twoRecord)
-          }
-          //3.3
-          const profitCount = await _self.checkHasIncomeData(item_address)
-          if(profitCount > 0){
-            const profitCount = await _self.getProfitRecord(item_address,0,profitCount,profitCount)
-            _self.layers_profit_Record.push(...profitCount)
-          }
+          setTimeout(async (i) =>{
+              let item = info_a[i]
+              const item_address = item.userAddress
+              const oneCount = await _self.checkHasMyLockData(item_address)
+              if(oneCount > 0){
+                const oneRecord = await _self.getMyLockAmount(item_address,0,oneCount,oneCount)
+                _self.layers_one_Record.push(...oneRecord)
+              }
+              //3.2
+              const twoCount = await _self.checkHasMyPairLockData(item_address)
+              if(twoCount > 0){
+                const twoRecord = await _self.getMyPairLockAmount(item_address,0,twoCount,twoCount)
+                _self.layers_two_Record.push(...twoRecord)
+              }
+              //3.3
+              const profitCount = await _self.checkHasIncomeData(item_address)
+              if(profitCount > 0){
+                const profitCount = await _self.getProfitRecord(item_address,0,profitCount,profitCount)
+                _self.layers_profit_Record.push(...profitCount)
+              }
+          },0,i)
           //3.4 --> 节点地址往下递归
-          _self.calculateTeamInfo(item_address)
+          _self.calculateTeamInfo(info_a.userAddress,false)
         }
+
+        // console.table(_self.layers_one_Record)
+        console.table(_self.layers_two_Record)
+        // console.table(_self.layers_profit_Record)
       }
       _self.calculateTeamPerformance()
+    },
+    async calculNodeInfo(item_address){
+      let _self = this
+      return new Promise((resolve,reject) => {
+         try {
+          setTimeout(async () =>{
+              const oneCount = await _self.checkHasMyLockData(item_address)
+              if(oneCount > 0){
+                const oneRecord = await _self.getMyLockAmount(item_address,0,oneCount,oneCount)
+                _self.layers_one_Record.push(...oneRecord)
+              }
+              //3.2
+              const twoCount = await _self.checkHasMyPairLockData(item_address)
+              if(twoCount > 0){
+                const twoRecord = await _self.getMyPairLockAmount(item_address,0,twoCount,twoCount)
+                _self.layers_two_Record.push(...twoRecord)
+              }
+              //3.3
+              const profitCount = await _self.checkHasIncomeData(item_address)
+              if(profitCount > 0){
+                const profitCount = await _self.getProfitRecord(item_address,0,profitCount,profitCount)
+                _self.layers_profit_Record.push(...profitCount)
+              }
+              resolve('success')
+          },0)
+
+         } catch (error) {
+           reject(error)
+         }
+      })
     },
     /**
      * 节点 address 直推下级 所有数量
@@ -414,7 +458,7 @@ export default {
           .then((res) => {
             resolve(res)
             //这里过滤数据, 递归
-            if(resultLockArr.length == end && end < twoSize){
+            if(end < twoSize){
               _self.getMyPairLockAmount(address,end,end + 1,twoSize)
             }
           })
@@ -454,7 +498,7 @@ export default {
             //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
             //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
             //这里过滤数据, 递归
-            if(resultLockArr.length == end && end < oneSize){
+            if(end < oneSize){
               _self.getMyLockAmount(address,end,end + 1,oneSize)
             }
 
@@ -506,7 +550,7 @@ export default {
           Promise.all(promiseRecordArr).then((res) => {
             resolve(res)
             //这里过滤数据, 递归
-            if(resultRecordArr.length == end && dataSize > end){
+            if(dataSize > end){
               _self.getProfitRecord(end,end + 1)
             }
           })
@@ -546,7 +590,7 @@ export default {
 
       setTimeout(async ()=>{
         if(!_self.walletAddress) return
-         await _self.calculateTeamInfo(_self.walletAddress);
+         await _self.calculateTeamInfo(_self.walletAddress,true);
          await _self.getCoinsPrice();
       },);
 

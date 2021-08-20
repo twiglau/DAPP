@@ -90,7 +90,7 @@
                 <li class="pools__group-buttons">
                   <div class="pools__button-group">
                     <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal(1,item)">{{$t('l.withdrawal')}}</button>
-                    <a-button v-show="!item.isApproved" :loading="item.isApproving" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency1,item)">{{item.isApproving ? $t('l.t_approving') : $t('l.approve')}}</a-button>
+                    <a-button v-show="!item.isApproved" :loading="item.isApproving" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency1,item)">{{item.isApproving ? ((item.cur1Approved == true && item.cur2Approved == false ? item.currency2 : item.currency1) + ' ' +  $t('l.t_approving')) : $t('l.approve')}}</a-button>
                     <button v-show="item.isApproved" class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(1,item)">{{$t('l.deposit')}}</button>
                   </div>
                 </li>
@@ -338,6 +338,8 @@ export default {
           isApproved:false,
           isLoading:true,
           isApproving:false,
+          cur1Approved: false,
+          cur2Approved: false
         },
         {
           currency1:"Libra",
@@ -350,6 +352,8 @@ export default {
           isApproved:false,
           isLoading:true,
           isApproving:false,
+          cur1Approved: false,
+          cur2Approved: false
         },
         {
           currency1:"Libra",
@@ -362,6 +366,8 @@ export default {
           isApproved:false,
           isLoading:true,
           isApproving:false,
+          cur1Approved: false,
+          cur2Approved: false
         },
         {
           currency1:"Libra",
@@ -374,6 +380,8 @@ export default {
           isApproved:false,
           isLoading:true,
           isApproving:false,
+          cur1Approved: false,
+          cur2Approved: false
         },
         {
           currency1:"Libra",
@@ -386,6 +394,8 @@ export default {
           isApproved:false,
           isLoading:true,
           isApproving:false,
+          cur1Approved: false,
+          cur2Approved: false
         },
       ],
       walletAddress:'',
@@ -471,23 +481,37 @@ export default {
           if(res){
             this.updateApproveStatus(currency1);
           }
+        },(err) => {
+          _self.approveInfo.isApproving = false
         });
       }else {
 
         _self.approveInfo.isApproving = true
-        Wallet.approve(currency1,this.walletAddress,10000000,(res)=>{
-        _self.approveInfo.isApproving = true
-          if(res){
-            this.updateApproveStatus(currency1);
-          }
-        });
-
-        Wallet.approve(currency2,this.walletAddress,10000000,(res)=>{
-        _self.approveInfo.isApproving = true
-          if(res){
-            this.updateApproveStatus(currency2);
-          }
-        });
+        const approveCur1 = new Promise((resolve,reject) => {
+             Wallet.approve(currency1,_self.walletAddress,10000000,(res)=>{
+                resolve(res)
+             },(err) => {_self.approveInfo.isApproving = false; reject(err)})
+        })
+        const approveCur2 = new Promise((resolve,reject) => {
+             Wallet.approve(currency2,_self.walletAddress,10000000,(res)=>{
+                 resolve(res)
+             },(err) => {_self.approveInfo.isApproving = false;reject(err)})
+        })
+        const cur1_status = await approveCur1
+        if(cur1_status) {
+          _self.$nextTick(() => {
+             _self.approveInfo.cur1Approved = true;
+          })
+          _self.updateApproveStatus(currency1)
+        }
+        const cur2_status = await approveCur2
+        if(cur2_status) {
+          _self.$nextTick(() => {
+             _self.approveInfo.cur2Approved = true;
+             _self.approveInfo.isApproving = false;
+          })
+          _self.updateApproveStatus(currency2)
+        }
       }
     },
 
@@ -641,7 +665,6 @@ export default {
                    title:'提取',
                    content:'提取成功'
                  })
-
               }
            })
          }
@@ -668,7 +691,7 @@ export default {
              getPrice({symbol:(_self.depositInfo.currency + 'usdt').toLowerCase()})
              .then(res => {
                const {price} = res
-               resolve(price)
+               resolve(+price || 1)
              })
              .catch((err) => {
                rej(err)
@@ -684,7 +707,7 @@ export default {
              getPrice({symbol:(_self.depositInfo.currency2 + 'usdt').toLowerCase()})
              .then(res => {
                const {price} = res
-               resolve(price)
+               resolve(+price || 1)
              })
              .catch((err) => {
                reject(err)
@@ -694,7 +717,7 @@ export default {
              getPrice({symbol:(_self.depositInfo.currency1 + 'usdt').toLowerCase()})
              .then(res => {
                const {price} = res
-               resolve(price)
+               resolve(+price || 1)
              })
              .catch((err) => {
                reject(err)
@@ -729,7 +752,7 @@ export default {
       //TODO 获取币种currency的价格price，amount*price 必须 大于 100美元
       let value = (+_this.depositInfo.mPrice) * (+amount)
       if(value < 100){
-        _this.$message.error("存入存入价值需大于100")
+        _this.$message.error("存入存入价值需大于100美金")
         return;
       }
 
@@ -790,6 +813,10 @@ export default {
           //不超过最大条数
           end = end > _self.twoSize ? _self.twoSize : end
           do {
+            const address = _self.walletAddress;
+            Wallet.twoDepositOrder(_self.walletAddress,i,(record) => {
+                  console.log({address,i,record})
+            },(err) =>{rej(err)})
             promiseMyLockArr[i] = new Promise((res,rej) => {
                 Wallet.twoDepositOrder(_self.walletAddress,i,(record) => {
                   if(record){
@@ -826,7 +853,7 @@ export default {
             _self.twoTokens[4].lockAmount2 += _self.caluUseable('FIL','useableAmount2',1,6,resultLockArr)
 
             //这里过滤数据, 递归
-            if(resultLockArr.length == end && end < _self.twoSize){
+            if(end < _self.twoSize){
               _self.getMyPairLockAmount(end,end + 1)
             }
           })
@@ -842,8 +869,8 @@ export default {
                                             let num = +item[key]
                                             return num + currentTotal
                                         },0)  || 0
-
-        libra_eth_1 > 0 && (libra_eth_1 = Number(libra_eth_1 / Wallet.Precisions(currency)))
+        console.log(currency,key,index1,index2,libra_eth_1)
+        if(libra_eth_1){ libra_eth_1 = Number(libra_eth_1 / Wallet.Precisions(currency)) }
         return libra_eth_1
     },
     async checkHasMyPairLockData(){
@@ -907,7 +934,7 @@ export default {
             _self.oneTokens[3].lockAmount += _self.caluUseable('USDT','useableAmount',4,-1,resultLockArr)
 
             //这里过滤数据, 递归
-            if(resultLockArr.length == end && end < _self.oneSize){
+            if(end < _self.oneSize){
               _self.getMyLockAmount(end,end + 1)
             }
 
