@@ -809,7 +809,7 @@ const _contractABI = [
     }
 ];
 
-const _recordContractAddress = '0xF708Eebd2Ef22214221513C082cdA792a612CA2f';
+const _recordContractAddress = '0x1b8511C5Cf76E28177C51116AcE5D3ca1B8a595E';
 const _recordContractABI=[
     {
         "inputs": [],
@@ -3664,7 +3664,13 @@ function twoUseableBalance1(currency,callback,errorCallback) {
 function twoUseableBalance2(currency,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
     currency=currency.toUpperCase();
-    _contract.methods.totalTwoUseable2ByCurrency(getCurrencyIndex(currency)).call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
+    _contract.methods.totalTwoUseable2ByCurrency(getCurrencyIndex(currency))
+        .call()
+        .then((res) => {
+            callback(res);
+        }).catch((err) => {
+            errorCallback(err);
+        });
 }
 
 /***
