@@ -23,7 +23,7 @@ const PrecisionsObj = [
 const tokensContractAddress = "0x5F8Bc83B6285A495c13347130352E9f20cebA63D";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链
-const _contractAddress = '0xb61cd95E9e64A6233b78F7FaB158342070a83806';
+const _contractAddress = '0x4A75Cf0Db8b62aA0c68e90D86EBbcFaCa18F55Ad';
 const _contractABI = [
     {
         "inputs": [],
@@ -812,6 +812,167 @@ const _contractABI = [
 const _recordContractAddress = '0xF708Eebd2Ef22214221513C082cdA792a612CA2f';
 const _recordContractABI=[
     {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+            }
+        ],
+        "name": "init",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "internalAddress",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneBnbTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneBnbTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneBtcTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneBtcTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneEthTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneEthTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneFee",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneUsdtTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneUsdtTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "uint8",
@@ -936,11 +1097,427 @@ const _recordContractABI=[
                 "type": "uint8"
             }
         ],
+        "name": "totalOneUseableByCurrency",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "currencyId",
+                "type": "uint8"
+            }
+        ],
+        "name": "totalTwoUseable1ByCurrency",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "currencyId",
+                "type": "uint8"
+            }
+        ],
+        "name": "totalTwoUseable2ByCurrency",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "currencyId",
+                "type": "uint8"
+            }
+        ],
         "name": "totalUseableByCurrency",
         "outputs": [
             {
                 "internalType": "uint256",
                 "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoBnbTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoBnbTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoBtcTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoBtcTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoEthTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoEthTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoFee1",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoFee2",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoFilTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoFilTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoUsdtTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoUsdtTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "userOneTakeoutMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currencyIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "feeAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutTime",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "userTwoTakeoutMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currency1Index",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutAmount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "fee1Amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currency2Index",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutAmount2",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "fee2Amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutTime",
                 "type": "uint256"
             }
         ],
@@ -3073,10 +3650,21 @@ function oneUseableBalance(currency,callback,errorCallback) {
  * @param currency
  * @param callback
  */
-function twoUseableBalance(currency,callback,errorCallback) {
+function twoUseableBalance1(currency,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
     currency=currency.toUpperCase();
-    _contract.methods.totalTwoUseableByCurrency(getCurrencyIndex(currency)).call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
+    _contract.methods.totalTwoUseable1ByCurrency(getCurrencyIndex(currency)).call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
+}
+
+/***
+ * 币种锁仓金额(双币种区)
+ * @param currency
+ * @param callback
+ */
+function twoUseableBalance2(currency,callback,errorCallback) {
+    const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
+    currency=currency.toUpperCase();
+    _contract.methods.totalTwoUseable2ByCurrency(getCurrencyIndex(currency)).call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
 }
 
 /***
@@ -3321,5 +3909,6 @@ export default {
     queryDepositUserSize,
     totalUseableBalance,
     oneUseableBalance,
-    twoUseableBalance,
+    twoUseableBalance1,
+    twoUseableBalance2,
 }
