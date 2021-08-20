@@ -105,7 +105,7 @@ export default {
             console.log(resultRecordArr)
             _self.records.push(...resultRecordArr)
             //这里过滤数据, 递归
-            if(resultRecordArr.length == end && _self.dataSize > end){
+            if(_self.dataSize > end){
               _self.getProfitRecord(end,end + 1)
             }
           })

@@ -56,7 +56,7 @@ export function queryExchangeRecords(data){
 }
 export function queryWithdrawalRecords(data){
     return new Promise((resolve,reject) => {
-       axios.post('/libar/queryExchangeRecord',data)
+       axios.post('/libar/queryTokenOutRecord',data)
        .then(res => {
           resolve(res)
        })

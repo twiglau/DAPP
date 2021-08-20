@@ -170,7 +170,7 @@ export default {
             // TODO: 放入定时器后, 需要清除lockAmount,防止累加
             _self.records.push(...resultLockArr)
             //这里过滤数据, 递归
-            if(resultLockArr.length == end && end < _this.twoSize){
+            if(end < _self.twoSize){
               _self.getMyPairLockAmount(end,end + 1)
             }
           })
@@ -214,7 +214,7 @@ export default {
             //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
             //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
             //这里过滤数据, 递归
-            if(resultLockArr.length == end && end < _self.oneSize){
+            if(end < _self.oneSize){
               _self.getMyLockAmount(end,end + 1)
             }
 
