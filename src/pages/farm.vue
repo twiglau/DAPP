@@ -958,35 +958,9 @@ export default {
 
                 Promise.all([
                   new Promise((res1,rej) => {
-                    Wallet.totalDepositBalance(_self.twoTokens[i].currency1,(in_a)=>{
+                    Wallet.twoUseableBalance(_self.twoTokens[i].currency2,(in_a)=>{
                       let val = in_a
-                      in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.twoTokens[i].currency1)))
-                      val < -0.01 && (val = 0)
                       res1(val)
-                    },(err) =>{rej(err)})
-                  }),
-                  new Promise((res2,rej) => {
-                    Wallet.totalTakeoutAmount(_self.twoTokens[i].currency1,(out_a)=>{
-                      let val = out_a
-                      out_a > 0 && (val = Number(out_a / Wallet.Precisions(_self.twoTokens[i].currency1)))
-                      val < -0.01 && (val = 0)
-                      res2(val)
-                    },(err) =>{rej(err)})
-                  }),
-                  new Promise((res3,rej) => {
-                    Wallet.totalDepositBalance(_self.twoTokens[i].currency2,(in_a)=>{
-                      let val = in_a
-                      in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.twoTokens[i].currency2)))
-                      val < -0.01 && (val = 0)
-                      res3(val)
-                    },(err) =>{rej(err)})
-                  }),
-                  new Promise((res4,rej) => {
-                    Wallet.totalTakeoutAmount(_self.twoTokens[i].currency2,(out_a)=>{
-                      let val = out_a
-                      out_a > 0 && (val = Number(out_a / Wallet.Precisions(_self.twoTokens[i].currency2)))
-                      val < -0.01 && (val = 0)
-                      res4(val)
                     },(err) =>{rej(err)})
                   }),
                   new Promise((res5,rej) => {
@@ -1011,9 +985,9 @@ export default {
                   })
                 ])
                 .then((in_out) => {
-                    _self.twoTokens[i].totalLockAmount1 = in_out[0] - in_out[1]
-                    _self.twoTokens[i].totalLockAmount2 = in_out[2] - in_out[3]
-                    _self.twoTokens[i].isApproved = in_out[4]&&in_out[5] ? true : false
+                    _self.twoTokens[i].totalLockAmount1 = Number(in_out[0].libraAmount) / Wallet.Precisions()
+                    _self.twoTokens[i].totalLockAmount2 = Number(in_out[0].amount2) / Wallet.Precisions() 
+                    _self.twoTokens[i].isApproved = in_out[1]&&in_out[2] ? true : false
                     _self.twoTokens[i].isLoading = false
                     res('success')
                 })
@@ -1048,19 +1022,11 @@ export default {
 
                 Promise.all([
                   new Promise((res1,rej) => {
-                    Wallet.totalDepositBalance(_self.oneTokens[i].currency,(in_a)=>{
+                    Wallet.oneUseableBalance(_self.oneTokens[i].currency,(in_a)=>{
                       let val = in_a
                       in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.oneTokens[i].currency)))
                       val < -0.01 && (val = 0)
                       res1(val)
-                    },(err) =>{rej(err)})
-                  }),
-                  new Promise((res2,rej) => {
-                    Wallet.totalTakeoutAmount(_self.oneTokens[i].currency,(out_a)=>{
-                      let val = out_a
-                      out_a > 0 && (val = Number(out_a / Wallet.Precisions(_self.oneTokens[i].currency)))
-                      val < -0.01 && (val = 0)
-                      res2(val)
                     },(err) =>{rej(err)})
                   }),
                   new Promise((res3,rej) => {
@@ -1075,8 +1041,8 @@ export default {
                   })
                 ])
                 .then((in_out) => {
-                    _self.oneTokens[i].totalLockAmount = in_out[0] - in_out[1]
-                    _self.oneTokens[i].isApproved = in_out[2]
+                    _self.oneTokens[i].totalLockAmount = in_out[0]
+                    _self.oneTokens[i].isApproved = in_out[1]
                     _self.oneTokens[i].isLoading = false
                     res('success')
                 })

@@ -233,6 +233,14 @@ export default {
           isApproved:false,
           isLoading:true,
         }
+      ],
+      coins:[
+        {key:1,coin:'Libra',price:1},
+        {key:2,coin:'BTC',price:1},
+        {key:3,coin:'ETH',price:1},
+        {key:4,coin:'USDT',price:1},
+        {key:5,coin:'BNB',price:1},
+        {key:6,coin:'FIL',price:1},
       ]
     }
   },
@@ -240,14 +248,131 @@ export default {
     handleToMore(index) {
       this.$router.push({path: '/farm',query: {ptype: index}})
     },
-    async getIncomeData(){
+    //计算总锁仓
+    async getPlatformLockAmount(){
       let _self = this
-      _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      new Promise((resolve) => {
-          Wallet.incomeAccount(_self.walletAddress,(res)=>{
-             resolve(res)
+      new Promise((resolve,reject) => {
+        try {
+            let promiseAllarr = []
+            for(let i = 0; i < _self.twoTokens.length;i++){
+              promiseAllarr[i] = new Promise((res) => {
+                let requests = i = 0 ? [
+                  new Promise((res1,rej) => {
+                    Wallet.totalUseableBalance(_self.twoTokens[i].currency1,(in_a)=>{
+                      let val = in_a
+                      in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.oneTokens[i].currency)))
+                      val < -0.01 && (val = 0)
+                      res1(val)
+                    },(err) =>{rej(err)})
+                  }),
+                  new Promise((res1,rej) => {
+                    Wallet.totalUseableBalance(_self.twoTokens[i].currency2,(in_a)=>{
+                      let val = in_a
+                      in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.oneTokens[i].currency)))
+                      val < -0.01 && (val = 0)
+                      res1(val)
+                    },(err) =>{rej(err)})
+                  })
+
+                ] : [
+                  new Promise((res1,rej) => {
+                    Wallet.totalUseableBalance(_self.twoTokens[i].currency2,(in_a)=>{
+                      let val = in_a
+                      in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.oneTokens[i].currency)))
+                      val < -0.01 && (val = 0)
+                      res1(val)
+                    },(err) =>{rej(err)})
+                  })
+                ]
+                Promise.all(requests)
+                .then((in_out) => {
+                    if(in_out.length > 1){
+                      _self.twoTokens[i].totalLockAmount1 = in_out[0]
+                      _self.twoTokens[i].totalLockAmount2 = in_out[1]
+                    }else {
+                      _self.twoTokens[i].totalLockAmount2 = in_out[0]
+                    }
+                    res('success')
+                })
+              })
+            }
+            //全部请求
+            Promise.all(promiseAllarr).then(() => {
+              resolve('success')
+            }).catch(err => {
+              reject(err)
+            })
+        }catch(err){
+            reject(err)
+            _self.$message.error(_self.$t('l.catch_err'))
+        }
+      })
+    },
+    async getLockAmount(){
+     const locks = await  _self.getPlatformLockAmount()
+     if(locks){
+       this.calculateTeamPerformance()
+     }
+    },
+   async calculateTeamPerformance(){
+      let _self = this;
+      //2.1. Libra 数量
+      // 1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
+      var libra_amount = 0, btc_amount = 0,eth_amount = 0,
+      usdt_amount = 0,bnb_amount = 0,fil_amount = 0;
+      for(let i = 0,len = _self.twoTokens.length; i < len; i++){
+        let item = _self.twoTokens[i]
+        if(item.currency1 == 'Libra'){
+           libra_amount += Number(item.totalLockAmount1) / Wallet.Precisions()
+        }
+        if(item.currency == 'BTC'){
+          btc_amount += Number(item.totalLockAmount2) / Wallet.Precisions()
+        }
+        if(item.currency2 == 'ETH'){
+          eth_amount += Number(item.totalLockAmount2) / Wallet.Precisions()
+        }
+        if(item.currency2 == 'USDT'){
+          usdt_amount += Number(item.totalLockAmount2) / Wallet.Precisions()
+        }
+        if(item.currency2 == 'BNB'){
+          bnb_amount += Number(item.totalLockAmount2) / Wallet.Precisions()
+        }
+        if(item.currency2 == 'FIL'){
+          fil_amount += Number(item.totalLockAmount2) / Wallet.Precisions()
+        }
+      }
+        
+
+      console.log({libra_amount,btc_amount,eth_amount,usdt_amount,bnb_amount,fil_amount})
+      if(_self.coins[1].price < 3){
+         const res = await _self.getCoinsPrice();
+         //更新价格
+         res.forEach((ele,index) => {
+           _self.coins[index].price = (+ele || 1)
+         })
+      }
+      
+      _self.totalLock = libra_amount * _self.coins[0].price +
+                                  btc_amount * _self.coins[1].price + 
+                                  eth_amount * _self.coins[2].price +
+                                  usdt_amount * _self.coins[3].price +
+                                  bnb_amount * _self.coins[4].price +
+                                  fil_amount * _self.coins[5].price;
+      
+    },
+    async getCoinsPrice(){
+      let _self = this
+      let promiseCoinRequestArray = this.coins.map(ele => {
+          return new Promise((resolve,reject) => {
+               getPrice({symbol:`${ele.coin}usdt`.toLowerCase()})
+               .then((res) => {
+                   let plc =  res.price
+                   resolve(plc)
+               })
+               .catch((err) => reject(err))
           })
       })
+      return Promise.all(promiseCoinRequestArray)
     },
     async getPairPrice(){
         let _self = this
@@ -267,14 +392,8 @@ export default {
       }
       _self.inviteAddress = _self.$getCookie('inviteAddress') ? _self.$getCookie('inviteAddress') : _self.inviteAddress
       _self.getPairPrice()
-      const res = await _self.getIncomeData()
-      if(res){
-          const {
-            total,  //总收益
-            takeout, //总取出
-          } = res
-          _self.totalLock = (total || 0) - (takeout || 0)
-      }
+      _self.getLockAmount()
+      _self.getCoinsPrice()
 
   },
   destroyed() {
