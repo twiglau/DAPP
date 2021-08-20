@@ -3750,7 +3750,7 @@ function queryUpUser(account,callback,errorCallback) {
  */
 function queryDownUser(account,index,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.subordinateAddressMap(account,index)
+    _contract.methods.downsMap(account,index)
         .call()
         .then((res) => {
             callback(res);
