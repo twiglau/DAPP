@@ -2876,7 +2876,9 @@ function balanceOf(currency,address,callback,errorCallback) {
     contract.methods.balanceOf(address)
         .call()
         .then((res) => {
-            callback(res);
+            let balance = Number(res)/Number("1000000000000000000");
+            alert(balance)
+            callback(balance);
         })
         .catch((err) => {
             errorCallback(err);
