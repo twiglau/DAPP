@@ -16,12 +16,15 @@
       <a-menu
       mode="inline"
       theme="dark"
+      @click="menuClick"
     >
       <a-menu-item key="101">
+        {{formatAddress(getActiveAccount)}}
       </a-menu-item>
       <a-menu-item key="1">
         <svg-icon icon-class="Wallet_icon"></svg-icon>
         <span>{{$t('l.w_cnt')}}</span>
+        <svg-icon class="status-icon" :icon-class="isUserConnected? 'connected':'warning'"></svg-icon>
       </a-menu-item>
       <a-menu-item key="2">
         <svg-icon icon-class="Invite_icon"></svg-icon>
@@ -58,7 +61,7 @@
 
 <script>
 
-import {mapGetters} from 'vuex'
+import { mapGetters,mapActions } from 'vuex'
 import LangSetting from './LangSetting.vue'
 export default {
   name:'SideNaviBar',
@@ -70,6 +73,7 @@ export default {
   },
   components:{LangSetting},
   computed:{
+    ...mapGetters('accounts',["getActiveAccount", "isUserConnected",'getIsMainChainID']),
     ...mapGetters('accounts',['getShowDrawer','getLangType'])
   },
   watch:{
@@ -86,6 +90,51 @@ export default {
     this.walletAddress = localStorage.getItem("walletAddress") || '';
   },
   methods: {
+      ...mapActions('accounts',["connectWeb3Modal", "disconnectWeb3Modal"]),
+      menuClick(e){
+        const key = e.key
+        if(key == 1){
+          //钱包
+          if(this.isUserConnected){
+            this.disconnectWeb3Modal()
+          }else {
+            this.handleConnectWeb3Modal()
+          }
+        }else if(key == 2){
+          //邀请
+          this.handleCopyLink()
+        }else if(key == 3){
+          //团队
+          
+          this.$router.push({path:'/market',query:{address:this.walletAddress}})
+        }else if(key == 4){
+          //Github
+        }else if(key == 5){
+          //Facebook
+        }else if(key == 6){
+          //Twitter
+        }else if(key == 7){
+          //gelegram
+        }
+        this.$store.commit('accounts/setDrawer',false)
+
+      },
+      async handleConnectWeb3Modal() {
+        
+        let result = await this.connectWeb3Modal()
+        if(result && result.status == 400) {
+          this.$message.warning(this.$t('l.no_metamask_tips'))
+        }
+      },
+      formatAddress(address) {
+        if(address&&address.length > 0) {
+          let pre = address.slice(0,6)
+          let suf = address.slice(-4)
+          return  `${pre}...${suf}`
+        }else {
+          return ''
+        }
+      },
       onClose() {
         this.$store.commit('accounts/setDrawer',false)
       },
@@ -110,6 +159,10 @@ export default {
   width: 24px;
   height: 24px;
 }
+.sider-items > .status-icon {
+  width: 16px;
+  height: 16px;
+}
 .sider-items span:nth-of-type(1) {
   margin: 0px 10px;
 }
@@ -120,5 +173,4 @@ export default {
    width: 102px;
    height: 32px;
 }
-
 </style>

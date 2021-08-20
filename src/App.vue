@@ -3,7 +3,7 @@
     <Header />
     <Footer />
     <side-navi-bar/>
-    <router-view class="route_view" :class="!getIsMainChainID ? 'pt_more' : ''"/>
+    <router-view class="route_view" :class="!getIsMainChainID ? 'pt_more' : getIsMobile? 'pt_mobile' : ''"/>
   </div>
 </template>
 
@@ -26,10 +26,10 @@ export default {
   methods: {
   },
   computed: {
-    ...mapGetters('accounts',['getIsMainChainID']),
+    ...mapGetters('accounts',['getIsMainChainID','getIsMobile']),
   },
   mounted() {
-    this.$store.dispatch('accounts/getMainChainID');
+    // this.$store.dispatch('accounts/getMainChainID');
   }
 }
 </script>
@@ -39,6 +39,9 @@ export default {
 .route_view {
   /*padding: 64px 0 64px 240px;*/
   padding: 76px 0 0 0;
+}
+.route_view.pt_mobile {
+  padding: 60px 0 0 0;
 }
 .route_view.pt_more {
   padding: 130px 0 0 0;

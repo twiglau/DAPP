@@ -1591,6 +1591,7 @@ export default {
       flex-direction: column;
     } */
     .copy_wrap {
+      max-width:40%;
       margin: 0px 15px 0px 30px;
       height: 28px;
       padding: 0px;

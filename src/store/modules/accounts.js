@@ -30,7 +30,7 @@ const state = {
   providerW3m: null, // this is "provider" from Web3Modal
   web3Modal: null,
   dataUpdateTime: 10, //页面数据刷新时间
-  mainChainID: 56,
+  mainChainID: '0x61', //链ID,用于判断是否处于主链上
   isMainChainID: true,
 };
 
@@ -73,7 +73,25 @@ const getters = {
 const actions = {
 
   async initWeb3Modal({ commit }) {
-    const providerOptions = {};
+    const providerOptions = {
+      // MetaMask is enabled by default
+      // Find other providers here: https://github.com/Web3Modal/web3modal/tree/master/docs/providers
+      // walletconnect: {
+      //   package: WalletConnectProvider, // required
+      //   options: {
+      //     infuraId: "4b757daa4ec146c49119b71477242746"
+      //   }
+      // },
+      // burnerconnect: {
+      //   package: BurnerConnectProvider // required
+      // },
+      // authereum: {
+      //   package: Authereum // required
+      // },
+      // dcentwallet: {
+      //   package: DcentProvider, // required
+      // }
+    };
     setTimeout(async () => {
       // This will get deprecated soon. Setting it to false removes a warning from the console.
       window.ethereum && (window.ethereum.autoRefreshOnNetworkChange = false);
@@ -100,7 +118,7 @@ const actions = {
     location.reload()
   },
 
-  async disconnectWeb3({ commit }) {
+  async disconnectWeb3Modal({ commit }) {
     commit("setIsConnected", false);
     commit("disconnectWallet");
   },
@@ -197,7 +215,7 @@ const mutations = {
     state.providerW3m = providerW3m;
     state.providerEthers = new ethers.providers.Web3Provider(providerW3m);
   },
-
+  
   setIsConnected(state, isConnected) {
     state.isConnected = isConnected;
     // add to persistent storage so that the user can be logged back in when revisiting website
