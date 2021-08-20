@@ -50,7 +50,7 @@
           <div class="info-item">
             <svg-icon icon-class="team_icon_01"></svg-icon>
             <span>{{$t('l.t_num')}}</span>
-            <span><countTo :endVal='team.teamPeople' :duration='3000' :decimals="2"></countTo></span>
+            <span><countTo :endVal='team.teamPeople' :duration='3000'></countTo></span>
           </div>
           <div class="info-item">
             <svg-icon icon-class="team_icon_02"></svg-icon>
@@ -96,9 +96,6 @@ export default {
         rightLevel:null,
       },
       layers:0,
-      layers_one_Record: [],
-      layers_two_Record: [],
-      layers_profit_Record: [],
       teamLevels:[
         {level:'LV1',value:Math.pow(10,6),ratio:'2%'},
         {level:'LV2',value:13*Math.pow(10,6),ratio:'3%'},
@@ -135,54 +132,97 @@ export default {
 //"useableAmount1":"10000000000","takeoutAmount1":"0",
 //"currency2Index":"5","totalAmount2":"94449209","useableAmount2":"94449209",
 //"takeoutAmount2":"0","depositTime":"1629389428"}
-    calculateTeamPerformance(){
-      //1. Libra 数量
-      let libra_amount = this.layers_two_Record.reduce((prev,item) => {
-        return prev + Number(item.useableAmount1 / Wallet.Precisions())
-      },0)
-      //2. BTC 数量
-      let btc_amount = this.layers_one_Record.filter(ele => ele.currencyIndex == 2)
-                                             .reduce((prev,item) =>{
-                                                return prev + Number(item.useableAmount / Wallet.Precisions())
-                                             },0)
-      //3. ETH 数量
-      let eth_amount = this.layers_one_Record.filter(ele => ele.currencyIndex == 3)
-                                             .reduce((prev,item) =>{
-                                                return prev + Number(item.useableAmount / Wallet.Precisions())
-                                             },0)
-      //4. USDT 数量
-      let usdt_amount = this.layers_one_Record.filter(ele => ele.currencyIndex == 4)
-                                             .reduce((prev,item) =>{
-                                                return prev + Number(item.useableAmount / Wallet.Precisions())
-                                             },0)
-      //5. BNB 数量
-      let bnb_amount = this.layers_one_Record.filter(ele => ele.currencyIndex == 5)
-                                             .reduce((prev,item) =>{
-                                                return prev + Number(item.useableAmount / Wallet.Precisions())
-                                             },0)
-      //6. FIL 数量
-      let fil_amount = this.layers_one_Record.filter(ele => ele.currencyIndex == 6)
-                                             .reduce((prev,item) =>{
-                                                return prev + Number(item.useableAmount / Wallet.Precisions())
-                                             },0)
-      //8. Libra 收益数量
-      let libra_profit_amount = this.layers_profit_Record.reduce((prev,item) => {
-                                                return prev + Number(item.amount / Wallet.Precisions())
-                                            },0)
+   async calculateTeamPerformance(){
+      let _self = this;
+      const layers_two_storeage = localStorage.getItem('TWO-RECORD')
+      const layers_two_Record = JSON.parse(layers_two_storeage) || []
+      const layers_one_storeage = localStorage.getItem('ONE-RECORD')
+      const layers_one_Record = JSON.parse(layers_one_storeage) || []
+      const layers_profit_storeage = localStorage.getItem('PROFIT-RECORD')
+      const layers_profit_Record = JSON.parse(layers_profit_storeage) || []
+      //2.1. Libra 数量
+      // 1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
+      var libra_amount = 0, btc_amount_two = 0,eth_amount_two = 0,
+      usdt_amount_two = 0,bnb_amount_two = 0,fil_amount_two = 0;
+      for(let i = 0,len = layers_two_Record.length; i < len; i++){
+        let item = layers_two_Record[i]
+        if(item.currency1Index == 1){
+           libra_amount += Number(item.useableAmount1) / Wallet.Precisions()
+        }
+        if(item.currency2Index == 2){
+          btc_amount_two += Number(item.useableAmount2) / Wallet.Precisions()
+        }
+        if(item.currency2Index == 3){
+          eth_amount_two += Number(item.useableAmount2) / Wallet.Precisions()
+        }
+        if(item.currency2Index == 4){
+          usdt_amount_two += Number(item.useableAmount2) / Wallet.Precisions()
+        }
+        if(item.currency2Index == 5){
+          bnb_amount_two += Number(item.useableAmount2) / Wallet.Precisions()
+        }
+        if(item.currency2Index == 6){
+          fil_amount_two += Number(item.useableAmount2) / Wallet.Precisions()
+        }
+      }
+
+      //1.2. BTC 数量
+      var btc_amount_one = 0, eth_amount_one = 0, usdt_amount_one = 0,
+      bnb_amount_one = 0, fil_amount_one = 0;
+      for(let i = 0, len = layers_one_Record.length; i < len; i++){
+        let item = layers_one_Record[i]
+        if(item.currencyIndex == 1){
+           libra_amount += Number(item.useableAmount) / Wallet.Precisions()
+        }
+        if(item.currencyIndex == 2){
+          btc_amount_one += Number(item.useableAmount) / Wallet.Precisions()
+        }
+        if(item.currencyIndex == 3){
+          eth_amount_one += Number(item.useableAmount) / Wallet.Precisions()
+        }
+        if(item.currencyIndex == 4){
+          usdt_amount_one += Number(item.useableAmount) / Wallet.Precisions()
+        }
+        if(item.currencyIndex == 5){
+          bnb_amount_one += Number(item.useableAmount) / Wallet.Precisions()
+        }
+        if(item.currencyIndex == 6){
+          fil_amount_one += Number(item.useableAmount) / Wallet.Precisions()
+        }
+      }
       
+      // 2 + 1
+      let btc_amount = btc_amount_two + btc_amount_one;
+      let eth_amount = eth_amount_two + eth_amount_one;
+      let usdt_amount = usdt_amount_two + usdt_amount_one;
+      let bnb_amount = bnb_amount_two + bnb_amount_one;
+      let fil_amount = fil_amount_two + fil_amount_one;   
+
+      //3. Libra 收益数量
+      let libra_profit_amount = layers_profit_Record.reduce((prev,item) => {
+                                                return prev + Number(item.amount)/Wallet.Precisions()
+                                            },0)
+      console.log({libra_amount,btc_amount,eth_amount,usdt_amount,bnb_amount,fil_amount,libra_profit_amount})
+      if(_self.coins[1].price < 3){
+         const res = await _self.getCoinsPrice();
+         //更新价格
+         res.forEach((ele,index) => {
+           _self.coins[index].price = (+ele || 1)
+         })
+      }
       //团队业绩
-      this.team.teamProformance = libra_amount * this.coins[0].price +
-                                  btc_amount * this.coins[1].price + 
-                                  eth_amount * this.coins[2].price +
-                                  usdt_amount * this.coins[3].price +
-                                  bnb_amount * this.coins[4].price +
-                                  fil_amount * this.coins[5].price;
+      _self.team.teamProformance = libra_amount * _self.coins[0].price +
+                                  btc_amount * _self.coins[1].price + 
+                                  eth_amount * _self.coins[2].price +
+                                  usdt_amount * _self.coins[3].price +
+                                  bnb_amount * _self.coins[4].price +
+                                  fil_amount * _self.coins[5].price;
 
       //团队收益
-      this.team.teamProfit = libra_profit_amount * this.coins[0].price;  
+      _self.team.teamProfit = libra_profit_amount * _self.coins[0].price;  
       
       //根据业绩判断信息
-      this.checkTeam()
+      _self.checkTeam()
       
     },
     checkTeam(){
@@ -240,7 +280,7 @@ export default {
     async getCoinsPrice(){
       let _self = this
       let promiseCoinRequestArray = this.coins.map(ele => {
-          new Promise((resolve,reject) => {
+          return new Promise((resolve,reject) => {
                getPrice({symbol:`${ele.coin}usdt`.toLowerCase()})
                .then((res) => {
                    let plc =  res.price
@@ -249,17 +289,12 @@ export default {
                .catch((err) => reject(err))
           })
       })
-      const res = await Promise.all(promiseCoinRequestArray)
-      //更新价格
-      res.forEach((value,index,array) => {
-        _self.coins[index].price = (+value || 1)
-      })
-      //更新team信息
-      _self.calculateTeamPerformance()
-      
+      return Promise.all(promiseCoinRequestArray)
     },
     async calculateTeamInfo(address,isTop) {
       let _self = this
+      //-1. 打印地址
+      console.log({'layer-show':this.layers,address})
       //0. 
       if(isTop){ //本人自己
         await _self.calculNodeInfo(address)
@@ -275,41 +310,55 @@ export default {
         if(!info_a || info_a.length == 0) return
 
         _self.layers++; //层数
-        console.table(info_a)
         //3.x
         for(let i = 0,len = info_a.length; i < len; i++){
           
           //3.1
-          setTimeout(async (i) =>{
+          setTimeout(async function(i){
               let item = info_a[i]
-              const item_address = item.userAddress
+              const item_address = item.downAddress
               const oneCount = await _self.checkHasMyLockData(item_address)
               if(oneCount > 0){
                 const oneRecord = await _self.getMyLockAmount(item_address,0,oneCount,oneCount)
-                _self.layers_one_Record.push(...oneRecord)
+                if(oneRecord && oneRecord.length > 0){
+                  const oneStr = localStorage.getItem('ONE-RECORD')
+                  const historyOneRecord = JSON.parse(oneStr) || []
+                  historyOneRecord.push(...oneRecord)
+                  localStorage.setItem('ONE-RECORD',JSON.stringify(historyOneRecord))
+                }
               }
               //3.2
               const twoCount = await _self.checkHasMyPairLockData(item_address)
               if(twoCount > 0){
                 const twoRecord = await _self.getMyPairLockAmount(item_address,0,twoCount,twoCount)
-                _self.layers_two_Record.push(...twoRecord)
+                if(twoRecord && twoRecord.length > 0){
+                    const twoStr = localStorage.getItem('TWO-RECORD')
+                    const historyTwoRecord = JSON.parse(twoStr) || []
+                    historyTwoRecord.push(...twoRecord)
+                    localStorage.setItem('TWO-RECORD',JSON.stringify(historyTwoRecord))
+                }
               }
               //3.3
               const profitCount = await _self.checkHasIncomeData(item_address)
               if(profitCount > 0){
                 const profitCount = await _self.getProfitRecord(item_address,0,profitCount,profitCount)
-                _self.layers_profit_Record.push(...profitCount)
+                if(profitCount && profitCount.length > 0){
+                    const profitStr = localStorage.getItem('PROFIT-RECORD')
+                    const historyProfitRecord = JSON.parse(profitStr) || []
+                    historyProfitRecord.push(...profitCount)
+                    localStorage.setItem('PROFIT-RECORD',JSON.stringify(historyProfitRecord))
+                }
               }
-          },0,i)
-          //3.4 --> 节点地址往下递归
-          _self.calculateTeamInfo(info_a.userAddress,false)
+              _self.calculateTeamPerformance()
+          }.bind(_self),0,i)
+          let nextLayer_whichAddress = info_a[i].downAddress
+          if(nextLayer_whichAddress && nextLayer_whichAddress.length > 0 && address.toLowerCase() !== nextLayer_whichAddress.toLowerCase()){
+            //3.4 --> 节点地址往下递归
+            _self.calculateTeamInfo(nextLayer_whichAddress,false)
+          }
         }
-
-        // console.table(_self.layers_one_Record)
-        console.table(_self.layers_two_Record)
-        // console.table(_self.layers_profit_Record)
+  
       }
-      _self.calculateTeamPerformance()
     },
     async calculNodeInfo(item_address){
       let _self = this
@@ -319,19 +368,34 @@ export default {
               const oneCount = await _self.checkHasMyLockData(item_address)
               if(oneCount > 0){
                 const oneRecord = await _self.getMyLockAmount(item_address,0,oneCount,oneCount)
-                _self.layers_one_Record.push(...oneRecord)
+                if(oneRecord && oneRecord.length > 0){
+                  const oneStr = localStorage.getItem('ONE-RECORD')
+                  const historyOneRecord = JSON.parse(oneStr) || []
+                  historyOneRecord.push(...oneRecord)
+                  localStorage.setItem('ONE-RECORD',JSON.stringify(historyOneRecord))
+                }
               }
               //3.2
               const twoCount = await _self.checkHasMyPairLockData(item_address)
               if(twoCount > 0){
                 const twoRecord = await _self.getMyPairLockAmount(item_address,0,twoCount,twoCount)
-                _self.layers_two_Record.push(...twoRecord)
+                if(twoRecord && twoRecord.length > 0){
+                    const twoStr = localStorage.getItem('TWO-RECORD')
+                    const historyTwoRecord = JSON.parse(twoStr) || []
+                    historyTwoRecord.push(...twoRecord)
+                    localStorage.setItem('TWO-RECORD',JSON.stringify(historyTwoRecord))
+                }
               }
               //3.3
               const profitCount = await _self.checkHasIncomeData(item_address)
               if(profitCount > 0){
                 const profitCount = await _self.getProfitRecord(item_address,0,profitCount,profitCount)
-                _self.layers_profit_Record.push(...profitCount)
+                if(profitCount && profitCount.length > 0){
+                    const profitStr = localStorage.getItem('PROFIT-RECORD')
+                    const historyProfitRecord = JSON.parse(profitStr) || []
+                    historyProfitRecord.push(...profitCount)
+                    localStorage.setItem('PROFIT-RECORD',JSON.stringify(historyProfitRecord))
+                }
               }
               resolve('success')
           },0)
@@ -471,7 +535,7 @@ export default {
     //1币记录
     async getMyLockAmount(address,start = 0, end = 1,oneSize){
       let _self = this
-      new Promise((resolve,reject) => {
+      return  new Promise((resolve,reject) => {
         try {
           let promiseMyLockArr = [],resultLockArr = [];
           let i = start;
@@ -494,9 +558,9 @@ export default {
 
           //全部请求,可能失败
           Promise.all(promiseMyLockArr).then((res) => {
+            
             resolve(res)
             //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
-            //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
             //这里过滤数据, 递归
             if(end < oneSize){
               _self.getMyLockAmount(address,end,end + 1,oneSize)
@@ -506,7 +570,6 @@ export default {
           .catch((err) => {
             reject(err)
           })
-
         } catch (error) {
             reject(error)
         }
@@ -591,7 +654,11 @@ export default {
       setTimeout(async ()=>{
         if(!_self.walletAddress) return
          await _self.calculateTeamInfo(_self.walletAddress,true);
-         await _self.getCoinsPrice();
+         const res = await _self.getCoinsPrice();
+        //更新价格
+        res.forEach((ele,index) => {
+          _self.coins[index].price = (+ele || 1)
+        })
       },);
 
       const res = await _self.getIncomeData()
@@ -607,6 +674,11 @@ export default {
           _self.team.todayProfit = (+todayDividend || 0) + (+todayShareAmount || 0) + (+todayGlobalAmount || 0)
       }
 
+  },
+  beforeDestroy(){
+    localStorage.removeItem('ONE-RECORD')
+    localStorage.removeItem('TWO-RECORD')
+    localStorage.removeItem('PROFIT-RECORD')
   },
   destroyed() {
   }
