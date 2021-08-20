@@ -23,7 +23,7 @@ const PrecisionsObj = [
 const tokensContractAddress = "0x5F8Bc83B6285A495c13347130352E9f20cebA63D";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链
-const _contractAddress = '0x7505b3ffbCCd012A71bb0e8e7f6Ed822D57c073f';
+const _contractAddress = '0xb61cd95E9e64A6233b78F7FaB158342070a83806';
 const _contractABI = [
     {
         "inputs": [],
@@ -76,59 +76,7 @@ const _contractABI = [
     },
     {
         "inputs": [],
-        "name": "bnbTakeoutAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "bnbTotalAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "btcPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "btcTakeoutAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "btcTotalAmount",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -254,32 +202,6 @@ const _contractABI = [
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "ethTakeoutAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "ethTotalAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "address",
@@ -365,32 +287,6 @@ const _contractABI = [
     {
         "inputs": [],
         "name": "filPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "filTakeoutAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "filTotalAmount",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -514,32 +410,6 @@ const _contractABI = [
     {
         "inputs": [],
         "name": "libraPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "libraTakeoutAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "libraTotalAmount",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -820,6 +690,25 @@ const _contractABI = [
     {
         "inputs": [
             {
+                "internalType": "uint8",
+                "name": "currencyId",
+                "type": "uint8"
+            }
+        ],
+        "name": "testTotalUseableByCurrency",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "uint256",
                 "name": "_a",
                 "type": "uint256"
@@ -900,32 +789,6 @@ const _contractABI = [
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "usdtTakeoutAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "usdtTotalAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -946,6 +809,145 @@ const _contractABI = [
     }
 ];
 
+const _recordContractAddress = '0xF708Eebd2Ef22214221513C082cdA792a612CA2f';
+const _recordContractABI=[
+    {
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "currencyIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "saveDepositOneRecord",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "amount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currencyIndex2",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "name": "saveDepositTwoRecord",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currencyIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "fee",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+            }
+        ],
+        "name": "saveTakeoutOneRecord",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "fee1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currencyIndex2",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "fee2",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+            }
+        ],
+        "name": "saveTakeoutTwoRecord",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "currencyId",
+                "type": "uint8"
+            }
+        ],
+        "name": "totalUseableByCurrency",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+];
 /////////////////////////////////////////////////////////////////////////////本地测试 - start
 // const btcContractAddress = '0xa7f0B0DbaBEc4b6C412b6f92343Fb68b5DF35f6C';
 // const ethContractAddress = '0xc256A3A6Af4561bCBc94678a1f00E5c24b0f50f0';
@@ -3017,52 +3019,6 @@ function sendTransfer(account, data, value, callback, errorCallBack) {
     });
 }
 
-/***
- * 累计存入数量(包括已经取出的)
- * @param currency
- * @param callback
- */
-function totalDepositBalance(currency,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    currency=currency.toUpperCase();
-    if (currency=="LIBRA"){
-        _contract.methods.libraTotalAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
-    }else if (currency=="BTC"){
-        _contract.methods.btcTotalAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
-    }else if (currency=="ETH"){
-        _contract.methods.ethTotalAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
-    }else if (currency=="USDT"){
-        _contract.methods.usdtTotalAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
-    }else if (currency=="BNB"){
-        _contract.methods.bnbTotalAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
-    }else if (currency=="FIL"){
-        _contract.methods.filTotalAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
-    }
-}
-
-/***
- * 累计取出数量
- * @param currency
- * @param callback
- */
-function totalTakeoutAmount(currency,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    currency=currency.toUpperCase();
-    if (currency=="LIBRA"){
-        _contract.methods.libraTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
-    }else if (currency=="BTC"){
-        _contract.methods.btcTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
-    }else if (currency=="ETH"){
-        _contract.methods.ethTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
-    }else if (currency=="USDT"){
-        _contract.methods.usdtTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err);  });
-    }else if (currency=="BNB"){
-        _contract.methods.bnbTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
-    }else if (currency=="FIL"){
-        _contract.methods.filTakeoutAmount().call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
-    }
-}
-
 /**
  * 1币种存入记录
  */
@@ -3090,6 +3046,37 @@ function twoDepositOrder(address,index,callback,errorCallback) {
         .catch((err) => {
             errorCallback(err);
         });
+}
+
+/***
+ * 币种锁仓金额(单币种区+双币种区)
+ * @param currency
+ * @param callback
+ */
+function totalUseableBalance(currency,callback,errorCallback) {
+    const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
+    currency=currency.toUpperCase();
+    _contract.methods.totalUseableByCurrency(getCurrencyIndex(currency)).call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
+}
+/***
+ * 币种锁仓金额(单币种区)
+ * @param currency
+ * @param callback
+ */
+function oneUseableBalance(currency,callback,errorCallback) {
+    const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
+    currency=currency.toUpperCase();
+    _contract.methods.totalOneUseableByCurrency(getCurrencyIndex(currency)).call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
+}
+/***
+ * 币种锁仓金额(双币种区)
+ * @param currency
+ * @param callback
+ */
+function twoUseableBalance(currency,callback,errorCallback) {
+    const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
+    currency=currency.toUpperCase();
+    _contract.methods.totalTwoUseableByCurrency(getCurrencyIndex(currency)).call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
 }
 
 /***
@@ -3316,8 +3303,6 @@ export default {
     takeoutOne,
     takeoutTwo,
     queryAllowance,
-    totalDepositBalance,
-    totalTakeoutAmount,
     balanceOf,
     oneDepositOrder,
     twoDepositOrder,
@@ -3334,4 +3319,7 @@ export default {
     queryExchangeSize,
     queryIncomeSize,
     queryDepositUserSize,
+    totalUseableBalance,
+    oneUseableBalance,
+    twoUseableBalance,
 }
