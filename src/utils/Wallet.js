@@ -23,7 +23,7 @@ const PrecisionsObj = [
 const tokensContractAddress = "0x5F8Bc83B6285A495c13347130352E9f20cebA63D";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链
-const _contractAddress = '0xDAD0Cf7527A2D26c63495c1a7525b1883b90aa3A';
+const _contractAddress = '0x7505b3ffbCCd012A71bb0e8e7f6Ed822D57c073f';
 const _contractABI = [
     {
         "inputs": [],
@@ -63,7 +63,7 @@ const _contractABI = [
     },
     {
         "inputs": [],
-        "name": "bnbCurrPrice",
+        "name": "bnbPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -102,7 +102,7 @@ const _contractABI = [
     },
     {
         "inputs": [],
-        "name": "btcCurrPrice",
+        "name": "btcPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -156,12 +156,12 @@ const _contractABI = [
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_upperAddress",
+                "name": "_upper",
                 "type": "address"
             },
             {
                 "internalType": "uint8",
-                "name": "_currencyIndex",
+                "name": "_cIndex",
                 "type": "uint8"
             },
             {
@@ -179,7 +179,7 @@ const _contractABI = [
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_upperAddress",
+                "name": "_upper",
                 "type": "address"
             },
             {
@@ -189,32 +189,13 @@ const _contractABI = [
             },
             {
                 "internalType": "uint8",
-                "name": "_currency2Index",
+                "name": "_c2Index",
                 "type": "uint8"
             }
         ],
         "name": "depositTwo",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "depositUserList",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -231,8 +212,37 @@ const _contractABI = [
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "downsMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "downAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
-        "name": "ethCurrPrice",
+        "name": "ethPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -273,7 +283,7 @@ const _contractABI = [
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_upperAddress",
+                "name": "_upper",
                 "type": "address"
             },
             {
@@ -354,7 +364,7 @@ const _contractABI = [
     },
     {
         "inputs": [],
-        "name": "filCurrPrice",
+        "name": "filPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -755,35 +765,6 @@ const _contractABI = [
     {
         "inputs": [
             {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "subordinateAddressMap",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "downAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "userAddress",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "uint256",
                 "name": "amount",
                 "type": "uint256"
@@ -939,6 +920,25 @@ const _contractABI = [
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "users",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
             }
         ],
         "stateMutability": "view",
