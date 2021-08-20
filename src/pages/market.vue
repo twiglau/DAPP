@@ -69,6 +69,7 @@
 </template>
 
 <script>
+import {getPrice} from '@/utils/api';
 import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
 export default {
@@ -237,6 +238,7 @@ export default {
       }
     },
     async getCoinsPrice(){
+      let _self = this
       let promiseCoinRequestArray = this.coins.map(ele => {
           new Promise((resolve,reject) => {
                getPrice({symbol:`${ele.coin}usdt`.toLowerCase()})
@@ -247,10 +249,14 @@ export default {
                .catch((err) => reject(err))
           })
       })
-      Promise.all(promiseCoinRequestArray)
-      .then((result) => {
-        
+      const res = await Promise.all(promiseCoinRequestArray)
+      //更新价格
+      res.forEach((value,index,array) => {
+        _self.coins[index].price = (+value || 1)
       })
+      //更新team信息
+      _self.calculateTeamPerformance()
+      
     },
     async calculateTeamInfo(address) {
       let _self = this
@@ -541,6 +547,7 @@ export default {
       setTimeout(async ()=>{
         if(!_self.walletAddress) return
          await _self.calculateTeamInfo(_self.walletAddress);
+         await _self.getCoinsPrice();
       },);
 
       const res = await _self.getIncomeData()
