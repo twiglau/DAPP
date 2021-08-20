@@ -86,7 +86,7 @@ export default {
       team:{
         totalProfit:0,
         todayProfit:0,
-        teamPeople:1,
+        teamPeople:0,
         teamProformance:0,
         needTeamProfor:0,
         teamProfit:0,
@@ -97,13 +97,13 @@ export default {
       },
       layers:0,
       teamLevels:[
-        {level:'LV1',value:Math.pow(10,6),ratio:'2%'},
-        {level:'LV2',value:13*Math.pow(10,6),ratio:'3%'},
-        {level:'LV3',value:19*Math.pow(10,6),ratio:'4%'},
-        {level:'LV4',value:27*Math.pow(10,6),ratio:'5%'},
-        {level:'LV5',value:81*Math.pow(10,6),ratio:'6%'},
-        {level:'LV6',value:243*Math.pow(10,6),ratio:'7%'},
-        {level:'LV7',value:729*Math.pow(10,6),ratio:'8%'},
+        {level:'LV1',value:Math.pow(10,5),ratio:'2%'},
+        {level:'LV2',value:13*Math.pow(10,5),ratio:'3%'},
+        {level:'LV3',value:19*Math.pow(10,5),ratio:'4%'},
+        {level:'LV4',value:27*Math.pow(10,5),ratio:'5%'},
+        {level:'LV5',value:81*Math.pow(10,5),ratio:'6%'},
+        {level:'LV6',value:243*Math.pow(10,5),ratio:'7%'},
+        {level:'LV7',value:729*Math.pow(10,5),ratio:'8%'},
       ],
       coins:[
         {key:1,coin:'Libra',price:1},
@@ -297,7 +297,7 @@ export default {
       console.log({'layer-show':this.layers,address})
       //0. 
       if(isTop){ //本人自己
-        await _self.calculNodeInfo(address)
+        // await _self.calculNodeInfo(address)
       }
       //1. 获得 address 下直接数量
       const total_a = await _self.checkNodeCount(address)
