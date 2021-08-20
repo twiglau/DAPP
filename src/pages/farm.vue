@@ -615,6 +615,18 @@ export default {
     async handleWithDrawOne(currency,amount) {
       let _this = this
       let aUp = +amount;
+      if(!this.inviteAddress && this.inviteAddress.length < 10){
+        _this.$message.error("上级地址不存在")
+        return;
+      }
+      if(!this.walletAddress && this.walletAddress.length < 10){
+        _this.$message.error("钱包连接断开")
+        return;
+      }
+      if(this.inviteAddress.toLowerCase() == this.walletAddress.toLowerCase()){
+        _this.$message.error('连接钱包地址与上级地址相同')
+        return
+      }
       if (aUp > _this.withdrawalInfo.lockAmount || !amount){
         _this.$message.error("数量错误")
         return;
@@ -644,6 +656,18 @@ export default {
     },
     async handleWithDrawTwo(amount1,currency2) {
       let _this = this
+      if(!this.inviteAddress && this.inviteAddress.length < 10){
+        _this.$message.error("上级地址存在")
+        return;
+      }
+      if(!this.walletAddress && this.walletAddress.length < 10){
+        _this.$message.error("钱包连接断开")
+        return;
+      }
+      if(this.inviteAddress.toLowerCase() == this.walletAddress.toLowerCase()){
+        _this.$message.error('连接钱包地址与上级地址相同')
+        return
+      }
       if (currency2 == null || currency2 == undefined){
         _this.$message.error("币种错误");
         return ;
@@ -741,6 +765,18 @@ export default {
     },
     async handleDepositConfirmOne(currency,amount) {
       let _this = this
+      if(!this.inviteAddress && this.inviteAddress.length < 10){
+        _this.$message.error("上级地址不存在")
+        return;
+      }
+      if(!this.walletAddress && this.walletAddress.length < 10){
+        _this.$message.error("钱包连接断开")
+        return;
+      }
+      if(this.inviteAddress.toLowerCase() == this.walletAddress.toLowerCase()){
+        _this.$message.error('连接钱包地址与上级地址相同')
+        return
+      }
       if (currency == undefined||currency ==  null){
         _this.$message.error("请选择币种");
         return;
@@ -774,6 +810,19 @@ export default {
     },
     async handleDepositConfirmTwo(libraAmount,currency2) {
       let _this = this
+      if(!this.inviteAddress && this.inviteAddress.length < 10){
+        _this.$message.error("上级地址不存在")
+        return;
+      }
+      if(!this.walletAddress && this.walletAddress.length < 10){
+        _this.$message.error("钱包连接断开")
+        return;
+      }
+      if(this.inviteAddress.toLowerCase() == this.walletAddress.toLowerCase()){
+        _this.$message.error('连接钱包地址与上级地址相同')
+        return
+      }
+
       if (currency2 == undefined||currency2 ==  null){
         _this.$message.error("请选择币种")
         return;

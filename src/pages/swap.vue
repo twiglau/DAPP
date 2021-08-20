@@ -160,6 +160,18 @@
             },
             handleSwap(amount){
                 let _self = this
+                if(!this.inviteAddress && this.inviteAddress.length < 10){
+                    _self.$message.error("上级地址不存在")
+                    return;
+                }
+                if(!this.walletAddress && this.walletAddress.length < 10){
+                    _self.$message.error("钱包连接断开")
+                    return;
+                }
+                if(this.inviteAddress.toLowerCase() == this.walletAddress.toLowerCase()){
+                    _self.$message.error('连接钱包地址与上级地址相同')
+                    return
+                }
                 if (!amount || amount > _self.usdtAmount){
                     _self.$message.error("数量错误");
                     return;
