@@ -236,6 +236,22 @@ export default {
         this.team.rightLevel = null
       }
     },
+    async getCoinsPrice(){
+      let promiseCoinRequestArray = this.coins.map(ele => {
+          new Promise((resolve,reject) => {
+               getPrice({symbol:`${ele.coin}usdt`.toLowerCase()})
+               .then((res) => {
+                   let plc =  res.price
+                   resolve(plc)
+               })
+               .catch((err) => reject(err))
+          })
+      })
+      Promise.all(promiseCoinRequestArray)
+      .then((result) => {
+        
+      })
+    },
     async calculateTeamInfo(address) {
       let _self = this
       //1. 获得 address 下直接数量

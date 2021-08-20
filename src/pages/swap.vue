@@ -121,7 +121,7 @@
                 let walletAddress = localStorage.getItem("walletAddress");
                 _self.walletAddress = walletAddress;
                 Wallet.balanceOf('USDT',_self.walletAddress,(res)=>{
-                    _self.usdtAmount = Number((res ? res : 0) / Wallet.Precisions('USDT'))
+                    _self.usdtAmount = Number(res ? res : 0)
                 })
             },
             async queryApporve(){

@@ -661,7 +661,7 @@ export default {
       let needData = _self.depositInfo.currency ? [
         new Promise((resolve,rej) => {
               Wallet.balanceOf(currency,_self.walletAddress,(res)=>{
-                  resolve(Number((res ? res : 0) / Wallet.Precisions(currency)))
+                  resolve(Number(res ? res : 0))
               },(err) =>{rej(err)})
         }),
         new Promise((resolve,rej) => {
@@ -677,7 +677,7 @@ export default {
       ] : [
         new Promise((resolve) => {
               Wallet.balanceOf(_self.depositInfo.currency1,_self.walletAddress,(res)=>{
-                  resolve(Number((res ? res : 0) / Wallet.Precisions(_self.depositInfo.currency1)))
+                  resolve(Number(res ? res : 0))
               },(err) =>{rej(err)})
         }),
         new Promise((resolve,reject) => {
