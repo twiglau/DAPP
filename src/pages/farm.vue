@@ -958,20 +958,28 @@ export default {
 
                 Promise.all([
                   new Promise((res1,rej) => {
-                    Wallet.twoUseableBalance(_self.twoTokens[i].currency2,(in_a)=>{
-                      let val = in_a
+                    Wallet.twoUseableBalance1(_self.twoTokens[i].currency2,(in_a)=>{
+                      let val = +in_a
+                      if(val > 0) val = Number(in_a / Wallet.Precisions())
+                      if(val < -0.01) val = 0
+                      res1(val)
+                    },(err) =>{rej(err)})
+                  }),
+                  new Promise((res1,rej) => {
+                    Wallet.twoUseableBalance2(_self.twoTokens[i].currency2,(in_a)=>{
+                      let val = +in_a
+                      if(val > 0) val = Number(in_a / Wallet.Precisions())
+                      if(val < -0.01) val = 0
                       res1(val)
                     },(err) =>{rej(err)})
                   }),
                   new Promise((res5,rej) => {
-
                       Wallet.queryAllowance(_self.walletAddress,_self.twoTokens[i].currency1,(res)=>{
                         if(res && res > 0) {
                             res5(true)
                         }else {
                             res5(false)
                         }
-
                       },(err) =>{rej(err)})
                   }),
                   new Promise((res6,rej) => {
@@ -985,9 +993,9 @@ export default {
                   })
                 ])
                 .then((in_out) => {
-                    _self.twoTokens[i].totalLockAmount1 = Number(in_out[0].libraAmount) / Wallet.Precisions()
-                    _self.twoTokens[i].totalLockAmount2 = Number(in_out[0].amount2) / Wallet.Precisions() 
-                    _self.twoTokens[i].isApproved = in_out[1]&&in_out[2] ? true : false
+                    _self.twoTokens[i].totalLockAmount1 = +in_out[0]
+                    _self.twoTokens[i].totalLockAmount2 = +in_out[1] 
+                    _self.twoTokens[i].isApproved = in_out[2]&&in_out[3] ? true : false
                     _self.twoTokens[i].isLoading = false
                     res('success')
                 })
@@ -1023,9 +1031,9 @@ export default {
                 Promise.all([
                   new Promise((res1,rej) => {
                     Wallet.oneUseableBalance(_self.oneTokens[i].currency,(in_a)=>{
-                      let val = in_a
-                      in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.oneTokens[i].currency)))
-                      val < -0.01 && (val = 0)
+                      let val = +in_a
+                      if(val > 0) val = Number(in_a / Wallet.Precisions())
+                      if(val < -0.01) val = 0
                       res1(val)
                     },(err) =>{rej(err)})
                   }),

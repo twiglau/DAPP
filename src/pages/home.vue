@@ -259,16 +259,16 @@ export default {
                 let requests = i = 0 ? [
                   new Promise((res1,rej) => {
                     Wallet.totalUseableBalance(_self.twoTokens[i].currency1,(in_a)=>{
-                      let val = in_a
-                      in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.oneTokens[i].currency)))
+                      let val = +in_a
+                      in_a > 0 && (val = Number(in_a / Wallet.Precisions()))
                       val < -0.01 && (val = 0)
                       res1(val)
                     },(err) =>{rej(err)})
                   }),
                   new Promise((res1,rej) => {
                     Wallet.totalUseableBalance(_self.twoTokens[i].currency2,(in_a)=>{
-                      let val = in_a
-                      in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.oneTokens[i].currency)))
+                      let val = +in_a
+                      in_a > 0 && (val = Number(in_a / Wallet.Precisions()))
                       val < -0.01 && (val = 0)
                       res1(val)
                     },(err) =>{rej(err)})
@@ -277,8 +277,8 @@ export default {
                 ] : [
                   new Promise((res1,rej) => {
                     Wallet.totalUseableBalance(_self.twoTokens[i].currency2,(in_a)=>{
-                      let val = in_a
-                      in_a > 0 && (val = Number(in_a / Wallet.Precisions(_self.oneTokens[i].currency)))
+                      let val = +in_a
+                      in_a > 0 && (val = Number(in_a / Wallet.Precisions()))
                       val < -0.01 && (val = 0)
                       res1(val)
                     },(err) =>{rej(err)})
@@ -309,7 +309,7 @@ export default {
       })
     },
     async getLockAmount(){
-     const locks = await  _self.getPlatformLockAmount()
+     const locks = await  this.getPlatformLockAmount()
      if(locks){
        this.calculateTeamPerformance()
      }
