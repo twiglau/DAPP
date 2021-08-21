@@ -7,8 +7,9 @@
             <div><span><countTo :endVal='totalProfit' :duration='3000' :decimals="2" /></span><span>LBR</span></div>
             <div>≈<countTo :endVal='totalValue' :duration='3000' :decimals="2" prefit="$" /></div>
           </div>
-          <div class="detail-c" @click="detailClick('/income-detail')">
-            <div class="detail"><span>{{$t('l.t_de')}}</span><svg-icon icon-class="enter_icon"></svg-icon></div>
+          <div class="detail-c">
+            <div class="detail" @click="detailClick('/income-detail')"><span>{{$t('l.t_de')}}</span><svg-icon icon-class="enter_icon"></svg-icon></div>
+            <a-button class="g-button" @click="isModalShowProfit=true">{{$t("l.claim")}}</a-button>
           </div>
       </div>
       <div class="sepertor-line"></div>
@@ -19,7 +20,6 @@
         <div class="invite-detail">
           <div class="invite-link">{{currentHref+'#/mine?address='+walletAddress}}</div>
           <div @click="handleCopyLink"><svg-icon icon-class="Button"></svg-icon></div>
-          
         </div>
       </div>
     </div>
@@ -38,6 +38,32 @@
        </div>
     </div>
     <svg-icon class="bottom-logo" icon-class="logo-gray"></svg-icon>
+
+      <!-- 提取收益 -->
+      <a-modal v-model="isModalShowProfit" :footer="null" :width="!$store.state.accounts.isMobile ? '600px' : '90%'" @cancel="handleMCancel" :centered="true">
+        <div class="pools__dialog-inner pools__dialog-withdraw">
+          <div class="pools__dialog__header">{{$t('l.withdrawal')}}</div>
+          <ul class="pools__rows">
+            <li class="pools__row-1">
+              <div class="pools__logo-name">
+                <svg-icon class="pools__coin-logo" icon-class="Libra_coin" />
+                <div class="pools__coin-name">Libra</div>
+              </div>
+              <div class="pools__info"></div>
+            </li>
+            <li class="pools__dialog__withdraw-field">
+              <span>{{$t('l.sygz')}}(Libra)</span><span><countTo :endVal='totalProfit' :duration='1000' :decimals="4"></countTo></span>
+            </li>
+            <li class="pools__dialog__input">
+              <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
+              <button @click="iptValue1 = totalProfit" class="g-button pools__dialog__deposit-all  g-button--normal">{{$t('l.withdrawall')}}</button>
+            </li>
+            <li>
+              <a-button :loading="pLoading"  @click="handleProfitAction" class="g-button" style="margin-left:auto;margin-top:20px;">{{$t('l.withdrawal')}}</a-button>
+            </li>
+          </ul>
+        </div>
+      </a-modal>
   </div>
 </template>
 
@@ -57,6 +83,9 @@ export default {
       inviteAddress:'',
       totalProfit:0,
       price:0,
+      pLoading:false,
+      isModalShowProfit:false,
+      iptValue1:null,
     }
   },
   computed: {
@@ -67,6 +96,53 @@ export default {
   methods: {
     detailClick(path){
       this.$router.push({path:path,query:{}})
+    },
+    input_num(index) {
+      this['iptValue' + index] = this['iptValue' + index].replace(/[^\d.]/g, "")
+      this['iptValue' + index] = this['iptValue' + index].replace(/\.{4,}/g, ".")
+      this['iptValue' + index] = this['iptValue' + index].replace(/^\./g, "")
+      this['iptValue' + index] = this['iptValue' + index].replace(".", "$#$").replace(/\./g, "").replace("$#$", ".")
+      this['iptValue' + index] = this['iptValue' + index].replace(/^(-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3')
+    },
+    handleMCancel() {
+      this.iptValue1 = undefined
+      this.isModalShowProfit = false
+    },
+    handleProfitAction(){
+       const {totalProfit,walletAddress,iptValue1} = this
+       let _self = this
+       if(!totalProfit || totalProfit < 0.00001){
+         this.$message.error('当前您暂无收益')
+         return
+       }
+       if(!walletAddress || walletAddress.length < 10){
+         this.$message.error("未连接钱包")
+         return
+       }
+       if(!iptValue1 || iptValue1 > totalProfit){
+         this.$message.error('输入数量错误')
+         return
+       }
+       console.log({walletAddress})
+       _self.pLoading = true
+       Wallet.takeoutIncome(walletAddress,iptValue1,(res) => {
+         if(res){
+           _self.handleMCancel()
+           _self.getIncomeData()
+           _self.$success({
+             title:_self.$t('l.claim'),
+             content:_self.$t('.ok_tips_withdraw')
+           })
+         }
+       },(err)=>{
+         console.log({err})
+         _self.pLoading = false
+         _self.$error({
+           title:_self.$t('l.claim'),
+           content:err || '错误'
+         })
+       })
+
     },
     async getPairPrice(){
         let _self = this
@@ -79,10 +155,10 @@ export default {
     async getIncomeData(){
       let _self = this
       _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      new Promise((resolve) => {
+      return new Promise((resolve,reject) => {
           Wallet.incomeAccount(_self.walletAddress,(res)=>{
              resolve(res)
-          })
+          },(err) => {reject(err)})
       })
     },
     handleCopyLink() {
@@ -115,7 +191,7 @@ export default {
           const {
             total  //总收益
                 } = res
-          _self.totalProfit = total || 0
+          _self.totalProfit = Number(total)/Wallet.Precisions() || 0
       }
   },
   destroyed() {
@@ -124,6 +200,222 @@ export default {
 </script>
 
 <style scoped>
+
+  .pools__dialog-inner {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+  }
+  .pools__dialog__header {
+    font-family: MicrosoftYaHei-Bold;
+    font-size: 16px;
+    color: #131d32;
+    line-height: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .pools__dialog__header__close {
+    right: -26px;
+    top: -23px;
+    width: 48px;
+    height: 48px;
+    background-size: 16px 16px;
+  }
+  .pools__dialog__fields li {
+    margin-bottom: 13px;
+  }
+  .pools__income-field {
+    padding: 10px 10px;
+  }
+  .g-button {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 86px;
+    height: 36px;
+    outline: none;
+    border: none;
+    background-color: #43318C;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .g-button:hover {
+    background-color: hsl(252, 74%, 21%);
+  }
+  .pools__box {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 28px 28px;
+    border-radius: 16px;
+    background-color: hsla(0,0%,100%,.7);
+    border: 1px solid #fff;
+    position: relative;
+  }
+  .pools__rows {
+    position: relative;
+    z-index: 1;
+    list-style: none;
+  }
+  .pools__rows>li {
+    margin-bottom: 16px;
+  }
+  .pools__rows>li:last-child {
+    margin-bottom: 0;
+  }
+  .pools__row, .pools__row-1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .pools__row_a {
+    position: relative;
+  }
+  .pools__row_a > .down-arrow {
+    width: 32px;
+    height:32px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%);
+  }
+  .pools__row {
+    flex-wrap: wrap;
+  }
+  .pools__logo-name {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  .pools__coin-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+  }
+  .logo_lp_2 {
+    position: absolute;
+    top: 0;left: 10%;
+  }
+  .pools__coin-name {
+    margin-left: 12px;
+    font-size: 24px;
+    color: #131d32;
+    font-weight: 700;
+  }
+  .name_lp_2 {
+    margin-left: 40px;
+  }
+  .pools__info, .pools__labe-field {
+    color: #8391a8;
+    display: flex;
+    align-items: center;
+  }
+  .pools__info {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    font-family: MicrosoftYaHei;
+    margin-top: 4px;
+  }
+  .pools__apy {
+    align-items: flex-end;
+  }
+  .pools__info, .pools__labe-field {
+    color: #8391a8;
+    display: flex;
+    align-items: center;
+  }
+  .pools__labe-field, .ques__labe-field {
+    color: #8391a8;
+    display: flex;
+    align-items: center;
+  }
+  .pools__apy-value {
+    font-size: 24px;
+    color: #19A569;
+    font-weight: 700;
+    font-family: DINPro-Black;
+  }
+  .pools__label-value {
+    font-size: 14px;
+    color: #8391a8;
+    font-weight: bolder;
+    margin-left: auto;
+  }
+  .pools__label-value--black {
+    color: #131d32;
+  }
+  .pools__label-value--gray {
+    color: #9C9C9C;
+    font-size: 12px;
+  }
+  .pools__button-group {
+    display: flex;
+    justify-content: space-between;
+  }
+  .pools__button-group .g-button {
+    width: 46%;
+  }
+
+  .pools__dialog__withdraw-field span:first-child {
+    color: #8391a8;
+  }
+  .pools__dialog__withdraw-field span:last-child {
+    font-size: 16px;
+    color: #131d32;
+    float: right;
+  }
+  .pools__dialog__input input {
+    box-sizing: border-box;
+    width: 100%;
+    background: #f6f8fb;
+    border-radius: 16px;
+    border: none;
+    font-size: 16px;
+    padding: 15px 100px 15px 30px;
+    color: #131d32;
+  }
+  .g-button:disabled {
+    opacity: .5;
+  }
+  .pools__dialog__input {
+    position: relative;
+  }
+  .pools__dialog__deposit-all {
+    position: absolute;
+    right: 20px;
+    top: 0px;
+    background: #e0eafa;
+    border-radius: 16px;
+    border: none;
+    width: auto;
+    padding: 0 10px;
+    height: 32px;
+    font-size: 14px;
+    color: #43318C;
+  }
+  .pools__income-text {
+    font-family: DINPro-Bold;
+    font-size: 16px;
+    color: #131d32;
+    letter-spacing: 0;
+    line-height: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .g-button--normal {
+    background-image: none;
+    background-color: #fff;
+    color: #43318C;
+    border: 1px solid #43318C;
+  }
+  .g-button--normal:hover{
+    background-color: #1d0c63;
+    color:#fff;
+    border:none
+  }
 .income-info {
   padding: 20px 20px;
   display: flex;
@@ -146,11 +438,13 @@ export default {
 .detail-c {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
+  text-align: right;
 
 }
 .detail {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   color: #3C3C3C;
   font-size: 14px;

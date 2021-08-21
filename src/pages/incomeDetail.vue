@@ -68,7 +68,7 @@ export default {
     },
     async checkHasIncomeData(){
       let _self = this
-      _self.walletAddress = "0x9eCe238B023BDd92BE1F8596dCC2c666529153f2" //localStorage.getItem("walletAddress") || '';
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
       Wallet.queryIncomeSize(_self.walletAddress,(res) =>{
           console.log({address:_self.walletAddress,count:res})
           _self.dataSize = +res || 0
@@ -79,7 +79,7 @@ export default {
     },
     async getProfitRecord(start = 0, end = 1){
       let _self = this
-      _self.walletAddress = "0x9eCe238B023BDd92BE1F8596dCC2c666529153f2" // localStorage.getItem("walletAddress") || '';
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
       new Promise((resolve,reject) => {
         try {
           let promiseRecordArr = [],resultRecordArr = [];
