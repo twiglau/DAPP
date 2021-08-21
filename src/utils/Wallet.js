@@ -3699,7 +3699,7 @@ function incomeAccount(address,callback,errorCallback) {
  */
 function incomeRecord(address,index,callback,errorCallback) {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.twoOrderMap(address,index)
+    _contract.methods.incomeRecord(address,index)
         .call()
         .then((res) => {
             console.log({'profits':res})
