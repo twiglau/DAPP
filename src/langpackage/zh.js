@@ -181,4 +181,14 @@ export const l = {
   Toggle_Audio_Mode:'切换音频模式',
   swap_on:'开',
   swap_off:'关',
+
+  l_copy:'复制成功',
+  l_copyf:'复制失败,请重试！',
+  l_upper:'上级地址不存在',
+  l_addrror:'连接钱包地址与上级地址相同',
+  l_numerror:'输入数量错误',
+  l_stockvalue:'存入存入价值需大于100美金',
+
+  l_noprofit:'当前您暂无可提收益',
+  l_unprofit:'可提',
 }

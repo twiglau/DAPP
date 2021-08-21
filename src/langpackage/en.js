@@ -179,4 +179,15 @@ export const l = {
   Toggle_Audio_Mode:'Toggle Audio Mode',
   swap_on:'On',
   swap_off:'Off',
+
+
+
+  l_copy:'Copy successfully',
+  l_copyf:'Copy failed, please try again!',
+  l_upper:'The parent address does not exist',
+  l_addrror:'The connected wallet address is the same as the upper-level address',
+  l_numerror:'input num error',
+  l_stockvalue:'Deposit deposit value must be greater than $100',
+  l_noprofit:'Currently you have no income to withdraw',
+  l_unprofit:'Income balance',
 }

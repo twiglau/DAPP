@@ -448,10 +448,11 @@ export default {
         this.$message.error(this.$t('l.error_tips_unconnect'))
         return
       }
+
       this.$copyText(this.currentHref+'#/farm?address='+this.walletAddress).then( () => {
-        this.$message.success('复制成功')
+        this.$message.success(this.$t('l.l_copy'))
       }, function () {
-        this.$message.error('复制失败,请重试！')
+        this.$message.error(this.$t('l.l_copyf'))
       })
     },
     handleMCancel() {
@@ -616,19 +617,19 @@ export default {
       let _this = this
       let aUp = +amount;
       if(!this.inviteAddress && this.inviteAddress.length < 10){
-        _this.$message.error("上级地址不存在")
+        _this.$message.error(_this.$t('l.l_upper'))
         return;
       }
       if(!this.walletAddress && this.walletAddress.length < 10){
-        _this.$message.error("钱包连接断开")
+        _this.$message.error(_this.$t('l.error_tips_unconnect'))
         return;
       }
       if(this.inviteAddress.toLowerCase() == this.walletAddress.toLowerCase()){
-        _this.$message.error('连接钱包地址与上级地址相同')
+        _this.$message.error(_this.$t('l.l_addrror'))
         return
       }
       if (aUp > _this.withdrawalInfo.lockAmount || !amount){
-        _this.$message.error("数量错误")
+        _this.$message.error(_this.$t('l.l_numerror'))
         return;
       }
       Wallet.takeoutOne(this.walletAddress,currency,aUp, (res)=>{
@@ -640,8 +641,8 @@ export default {
               if(status == 200){
                  _this.isModalShowWithOne = false
                  _this.$success({
-                   title:'提取',
-                   content:'提取成功'
+                   title:_this.$t('l.withdrawal'),
+                   content:_this.$t('l.ok_tips_withdraw')
                  })
               }
            })
@@ -649,7 +650,7 @@ export default {
 
       }, (res)=>{
         _this.$error({
-          title:'提取',
+          title:_this.$t('l.withdrawal'),
           content:res.message || '提取失败'
         })
       });
@@ -657,15 +658,15 @@ export default {
     async handleWithDrawTwo(amount1,currency2) {
       let _this = this
       if(!this.inviteAddress && this.inviteAddress.length < 10){
-        _this.$message.error("上级地址存在")
+        _this.$message.error(_this.$t('l.l_upper'))
         return;
       }
       if(!this.walletAddress && this.walletAddress.length < 10){
-        _this.$message.error("钱包连接断开")
+        _this.$message.error(_this.$t('l.error_tips_unconnect'))
         return;
       }
       if(this.inviteAddress.toLowerCase() == this.walletAddress.toLowerCase()){
-        _this.$message.error('连接钱包地址与上级地址相同')
+        _this.$message.error(_this.$t('l.l_addrror'))
         return
       }
       if (currency2 == null || currency2 == undefined){
@@ -673,7 +674,7 @@ export default {
         return ;
       }
       if (!amount1 || amount1 > _this.withdrawalInfo.lockAmount1){
-        _this.$message.error("数量错误")
+        _this.$message.error(_this.$t('l.l_numerror'))
         return ;
       }
       console.log(amount1,currency2)
@@ -686,15 +687,15 @@ export default {
               if(status == 200){
                  _this.isModalShowWithOne = false
                  _this.$success({
-                   title:'提取',
-                   content:'提取成功'
+                   title:_this.$t('l.withdrawal'),
+                   content:_this.$t('l.ok_tips_withdraw')
                  })
               }
            })
          }
       }, (res)=>{
         _this.$error({
-          title:'提取',
+          title:_this.$t('l.withdrawal'),
           content:res.message || '提取失败'
         })
       });
@@ -766,15 +767,15 @@ export default {
     async handleDepositConfirmOne(currency,amount) {
       let _this = this
       if(!this.inviteAddress && this.inviteAddress.length < 10){
-        _this.$message.error("上级地址不存在")
+        _this.$message.error(_this.$t('l.l_upper'))
         return;
       }
       if(!this.walletAddress && this.walletAddress.length < 10){
-        _this.$message.error("钱包连接断开")
+        _this.$message.error(_this.$t('l.error_tips_unconnect'))
         return;
       }
       if(this.inviteAddress.toLowerCase() == this.walletAddress.toLowerCase()){
-        _this.$message.error('连接钱包地址与上级地址相同')
+        _this.$message.error(_this.$t('l.l_addrror'))
         return
       }
       if (currency == undefined||currency ==  null){
@@ -782,13 +783,13 @@ export default {
         return;
       }
       if (!amount || amount > _this.depositInfo.balance){
-        _this.$message.error("存入数量不正确")
+        _this.$message.error(_this.$t('l.l_numerror'))
         return;
       }
       //TODO 获取币种currency的价格price，amount*price 必须 大于 100美元
       let value = (+_this.depositInfo.mPrice) * (+amount)
       if(value < 100){
-        _this.$message.error("存入存入价值需大于100美金")
+        _this.$message.error(_this.$t('l.l_stockvalue'))
         return;
       }
 
@@ -797,13 +798,13 @@ export default {
         if(res) {
             _this.isModalShowSaveOne = false
             _this.$success({
-              title:'存入',
-              content:'存入成功'
+              title:_this.$t('l.deposit'),
+              content:_this.$t('.ok_tips_deposit')
             })
         }
       },(res)=>{
         _this.$error({
-          title:'存入',
+          title:_this.$t('l.deposit'),
           content:res.message || '存入失败'
         })
       });
@@ -811,15 +812,15 @@ export default {
     async handleDepositConfirmTwo(libraAmount,currency2) {
       let _this = this
       if(!this.inviteAddress && this.inviteAddress.length < 10){
-        _this.$message.error("上级地址不存在")
+        _this.$message.error(_this.$t('l.l_upper'))
         return;
       }
       if(!this.walletAddress && this.walletAddress.length < 10){
-        _this.$message.error("钱包连接断开")
+        _this.$message.error(_this.$t('l.error_tips_unconnect'))
         return;
       }
       if(this.inviteAddress.toLowerCase() == this.walletAddress.toLowerCase()){
-        _this.$message.error('连接钱包地址与上级地址相同')
+        _this.$message.error(_this.$t('l.l_addrror'))
         return
       }
 
@@ -828,13 +829,13 @@ export default {
         return;
       }
       if (!libraAmount || libraAmount > _this.depositInfo.balance){
-        _this.$message.error("存入数量错误");
+        _this.$message.error(_this.$t('l.l_numerror'));
         return ;
       }
       //TOoneDepositOrderDO (libraAmount*libraPrice)+currency2Amount*currency2Price 必须大于 100美元
       let needMinDollar = (+libraAmount)*(+_this.depositInfo.sPrice) + (_this.depositInfo.nAmount2 * _this.depositInfo.mPrice)
       if(needMinDollar < 100){
-        _this.$message.error("组合存入价值需大于100美金")
+        _this.$message.error(_this.$t('l.l_stockvalue'))
         return;
       }
       //调用合约方法存入币种
@@ -842,13 +843,13 @@ export default {
         if(res) {
             _this.isModalShowSaveTwo = false
             _this.$success({
-              title:'存入',
-              content:'存入成功'
+              title:_this.$t('l.deposit'),
+              content:_this.$t('.ok_tips_deposit')
             })
         }
       },(res)=>{
         _this.$error({
-          title:'存入',
+          title:_this.$t('l.deposit'),
           content:res.message || '存入失败'
         })
       });

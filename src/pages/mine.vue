@@ -2,10 +2,18 @@
   <div class="mine">
     <div class="income-info">
       <div class="total-item">
-          <div class="total">
-            <div>{{$t('l.t_tolIn')}}</div>
-            <div><span><countTo :endVal='totalProfit' :duration='3000' :decimals="2" /></span><span>LBR</span></div>
-            <div>≈<countTo :endVal='totalValue' :duration='3000' :decimals="2" prefit="$" /></div>
+          <div class="total-left">
+            <div class="total">
+              <div>{{$t('l.t_tolIn')}}</div>
+              <div><span><countTo :endVal='totalProfit' :duration='3000' :decimals="2" /></span><span>LBR</span></div>
+              <div>≈<countTo :endVal='totalValue' :duration='3000' :decimals="2" prefit="$" /></div>
+            </div>
+            <div class="total">
+              <div>{{$t('l.l_unprofit')}}</div>
+              <div><span><countTo :endVal='useableProfit' :duration='3000' :decimals="2" /></span><span>LBR</span></div>
+              <div>≈<countTo :endVal='useValue' :duration='3000' :decimals="2" prefit="$" /></div>
+            </div>
+
           </div>
           <div class="detail-c">
             <div class="detail" @click="detailClick('/income-detail')"><span>{{$t('l.t_de')}}</span><svg-icon icon-class="enter_icon"></svg-icon></div>
@@ -52,11 +60,11 @@
               <div class="pools__info"></div>
             </li>
             <li class="pools__dialog__withdraw-field">
-              <span>{{$t('l.sygz')}}(Libra)</span><span><countTo :endVal='totalProfit' :duration='1000' :decimals="4"></countTo></span>
+              <span>{{$t('l.l_unprofit')}}(Libra)</span><span><countTo :endVal='useableProfit' :duration='1000' :decimals="4"></countTo></span>
             </li>
             <li class="pools__dialog__input">
               <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
-              <button @click="iptValue1 = totalProfit" class="g-button pools__dialog__deposit-all  g-button--normal">{{$t('l.withdrawall')}}</button>
+              <button @click="iptValue1 = useableProfit" class="g-button pools__dialog__deposit-all  g-button--normal">{{$t('l.withdrawall')}}</button>
             </li>
             <li>
               <a-button :loading="pLoading"  @click="handleProfitAction" class="g-button" style="margin-left:auto;margin-top:20px;">{{$t('l.withdrawal')}}</a-button>
@@ -82,6 +90,7 @@ export default {
       walletAddress:'',
       inviteAddress:'',
       totalProfit:0,
+      useableProfit:0,
       price:0,
       pLoading:false,
       isModalShowProfit:false,
@@ -91,6 +100,9 @@ export default {
   computed: {
     totalValue:function(){
       return (+this.totalProfit) * (+this.price)
+    },
+    useValue:function(){
+      return (+this.useableProfit) * (+this.price)
     }
   },
   methods: {
@@ -109,18 +121,18 @@ export default {
       this.isModalShowProfit = false
     },
     handleProfitAction(){
-       const {totalProfit,walletAddress,iptValue1} = this
+       const {useableProfit,walletAddress,iptValue1} = this
        let _self = this
-       if(!totalProfit || totalProfit < 0.00001){
-         this.$message.error('当前您暂无收益')
+       if(!useableProfit || useableProfit < 0.00001){
+         this.$message.error(_self.$t('l.l_noprofit'))
          return
        }
        if(!walletAddress || walletAddress.length < 10){
-         this.$message.error("未连接钱包")
+         this.$message.error(_self.$t('l.error_tips_unconnect'))
          return
        }
-       if(!iptValue1 || iptValue1 > totalProfit){
-         this.$message.error('输入数量错误')
+       if(!iptValue1 || iptValue1 > useableProfit){
+         this.$message.error(_self.$t('l.l_numerror'))
          return
        }
        console.log({walletAddress})
@@ -188,10 +200,13 @@ export default {
       _self.getPairPrice()
       const res = await _self.getIncomeData()
       if(res){
+          console.log({res})
           const {
-            total  //总收益
+            total,  //总收益
+            takeout //取出
                 } = res
           _self.totalProfit = Number(total)/Wallet.Precisions() || 0
+          _self.useableProfit = _self.totalProfit - (Number(takeout)/Wallet.Precisions() || 0)
       }
   },
   destroyed() {
@@ -433,7 +448,13 @@ export default {
   display: flex;
 }
 .total {
+  min-width: 150px;
+}
+.total-left {
   flex: 1;
+  display: flex;
+  align-items: center;
+  
 }
 .detail-c {
   display: flex;

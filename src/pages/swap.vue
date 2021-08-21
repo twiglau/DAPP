@@ -161,19 +161,19 @@
             handleSwap(amount){
                 let _self = this
                 if(!this.inviteAddress && this.inviteAddress.length < 10){
-                    _self.$message.error("上级地址不存在")
+                    _self.$message.error(_self.$t('l.l_upper'))
                     return;
                 }
                 if(!this.walletAddress && this.walletAddress.length < 10){
-                    _self.$message.error("钱包连接断开")
+                    _self.$message.error(_self.$t('l.error_tips_unconnect'))
                     return;
                 }
                 if(this.inviteAddress.toLowerCase() == this.walletAddress.toLowerCase()){
-                    _self.$message.error('连接钱包地址与上级地址相同')
+                    _self.$message.error(_self.$t('l.l_addrror'))
                     return
                 }
                 if (!amount || amount > _self.usdtAmount){
-                    _self.$message.error("数量错误");
+                    _self.$message.error(_self.$t('l.l_numerror'));
                     return;
                 }
                 //TODO 上级地址,从URL获取
