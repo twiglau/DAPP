@@ -3,10 +3,10 @@
     <a-spin class="global_loading" tip="loading" :spinning="spinStatus" size="large">
       <div class="team-amount">
         <div class="amount-item">
-          <span>{{$t('l.t_tolp')}}</span><span>LBR + USDT</span><span><countTo :endVal='team.totalProfit' :duration='3000' :decimals="2"></countTo></span>
+          <span>{{$t('l.t_tolp')}}</span><span>LBR</span><span><countTo :endVal='team.totalProfit' :duration='3000' :decimals="2"></countTo></span>
         </div>
         <div class="amount-item">
-          <span>{{$t('l.t_todayp')}}</span><span>LBR + USDT</span><span><countTo :endVal='team.todayProfit' :duration='3000' :decimals="2"></countTo></span>
+          <span>{{$t('l.t_todayp')}}</span><span>LBR</span><span><countTo :endVal='team.todayProfit' :duration='3000' :decimals="2"></countTo></span>
         </div>
       </div>
       <div class="team-level">

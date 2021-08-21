@@ -64,21 +64,22 @@ export default {
     },
     amt(item){
       let amount = item.amount
-      return  (amount / Wallet.Precisions(coin.toUpperCase())).toFixed(4)
+      return  (amount / Wallet.Precisions()).toFixed(4)
     },
     async checkHasIncomeData(){
       let _self = this
-      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      _self.walletAddress = "0x9eCe238B023BDd92BE1F8596dCC2c666529153f2" //localStorage.getItem("walletAddress") || '';
       Wallet.queryIncomeSize(_self.walletAddress,(res) =>{
+          console.log({address:_self.walletAddress,count:res})
           _self.dataSize = +res || 0
-          if(_self.data > 0) _self.getProfitRecord()
+          if(_self.dataSize > 0) _self.getProfitRecord()
       },(err) => {
           reject(err)
       })
     },
     async getProfitRecord(start = 0, end = 1){
       let _self = this
-      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      _self.walletAddress = "0x9eCe238B023BDd92BE1F8596dCC2c666529153f2" // localStorage.getItem("walletAddress") || '';
       new Promise((resolve,reject) => {
         try {
           let promiseRecordArr = [],resultRecordArr = [];
@@ -87,13 +88,14 @@ export default {
             end = end > _self.dataSize ? _self.dataSize : end
             promiseRecordArr[i] = new Promise((res,rej) => {
                 Wallet.incomeRecord(_self.walletAddress,i,(record) => {
+                  console.log({record,i})
                   if(record){
                     resultRecordArr.push(record)
                     res(record)
                   }else{
                     rej('error')
                   }
-                })
+                },(err) => {rej(err)})
             })
             ++i;
 
