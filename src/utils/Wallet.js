@@ -22,8 +22,8 @@ const PrecisionsObj = [
 //币
 const tokensContractAddress = "0x5F8Bc83B6285A495c13347130352E9f20cebA63D";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
-//币安测试链
-const _contractAddress = '0x4A75Cf0Db8b62aA0c68e90D86EBbcFaCa18F55Ad';
+//币安测试链   0xd583631d0aC918637449E462708BC51eC4351c17
+const _contractAddress = '0x48a937CB185E825FA6b470b277D8f4A5ff5B3a24';
 const _contractABI = [
     {
         "inputs": [],
@@ -808,8 +808,8 @@ const _contractABI = [
         "type": "function"
     }
 ];
-
-const _recordContractAddress = '0x1b8511C5Cf76E28177C51116AcE5D3ca1B8a595E';
+//记录        0x1b8511C5Cf76E28177C51116AcE5D3ca1B8a595E
+const _recordContractAddress = '0xeB6b0798Eb3637c0b51A2C42A448E4B47784CF7f';
 const _recordContractABI=[
     {
         "inputs": [],
