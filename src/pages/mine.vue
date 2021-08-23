@@ -13,7 +13,6 @@
               <div><span><countTo :endVal='useableProfit' :duration='3000' :decimals="2" /></span><span>LBR</span></div>
               <div>≈<countTo :endVal='useValue' :duration='3000' :decimals="2" prefit="$" /></div>
             </div>
-
           </div>
           <div class="detail-c">
             <div class="detail" @click="detailClick('/income-detail')"><span>{{$t('l.t_de')}}</span><svg-icon icon-class="enter_icon"></svg-icon></div>

@@ -22,7 +22,7 @@ const state = {
   isMobile: document.body.clientWidth < 768 ? true : false,
   showDrawer: false,
   langType: lan,
-  activeAccount: null,
+  activeAccount: localStorage.getItem("walletAddress"),
   chainId: null,
   chainName: null,
   providerEthers: null, // this is "provider" for Ethers.js
@@ -105,6 +105,7 @@ const actions = {
         if(window.ethereum) {
           commit("setIsConnected", true);
           commit("setActiveAccount", window.ethereum.selectedAddress || window.ethereum.address);
+          localStorage.setItem("walletAddress",window.ethereum.selectedAddress || window.ethereum.address);
           commit("setChainData", window.ethereum.chainId);
           commit("setEthersProvider", providerW3m);
         }
@@ -129,6 +130,7 @@ const actions = {
       window.ethereum.on('accountsChanged', (accounts) => {
         if (state.isConnected) {
           commit("setActiveAccount", accounts[0]);
+          localStorage.setItem("walletAddress",accounts[0]);
           commit("setEthersProvider", state.providerW3m);
           location.reload()
         }
@@ -164,6 +166,14 @@ const mutations = {
     }
     state.providerW3m = null;
     await state.web3Modal.clearCachedProvider();
+    localStorage.removeItem("isApprovedETH");
+    localStorage.removeItem("isApprovedBNB");
+    localStorage.removeItem("isApprovedBTC");
+    localStorage.removeItem("isApprovedUSDT");
+    localStorage.removeItem("isApprovedFIL");
+    localStorage.removeItem("isApprovedLibra");
+    localStorage.removeItem("walletAddress");
+    
     location.reload() // redirect to the Main page
   },
 

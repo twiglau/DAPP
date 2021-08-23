@@ -23,7 +23,7 @@
       </a-menu-item>
       <a-menu-item key="1">
         <svg-icon icon-class="Wallet_icon"></svg-icon>
-        <span>{{$t('l.w_cnt')}}</span>
+        <span>{{isUserConnected? $t('l.w_scnt') : $t('l.w_cnt')}}</span>
         <svg-icon class="status-icon" :icon-class="isUserConnected? 'connected':'warning'"></svg-icon>
       </a-menu-item>
       <a-menu-item key="2">
@@ -61,6 +61,9 @@
 
 <script>
 
+import Vue from 'vue'
+import Web3 from 'web3'
+import Wallet from '@/utils/Wallet.js'
 import { mapGetters,mapActions } from 'vuex'
 import LangSetting from './LangSetting.vue'
 export default {
@@ -120,11 +123,19 @@ export default {
 
       },
       async handleConnectWeb3Modal() {
-        
+        this.initWallet()
         let result = await this.connectWeb3Modal()
         if(result && result.status == 400) {
           this.$message.warning(this.$t('l.no_metamask_tips'))
         }
+      },
+      initWallet(){
+        Vue.prototype.Web3 = Web3;
+        Wallet.initWallet((address)=>{
+          this.walletAddress = address;
+          this.showConnectBtn = false;
+          localStorage.setItem("walletAddress",address);
+        })
       },
       formatAddress(address) {
         if(address&&address.length > 0) {

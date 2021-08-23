@@ -44,6 +44,7 @@ export const l = {
   e_today:'Earnings Today',
   t_level:'Team Level',
   w_cnt:'Connect Wallet',
+  w_scnt:'Wallet is connected',
   i_invite:'Invite',
   t_team:'Team',
   token1:token1,

@@ -44,6 +44,7 @@ export const l = {
   e_today:'今日收益',
   t_level:'团队等级',
   w_cnt:'连接钱包',
+  w_scnt:'钱包已连接',
   i_invite:'邀请',
   t_team:'团队',
   token1:token1,
