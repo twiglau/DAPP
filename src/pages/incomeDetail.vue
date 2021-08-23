@@ -20,6 +20,7 @@
       <div class="pools-main" v-if="records.length > 0">
         <div class="pools__item" v-for="(item,index) in records" :key="index">
             <div class="pools__box">
+            <a-spin tips="loading" :spinning="false" size="large">
                 <ul class="pools__rows">
                   <li class="pools__row-1">
                     <div class="pools__logo-name">
@@ -38,6 +39,7 @@
                 <div class="pools__mao-logo__wrap">
                   <img src="" alt="" class="pools__mao-logo">
                 </div>
+            </a-spin>
             </div>
         </div>
       </div>
@@ -73,6 +75,11 @@ export default {
     },
     handleContChange(index) {
       this.currentIndex = index
+      if(this.currentIndex == 0){
+        this.getProfitRecord()
+      }else{
+        this.getTiquRecord()
+      }
     },
     formatTimeStr(item){
       let timestamp = +item.time * 1000
@@ -91,21 +98,76 @@ export default {
           },(err) => {reject(err)})
       })
     },
+    async checkHasTiquData(){
+      let _self = this
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      return new Promise((resolve,reject) => {
+        Wallet.queryIncomeSize(_self.walletAddress,(res) =>{
+            let result = +res || 0
+            resolve(result)
+        },(err) => {
+            reject(err)
+        })
+
+      })
+    },
+    async getTiquRecord(start = 0, end = 1){
+      let _self = this
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      return new Promise((resolve,reject) => {
+        try {
+          let promiseRecordArr = [],resultRecordArr = [];
+          let i = start;
+          do {
+            end = end > _self.dataSize ? _self.dataSize : end
+            promiseRecordArr[i] = new Promise((res,rej) => {
+                Wallet.queryTakeoutIncomeRecord(_self.walletAddress,i,(record) => {
+                  console.log({record,i})
+                  if(record){
+                    resultRecordArr.push(record)
+                    res(record)
+                  }else{
+                    rej('error')
+                  }
+                },(err) => {rej(err)})
+            })
+            ++i;
+
+          } while (i < end);
+
+          //全部请求,可能失败, finally接收
+          Promise.all(promiseRecordArr).finally(() => {
+            resolve('success')
+            console.log(resultRecordArr)
+            _self.records.push(...resultRecordArr)
+            //这里过滤数据, 递归
+            if(_self.dataSize > end){
+              _self.getTiquRecord(end,end + 1)
+            }
+          })
+
+        } catch (error) {
+            reject(error)
+            _self.$message.error(_self.$t('l.catch_err'))
+        }
+      })
+    },
     async checkHasIncomeData(){
       let _self = this
       _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      Wallet.queryIncomeSize(_self.walletAddress,(res) =>{
-          console.log({address:_self.walletAddress,count:res})
-          _self.dataSize = +res || 0
-          if(_self.dataSize > 0) _self.getProfitRecord()
-      },(err) => {
-          reject(err)
+      return new Promise((resolve,reject) => {
+        Wallet.queryIncomeSize(_self.walletAddress,(res) =>{
+            let result = +res || 0
+            resolve(result)
+        },(err) => {
+            reject(err)
+        })
       })
     },
     async getProfitRecord(start = 0, end = 1){
       let _self = this
       _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      new Promise((resolve,reject) => {
+      return new Promise((resolve,reject) => {
         try {
           let promiseRecordArr = [],resultRecordArr = [];
           let i = start;
@@ -158,7 +220,7 @@ export default {
           _self.totalProfit = (Number(total)/Wallet.Precisions() || 0).toFixed(2)
           _self.takeOutProfit = (Number(takeout)/Wallet.Precisions() || 0).toFixed(2)
       }
-    this.checkHasIncomeData()
+    this.handleContChange(0)
 
   },
   destroyed() {
