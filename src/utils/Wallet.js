@@ -20,10 +20,10 @@ const PrecisionsObj = [
 ]
 
 //币
-const tokensContractAddress = "0x5F8Bc83B6285A495c13347130352E9f20cebA63D";
+const tokensContractAddress = "0x53F5b20E09e31Cb54C90FA47DFF2e9dF8cac5919";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链   0xd583631d0aC918637449E462708BC51eC4351c17
-const _contractAddress = '0x48a937CB185E825FA6b470b277D8f4A5ff5B3a24';
+const _contractAddress = '0xf74cD0b2FC98c19C394bBf72E70284C32E3359B0';
 const _contractABI = [
     {
         "inputs": [],
@@ -690,25 +690,6 @@ const _contractABI = [
     {
         "inputs": [
             {
-                "internalType": "uint8",
-                "name": "currencyId",
-                "type": "uint8"
-            }
-        ],
-        "name": "testTotalUseableByCurrency",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "uint256",
                 "name": "_a",
                 "type": "uint256"
@@ -809,7 +790,7 @@ const _contractABI = [
     }
 ];
 //记录        0x1b8511C5Cf76E28177C51116AcE5D3ca1B8a595E
-const _recordContractAddress = '0xeB6b0798Eb3637c0b51A2C42A448E4B47784CF7f';
+const _recordContractAddress = '0x803bE16758511a87859863b0Cb438D8377670076';
 const _recordContractABI=[
     {
         "inputs": [],
@@ -1055,6 +1036,29 @@ const _recordContractABI=[
             },
             {
                 "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "receivedAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "saveTakeoutRecord",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
                 "name": "amount1",
                 "type": "uint256"
             },
@@ -1087,6 +1091,64 @@ const _recordContractABI=[
         "name": "saveTakeoutTwoRecord",
         "outputs": [],
         "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "takeoutIncomeMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "receivedAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutTime",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+            }
+        ],
+        "name": "takeoutIncomeRecordSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -1525,14 +1587,6 @@ const _recordContractABI=[
         "type": "function"
     }
 ];
-/////////////////////////////////////////////////////////////////////////////本地测试 - start
-// const btcContractAddress = '0xa7f0B0DbaBEc4b6C412b6f92343Fb68b5DF35f6C';
-// const ethContractAddress = '0xc256A3A6Af4561bCBc94678a1f00E5c24b0f50f0';
-// const usdtContractAddress = '0xc1D586e2649B67C62bCC34E8D220c2353ceCA118';
-// const bnbContractAddress = '0x52FA059Da6Ef9D95b53476D774026821402f9E4E';
-// const filContractAddress = '0x0Bb12A9e26a292d7f69F528DEbc23e679516A604';
-// const libraContractAddress = '0x6950C3327FF3cd00Db061A360F75D07f2cB490E1';
-/////////////////////////////////////////////////////////////////////////////本地测试 - end
 
 /////////////////////////////////////////////////////////////////////////////币安测试网测试 - start
 const ethContractAddress = '0x44BAd5d45e9486454a0FF1c255396C4272590d73';
@@ -3858,6 +3912,35 @@ function queryDepositUserSize(callback,errorCallback) {
         });
 }
 
+/**
+ * 取出收益记录
+ * @param callback
+ * @param errorCallback
+ */
+function queryTakeoutIncomeRecord(address,index,callback,errorCallback) {
+    const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
+    _contract.methods.takeoutIncomeMap(address,index)
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            errorCallback(err);
+        });
+}
+
+function queryTakeoutIncomeRecordSize(address,callback,errorCallback) {
+    const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
+    _contract.methods.takeoutIncomeRecordSize(address)
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            errorCallback(err);
+        });
+}
+
 function test() {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.libraTotalAmount().call()
@@ -3917,4 +4000,6 @@ export default {
     oneUseableBalance,
     twoUseableBalance1,
     twoUseableBalance2,
+    queryTakeoutIncomeRecord,
+    queryTakeoutIncomeRecordSize,
 }
