@@ -23,7 +23,7 @@ const PrecisionsObj = [
 const tokensContractAddress = "0x53F5b20E09e31Cb54C90FA47DFF2e9dF8cac5919";
 // const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
 //币安测试链   0xd583631d0aC918637449E462708BC51eC4351c17
-const _contractAddress = '0xee0f4F9C2F2cd5e6a30670d1609572cA8664F5c6';
+const _contractAddress = '0xf74cD0b2FC98c19C394bBf72E70284C32E3359B0';
 const _contractABI = [
     {
         "inputs": [],
@@ -790,7 +790,7 @@ const _contractABI = [
     }
 ];
 //记录        0x1b8511C5Cf76E28177C51116AcE5D3ca1B8a595E
-const _recordContractAddress = '0x93aa7d47B40AceF04789C21AB2cD704104888213';
+const _recordContractAddress = '0x803bE16758511a87859863b0Cb438D8377670076';
 const _recordContractABI=[
     {
         "inputs": [],
@@ -1126,6 +1126,25 @@ const _recordContractABI=[
             {
                 "internalType": "uint256",
                 "name": "takeoutTime",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+            }
+        ],
+        "name": "takeoutIncomeRecordSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
                 "type": "uint256"
             }
         ],
@@ -3909,6 +3928,19 @@ function queryTakeoutIncomeRecord(address,index,callback,errorCallback) {
             errorCallback(err);
         });
 }
+
+function queryTakeoutIncomeRecordSize(address,callback,errorCallback) {
+    const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
+    _contract.methods.takeoutIncomeRecordSize(address)
+        .call()
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => {
+            errorCallback(err);
+        });
+}
+
 function test() {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.libraTotalAmount().call()
@@ -3969,4 +4001,5 @@ export default {
     twoUseableBalance1,
     twoUseableBalance2,
     queryTakeoutIncomeRecord,
+    queryTakeoutIncomeRecordSize,
 }
