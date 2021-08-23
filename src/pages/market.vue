@@ -299,7 +299,7 @@ export default {
         this.team.needTeamProfor = this.teamLevels[3].value
         this.team.enjoyRatio = this.teamLevels[3].ratio
         this.team.leftLevel = 'LV3'
-        this.team.level = 'LV5'
+        this.team.level = 'LV4'
         this.team.rightLevel = 'LV5'
         this.team.status = teamProformance < this.teamLevels[3].value ? this.$t('l.l_unfinished') : this.$t('l.l_completed')
       }else if (level == this.teamLevels[4].level){
