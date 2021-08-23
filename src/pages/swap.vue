@@ -31,6 +31,7 @@
                 </div>
                 <div class="text-label">
                     {{$t('l.t_to')}}
+                    <svg-icon icon-class="down_icon" class="down-dir"></svg-icon>
                 </div>
                 <li class="pools__dialog__input">
                     <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
@@ -276,6 +277,14 @@
         margin: 30px 0px 6px 0px;
         color: #3C3C3C;
         font-size: 12px;
+        position: relative;
+    }
+    .text-label .svg-icon {
+        position:absolute;
+        width: 40px;
+        height: 40px;
+        right: 25%;
+        bottom: 0px;
     }
 
     .pools__dialog__input input {
@@ -287,6 +296,7 @@
         font-size: 8px;
         padding: 15px 100px 15px 30px;
         color: #131d32;
+        font-size: 16px;
     }
     .pools__dialog__input {
         position: relative;
@@ -304,6 +314,8 @@
     }
     .input_right span {
         margin: 0px 6px;
+        min-width: 36px;
+        font-size: 14px;
     }
     .input_right .svg-coin {
         width: 24px;
