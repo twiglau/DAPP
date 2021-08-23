@@ -73,12 +73,24 @@ export default {
     goBack(){
       this.$router.go(-1);
     },
-    handleContChange(index) {
+    async handleContChange(index) {
       this.currentIndex = index
       if(this.currentIndex == 0){
-        this.getProfitRecord()
+        const count = await this.checkHasIncomeData()
+        if(count > 0){
+          this.dataSize = count
+          this.spinStatus = true
+          const res = await this.getProfitRecord()
+          this.spinStatus = false
+        }
       }else{
-        this.getTiquRecord()
+        const count = await this.checkHasTiquData()
+        if(count > 0){
+          this.dataSize = count
+          this.spinStatus = true
+          const res = await this.getTiquRecord()
+          this.spinStatus = false
+        }
       }
     },
     formatTimeStr(item){
@@ -102,7 +114,7 @@ export default {
       let _self = this
       _self.walletAddress = localStorage.getItem("walletAddress") || '';
       return new Promise((resolve,reject) => {
-        Wallet.queryIncomeSize(_self.walletAddress,(res) =>{
+        Wallet.queryTakeoutIncomeRecordSize(_self.walletAddress,(res) =>{
             let result = +res || 0
             resolve(result)
         },(err) => {
