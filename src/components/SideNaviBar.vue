@@ -138,12 +138,12 @@ export default {
         })
       },
       formatAddress(address) {
-        if(address&&address.length > 0) {
+        if(!address || address.length < 10) {
+          return ''
+        }else {
           let pre = address.slice(0,6)
           let suf = address.slice(-4)
           return  `${pre}...${suf}`
-        }else {
-          return ''
         }
       },
       onClose() {
@@ -170,7 +170,7 @@ export default {
   width: 24px;
   height: 24px;
 }
-.sider-items > .status-icon {
+.sider-items .status-icon {
   width: 16px;
   height: 16px;
 }

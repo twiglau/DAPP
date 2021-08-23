@@ -61,6 +61,8 @@ export default {
       dataSize:0,
       navArr: [this.$t('l.t_profitD'),this.$t('l.t_wde')],
       currentIndex:0,
+      totalProfit:0,
+      takeOutProfit:0,
     }
   },
   computed: {
@@ -145,7 +147,7 @@ export default {
   created() {
   },
   async mounted() {
-
+    let _self = this
     const res = await _self.getIncomeData()
       if(res){
           console.log({res})
@@ -341,7 +343,7 @@ export default {
   }
   .logo_lp_2 {
     position: absolute;
-    top: 0;left: 10%;
+    top: 2px;left: 10%;
   }
   .pools__coin-name {
     margin-left: 12px;

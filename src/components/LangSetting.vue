@@ -15,6 +15,14 @@
           <svg-icon icon-class="Lang_en"></svg-icon>
           English
         </a-menu-item>
+        <a-menu-item key="3" @click="changeLangType">
+          <svg-icon icon-class="Lang_ko"></svg-icon>
+          Korea
+        </a-menu-item>
+        <a-menu-item key="4" @click="changeLangType">
+          <svg-icon icon-class="Lang_ja"></svg-icon>
+          Japan
+        </a-menu-item>
       </a-menu>
     </template>
   </a-dropdown>
@@ -45,6 +53,12 @@ export default {
         }else if(this.getLangType == 'en-US'){
           this.lanc = "English";
           this.lanImg = 'Lang_en'
+        }else if(this.getLangType == 'ko'){
+          this.lanc = "Korea"
+          this.lanImg = 'Lang_ko'
+        }else if(this.getLangType == 'ja'){
+          this.lanc = "Japan"
+          this.lanImg = 'Lang_ja'
         }
       },
       changeLangType(type) {
@@ -59,10 +73,19 @@ export default {
           this.$i18n.locale = 'zh-CN';
           this.lanc = "简体中文";
           this.lanImg = 'Lang_cn'
-          llWYf = 'zh-CN';
+          llWYf = 'zh';
+        }else if(key == 3){
+          this.$i18n.locale = 'ko';
+          this.lanc = "Korea"
+          llWYf = 'ko';
+        }else if(key == 4){
+          this.$i18n.locale = 'ja';
+          this.lanc = "Japan"
+          llWYf = 'ja';
         }
         this.$store.commit('accounts/setLangType',this.$i18n.locale)
         localStorage.setItem('langType',this.$i18n.locale);
+        this.$setCookie('pipipSwapLanguage',llWYf);
       },
   }
 }

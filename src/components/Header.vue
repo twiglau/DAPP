@@ -21,6 +21,8 @@
           <div id="languageBox" v-show="languageShow" >
             <li :class="this.$i18n.locale == 'en-US' ? 'active' : ''" @click.stop.prevent="changeLangType(1)">English</li>
             <li :class="this.$i18n.locale == 'zh-CN' ? 'active' : ''" @click.stop.prevent="changeLangType(2)">简体中文</li>
+            <li :class="this.$i18n.locale == 'ko' ? 'active' : ''" @click.stop.prevent="changeLangType(3)">Korea</li>
+            <li :class="this.$i18n.locale == 'jp' ? 'active' : ''" @click.stop.prevent="changeLangType(4)">Japan</li>
           </div>
         </a>
         <img :src="menuImg" v-if="getIsMobile" @click="switchMenu" alt="" class="menu_icon">
@@ -68,6 +70,10 @@
           this.lanc = "简体中文";
         }else if(this.getLangType == 'en-US'){
           this.lanc = "English";
+        }else if(this.getLangType == 'ko'){
+          this.lanc = "Korea"
+        }else if(this.getLangType == 'ja'){
+          this.lanc = "Japan"
         }
       },
       setCookie(key,value){
@@ -85,11 +91,20 @@
         }else if (type == 2) {
           this.$i18n.locale = 'zh-CN';
           this.lanc = "简体中文";
-          llWYf = 'zh-CN';
+          llWYf = 'zh';
+        }else if(this.getLangType == 'ko'){
+          this.$i18n.locale = 'ko';
+          this.lanc = "Korea"
+          llWYf = 'ko';
+        }else if(this.getLangType == 'ja'){
+          this.$i18n.locale = 'ja';
+          this.lanc = "Japan"
+          llWYf = 'ja';
         }
         this.showLangBox();
         this.$store.commit('accounts/setLangType',this.$i18n.locale)
         localStorage.setItem('langType',this.$i18n.locale);
+        this.$setCookie('pipipSwapLanguage',llWYf);
       },
       handleTapStart(e) {
         e.target.classList.toggle('tap')
@@ -114,12 +129,12 @@
         })
       },
       formatAddress(address) {
-        if(address !== '' && address !== undefined) {
+        if(!address || address.length < 10) {
+          return ''
+        }else {
           let pre = address.slice(0,6)
           let suf = address.slice(-4)
           return  `${pre}...${suf}`
-        }else {
-          return ''
         }
       },
       getIndex(){

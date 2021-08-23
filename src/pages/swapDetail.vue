@@ -229,7 +229,7 @@ export default {
   }
   .logo_lp_2 {
     position: absolute;
-    top: 0;left: 10%;
+    top: 2px;left: 10%;
   }
   .pools__coin-name {
     margin-left: 12px;

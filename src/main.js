@@ -44,12 +44,17 @@ function getCookie(key){
         }
     }
 }
+
 var wyfLan = 'zh-CN';
 if (getCookie('pipipSwapLanguage') == 'en') {
   wyfLan = 'en-US';
 }else if (getCookie('pipipSwapLanguage') == 'zh') {
-  wyfLan = 'zh-CN';
-}
+ wyfLan = 'zh-CN';
+}else if (getCookie('pipipSwapLanguage') == 'ja') {
+  wyfLan = 'ja';
+ }else if (getCookie('pipipSwapLanguage') == 'ko') {
+  wyfLan = 'ko';
+ }
 localStorage.setItem('langType',wyfLan);
 
 import action from './utils/axios'
@@ -118,6 +123,8 @@ const i18n = new VueI18n({
   messages: {
     'zh-CN': require('./langpackage/zh'),   // 中文语言包
     'en-US': require('./langpackage/en'),    // 英文语言包
+    'ko': require('./langpackage/ko'),    // 韩文语言包
+    'ja': require('./langpackage/jp'),    // 日文语言包
   }
 })
 new Vue({
