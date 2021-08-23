@@ -8,6 +8,15 @@
             <span>{{$t('l.back')}}</span>
           </div>
       </div>
+      <div class="vault_seg_nav">
+        <ul class="vault_left">
+          <li v-for="(item,index) in navArr" :key="index" @click="handleContChange(index)" class="valut_nav_item" :class="currentIndex == index ? 'active animation-scale-up' : 'animation-scale-down'">{{item}}</li>
+        </ul>
+        <div class="vault_right">
+           <span>{{currentIndex == 0? $t('l.t_tolIn') : $t('l.t_tolOut')}}</span>
+           <span>{{currentIndex == 0? totalProfit : takeOutProfit}}</span>
+        </div>
+      </div>
       <div class="pools-main" v-if="records.length > 0">
         <div class="pools__item" v-for="(item,index) in records" :key="index">
             <div class="pools__box">
@@ -50,6 +59,8 @@ export default {
       walletAddress:'',
       records:[],
       dataSize:0,
+      navArr: [this.$t('l.t_profitD'),this.$t('l.t_wde')],
+      currentIndex:0,
     }
   },
   computed: {
@@ -58,6 +69,9 @@ export default {
     goBack(){
       this.$router.go(-1);
     },
+    handleContChange(index) {
+      this.currentIndex = index
+    },
     formatTimeStr(item){
       let timestamp = +item.time * 1000
       return this.$formatTime(timestamp,'YYYY-MM-DD HH:MM')
@@ -65,6 +79,15 @@ export default {
     amt(item){
       let amount = item.amount
       return  (amount / Wallet.Precisions()).toFixed(4)
+    },
+    async getIncomeData(){
+      let _self = this
+      _self.walletAddress = localStorage.getItem("walletAddress") || '';
+      return new Promise((resolve,reject) => {
+          Wallet.incomeAccount(_self.walletAddress,(res)=>{
+             resolve(res)
+          },(err) => {reject(err)})
+      })
     },
     async checkHasIncomeData(){
       let _self = this
@@ -122,7 +145,19 @@ export default {
   created() {
   },
   async mounted() {
+
+    const res = await _self.getIncomeData()
+      if(res){
+          console.log({res})
+          const {
+            total,  //总收益
+            takeout //取出
+                } = res
+          _self.totalProfit = (Number(total)/Wallet.Precisions() || 0).toFixed(2)
+          _self.takeOutProfit = (Number(takeout)/Wallet.Precisions() || 0).toFixed(2)
+      }
     this.checkHasIncomeData()
+
   },
   destroyed() {
   }
@@ -152,6 +187,88 @@ export default {
     height: 48px;
     background-color: #fff;
     border-radius: 8px;
+  }
+  .vault_seg_nav {
+    padding: 8px 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+  }
+  .vault_left {
+    position: relative;
+    background-color: #fff;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    color: #666666;
+    overflow: hidden;
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+  }
+  .vault_right {
+    font-size: 14px;
+    font-weight: bold;
+    color: #6c6c6c;
+  }
+  .vault_right span:nth-child(2){
+    color: #19A569;
+    font-size: 16px;
+    margin-left: 8px;
+  }
+  .valut_nav_item {
+    padding: 0px 10px;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: 0.5s;
+  }
+  .valut_nav_item.active {
+    color: #000;
+    font-weight: 500;
+  }
+
+  li {
+    list-style: none;
+  }
+  /* Animation css */
+  [class*=animation-] {
+      animation-duration: .3s;
+      animation-timing-function: ease-out;
+      animation-fill-mode: both
+  }
+  .animation-scale-up {
+    animation-name: scale-up;
+  }
+
+  .animation-scale-down {
+      animation-name: scale-down;
+  }
+
+  @keyframes scale-up {
+      0% {
+          opacity: 0;
+          transform: scale(1)
+      }
+
+      100% {
+          opacity: 1;
+          transform: scale(1.2)
+      }
+  }
+
+  @keyframes scale-down {
+      0% {
+          opacity: 0;
+          transform: scale(1.2)
+      }
+
+      100% {
+          opacity: 1;
+          transform: scale(1)
+      }
   }
   .pools-main {
     width: calc(100% + 15px);
@@ -409,10 +526,9 @@ export default {
     margin-bottom: 22px;
   }
   @media (max-width: 768px) {
-    .vault_top_nav {
-      border-top: solid 1px #f1f1f1;
+    
+    .vault_seg_nav {
       border-bottom:solid 1px #f1f1f1;
-      padding: 6px 0px;
     }
     .pools-main {
       width: 100%;

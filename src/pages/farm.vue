@@ -1351,11 +1351,6 @@ export default {
     align-items: center;
     position: relative;
   }
-  .pools__coin-logo {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-  }
   .logo_lp_2 {
     position: absolute;
     top: 0;left: 10%;
@@ -1645,8 +1640,11 @@ export default {
       font-size: 20px;
     }
     .pools__coin-logo {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
+    }
+    .pools__apy-value {
+      font-size: 18px;
     }
     .pools__info, .pools__labe-field {
       font-family: MicrosoftYaHei;

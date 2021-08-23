@@ -311,11 +311,6 @@ export default {
     align-items: center;
     position: relative;
   }
-  .pools__coin-logo {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-  }
   .logo_lp_2 {
     position: absolute;
     top: 0;left: 10%;
