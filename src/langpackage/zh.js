@@ -30,6 +30,7 @@ export const l = {
   t_depD:'存入记录',
   t_int:'邀请',
   t_tolIn:'总收入',
+  t_tolOne:'总计',
   t_de:'详情',
   t_jiedata:'结算日期',
   t_dedata:'存入时间',
@@ -192,4 +193,9 @@ export const l = {
 
   l_noprofit:'当前您暂无可提收益',
   l_unprofit:'可提',
+  l_unfinished:'未完成',
+  l_completed:'已完成',
+  l_teamlink:'搜索链接',
+  l_enterrightaddress:'请输入正确钱包地址',
+  l_noTeamBelowInfo:'暂无该团队下级信息',
 }

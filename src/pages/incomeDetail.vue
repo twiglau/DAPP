@@ -409,6 +409,11 @@ export default {
     margin-bottom: 22px;
   }
   @media (max-width: 768px) {
+    .vault_top_nav {
+      border-top: solid 1px #f1f1f1;
+      border-bottom:solid 1px #f1f1f1;
+      padding: 6px 0px;
+    }
     .pools-main {
       width: 100%;
     }
@@ -418,7 +423,7 @@ export default {
     }
     .pools__box {
       width: 100%;
-      padding: 24px;
+      padding: 0px 10px 15px 10px;
     }
     .pools__rows>li {
       margin-bottom: 14px;

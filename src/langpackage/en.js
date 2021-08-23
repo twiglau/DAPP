@@ -191,4 +191,9 @@ export const l = {
   l_stockvalue:'Deposit deposit value must be greater than $100',
   l_noprofit:'Currently you have no income to withdraw',
   l_unprofit:'Income balance',
+  l_unfinished:'Undone',
+  l_completed:'Completed',
+  l_teamlink:'team link',
+  l_noTeamBelowInfo:'No subordinate information for this team',
+  t_tolOne:'Total',
 }

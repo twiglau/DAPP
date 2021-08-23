@@ -2,6 +2,7 @@
   <div class="market">
     <a-spin class="global_loading" tip="loading" :spinning="spinStatus" size="large">
       <div class="team-amount">
+        <svg-icon icon-class="team_top_icon" class="team-icon"></svg-icon>
         <div class="amount-item">
           <span>{{$t('l.t_tolp')}}</span><span>LBR</span><span><countTo :endVal='team.totalProfit' :duration='3000' :decimals="2"></countTo></span>
         </div>
@@ -13,7 +14,7 @@
 
         <div class="level-desc">
           <span>{{$t('l.t_level')}}</span>
-          <span>-</span>
+          <span :style="[{color:team.status === $t('l.l_completed')? '#43318C':'#9C9C9C'}]">{{team.status}}</span>
         </div>
         <div class="level">
             <div class="line-docr">
@@ -21,21 +22,21 @@
               <div class="line" :style="[{background:team.rightLevel ? '#43318C':'white'}]"></div>
             </div>
             <div class="level-item" style="justify-content: flex-start;" >
-              <svg-icon v-show="team.leftLevel" icon-class="left_icon"></svg-icon>
+              <div @click="leftTeamClick"><svg-icon v-show="team.leftLevel" icon-class="left_icon"></svg-icon></div>
               <span v-show="team.leftLevel" style="left:5px">{{team.leftLevel}}</span>
             </div>
             <div class="level-item" style="justify-content: center;">
               <svg-icon class="team-level-icon" :icon-class="team.level + '_icon'"></svg-icon>
             </div>
             <div class="level-item" style="justify-content: flex-end;" >
-              <svg-icon v-show="team.rightLevel" icon-class="right_icon"></svg-icon>
+              <div @click="rightTeamClick"><svg-icon v-show="team.rightLevel" icon-class="right_icon" ></svg-icon></div>
               <span v-show="team.rightLevel" style="right:5px">{{team.rightLevel}}</span>
             </div>
         </div>
         <div class="team-level-desc-nor">
           {{$t('l.t_desc')}}
         </div>
-        <div class="team-level-amount"><countTo :endVal='team.needTeamProfor' :duration='3000' :decimals="2" prefix="$"></countTo></div>
+        <div class="team-level-amount"><countTo :endVal='team.needTeamProfor' :duration='1000' :decimals="2" prefix="$"></countTo></div>
         <div class="team-level-desc">
           {{$t('l.t_desc1')}}{{team.enjoyRatio}}
         </div>
@@ -44,24 +45,34 @@
       <div class="team-level">
         <div class="level-desc">
           <span>{{$t('l.t_info')}}</span>
-          <span></span>
+          <span>
+            <a-input-search :loading="searching" :allowClear="true" :placeholder="$t('l.l_teamlink')" @search="onSearchTeam">
+              <a-button slot="enterButton" >
+                <svg-icon  icon-class="search_icon" style="width:16px;height:16px;"></svg-icon>
+              </a-button>
+            </a-input-search>
+    </span>
         </div>
+        <div class="team-wrap">
+        <a-spin class="team_loading" tip="loading" :spinning="teamSearching" size="large">
         <div class="team-info">
-          <div class="info-item">
-            <svg-icon icon-class="team_icon_01"></svg-icon>
-            <span>{{$t('l.t_num')}}</span>
-            <span><countTo :endVal='team.teamPeople' :duration='3000'></countTo></span>
-          </div>
-          <div class="info-item">
-            <svg-icon icon-class="team_icon_02"></svg-icon>
-            <span>{{$t('l.t_ttt')}}</span>
-            <span><countTo :endVal='team.teamProformance' :duration='3000' :decimals="2"></countTo></span>
-          </div>
-          <div class="info-item">
-            <svg-icon icon-class="team_icon_03"></svg-icon>
-            <span>{{$t('l.t_tre')}}</span>
-            <span><countTo :endVal='team.teamProfit' :duration='3000' :decimals="2"></countTo></span>
-          </div>
+            <div class="info-item">
+              <svg-icon icon-class="team_icon_01"></svg-icon>
+              <span>{{$t('l.t_num')}}</span>
+              <span><countTo :endVal='team.teamPeople' :duration='3000'></countTo></span>
+            </div>
+            <div class="info-item">
+              <svg-icon icon-class="team_icon_02"></svg-icon>
+              <span>{{$t('l.t_ttt')}}</span>
+              <span><countTo :endVal='team.teamProformance' :duration='3000' :decimals="2"></countTo></span>
+            </div>
+            <div class="info-item">
+              <svg-icon icon-class="team_icon_03"></svg-icon>
+              <span>{{$t('l.t_tre')}}</span>
+              <span><countTo :endVal='team.teamProfit' :duration='3000' :decimals="2"></countTo></span>
+            </div>
+        </div>
+        </a-spin>
         </div>
       </div>
     </a-spin>
@@ -90,10 +101,11 @@ export default {
         teamProformance:0,
         needTeamProfor:0,
         teamProfit:0,
-        leftLevel:null,
-        level:'LV1',
-        enjoyRatio:'2%',
-        rightLevel:null,
+        leftLevel:'LV1',
+        level:'LV2',
+        enjoyRatio:'3%',
+        rightLevel:'LV3',
+        status:this.$t('l.l_unfinished'),
       },
       layers:0,
       teamLevels:[
@@ -105,6 +117,7 @@ export default {
         {level:'LV6',value:243*Math.pow(10,5),ratio:'7%'},
         {level:'LV7',value:729*Math.pow(10,5),ratio:'8%'},
       ],
+      curLevelIndex:2,
       coins:[
         {key:1,coin:'Libra',price:1},
         {key:2,coin:'BTC',price:1},
@@ -112,7 +125,9 @@ export default {
         {key:4,coin:'USDT',price:1},
         {key:5,coin:'BNB',price:1},
         {key:6,coin:'FIL',price:1},
-      ]
+      ],
+      searching:false,
+      teamSearching:false,
     }
   },
   computed: {
@@ -132,6 +147,23 @@ export default {
 //"useableAmount1":"10000000000","takeoutAmount1":"0",
 //"currency2Index":"5","totalAmount2":"94449209","useableAmount2":"94449209",
 //"takeoutAmount2":"0","depositTime":"1629389428"}
+   onSearchTeam(value){
+      console.log({searchValue:value})
+      let _self = this
+      if(!value) return
+      let genrateAddr = this.$emptyAddress()
+      if(value && value.length < genrateAddr.length){
+        this.$message.error({content:this.$t('l.l_enterrightaddress'),top:`300px`})
+        return
+      }
+      this.searching = true
+      this.teamSearching = true
+      setTimeout(async ()=>{
+        await _self.calculateTeamInfo(value,true);
+        _self.teamSearching = false
+      },);
+
+   },
    async calculateTeamPerformance(){
       let _self = this;
       const layers_two_storeage = localStorage.getItem('TWO-RECORD')
@@ -221,60 +253,76 @@ export default {
       //团队收益
       _self.team.teamProfit = libra_profit_amount * _self.coins[0].price;  
       
-      //根据业绩判断信息
-      _self.checkTeam()
-      
+      //检查完成状态
+      this.checkTeam()
+    },
+    leftTeamClick(){
+      //减一
+      this.curLevelIndex -= 1;
+      let level =  `LV${this.curLevelIndex}`
+      this.team.level = level
+      this.checkTeam()
+    },
+    rightTeamClick(){
+      //加一
+      this.curLevelIndex += 1;
+      let level = `LV${this.curLevelIndex}`
+      this.team.level = level
+      this.checkTeam()
+
     },
     checkTeam(){
-      const {teamProformance} = this.team
-      if(teamProformance < this.teamLevels[0].value){
-        this.team.needTeamProfor = this.teamLevels[0].value - teamProformance
+      const {teamProformance,level} = this.team
+      console.log({level})
+      if(level == this.teamLevels[0].level){
+        this.team.needTeamProfor = this.teamLevels[0].value
         this.team.enjoyRatio = this.teamLevels[0].ratio
         this.team.leftLevel = null
         this.team.level = 'LV1'
         this.team.rightLevel = 'LV2'
-      }else if (teamProformance > this.teamLevels[0].value && teamProformance < this.teamLevels[1].value){
-        this.team.needTeamProfor = this.teamLevels[1].value - teamProformance
+        this.team.status = teamProformance < this.teamLevels[0].value ? this.$t('l.l_unfinished') : this.$t('l.l_completed')
+      }else if (level == this.teamLevels[1].level){
+        this.team.needTeamProfor = this.teamLevels[1].value
         this.team.enjoyRatio = this.teamLevels[1].ratio
         this.team.leftLevel = 'LV1'
         this.team.level = 'LV2'
         this.team.rightLevel = 'LV3'
-      }else if (teamProformance > this.teamLevels[1].value && teamProformance < this.teamLevels[2].value){
-        this.team.needTeamProfor = this.teamLevels[2].value - teamProformance
+        this.team.status = teamProformance < this.teamLevels[1].value ? this.$t('l.l_unfinished') : this.$t('l.l_completed')
+      }else if (level == this.teamLevels[2].level){
+        this.team.needTeamProfor = this.teamLevels[2].value
         this.team.enjoyRatio = this.teamLevels[2].ratio
         this.team.leftLevel = 'LV2'
         this.team.level = 'LV3'
         this.team.rightLevel = 'LV4'
-      }else if (teamProformance > this.teamLevels[2].value && teamProformance < this.teamLevels[3].value){
-        this.team.needTeamProfor = this.teamLevels[3].value - teamProformance
+        this.team.status = teamProformance < this.teamLevels[2].value ? this.$t('l.l_unfinished') : this.$t('l.l_completed')
+      }else if (level == this.teamLevels[3].level){
+        this.team.needTeamProfor = this.teamLevels[3].value
         this.team.enjoyRatio = this.teamLevels[3].ratio
-        this.team.leftLevel = 'LV2'
-        this.team.level = 'LV3'
-        this.team.rightLevel = 'LV4'
-      }else if (teamProformance > this.teamLevels[3].value && teamProformance < this.teamLevels[4].value){
-        this.team.needTeamProfor = this.teamLevels[4].value - teamProformance
-        this.team.enjoyRatio = this.teamLevels[4].ratio
         this.team.leftLevel = 'LV3'
-        this.team.level = 'LV4'
+        this.team.level = 'LV5'
         this.team.rightLevel = 'LV5'
-      }else if (teamProformance > this.teamLevels[4].value && teamProformance < this.teamLevels[5].value){
-        this.team.needTeamProfor = this.teamLevels[5].value - teamProformance
-        this.team.enjoyRatio = this.teamLevels[5].ratio
+        this.team.status = teamProformance < this.teamLevels[3].value ? this.$t('l.l_unfinished') : this.$t('l.l_completed')
+      }else if (level == this.teamLevels[4].level){
+        this.team.needTeamProfor = this.teamLevels[4].value
+        this.team.enjoyRatio = this.teamLevels[4].ratio
         this.team.leftLevel = 'LV4'
         this.team.level = 'LV5'
         this.team.rightLevel = 'LV6'
-      }else if (teamProformance > this.teamLevels[5].value && teamProformance < this.teamLevels[6].value){
-        this.team.needTeamProfor = this.teamLevels[6].value - teamProformance
-        this.team.enjoyRatio = this.teamLevels[6].ratio
+        this.team.status = teamProformance < this.teamLevels[4].value ? this.$t('l.l_unfinished') : this.$t('l.l_completed')
+      }else if (level == this.teamLevels[5].level){
+        this.team.needTeamProfor = this.teamLevels[5].value
+        this.team.enjoyRatio = this.teamLevels[5].ratio
         this.team.leftLevel = 'LV5'
         this.team.level = 'LV6'
         this.team.rightLevel = 'LV7'
-      }else if (teamProformance > this.teamLevels[7].value){
-        this.team.needTeamProfor = this.teamLevels[7].value - teamProformance
-        this.team.enjoyRatio = this.teamLevels[7].ratio
+        this.team.status = teamProformance < this.teamLevels[5].value ? this.$t('l.l_unfinished') : this.$t('l.l_completed')
+      }else if (level == this.teamLevels[6].level){
+        this.team.needTeamProfor = this.teamLevels[6].value
+        this.team.enjoyRatio = this.teamLevels[6].ratio
         this.team.leftLevel = 'LV6'
         this.team.level = 'LV7'
         this.team.rightLevel = null
+        this.team.status = teamProformance < this.teamLevels[6].value ? this.$t('l.l_unfinished') : this.$t('l.l_completed')
       }
     },
     async getCoinsPrice(){
@@ -301,13 +349,18 @@ export default {
       }
       //1. 获得 address 下直接数量
       const total_a = await _self.checkNodeCount(address)
+      
       _self.team.teamPeople += Number(total_a)
       const total_num = +total_a
       if(total_num > 0){
         //2. 获得 address 下直推下级的地址信息, 获得团队人数
         const info_a = await _self.getNodeTeamDown(address,0,total_num,total_num)
         //3. 根据下级地址获得存入记录: 单币记录,双币记录,  返利记录 --> 计算团队业绩,  团队总收益
-        if(!info_a || info_a.length == 0) return
+        if(!info_a || info_a.length == 0) {
+              _self.$t('l.l_noTeamBelowInfo')
+              _self.searching = false
+              return
+        }
 
         _self.layers++; //层数
         //3.x
@@ -358,6 +411,12 @@ export default {
           }
         }
   
+      }else{
+        if(_self.searching){
+          //正在查找团队信息
+          _self.$t('l.l_noTeamBelowInfo')
+          _self.searching = false
+        }
       }
     },
     async calculNodeInfo(item_address){
@@ -685,7 +744,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+.team-wrap {
+  width: 100%;
+}
 .team-amount {
   display: flex;
   align-items: center;
@@ -694,7 +756,16 @@ export default {
   width: 100%;
   border-radius: 20px;
   background: #43318C;
-  height: 120px;
+  height: 126px;
+  position: relative;
+}
+.team-icon {
+  width:64px;
+  height: 48px;
+  position: absolute;
+  bottom:0px;
+  left:50%;
+  transform: translateX(-50%);
 }
 .amount-item {
   flex: 1;
@@ -743,7 +814,7 @@ export default {
 }
 .line-docr .line {
   width: 50%;
-  height: 10px;
+  height: 3px;
   background: #43318C;
 }
 .level-desc {
@@ -756,10 +827,27 @@ export default {
 .level-desc span:nth-child(1) {
   color: #000;
   font-size: 16px;
+  flex: 1;
 }
 .level-desc span:nth-child(2) {
   color: #9c9c9c;
   font-size: 14px;
+  flex: 1;
+  margin-right: 0px;
+  text-align: right;
+}
+/deep/.ant-input {
+    background-color: #f1f1f1;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+/deep/.ant-btn {
+    background-color: #f1f1f1;
+    border: 1px solid transparent;
+    border-color: transparent;
+}
+/deep/.ant-btn-primary {
+    color: #43318C;
 }
 .level-item {
   flex: 1;
@@ -828,6 +916,9 @@ export default {
 @media (max-width: 768px) {
   .team-amount,.team-level {
     border-radius: 0px;
+  }
+  .team-info {
+    margin-top:15px;
   }
   .team-level {
     margin-top: 0px;

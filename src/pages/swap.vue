@@ -282,9 +282,9 @@
         box-sizing: border-box;
         width: 100%;
         background: #f6f8fb;
-        border-radius: 16px;
+        border-radius: 8px;
         border: none;
-        font-size: 16px;
+        font-size: 8px;
         padding: 15px 100px 15px 30px;
         color: #131d32;
     }
@@ -336,7 +336,7 @@
         outline: none;
         border: none;
         background-color: #43318C;
-        border-radius: 22px;
+        border-radius: 8px;
         font-size: 14px;
         color: #fff;
         font-weight: 700;

@@ -110,20 +110,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="parter_wrap">
-      <p class="p_title">{{$t('l.partner')}}</p>
-      <ul class="parter_logo">
-        <li class="p_item"><img src="" alt="bit"></li>
-        <li class="p_item"><img src="" alt="bit"></li>
-        <li class="p_item"><img src="" alt="bit"></li>
-      </ul>
-    </div>
-    <div class="parter_wrap2">
-      <p class="p_title">{{$t('l.sjjg')}}</p>
-      <ul class="parter_logo">
-        <a :href="$t('https://attest.im/attestation/searchResult?qurey=18f53a9bb3a54906b416c8ff67dd94ab')" target="_black"><img class="sjjg" src=""></a>
-      </ul>
-    </div> -->
   </div>
 </template>
 
@@ -584,7 +570,7 @@ export default {
     min-width: 96px;
     background: rgba(67, 49, 140, 0.1);
     font-weight: 700;
-    border-radius: 22px;
+    border-radius: 4px;
   }
   .jss126 .MuiButton-label {
     font-size: 14px;
@@ -779,6 +765,7 @@ export default {
     font-weight: bolder;
   }
   @media (max-width: 768px) {
+    
     .home-info {
       margin-top: 0px;
     }
@@ -810,23 +797,30 @@ export default {
     .valut_info_item div:last-child {
       font-size: 14px;
     }
+    .jss107 {
+       margin: 0px auto 10px;
+    }
     .jss108 {
       margin: 20px 15px;
       width: 100%;
       padding-left: 0;
     }
+    .jss108 + .jss108 {
+      margin-top: 0px;
+    }
     .jss109 {
       padding-right: 0;
     }
     .jss110 {
-      padding: 0 20px;
+      padding: 0 10px;
     }
     .jss111 {
       height: 42px;
       line-height: 42px;
     }
     .jss112 {
-      font-size: 14px;
+      color: #43318C;
+      font-size: 15px;
     }
     .jss113 img {
       display: none;
@@ -859,7 +853,7 @@ export default {
       font-size: 12px;
       min-width: 70px;
       font-weight: 700;
-      border-radius: 22px;
+      border-radius: 4px;
       background: rgba(67, 49, 140, 0.1);
     }
     .parter_wrap2 {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Star_icon_white</title>
+    <g id="Dapp" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Mining_single_deposit" transform="translate(-235.000000, -331.000000)" fill="#FFFFFF" fill-rule="nonzero">
+            <g id="Swap备份" transform="translate(0.000000, 151.000000)">
+                <g id="Button备份" transform="translate(195.000000, 168.000000)">
+                    <path d="M48,12 C43.582,12 40,15.582 40,20 C40,24.418 43.582,28 48,28 C52.418,28 56,24.418 56,20 C56,15.582 52.418,12 48,12 Z M48,26 C44.687,26 42,23.313 42,20 C42,16.687 44.687,14 48,14 C51.313,14 54,16.687 54,20 C54,23.313 51.313,26 48,26 Z M49.47,17.978 L48,15.001 L46.531,17.978 L43.245,18.456 L45.623,20.773 L45.061,24.044 L48,22.5 L50.938,24.045 L50.377,20.774 L52.754,18.457 L49.47,17.978 Z" id="Star_icon_white"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

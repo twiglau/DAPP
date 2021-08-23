@@ -4,12 +4,7 @@
       <div class="total-item">
           <div class="total-left">
             <div class="total">
-              <div>{{$t('l.t_tolIn')}}</div>
-              <div><span><countTo :endVal='totalProfit' :duration='3000' :decimals="2" /></span><span>LBR</span></div>
-              <div>≈<countTo :endVal='totalValue' :duration='3000' :decimals="2" prefit="$" /></div>
-            </div>
-            <div class="total">
-              <div>{{$t('l.l_unprofit')}}</div>
+              <div>{{$t('l.t_tolOne')}}</div>
               <div><span><countTo :endVal='useableProfit' :duration='3000' :decimals="2" /></span><span>LBR</span></div>
               <div>≈<countTo :endVal='useValue' :duration='3000' :decimals="2" prefit="$" /></div>
             </div>
@@ -66,7 +61,7 @@
               <button @click="iptValue1 = useableProfit" class="g-button pools__dialog__deposit-all  g-button--normal">{{$t('l.withdrawall')}}</button>
             </li>
             <li>
-              <a-button :loading="pLoading"  @click="handleProfitAction" class="g-button" style="margin-left:auto;margin-top:20px;">{{$t('l.withdrawal')}}</a-button>
+              <a-button :loading="pLoading"  @click="handleProfitAction" class="g-button g-button--tip" style="margin-left:auto;margin-top:20px;">{{$t('l.withdrawal')}}</a-button>
             </li>
           </ul>
         </div>
@@ -214,7 +209,11 @@ export default {
 </script>
 
 <style scoped>
-
+  .mine {
+    width: 100%;
+    min-height: 100vh;
+    background: #f5f5f5;
+  }
   .pools__dialog-inner {
     width: 100%;
     min-width: 100%;
@@ -249,15 +248,24 @@ export default {
     width: 86px;
     height: 36px;
     outline: none;
-    border: none;
-    background-color: #43318C;
+    border: solid 1px #43318C;
+    background-color: white;
     font-size: 14px;
-    color: #fff;
+    color: #43318C;
     font-weight: 700;
     cursor: pointer;
   }
+  .g-button--tip {
+    width: 100%;
+    height: 48px;
+    background-color: #43318C;
+    color: white;
+  }
+  .g-button--tip:hover {
+    background-color: hsl(253, 68%, 47%);
+  }
   .g-button:hover {
-    background-color: hsl(252, 74%, 21%);
+    background-color: hsl(252, 37%, 70%);
   }
   .pools__box {
     width: 100%;
@@ -304,8 +312,8 @@ export default {
     position: relative;
   }
   .pools__coin-logo {
-    width: 48px;
-    height: 48px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
   }
   .logo_lp_2 {
@@ -314,7 +322,7 @@ export default {
   }
   .pools__coin-name {
     margin-left: 12px;
-    font-size: 24px;
+    font-size: 16px;
     color: #131d32;
     font-weight: 700;
   }
@@ -385,7 +393,7 @@ export default {
     box-sizing: border-box;
     width: 100%;
     background: #f6f8fb;
-    border-radius: 16px;
+    border-radius: 8px;
     border: none;
     font-size: 16px;
     padding: 15px 100px 15px 30px;
@@ -423,7 +431,8 @@ export default {
     background-image: none;
     background-color: #fff;
     color: #43318C;
-    border: 1px solid #43318C;
+    border: none;
+    border-radius: 4px;
   }
   .g-button--normal:hover{
     background-color: #1d0c63;

@@ -360,7 +360,7 @@ export default {
     background: #f6f8fb;
     border-radius: 16px;
     border: none;
-    font-size: 16px;
+    font-size: 8px;
     padding: 15px 100px 15px 30px;
     color: #131d32;
   }
@@ -408,7 +408,7 @@ export default {
     }
     .pools__box {
       width: 100%;
-      padding: 24px;
+      padding: 0px 10px 15px 10px;
     }
     .pools__rows>li {
       margin-bottom: 14px;

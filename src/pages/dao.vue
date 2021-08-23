@@ -412,7 +412,7 @@ export default {
     }
     .pools__box {
       width: 100%;
-      padding: 24px;
+      padding: 0px 10px 15px 10px;
     }
     .pools__rows>li {
       margin-bottom: 14px;

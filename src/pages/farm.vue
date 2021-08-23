@@ -4,8 +4,8 @@
     <div class="vault_inner_wrap">
       <div class="vault_top_nav">
         <ul class="vault_nav shadow">
-          <li v-for="(item,index) in navArr" :key="index" @click="handleContChange(index)" class="valut_nav_item" :class="currentIndex == index ? 'active' : ''">{{$t('l.'+item)}}</li>
-          <div id="donghuaBox" :style="{left:currentIndex*50+'%'}"></div>
+          <li v-for="(item,index) in navArr" :key="index" @click="handleContChange(index)" class="valut_nav_item" :class="currentIndex == index ? 'active animation-scale-up' : 'animation-scale-down'">{{$t('l.'+item)}}</li>
+          <!-- <div id="donghuaBox" :style="{left:currentIndex*50+'%'}"></div> -->
         </ul>
         <div class="copy_wrap">
           <span class="copy_text" v-if="!$store.state.accounts.isMobile">{{$t('l.invite_text')}}</span>
@@ -43,7 +43,7 @@
                     <div class="pools__button-group">
                       <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal(0,item)">{{$t('l.withdrawal')}}</button>
                       <a-button v-show="!item.isApproved" :loading="item.isApproving" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency,item)">{{item.isApproving ? $t('l.t_approving') : $t('l.approve')}}</a-button>
-                      <button v-show="item.isApproved"  class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(0,item)">{{$t('l.deposit')}}</button>
+                      <button v-show="item.isApproved"  class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(0,item)"><svg-icon icon-class="Star_icon_white"></svg-icon> <span>{{$t('l.deposit')}}</span></button>
                     </div>
                   </li>
                 </ul>
@@ -91,7 +91,7 @@
                   <div class="pools__button-group">
                     <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal(1,item)">{{$t('l.withdrawal')}}</button>
                     <a-button v-show="!item.isApproved" :loading="item.isApproving" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency1,item)">{{item.isApproving ? ((item.cur1Approved == true && item.cur2Approved == false ? item.currency2 : item.currency1) + ' ' +  $t('l.t_approving')) : $t('l.approve')}}</a-button>
-                    <button v-show="item.isApproved" class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(1,item)">{{$t('l.deposit')}}</button>
+                    <button v-show="item.isApproved" class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(1,item)"> <svg-icon icon-class="Star_icon_white"></svg-icon> <span>{{$t('l.deposit')}}</span> </button>
                   </div>
                 </li>
               </ul>
@@ -1285,6 +1285,7 @@ export default {
     background-color: #fff;
     border-radius: 8px;
   }
+
   .vault_inner_wrap {
     text-align: center;
     width: 100%;
@@ -1428,7 +1429,7 @@ export default {
     outline: none;
     border: none;
     background-color: #43318C;
-    border-radius: 22px;
+    border-radius: 8px;
     font-size: 14px;
     color: #fff;
     font-weight: 700;
@@ -1437,6 +1438,13 @@ export default {
   .g-button--approved {
     background-image: none;
     background-color: #19A569;
+    display: flex;
+    justify-content: center;
+  }
+  .g-button--approved .svg-icon {
+    width: 16px;
+    height:16px;
+    margin-right:8px;
   }
   .g-button--normal {
     background-image: none;
@@ -1513,7 +1521,7 @@ export default {
     box-sizing: border-box;
     width: 100%;
     background: #f6f8fb;
-    border-radius: 16px;
+    border-radius: 8px;
     border: none;
     font-size: 16px;
     padding: 15px 100px 15px 30px;
@@ -1530,7 +1538,7 @@ export default {
     right: 20px;
     top: 10px;
     background: #e0eafa;
-    border-radius: 16px;
+    border-radius: 8px;
     border: none;
     width: auto;
     padding: 0 10px;
@@ -1554,10 +1562,69 @@ export default {
     margin-bottom: 22px;
   }
   @media (max-width: 768px) {
+    .vault_top_nav {
+      border-top: solid 1px #f1f1f1;
+      border-bottom:solid 1px #f1f1f1;
+      padding: 6px 0px;
+    }
     .vault_nav {
       margin-left: 15px;
-      font-size: 12px;
+      font-size: 16px;
       width: 94%;
+      justify-content: flex-start;
+    }
+    #donghuaBox {
+      background:white;
+    }
+    .valut_nav_item {
+      flex: none;
+      padding: 0px 15px;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      color:#666;
+    }
+    .valut_nav_item.active {
+      color: #000;
+      font-weight: 500;
+    }
+
+    /* Animation css */
+    [class*=animation-] {
+        animation-duration: .3s;
+        animation-timing-function: ease-out;
+        animation-fill-mode: both
+    }
+    .animation-scale-up {
+      animation-name: scale-up;
+    }
+
+    .animation-scale-down {
+        animation-name: scale-down;
+    }
+
+    @keyframes scale-up {
+        0% {
+            opacity: 0;
+            transform: scale(1)
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1.2)
+        }
+    }
+
+    @keyframes scale-down {
+        0% {
+            opacity: 0;
+            transform: scale(1.2)
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1)
+        }
     }
     .pools-main {
       width: 100%;
@@ -1565,10 +1632,11 @@ export default {
     .pools__item {
       width: 100%;
       padding: 0 15px;
+      border-bottom: solid 1px #f1f1f1;
     }
     .pools__box {
       width: 100%;
-      padding: 24px;
+      padding: 0px 10px 15px 10px;
     }
     .pools__rows>li {
       margin-bottom: 14px;
@@ -1615,6 +1683,7 @@ export default {
       flex-direction: column;
     } */
     .copy_wrap {
+      display: none;
       max-width:40%;
       margin: 0px 15px 0px 30px;
       height: 28px;
