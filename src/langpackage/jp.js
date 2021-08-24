@@ -171,4 +171,11 @@ export const l = {
   l_teamlink:  '検索リンク', 
   l_enterrightaddress:  '正しいウォレットアドレスを入力してください', 
   l_noTeamBelowInfo:  'このチームの下位情報はありません', 
+  l_deposit_desc:'預金は価値を付加できる',
+  l_sureIt:'確認',
+  l_konwIt:'とった',
+  l_widthing:'抽出',
+  l_innering:'デポジットイン',
+  l_duiing:'確認中',
+  l_numing:'number',
 }

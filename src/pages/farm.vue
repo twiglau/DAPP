@@ -241,21 +241,31 @@
       </a-modal>
     </div>
     </a-spin>
+    <!-- <outer-drawer ref="outer"></outer-drawer> -->
+    <in-drawer ref="inner" :info="depositInfo" @sure="mobileDepositClick"></in-drawer>
+    <loading  ref="loading" :note="loadingInfo"/>
   </div>
 </template>
 
 <script>
 import countTo from 'vue-count-to';
 import Wallet from '@/utils/Wallet.js';
+import OuterDrawer from '@/components/OuterDrawer';
+import InDrawer from '@/components/InDrawer';
+import Loading from '@/components/Loading';
 import {getRate,getPrice,postWithdrawalData} from '@/utils/api'
 import {mapGetters} from 'vuex'
 export default {
   name: "Farm",
   components: {
-    countTo
+    countTo,
+    OuterDrawer,
+    InDrawer,
+    Loading,
   },
   data() {
     return {
+      loadingInfo:{},
       currentHref: window.location.origin + window.location.pathname,
       spinStatus: false,
       isModalShowWithOne:false,
@@ -429,7 +439,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('accounts',['getActiveAccount','getDataUpdateTime','getIsMainChainID']),
+    ...mapGetters('accounts',['getActiveAccount','getDataUpdateTime','getIsMainChainID','getIsMobile']),
   },
   methods: {
     handleTapStart(e) {
@@ -632,6 +642,7 @@ export default {
         _this.$message.error(_this.$t('l.l_numerror'))
         return;
       }
+      _this.$refs.loading.show({title:_this.$t('l.l_widthing'),content:`${_this.$t('l.withdrawal')} ${_this.$t('l.l_numing')} ${aUp}${currency}`})
       Wallet.takeoutOne(this.walletAddress,currency,aUp, (res)=>{
         console.log(res)
          if(res){
@@ -640,19 +651,13 @@ export default {
               const {status} = res
               if(status == 200){
                  _this.isModalShowWithOne = false
-                 _this.$success({
-                   title:_this.$t('l.withdrawal'),
-                   content:_this.$t('l.ok_tips_withdraw')
-                 })
+                 _this.$refs.loading.success({title:_this.$t('l.ok_tips_withdraw')})
               }
            })
          }
 
       }, (res)=>{
-        _this.$error({
-          title:_this.$t('l.withdrawal'),
-          content:res.message || '提取失败'
-        })
+        _this.$refs.loading.failed({title:res || '提取失败'})
       });
     },
     async handleWithDrawTwo(amount1,currency2) {
@@ -678,6 +683,7 @@ export default {
         return ;
       }
       console.log(amount1,currency2)
+      _this.$refs.loading.show({title:_this.$t('l.l_widthing'),content:`${_this.$t('l.withdrawal')} ${_this.$t('l.l_numing')} ${amount1}${_this.withdrawalInfo.currency1}/${currency2}`})
       Wallet.takeoutTwo(this.walletAddress,amount1,currency2,(res)=>{
 
          if(res){
@@ -686,23 +692,17 @@ export default {
               const {status} = res
               if(status == 200){
                  _this.isModalShowWithOne = false
-                 _this.$success({
-                   title:_this.$t('l.withdrawal'),
-                   content:_this.$t('l.ok_tips_withdraw')
-                 })
+                 _this.$refs.loading.success({title:_this.$t('l.ok_tips_withdraw')})
               }
            })
          }
       }, (res)=>{
-        _this.$error({
-          title:_this.$t('l.withdrawal'),
-          content:res.message || '提取失败'
-        })
+        _this.$refs.loading.failed({title:res || '提取失败'})
       });
     },
     async handleShowDepositModal(index,item) {
       let _self = this
-
+      
       _self.depositInfo = item
       _self.$message.loading({ content: 'Loading...',key:'lang'})
       let currency = _self.depositInfo.currency ? _self.depositInfo.currency : _self.depositInfo.currency2;
@@ -753,15 +753,31 @@ export default {
       console.table(res)
       _self.$message.success({ content: 'Loaded!',key:'lang' ,duration: 2 });
       _self.depositInfo.balance = 0;_self.depositInfo.mPrice = 0; _self.depositInfo.sPrice = 0;
-      _self.depositInfo.realM_v = 0;_self.depositInfo.realS_v = 0;
+      _self.depositInfo.realM_v = 0;_self.depositInfo.realS_v = 0;_self.depositInfo.nAmount = 0;
       _self.depositInfo.nAmount1 = 0; _self.depositInfo.nAmount2 = 0;
       if(res.length > 0) _self.depositInfo.balance = res[0];
       if(res.length > 1) _self.depositInfo.mPrice = res[1];
       if(res.length > 2) _self.depositInfo.sPrice = res[2];
-      if(index==0){
-        _self.isModalShowSaveOne = true
-      }else if(index==1){
-        _self.isModalShowSaveTwo = true
+      if(_self.getIsMobile){
+        //移动端
+        _self.depositInfo.isSingle = index
+        _self.$refs.inner.show()
+
+      }else {
+        if(index==0){
+          _self.isModalShowSaveOne = true
+        }else if(index==1){
+          _self.isModalShowSaveTwo = true
+        }
+
+      }
+    },
+    async mobileDepositClick(amount){
+      const {isSingle} = this.depositInfo
+      if(isSingle == 0){
+        this.handleDepositConfirmOne(this.depositInfo.currency,amount)
+      }else{
+        this.handleDepositConfirmTwo(amount,this.depositInfo.currency2)
       }
     },
     async handleDepositConfirmOne(currency,amount) {
@@ -792,21 +808,15 @@ export default {
         _this.$message.error(_this.$t('l.l_stockvalue'))
         return;
       }
-
+      _this.$refs.loading.show({title:_this.$t('l.deposit'),content:`${_this.$t('l.deposit')} ${_this.$t('l.l_numing')} ${amount}${currency}`})
       //调用合约方法存入币种
       Wallet.depositOne(this.inviteAddress,this.walletAddress,currency,amount,(res)=>{
         if(res) {
             _this.isModalShowSaveOne = false
-            _this.$success({
-              title:_this.$t('l.deposit'),
-              content:_this.$t('l.ok_tips_deposit')
-            })
+            _this.$refs.loading.success({title:_this.$t('l.ok_tips_deposit')})
         }
       },(res)=>{
-        _this.$error({
-          title:_this.$t('l.deposit'),
-          content:res.message || '存入失败'
-        })
+        _this.$refs.loading.failed({title:res || '存入失败'})
       });
     },
     async handleDepositConfirmTwo(libraAmount,currency2) {
@@ -838,20 +848,15 @@ export default {
         _this.$message.error(_this.$t('l.l_stockvalue'))
         return;
       }
+      _this.$refs.loading.show({title:_this.$t('l.deposit'),content:`${_this.$t('l.deposit')} ${_this.$t('l.l_numing')} ${amount}${_this.depositInfo.currency1}/${currency2}`})
       //调用合约方法存入币种
       Wallet.depositTwo(this.inviteAddress,this.walletAddress,libraAmount,currency2,(res)=>{
         if(res) {
             _this.isModalShowSaveTwo = false
-            _this.$success({
-              title:_this.$t('l.deposit'),
-              content:_this.$t('l.ok_tips_deposit')
-            })
+            _this.$refs.loading.success({title:_this.$t('l.ok_tips_deposit')})
         }
       },(res)=>{
-        _this.$error({
-          title:_this.$t('l.deposit'),
-          content:res.message || '存入失败'
-        })
+        _this.$refs.loading.failed({title:res || '存入失败'})
       });
     },
     async getMyPairLockAmount(start = 0,end = 1){

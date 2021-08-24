@@ -200,4 +200,11 @@ export const l = {
   l_teamlink:'搜索链接',
   l_enterrightaddress:'请输入正确钱包地址',
   l_noTeamBelowInfo:'暂无该团队下级信息',
+  l_deposit_desc:'存入可以增值',
+  l_sureIt:'确认',
+  l_konwIt:'知道了',
+  l_widthing:'提取中',
+  l_innering:'存入中',
+  l_duiing:'确认中',
+  l_numing:'数量',
 }

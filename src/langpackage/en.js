@@ -198,4 +198,11 @@ export const l = {
   l_teamlink:'team link',
   l_noTeamBelowInfo:'No subordinate information for this team',
   t_tolOne:'Total',
+  l_deposit_desc:'Deposit can add value',
+  l_sureIt:'Confirm',
+  l_konwIt:'Got it',
+  l_widthing:'withdrawing',
+  l_innering:'depositing',
+  l_duiing:'confirming',
+  l_numing:'number',
 }

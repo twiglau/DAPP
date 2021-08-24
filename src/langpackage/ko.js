@@ -187,4 +187,11 @@ export const l = {
   l_teamlink:'검색 링크',
   l_enterrightaddress:'올바른 지갑 주소를 입력하세요',
   l_noTeamBelowInfo:'이 팀에 대한 하위 정보가 없습니다',
+  l_deposit_desc:'예금은 가치를 더할 수 있습니다',
+  l_sureIt:'확인',
+  l_konwIt:'알았어요',
+  l_widthing:'추출',
+  l_innering:'입금',
+  l_duiing:'확인 중',
+  l_numing:'숫자',
 }
