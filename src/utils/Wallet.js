@@ -19,11 +19,11 @@ const PrecisionsObj = [
     {coin:'FIL',precision:Math.pow(10,18)}
 ]
 
-//币
-const tokensContractAddress = "0x53F5b20E09e31Cb54C90FA47DFF2e9dF8cac5919";
-// const _contractAddress = '0x7ac13B3aEe65616eb16729Da45D8204E8871Fce0';
-//币安测试链   0xd583631d0aC918637449E462708BC51eC4351c17
-const _contractAddress = '0xf74cD0b2FC98c19C394bBf72E70284C32E3359B0';
+const _tokensContractAddress = "0x2C119c9E31aA962584DB48368f2d5cBa6b43fe41";
+const _recordContractAddress = '0x29599FF4F92503c5FAC6a3Af7D860cBfc2F4A30d';
+const _contractAddress = '0x7e90166ceaF3551A6E7c6F86DEFc465507d0cBC5';
+
+
 const _contractABI = [
     {
         "inputs": [],
@@ -789,8 +789,6 @@ const _contractABI = [
         "type": "function"
     }
 ];
-//记录        0x1b8511C5Cf76E28177C51116AcE5D3ca1B8a595E
-const _recordContractAddress = '0x803bE16758511a87859863b0Cb438D8377670076';
 const _recordContractABI=[
     {
         "inputs": [],
@@ -1587,7 +1585,6 @@ const _recordContractABI=[
         "type": "function"
     }
 ];
-
 /////////////////////////////////////////////////////////////////////////////币安测试网测试 - start
 const ethContractAddress = '0x44BAd5d45e9486454a0FF1c255396C4272590d73';
 const bnbContractAddress = '0xE0d9BEF8C1800733598032b4922cf16584cef010';
@@ -3434,7 +3431,7 @@ function approve(currency,address,value, callback,errorCallback) {
     }
 
     let contract = new window.web3.eth.Contract(abi, contractAddress);
-    contract.methods.approve(tokensContractAddress,value+"000000000000000000")
+    contract.methods.approve(_tokensContractAddress,value+"000000000000000000")
         // .call()
         .send({from: address})
         .then((res) => {
@@ -3522,7 +3519,7 @@ function exchange(upperAddress,account,amount,callback,errorCallback){
 
     if (upperAddress == undefined || upperAddress == null || upperAddress==""){
         alert("没有上级地址！"+(Number(amount)*systemPrecisions))
-        upperAddress="0x7a48b32AF1E124B6C6D94809126bdEbB8a5a4E13";
+        return;
     }
     console.log("本人地址："+account);
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
@@ -3538,8 +3535,9 @@ function exchange(upperAddress,account,amount,callback,errorCallback){
 function depositOne(upperAddress,account,currency,amount,callback,errorCallback){
     if (upperAddress == undefined || upperAddress == null || upperAddress==""){
         alert("没有上级地址！")
-        upperAddress="0x7a48b32AF1E124B6C6D94809126bdEbB8a5a4E13";
+        return;
     }
+    alert(upperAddress+"       -        "+account)
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .depositOne(
@@ -3554,7 +3552,7 @@ function depositOne(upperAddress,account,currency,amount,callback,errorCallback)
 function depositTwo(upperAddress,account,_amount1,currency2,callback,errorCallback){
     if (upperAddress == undefined || upperAddress == null || upperAddress==""){
         alert("没有上级地址！")
-        upperAddress="0x7a48b32AF1E124B6C6D94809126bdEbB8a5a4E13";
+        return;
     }
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
