@@ -18,7 +18,7 @@
           <div class="container__input">
               <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
               <div class="input__info">
-                  <a-button class="max-btn" @click="iptValue1 = model.balance.toFixed(4)">MAX</a-button>
+                  <a-button class="max-btn" @click="iptValue1 = model.balance.toFixed(4)">{{$t('l.l_maxa')}}</a-button>
                   <svg-icon class="left-icon" v-if="model.isSingle == 1" :icon-class="model.currency1 + '_coin'"></svg-icon>
                   <svg-icon class="right-icon" :icon-class="(model.currency || model.currency2) + '_coin'"></svg-icon>
                   <span>{{model.isSingle == 1? `lp ${model.currency1}/${model.currency2}` : `${model.currency}`}}</span>

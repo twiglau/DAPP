@@ -194,4 +194,7 @@ export const l = {
   l_innering:'입금',
   l_duiing:'확인 중',
   l_numing:'숫자',
+  l_you:'「당신은 얻을 것이다',
+  l_maxa:'최',
+  l_ming:'디테일',
 }

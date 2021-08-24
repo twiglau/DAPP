@@ -207,4 +207,7 @@ export const l = {
   l_innering:'存入中',
   l_duiing:'确认中',
   l_numing:'数量',
+  l_you:'你将获得',
+  l_maxa:'最大',
+  l_ming:'明细',
 }

@@ -178,4 +178,7 @@ export const l = {
   l_innering:'デポジットイン',
   l_duiing:'確認中',
   l_numing:'number',
+  l_you:'「あなたは得るでしょう」',
+  l_maxa:'Max',
+  l_ming:'詳細',
 }

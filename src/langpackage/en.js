@@ -205,4 +205,7 @@ export const l = {
   l_innering:'depositing',
   l_duiing:'confirming',
   l_numing:'number',
+  l_you:'You will get',
+  l_maxa:'Max',
+  l_ming:'Detail',
 }

@@ -241,7 +241,7 @@
       </a-modal>
     </div>
     </a-spin>
-    <!-- <outer-drawer ref="outer"></outer-drawer> -->
+    <outer-drawer ref="outer" :info="withdrawalInfo" @sure="mobileWithDrawalClick"></outer-drawer>
     <in-drawer ref="inner" :info="depositInfo" @sure="mobileDepositClick"></in-drawer>
     <loading  ref="loading" :note="loadingInfo"/>
   </div>
@@ -617,11 +617,26 @@ export default {
 
     async handleShowWithdrawModal(index,currency) {
       this.withdrawalInfo = currency;
-      if (index==0){
-        this.isModalShowWithOne=true;
-      }else {
-        this.isModalShowWithTwo=true;
+      this.withdrawalInfo.nAmount = 0; this.withdrawalInfo.nAmount1 = 0; this.withdrawalInfo.nAmount2 = 0;
+      this.withdrawalInfo.nResult = 0; this.withdrawalInfo.nResult1 = 0; this.withdrawalInfo.nResult2 = 0;
+      if(this.getIsMobile){
+        this.withdrawalInfo.isSingle = index
+        this.$refs.outer.show()
+      }else{
+        if (index==0){
+          this.isModalShowWithOne=true;
+        }else {
+          this.isModalShowWithTwo=true;
+        }
       }
+    },
+    mobileWithDrawalClick(amount){
+       const {isSingle} = this.withdrawalInfo
+       if(isSingle == 0){
+         this.handleWithDrawOne(this.withdrawalInfo.currency,amount)
+       }else{
+         this.handleWithDrawTwo(amount,this.withdrawalInfo.currency2)
+       }
     },
     async handleWithDrawOne(currency,amount) {
       let _this = this
