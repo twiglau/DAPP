@@ -80,6 +80,7 @@ export default {
         if(count > 0){
           this.dataSize = count
           this.spinStatus = true
+          this.records = []
           const res = await this.getProfitRecord()
           this.spinStatus = false
         }
@@ -88,13 +89,14 @@ export default {
         if(count > 0){
           this.dataSize = count
           this.spinStatus = true
+          this.records = []
           const res = await this.getTiquRecord()
           this.spinStatus = false
         }
       }
     },
     formatTimeStr(item){
-      let timestamp = +item.time * 1000
+      let timestamp = this.currentIndex == 0?  +item.time * 1000 : +item.takeoutTime * 1000
       return this.$formatTime(timestamp,'YYYY-MM-DD HH:MM')
     },
     amt(item){
