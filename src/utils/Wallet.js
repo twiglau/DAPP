@@ -3402,7 +3402,6 @@ function initWallet(callback){
 }
 
 function approve(currency,address,value, callback,errorCallback) {
-    alert(currency+"     "+address+"      "+value);
     //授权
     currency = currency.toUpperCase();
     let contractAddress;
@@ -3516,12 +3515,10 @@ function balanceOf(currency,address,callback,errorCallback) {
 
 //兑换
 function exchange(upperAddress,account,amount,callback,errorCallback){
-
     if (upperAddress == undefined || upperAddress == null || upperAddress==""){
-        alert("没有上级地址！"+(Number(amount)*systemPrecisions))
+        alert("没有上级地址！")
         return;
     }
-    console.log("本人地址："+account);
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .exchange(
