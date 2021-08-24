@@ -130,13 +130,13 @@
                 let walletAddress = localStorage.getItem("walletAddress");
                 _self.walletAddress = walletAddress;
                 Wallet.queryAllowance(_self.walletAddress,'USDT',(res)=>{
-                    console.log({res})
                     if(res && res > 0) {
                         _self.isApprovedUSDT = true
                     }else {
-                        _self.isApprovedUSDT = true
+                        _self.isApprovedUSDT = false
                     }
                 })
+
             },
             async getPairPrice(){
                let _self = this
@@ -220,11 +220,10 @@
                     if(res){
                         _self.updateApproveStatus('USDT');
                     }
-                });
+                },(err) => {});
             },
             updateApproveStatus(){
                 this.isApprovedUSDT = true;
-                localStorage.setItem("isApprovedUSDT", true);
             },
         }
     }
