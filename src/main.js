@@ -96,26 +96,6 @@ const setCookie = (name, value, seconds) => {
 Vue.prototype.$setCookie = setCookie
 Vue.prototype.$getCookie = getCookie
 
-function pagination(pageNo, pageSize = 10, array) {
-  var offset = (pageNo - 1) * pageSize;
-  return (offset + pageSize >= array.length) ? array.slice(offset, array.length) : array.slice(offset, offset + pageSize);
-}
-function formatKey(index) {
-  if(index < 10) {
-      return '000'+index;
-  }else if(index >= 10 && index < 100 ) {
-      return '00'+index;
-  }else if(index >= 100 && index < 1000) {
-      return '0'+index;
-  }
-}
-function pageCount(totalnum,limit) {
-  return totalnum > 0 ? ((totalnum < limit) ? 1 : ((totalnum % limit) ? (parseInt(totalnum / limit) + 1) : (totalnum / limit))) : 0;
-}
-Vue.prototype.$pagination = pagination
-Vue.prototype.$formatKey = formatKey
-Vue.prototype.$pageCount = pageCount
-
 
 const i18n = new VueI18n({
   locale: wyfLan,    // 语言标识

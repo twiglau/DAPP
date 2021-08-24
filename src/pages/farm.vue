@@ -5,7 +5,7 @@
       <div class="vault_top_nav">
         <ul class="vault_nav shadow">
           <li v-for="(item,index) in navArr" :key="index" @click="handleContChange(index)" class="valut_nav_item" :class="currentIndex == index ? 'active animation-scale-up' : 'animation-scale-down'">{{$t('l.'+item)}}</li>
-          <!-- <div id="donghuaBox" :style="{left:currentIndex*50+'%'}"></div> -->
+          <div id="donghuaBox" :style="{left:currentIndex*50+'%'}"></div>
         </ul>
         <div class="copy_wrap">
           <span class="copy_text" v-if="!$store.state.accounts.isMobile">{{$t('l.invite_text')}}</span>
