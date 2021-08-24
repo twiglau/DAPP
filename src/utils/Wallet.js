@@ -3534,7 +3534,6 @@ function depositOne(upperAddress,account,currency,amount,callback,errorCallback)
         alert("没有上级地址！")
         return;
     }
-    alert(upperAddress+"       -        "+account)
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     const data = _contract.methods
         .depositOne(
