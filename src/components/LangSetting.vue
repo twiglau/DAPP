@@ -77,10 +77,12 @@ export default {
         }else if(key == 3){
           this.$i18n.locale = 'ko';
           this.lanc = "Korea"
+          this.lanImg = 'Lang_ko'
           llWYf = 'ko';
         }else if(key == 4){
           this.$i18n.locale = 'ja';
           this.lanc = "Japan"
+          this.lanImg = 'Lang_ja'
           llWYf = 'ja';
         }
         this.$store.commit('accounts/setLangType',this.$i18n.locale)

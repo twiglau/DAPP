@@ -37,7 +37,7 @@
                   </li>
                   <li class="pools__row">
                     <div class="pools__labe-field">{{$t('l.VL')}}({{item.currency}})</div>
-                    <div class="pools__label-value"><countTo :endVal='item.totalLockAmount' :duration='3000' :decimals="2"></countTo></div>
+                    <div class="pools__label-value"><countTo :endVal='item.totalLockAmount' :duration='3000' :decimals="4"></countTo></div>
                   </li>
                   <li class="pools__group-buttons">
                     <div class="pools__button-group">
@@ -82,9 +82,9 @@
                 <li class="pools__row">
                   <div class="pools__labe-field">{{$t('l.VL')}}({{item.currency1}}/{{item.currency2}})</div>
                   <div class="pools__label-value">
-                    <countTo :endVal='item.totalLockAmount1' :duration='3000' :decimals="2"></countTo>
+                    <countTo :endVal='item.totalLockAmount1' :duration='3000' :decimals="4"></countTo>
                     /
-                    <countTo :endVal='item.totalLockAmount2' :duration='3000' :decimals="2"></countTo>
+                    <countTo :endVal='item.totalLockAmount2' :duration='3000' :decimals="4"></countTo>
                     </div>
                 </li>
                 <li class="pools__group-buttons">

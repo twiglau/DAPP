@@ -11,6 +11,7 @@
       <div class="vault_seg_nav">
         <ul class="vault_left">
           <li v-for="(item,index) in navArr" :key="index" @click="handleContChange(index)" class="valut_nav_item" :class="currentIndex == index ? 'active animation-scale-up' : 'animation-scale-down'">{{item}}</li>
+          <div id="donghuaBox" :style="{left:currentIndex*50+'%'}"></div>
         </ul>
         <div class="vault_right">
            <span>{{currentIndex == 0? $t('l.t_tolIn') : $t('l.t_tolOut')}}</span>
@@ -75,21 +76,22 @@ export default {
     },
     async handleContChange(index) {
       this.currentIndex = index
+      this.records = []
       if(this.currentIndex == 0){
         const count = await this.checkHasIncomeData()
+        console.log({count})
         if(count > 0){
           this.dataSize = count
           this.spinStatus = true
-          this.records = []
           const res = await this.getProfitRecord()
           this.spinStatus = false
         }
       }else{
         const count = await this.checkHasTiquData()
+        console.log({count})
         if(count > 0){
           this.dataSize = count
           this.spinStatus = true
-          this.records = []
           const res = await this.getTiquRecord()
           this.spinStatus = false
         }
@@ -256,6 +258,15 @@ export default {
     justify-content: flex-start;
     align-items: center;
   }
+  #donghuaBox{
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    background-color: #43318C;
+    border-radius: 100px;
+    transition: 0.5s;
+  }
   .copy_wrap {
     display: flex;
     align-items: center;
@@ -267,7 +278,7 @@ export default {
     border-radius: 8px;
   }
   .vault_seg_nav {
-    padding: 8px 15px;
+    padding: 5px 15px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -277,14 +288,15 @@ export default {
   .vault_left {
     position: relative;
     background-color: #fff;
-    height: 40px;
-    line-height: 40px;
+    height: 32px;
+    line-height: 32px;
     font-size: 14px;
     color: #666666;
     overflow: hidden;
     list-style: none;
     display: flex;
     justify-content: space-around;
+    border-radius: 40px;
   }
   .vault_right {
     font-size: 14px;
@@ -304,7 +316,7 @@ export default {
     transition: 0.5s;
   }
   .valut_nav_item.active {
-    color: #000;
+    color: white;
     font-weight: 500;
   }
 
@@ -610,6 +622,14 @@ export default {
     }
     .pools-main {
       width: 100%;
+    }
+    #donghuaBox {
+      background:white;
+    }
+
+    .valut_nav_item.active {
+      color: #000;
+      font-weight: 500;
     }
     .pools__item {
       width: 100%;
