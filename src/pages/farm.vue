@@ -799,7 +799,7 @@ export default {
             _this.isModalShowSaveOne = false
             _this.$success({
               title:_this.$t('l.deposit'),
-              content:_this.$t('.ok_tips_deposit')
+              content:_this.$t('l.ok_tips_deposit')
             })
         }
       },(res)=>{
@@ -844,7 +844,7 @@ export default {
             _this.isModalShowSaveTwo = false
             _this.$success({
               title:_this.$t('l.deposit'),
-              content:_this.$t('.ok_tips_deposit')
+              content:_this.$t('l.ok_tips_deposit')
             })
         }
       },(res)=>{
