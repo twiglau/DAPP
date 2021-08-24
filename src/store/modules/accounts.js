@@ -23,6 +23,7 @@ const state = {
   showDrawer: false,
   langType: lan,
   activeAccount: localStorage.getItem("walletAddress"),
+  upperAccount:getCookie("inviteAddress"),
   chainId: null,
   chainName: null,
   providerEthers: null, // this is "provider" for Ethers.js
@@ -30,7 +31,7 @@ const state = {
   providerW3m: null, // this is "provider" from Web3Modal
   web3Modal: null,
   dataUpdateTime: 10, //页面数据刷新时间
-  mainChainID: '0x61', //链ID,用于判断是否处于主链上
+  mainChainID: '97', //链ID,用于判断是否处于主链上
   isMainChainID: true,
 };
 
@@ -52,6 +53,9 @@ const getters = {
   },
   getActiveAccount(state) {
     return state.activeAccount;
+  },
+  getUpperAccount(state){
+    return state.upperAccount;
   },
   getChainId(state) {
     return state.chainId;
@@ -103,6 +107,7 @@ const actions = {
         });
         let providerW3m = await w3mObject.connect();
         if(window.ethereum) {
+          
           commit("setIsConnected", true);
           commit("setActiveAccount", window.ethereum.selectedAddress || window.ethereum.address);
           localStorage.setItem("walletAddress",window.ethereum.selectedAddress || window.ethereum.address);
@@ -186,7 +191,9 @@ const mutations = {
   setActiveAccount(state, selectedAddress) {
     state.activeAccount = selectedAddress;
   },
-
+  setUpperAccount(state,upperAddress) {
+    state.upperAccount = upperAddress;
+  },
 
   setChainData(state, chainId) {
     state.chainId = chainId;
