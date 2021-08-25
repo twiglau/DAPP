@@ -214,6 +214,7 @@
                             const {status} = result
                             if(status == 200){
                                 _self.iptValue0 = null;
+                                _self.$refs.swap.close();
                                 _self.$refs.loading.success({title:_self.$t('l.l_success')})
                             }
                         })
