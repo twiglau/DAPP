@@ -49,10 +49,12 @@
                 </div> -->
                 <li>
                     <a-button v-show="!isApprovedUSDT" :loading="isApproving" class="g-button" @click="handleApprovedFor()">{{isApproving ? $t('l.t_approving') : $t('l.approve')}}</a-button>
-                    <button v-show="isApprovedUSDT" class="g-button" @click="handleSwap(iptValue0)">{{$t('l.t_Duic')}}</button>
+                    <button v-show="isApprovedUSDT" class="g-button" @click="handleSwapAction(iptValue0)">{{$t('l.t_Duic')}}</button>
                 </li>
             </a-spin>
         </div>
+        <swap-drawer ref="swap" :info="swap" @sure="handleSwap"></swap-drawer>
+        <loading ref="loading"/>
     </div>
 </template>
 <script>
@@ -61,11 +63,15 @@
     import countTo from 'vue-count-to';
     import SwapConfig from '@/components/SwapConfig.vue'
     import clickoutside from '@/utils/clickoutside.js'
+    import SwapDrawer from '@/components/SwapDrawer'
+    import Loading from '@/components/Loading'
     export default {
         name:'swap',
         components: {
             countTo,
-            SwapConfig
+            SwapConfig,
+            SwapDrawer,
+            Loading,
         },
         directives:{clickoutside},
         computed: {
@@ -114,6 +120,7 @@
                 isApprovedUSDT:false,
                 isApproving:false,
                 inviteAddress:'',
+                swap:{},
             }
         },
         methods: {
@@ -159,7 +166,7 @@
             handleSetting(){
                 this.showConfig = false
             },
-            handleSwap(amount){
+            handleSwapAction(amount){
                 let _self = this
                 if(!this.inviteAddress && this.inviteAddress.length < 10){
                     _self.$message.error(_self.$t('l.l_upper'))
@@ -177,10 +184,21 @@
                     _self.$message.error(_self.$t('l.l_numerror'));
                     return;
                 }
+
+                this.swap = {
+                    currency1:this.iptCoin0,
+                    currency2:this.iptCoin1,
+                    amount1:+amount,
+                    amount2:+this.iptValue1
+                }
+                this.$refs.swap.show()
+            },
+            handleSwap(amount){
+                let _self = this
                 //TODO 上级地址,从URL获取
                 let walletAddress = localStorage.getItem("walletAddress");
                 let upperAddress = _self.inviteAddress;
-                _self.spinStatus = true
+                _self.$refs.loading.show({title:_self.$t('l.l_duiing'),content:_self.$t('l.l_swaps',[this.iptValue0,this.iptCoin0,this.iptValue1,this.iptCoin1]),desc:_self.$t('l.l_swapb')})
                 Wallet.exchange(upperAddress,walletAddress,amount,(res)=>{
                     _self.spinStatus = false
                     if(res){
@@ -196,19 +214,14 @@
                             const {status} = result
                             if(status == 200){
                                 _self.iptValue0 = null;
-                                _self.$success({
-                                    title:_self.$t('l.t_SWAP'),
-                                    content:_self.$t('l.t_SWAP') + ' success!'
-                                })
+                                _self.$refs.swap.close();
+                                _self.$refs.loading.success({title:_self.$t('l.l_success')})
                             }
                         })
                     }
                 },(err)=>{
                     _self.spinStatus = false
-                    _self.$error({
-                        title:_self.$t('l.t_SWAP'),
-                        content:err.message || 'error unknown'
-                    })
+                    _self.$refs.loading.failed({title:err.message || 'err'})
                 });
             },
             async handleApprovedFor() {

@@ -1,6 +1,5 @@
 var token1 = 'WFC';
 
-
 export const l = {
   t_isbottom:'已是底部',
   t_loadMore:'点击加载更多',
@@ -200,4 +199,20 @@ export const l = {
   l_teamlink:'搜索链接',
   l_enterrightaddress:'请输入正确钱包地址',
   l_noTeamBelowInfo:'暂无该团队下级信息',
+  l_deposit_desc:'存入可以增值',
+  l_sureIt:'确认',
+  l_konwIt:'知道了',
+  l_widthing:'提取中',
+  l_innering:'存入中',
+  l_duiing:'确认中',
+  l_numing:'数量',
+  l_you:'你将获得',
+  l_maxa:'最大',
+  l_ming:'明细',
+  l_swapt:'确认兑换',
+  l_swapm:'如果交易输出，您将收到至少{0}{1}，否则交易将恢复',
+  l_next:'下一步',
+  l_swaps:'用 {0}{1} 兑换 {2}{3}',
+  l_swapb:'确认在钱包中交易',
+  l_success:'兑换成功',
 }
