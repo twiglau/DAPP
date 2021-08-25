@@ -111,11 +111,14 @@ export default {
   },
   methods: {
     close() {
+       this.iptValue1 = null
        this.visible = false
     },
     show(){
-        this.model = this.info
-        this.drawerHeight = this.model.isSingle == 0 ? 400 : 440
+        this.$nextTick(()=>{
+          this.model = this.info
+          this.drawerHeight = this.model.isSingle == 0 ? 400 : 440
+        })
         this.visible = true
     },
     input_num(index) {

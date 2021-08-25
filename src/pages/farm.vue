@@ -666,6 +666,7 @@ export default {
               const {status} = res
               if(status == 200){
                  _this.isModalShowWithOne = false
+                 _this.$refs.outer.close()
                  _this.$refs.loading.success({title:_this.$t('l.ok_tips_withdraw')})
               }
            })
@@ -707,6 +708,7 @@ export default {
               const {status} = res
               if(status == 200){
                  _this.isModalShowWithOne = false
+                 _this.$refs.outer.close()
                  _this.$refs.loading.success({title:_this.$t('l.ok_tips_withdraw')})
               }
            })
@@ -828,6 +830,7 @@ export default {
       Wallet.depositOne(this.inviteAddress,this.walletAddress,currency,amount,(res)=>{
         if(res) {
             _this.isModalShowSaveOne = false
+            _this.$refs.inner.close()
             _this.$refs.loading.success({title:_this.$t('l.ok_tips_deposit')})
         }
       },(res)=>{
@@ -868,6 +871,7 @@ export default {
       Wallet.depositTwo(this.inviteAddress,this.walletAddress,libraAmount,currency2,(res)=>{
         if(res) {
             _this.isModalShowSaveTwo = false
+            _this.$refs.inner.close()
             _this.$refs.loading.success({title:_this.$t('l.ok_tips_deposit')})
         }
       },(res)=>{

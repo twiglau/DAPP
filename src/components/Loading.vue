@@ -16,6 +16,9 @@
              <div class="container__msg" v-if="alert.content && alert.content.length > 0">
                {{alert.content}}
              </div>
+             <div class="container__msg container__desc" v-if="alert.desc && alert.desc.length > 0">
+               {{alert.desc}}
+             </div>
              <a-button class="container__btn" @click="close" v-if="!alert.content">{{$t('l.l_konwIt')}}</a-button>
          </div>
     </a-modal>
@@ -29,7 +32,7 @@ export default {
   props:{
     note:{
       type:Object,
-      default:{}
+      default:()=>({})
     },
   },
   data() {
@@ -114,7 +117,9 @@ export default {
     font-size: 12px;
     font-weight: 500;
     text-align: center;
-
+  }
+  &__desc {
+    margin-top: 4px;
   }
   &__btn {
     margin: 24px auto;

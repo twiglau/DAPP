@@ -1,4 +1,6 @@
 var token1 = 'WFC';
+var amount = 0;
+var currency = 'LBR';
  
 
 export const l = {
@@ -208,4 +210,9 @@ export const l = {
   l_you:'You will get',
   l_maxa:'Max',
   l_ming:'Detail',
+  l_swapt:'Confirm redemption',
+  l_swapm: `If the transaction is output, you will receive at least {0}{1}, otherwise the transaction will resume. `,
+  l_swaps:'Use {0}{1} to exchange {2}{3}',
+  l_swapb:'Confirm transaction in wallet',
+  l_success:'Exchange successful',
 }
