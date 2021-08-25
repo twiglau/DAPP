@@ -3,7 +3,7 @@
     <div class="header_inner_wrap">
       <div class="left_nav">
         <div class="logo_wrap">
-          <img :src="logoImg" alt="" class="logo">
+          <svg-icon :icon-class="logoImg" alt="" class="logo" />
         </div>
         <ul class="nav_text" v-if="!getIsMobile">
           <li class="nav_item" :class="currentIndex == 1 ? 'clickedWhiteNav': ''"><a @click="handleJump('home',1)">{{$t('l.h_n1')}}</a><div class="whiteLine"></div></li>
@@ -14,7 +14,6 @@
         </ul>
       </div>
       <div class="right_nav">
-        <!-- v-show="showConnectBtn" -->
         <a v-if="!isUserConnected" @touchstart="handleTapStart" @touchend="handleTapEnd" class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"  @click="handleConnectWeb3Modal"><span class="c_btn_text">{{$t('l.cwallet')}}</span></a>
         <a v-if="isUserConnected"  @click="disconnectWeb3Modal"  class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"><span class="c_btn_text">{{formatAddress(getActiveAccount)}}</span></a>
         <a class="lang_change" v-if="!getIsMobile" @click="showLangBox" :class="currentIndex == 1 ? 'c_bg':''" ><i class="icon"></i>{{this.lanc}}
@@ -25,7 +24,8 @@
             <li :class="this.$i18n.locale == 'jp' ? 'active' : ''" @click.stop.prevent="changeLangType(4)">Japan</li>
           </div>
         </a>
-        <img :src="menuImg" v-if="getIsMobile" @click="switchMenu" alt="" class="menu_icon">
+        <div @click="switchMenu" class="menu-c"><svg-icon :icon-class="menuImg" v-if="getIsMobile" alt="" class="menu-icon" /></div>
+        
       </div>
     </div>
     <a-alert
@@ -172,16 +172,16 @@
       ...mapGetters('accounts',['getLangType','getIsMobile',"getActiveAccount", "isUserConnected",'getIsMainChainID']),
       logoImg:function(){
         if(this.currentIndex == 1){
-          return require('@/assets/logo_white.png')
+          return 'logo_white'
         }else{
-          return require('@/assets/logo.png')
+          return 'logo'
         }
       },
       menuImg:function(){
         if(this.currentIndex == 1){
-          return require('@/assets/menu_white_icon.png')
+          return 'menu_white_icon'
         }else{
-          return require('@/assets/menu_black_icon.png')
+          return 'menu_black_icon'
         }
       }
     },
@@ -301,7 +301,7 @@
   }
   .left_nav {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: flex-start;
     margin-right: auto;
     align-items: center;
   }
@@ -322,8 +322,9 @@
     color: black;
   }
   .header_wrap .c_btn {
-    height: 32px;
-    line-height: 32px;
+    height: 24px;
+    line-height: 24px;
+    width: 104px;
     background-color: transparent;
     font-size: 16px;
     color: rgb(68, 62, 62);
@@ -336,8 +337,8 @@
     width: 100%;
     height: 100%;
     font-size: 14px;
+    text-align: center;
     border-radius: 4px;
-    padding: 0 15px;
   }
   .header_wrap .c_btn:hover {
     /* background-color: #20C7D3; */
@@ -365,24 +366,20 @@
     background: rgba(255, 255, 255, 0.2);
     color: white;
   }
-  .menu_icon {
-    margin-right: -10px;
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
+  .menu-c {
+    display: inline-block;
+  }
+  .menu-c .menu-icon {
+    width: 44px;
+    height: 44px;
     cursor: pointer;
-    display: none;
-    /* background-image: url('../assets/m_menu_icon.svg'); */
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    background-position: center center;
   }
   .logo_wrap {
     margin-right: 42px;
     width: 76px;
     height: 24px;
   }
-  .logo_wrap img {
+  .logo_wrap .svg-icon {
     width: 100%;
     height: 100%;
   }
@@ -441,8 +438,8 @@
       color: rgb(68, 62, 62);
     }
     .header_wrap {
-      padding: 10px 15px 10px 24px;
-      height: auto!important;
+      padding: 0px 10px 0px 24px;
+      height: 60px !important;
     }
     .lang_change{
       float: right;

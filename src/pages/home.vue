@@ -1,9 +1,8 @@
 <template>
   <div class="home_wrap">
     <div class="home-info">
-      <img src="../assets/logo_bg_img.png" v-show="$store.state.accounts.isMobile" class="logo_bg" alt="">
       <div class="top_banner_wrap">
-        <img src="../assets/logo_bg_img.png" v-show="!$store.state.accounts.isMobile" class="logo_bg" alt="">
+        <svg-icon icon-class="logo_bg_img" v-show="!$store.state.accounts.isMobile" class="logo_bg" />
         <ul class="top_info" style="list-style:none;">
           <li>{{$t('l.t_home1')}}</li>
           <li>{{$t('l.t_home2')}}</li>
@@ -52,6 +51,7 @@
           </table>
         </div>
       </ul>
+      <svg-icon icon-class="logo_bg_img" v-show="$store.state.accounts.isMobile" class="logo_bg" />
     </div>
     <div class="jss107">
       <div class="jss108 jss109">
@@ -60,7 +60,6 @@
             <p class="jss112">{{$t('l.home_t1')}}</p>
             <p class="jss113" @click="handleToMore(1)">
               <span class="jss114">{{$t("l.home_seemore")}}</span>
-              <svg-icon icon-class="icon-more" />
             </p>
           </div>
           <div class="jss115" v-for="(item,index) in oneTokens" :key="index">
@@ -87,7 +86,6 @@
             <p class="jss112">{{$t('l.home_t2')}}</p>
             <p class="jss113">
               <span class="jss114" @click="handleToMore(2)">{{$t('l.home_seemore')}}</span>
-              <svg-icon icon-class="icon-more" />
             </p>
           </div>
           <div class="jss115" v-for="(item,index) in twoTokens" :key="index">
@@ -437,10 +435,8 @@ export default {
     border-radius: 16px;
   }
   .jss111 {
-    height: 60px;
+    padding-top: 24px;
     display: flex;
-    line-height: 60px;
-    border-bottom: 1px solid #EDEFF2;
     justify-content: space-between;
   }
   .jss112 {
@@ -452,7 +448,7 @@ export default {
     cursor: pointer;
   }
   .jss114 {
-    color: #8391A8;
+    color: #3C3C3C;
     font-size: 12px;
     font-weight: 400;
   }
@@ -461,7 +457,7 @@ export default {
     margin-left: 4px;
   }
   .jss115 {
-    padding: 20px 0 3px;
+    padding: 24px 0px 0px 0px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -488,7 +484,7 @@ export default {
     margin-right: 5px;
   }
   .jss_img2 {
-    margin-left: -15px;
+    margin-left: -18px;
   }
   .jss121 {
     color: #131D32;
@@ -771,14 +767,14 @@ export default {
     }
     .top_banner_wrap {
       margin: 0px;
-      padding: 20px;
+      padding: 24px;
       height: 100px;
       font-size: 12px;
       border-radius: 0px;
-      border: solid 1px transparent;
+      border: none;
     }
     .top_info {
-      padding: 20px 0px;
+      padding: 0px 0px;
     }
     .banner_img {
       max-height: 160px;
@@ -798,10 +794,10 @@ export default {
       font-size: 14px;
     }
     .jss107 {
-       margin: 0px auto 10px;
+       margin: 0px;
     }
     .jss108 {
-      margin: 20px 15px;
+      margin: 0px;
       width: 100%;
       padding-left: 0;
     }
@@ -812,15 +808,16 @@ export default {
       padding-right: 0;
     }
     .jss110 {
-      padding: 0 10px;
+      padding: 24px;
+      border-radius: 0px;
+      border-bottom: solid 1px #f5f5f5;
     }
     .jss111 {
-      height: 42px;
-      line-height: 42px;
+      padding-top: 0px;
     }
     .jss112 {
       color: #43318C;
-      font-size: 15px;
+      font-size: 16px;
     }
     .jss113 img {
       display: none;
@@ -830,7 +827,7 @@ export default {
     }
     .jss117 {
       width: 100%;
-      margin-bottom: 16px;
+      margin-bottom: 0px;
     }
     .jss119 {
       width: 28px;
@@ -849,12 +846,14 @@ export default {
       color: #43318C;
       border: none;
       height: 32px;
-      padding: 0 12px;
+      line-height: 32px;
+      width: 80px;
+      min-width:70px;
+      padding: 0px;
       font-size: 12px;
-      min-width: 70px;
       font-weight: 700;
-      border-radius: 4px;
-      background: rgba(67, 49, 140, 0.1);
+      border-radius: 8px;
+      background: #f6f6f6;
     }
     .parter_wrap2 {
       padding-bottom: 0;
@@ -883,7 +882,7 @@ export default {
       padding-bottom: 24px;
     }
     #homeDate {
-      padding: 16px 20px;
+      padding: 0px 24px 16px 24px;
       border-radius: 0px;
       margin: 0 0px 0;
     }

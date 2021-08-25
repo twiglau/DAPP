@@ -4,7 +4,7 @@
     <div class="vault_inner_wrap">
       <div class="vault_top_nav">
         <ul class="vault_nav shadow">
-          <li v-for="(item,index) in navArr" :key="index" @click="handleContChange(index)" class="valut_nav_item" :class="currentIndex == index ? 'active animation-scale-up' : 'animation-scale-down'">{{$t('l.'+item)}}</li>
+          <li v-for="(item,index) in navArr" :key="index" @click="handleContChange(index)" class="valut_nav_item" :class="currentIndex == index ? 'active' : ''">{{$t('l.'+item)}}</li>
           <div id="donghuaBox" :style="{left:currentIndex*50+'%'}"></div>
         </ul>
         <div class="copy_wrap">
@@ -1389,7 +1389,7 @@ export default {
     margin-left: 40px;
   }
   .pools__info, .pools__labe-field {
-    color: #8391a8;
+    color: #9C9C9C;
     display: flex;
     align-items: center;
   }
@@ -1404,12 +1404,12 @@ export default {
     align-items: flex-end;
   }
   .pools__info, .pools__labe-field {
-    color: #8391a8;
+    color: #9C9C9C;
     display: flex;
     align-items: center;
   }
   .pools__labe-field, .ques__labe-field {
-    color: #8391a8;
+    color: #9C9C9C;
     display: flex;
     align-items: center;
   }
@@ -1421,7 +1421,7 @@ export default {
   }
   .pools__label-value {
     font-size: 14px;
-    color: #8391a8;
+    color: #9C9C9C;
     font-weight: bolder;
     margin-left: auto;
   }
@@ -1433,18 +1433,19 @@ export default {
     font-size: 12px;
   }
   .pools__button-group {
+    padding-top:16px;
     display: flex;
     justify-content: space-between;
   }
   .pools__button-group .g-button {
-    width: 46%;
+    width: 47.5%;
   }
   .g-button {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 44px;
+    height: 40px;
     outline: none;
     border: none;
     background-color: #43318C;
@@ -1529,7 +1530,7 @@ export default {
     width: 108px;
   }
   .pools__dialog__withdraw-field span:first-child {
-    color: #8391a8;
+    color: #9C9C9C;
   }
   .pools__dialog__withdraw-field span:last-child {
     font-size: 16px;
@@ -1581,13 +1582,15 @@ export default {
     margin-bottom: 22px;
   }
   @media (max-width: 768px) {
+    .vault_inner_wrap {
+       padding:0px;
+    }
     .vault_top_nav {
       border-top: solid 1px #f1f1f1;
       border-bottom:solid 1px #f1f1f1;
-      padding: 6px 0px;
+      padding: 2px 0px;
     }
     .vault_nav {
-      margin-left: 15px;
       font-size: 16px;
       width: 94%;
       justify-content: flex-start;
@@ -1597,15 +1600,20 @@ export default {
     }
     .valut_nav_item {
       flex: none;
-      padding: 0px 15px;
+      margin-left: 24px;
+      padding: 0px;
       cursor: pointer;
       position: relative;
       z-index: 2;
-      color:#666;
+      color:#9C9C9C;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .valut_nav_item + .valut_nav_item {
+      margin-left:45px;
     }
     .valut_nav_item.active {
       color: #000;
-      font-weight: 500;
     }
 
     /* Animation css */
@@ -1630,14 +1638,14 @@ export default {
 
         100% {
             opacity: 1;
-            transform: scale(1.2)
+            transform: scale(1)
         }
     }
 
     @keyframes scale-down {
         0% {
             opacity: 0;
-            transform: scale(1.2)
+            transform: scale(1)
         }
 
         100% {
@@ -1647,18 +1655,23 @@ export default {
     }
     .pools-main {
       width: 100%;
+      margin:0px;
     }
     .pools__item {
       width: 100%;
-      padding: 0 15px;
+      padding: 24px;
+      margin:0px;
       border-bottom: solid 1px #f1f1f1;
     }
     .pools__box {
       width: 100%;
-      padding: 0px 10px 15px 10px;
+      padding: 0px;
     }
     .pools__rows>li {
-      margin-bottom: 14px;
+      margin-bottom: 5px;
+    }
+    .pools__row-1 {
+      margin-bottom: 8px !important;
     }
     .pools__coin-name {
       font-size: 20px;
@@ -1673,7 +1686,7 @@ export default {
     .pools__info, .pools__labe-field {
       font-family: MicrosoftYaHei;
       font-size: 12px;
-      font-weight: 400;
+      font-weight: 500;
     }
     .pools__dialog-inner {
       width: 100%;
@@ -1701,9 +1714,6 @@ export default {
     .pools__income-field {
       padding: 10px 10px;
     }
-    /* .vault_top_nav {
-      flex-direction: column;
-    } */
     .copy_wrap {
       display: none;
       max-width:40%;

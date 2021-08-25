@@ -115,7 +115,7 @@ export const l = {
   menu2: "机枪池",
   home_t1: "单币质押挖矿",
   home_t2: "LP质押挖矿",
-  home_seemore: "查看更多",
+  home_seemore: "更多..",
   mining: "去挖矿",
   home_icon1_text: "高收益",
   home_icon2_text: "智能配资",

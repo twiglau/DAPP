@@ -518,16 +518,52 @@ export default {
     margin-bottom: 22px;
   }
   @media (max-width: 768px) {
+    
     .pools-main {
       width: 100%;
+      margin:0px;
+    }
+    #donghuaBox {
+      background:white;
+    }
+
+    .valut_nav_item {
+      flex: none;
+      margin-left: 24px;
+      padding: 0px;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      color:#9C9C9C;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .valut_nav_item + .valut_nav_item {
+      margin-left:24px;
+    }
+    .valut_nav_item.active {
+      color: #000;
+    }
+    .pools__coin-logo {
+      width: 24px !important;
+      height: 24px !important;
+    }
+    .pools__coin-name {
+      font-size: 14px !important;
+      margin-left: 8px;
+    }
+    .name_lp_2 {
+      margin-left: 20px;
     }
     .pools__item {
       width: 100%;
-      padding: 0 15px;
+      padding: 24px;
+      margin: 0px;
+      border-bottom: solid 1px #f6f8fb;
     }
     .pools__box {
       width: 100%;
-      padding: 0px 10px 15px 10px;
+      padding: 0px;
     }
     .pools__rows>li {
       margin-bottom: 14px;

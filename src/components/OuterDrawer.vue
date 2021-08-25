@@ -18,13 +18,13 @@
               <span>{{model.isSingle == 1? `${model.currency1}/${model.currency2}` : `${model.currency}`}}</span>
           </div>
           <div class="container__desc">
-              <span>{{$t('l.deposited')}}({{model.currency || model.currency1}})</span><span><countTo :endVal='(model.lockAmount || model.lockAmount1)' :duration='1000' :decimals="4"></countTo></span>
+              <span>{{$t('l.deposited')}}({{model.currency || model.currency1}})</span><span><countTo :endVal='( model.isSingle == 0? model.lockAmount : model.lockAmount1)' :duration='1000' :decimals="4"></countTo></span>
           </div>
           <div class="container__input">
               <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
               <div class="input__info">
                   <span>{{model.isSingle == 1? `${model.currency1}/${model.currency2}` : `${model.currency}`}}</span>
-                  <a-button class="max-btn" @click="iptValue1 = (model.lockAmount || model.lockAmount1).toFixed(4)">{{$t('l.l_maxa')}}</a-button>
+                  <a-button class="max-btn" @click="iptValue1 = (model.isSingle == 0? model.lockAmount : model.lockAmount1).toFixed(4)">{{$t('l.l_maxa')}}</a-button>
               </div>
           </div>
           <div class="container__detail">
