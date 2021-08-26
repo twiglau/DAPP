@@ -72,6 +72,7 @@ export default {
     return {
       visible: true,
       walletAddress:'',
+      currentHref: window.location.origin+window.location.pathname,
     }
   },
   components:{LangSetting},

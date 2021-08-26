@@ -1153,10 +1153,12 @@ export default {
     if(inviteAddress && inviteAddress.length > 0) this.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)
     this.inviteAddress = this.$getCookie('inviteAddress')
 
+    //从首页过来的
     let ptype = this.$route.query.ptype ? this.$route.query.ptype : 1
     if(ptype !== undefined) {
       this.handleContChange(ptype - 1)
     }
+    //开启定时器线程
     setTimeout(async () => {
        await this.getLockAmount()
        await this.getPairLockAmount()
