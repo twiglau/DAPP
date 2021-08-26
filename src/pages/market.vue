@@ -357,11 +357,11 @@ export default {
       console.log({'layer-show':this.layers,address})
       //0. 
       if(isTop){ //本人自己
-        // await _self.calculNodeInfo(address)
+        //----------------
       }
       //1. 获得 address 下直接数量
       const total_a = await _self.checkNodeCount(address)
-      
+      console.log({address,total_a,a:'直接数量'})
       _self.team.teamPeople += Number(total_a)
       if(!_self.isSearchData){
         _self.currentTeam.teamPeople = _self.team.teamPeople + 0
@@ -370,6 +370,7 @@ export default {
       if(total_num > 0){
         //2. 获得 address 下直推下级的地址信息, 获得团队人数
         const info_a = await _self.getNodeTeamDown(address,0,total_num,total_num)
+        console.log({address,info_a,a:'团队地址详情'})
         //3. 根据下级地址获得存入记录: 单币记录,双币记录,  返利记录 --> 计算团队业绩,  团队总收益
         if(!info_a || info_a.length == 0) {
             _self.searching = false
@@ -387,6 +388,7 @@ export default {
               const oneCount = await _self.checkHasMyLockData(item_address)
               if(oneCount > 0){
                 const oneRecord = await _self.getMyLockAmount(item_address,0,oneCount,oneCount)
+                console.log({item_address,oneRecord,a: i + 'MyLockData'})
                 if(oneRecord && oneRecord.length > 0){
                   const oneStr = localStorage.getItem('ONE-RECORD')
                   const historyOneRecord = JSON.parse(oneStr) || []
@@ -396,8 +398,10 @@ export default {
               }
               //3.2
               const twoCount = await _self.checkHasMyPairLockData(item_address)
+              console.log({item_address,twoCount,a: i + 'checkHasMyPairLockData'})
               if(twoCount > 0){
                 const twoRecord = await _self.getMyPairLockAmount(item_address,0,twoCount,twoCount)
+                console.log({item_address,twoRecord,a: i + 'MyPairLock'})
                 if(twoRecord && twoRecord.length > 0){
                     const twoStr = localStorage.getItem('TWO-RECORD')
                     const historyTwoRecord = JSON.parse(twoStr) || []
@@ -407,12 +411,14 @@ export default {
               }
               //3.3
               const profitCount = await _self.checkHasIncomeData(item_address)
+              console.log({item_address,profitCount,a: i + 'checkHasIncomeData'})
               if(profitCount > 0){
-                const profitCount = await _self.getProfitRecord(item_address,0,profitCount,profitCount)
-                if(profitCount && profitCount.length > 0){
+                const profitRecord = await _self.getProfitRecord(item_address,0,profitCount,profitCount)
+                console.log({item_address,profitRecord,a: i + 'getProfitRecord'})
+                if(profitRecord && profitRecord.length > 0){
                     const profitStr = localStorage.getItem('PROFIT-RECORD')
                     const historyProfitRecord = JSON.parse(profitStr) || []
-                    historyProfitRecord.push(...profitCount)
+                    historyProfitRecord.push(...profitRecord)
                     localStorage.setItem('PROFIT-RECORD',JSON.stringify(historyProfitRecord))
                 }
               }
@@ -434,51 +440,6 @@ export default {
           _self.searching = false
         }
       }
-    },
-    async calculNodeInfo(item_address){
-      let _self = this
-      return new Promise((resolve,reject) => {
-         try {
-          setTimeout(async () =>{
-              const oneCount = await _self.checkHasMyLockData(item_address)
-              if(oneCount > 0){
-                const oneRecord = await _self.getMyLockAmount(item_address,0,oneCount,oneCount)
-                if(oneRecord && oneRecord.length > 0){
-                  const oneStr = localStorage.getItem('ONE-RECORD')
-                  const historyOneRecord = JSON.parse(oneStr) || []
-                  historyOneRecord.push(...oneRecord)
-                  localStorage.setItem('ONE-RECORD',JSON.stringify(historyOneRecord))
-                }
-              }
-              //3.2
-              const twoCount = await _self.checkHasMyPairLockData(item_address)
-              if(twoCount > 0){
-                const twoRecord = await _self.getMyPairLockAmount(item_address,0,twoCount,twoCount)
-                if(twoRecord && twoRecord.length > 0){
-                    const twoStr = localStorage.getItem('TWO-RECORD')
-                    const historyTwoRecord = JSON.parse(twoStr) || []
-                    historyTwoRecord.push(...twoRecord)
-                    localStorage.setItem('TWO-RECORD',JSON.stringify(historyTwoRecord))
-                }
-              }
-              //3.3
-              const profitCount = await _self.checkHasIncomeData(item_address)
-              if(profitCount > 0){
-                const profitCount = await _self.getProfitRecord(item_address,0,profitCount,profitCount)
-                if(profitCount && profitCount.length > 0){
-                    const profitStr = localStorage.getItem('PROFIT-RECORD')
-                    const historyProfitRecord = JSON.parse(profitStr) || []
-                    historyProfitRecord.push(...profitCount)
-                    localStorage.setItem('PROFIT-RECORD',JSON.stringify(historyProfitRecord))
-                }
-              }
-              resolve('success')
-          },0)
-
-         } catch (error) {
-           reject(error)
-         }
-      })
     },
     /**
      * 节点 address 直推下级 所有数量
@@ -654,7 +615,7 @@ export default {
     async checkHasIncomeData(address){
       let _self = this
       return new Promise((resolve,reject) => {
-        Wallet.queryIncomeSize(_self.walletAddress,(res) =>{
+        Wallet.queryIncomeSize(address,(res) =>{
             resolve(+res || 0) 
         },(err) => {
             reject(err)
@@ -678,7 +639,7 @@ export default {
                   }else{
                     rej('error')
                   }
-                })
+                },err => rej(err))
             })
             ++i;
 
