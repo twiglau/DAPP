@@ -10,20 +10,12 @@ const bnbIndex=5;
 const filIndex=6;
 const systemPrecisions=100000000;
 
-const PrecisionsObj = [
-    {coin:'LIBRA',precision:Math.pow(10,18)},
-    {coin:'USDT',precision:Math.pow(10,18)},
-    {coin:'ETH',precision:Math.pow(10,18)},
-    {coin:'BNB',precision:Math.pow(10,18)},
-    {coin:'BTC',precision:Math.pow(10,18)},
-    {coin:'FIL',precision:Math.pow(10,18)}
-]
-
 // const _tokensContractAddress = "0x2C119c9E31aA962584DB48368f2d5cBa6b43fe41";
 const _tokensContractAddress = "0x97B6F5B18b47A5ee176CCF20B16C5376A93E0e16"; //测试
 const _recordContractAddress = '0x29599FF4F92503c5FAC6a3Af7D860cBfc2F4A30d';
 const _contractAddress = '0x7e90166ceaF3551A6E7c6F86DEFc465507d0cBC5';
 const _testNewContractAddress = '0x985fD0deac376f21D9a799B448A7665CAe4aEfa4';
+const _priceContractAddress='0x9D3B83ab5D8493d36dAD9163275C752202b88DaE';
 
 const _contractABI = [
     {
@@ -2418,6 +2410,70 @@ const _testNewContractABI=[
         "type": "function"
     }
 ];
+const _priceContractABI=[
+    {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "floor",
+                "type": "uint256"
+            }
+        ],
+        "name": "getFloorRate",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "rate",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "teamBalance",
+                "type": "uint256"
+            }
+        ],
+        "name": "getLevelRate",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "levelRate",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "currIndex",
+                "type": "uint256"
+            }
+        ],
+        "name": "getThePrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+];
 /////////////////////////////////////////////////////////////////////////////币安测试网测试 - start
 const ethContractAddress = '0x44BAd5d45e9486454a0FF1c255396C4272590d73';
 const bnbContractAddress = '0xE0d9BEF8C1800733598032b4922cf16584cef010';
@@ -4197,7 +4253,7 @@ const libraContractABI=[
         "type": "event"
     }
 ];
-function Precisions(currency){
+function Precisions(){
     return systemPrecisions //  PrecisionsObj.find(ele => ele.coin === currency.toUpperCase()).precision;
 }
 function initWallet(callback){
@@ -4752,6 +4808,38 @@ function queryTakeoutIncomeRecordSize(address,callback,errorCallback) {
     });
 }
 
+function queryPrice(currency,callback,errorCallback) {
+    const cId = getCurrencyIndex(currency);
+    if(cId==usdtIndex){
+        return 1;
+    }else if(cId==libraIndex){
+        //从主合约获取
+        getContract(_contractABI, _contractAddress,(contract)=>{
+            contract.methods.libraPrice()
+                .call()
+                .then((res) => {
+                    callback(Number(res)/100000000.0);
+                })
+                .catch((err) => {
+                    errorCallback(err);
+                });
+        });
+    }else{
+        //从价格合约获取
+        getContract(_priceContractABI, _priceContractAddress,(contract)=>{
+            contract.methods.getThePrice(cId)
+                .call()
+                .then((res) => {
+                    callback(Number(res)/100000000.0);
+                })
+                .catch((err) => {
+                    errorCallback(err);
+                });
+        });
+    }
+}
+
+
 /**
  * 发送交易
  * @param {Object} account 用户地址
@@ -5034,4 +5122,5 @@ export default {
     twoUseableBalance2,
     queryTakeoutIncomeRecord,
     queryTakeoutIncomeRecordSize,
+    queryPrice,
 }
