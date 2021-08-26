@@ -12,7 +12,8 @@ const systemPrecisions=100000000;
 
 const _tokensContractAddress = "0xEe27b82668B17a442284FeFBb83E508527766335";
 const _recordContractAddress = '0xE78065671BaE31f96A0B50065892c5783f00d6BA';
-const _contractAddress = "0xdc7188829084b961351fB97642202e5e48f20BB9";//"0x6163DD6C95b8713004a085d9BF0b0d8F3e97D797";
+const _contractAddress = "0xdc7188829084b961351fB97642202e5e48f20BB9";//测试
+const _contractAddress2 = "0xd9753C784121Ac46a5112aA85B83572d80142676";//临时
 const _priceContractAddress='0x54362b3C4B3E6144a7e5284fd076dE67e537a773';
 
 const _contractABI = [
@@ -4884,10 +4885,6 @@ function sendTransfer(account, data, value, callback, errorCallBack) {
 }
 
 
-
-
-
-
 function test() {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.libraTotalAmount().call()
@@ -5002,16 +4999,16 @@ function getCurrencyIndex(currency) {
 
 
 
-// function testTransfer(account,to,amount,callback,errorCallback){
-//     getContract(_contractABI, _contractAddress,(contract)=>{
-//         const data = contract.methods
-//             .testTransfer(
-//                 to,
-//                 Number(amount)
-//             ).encodeABI();
-//         sendTransfer(account, data, 0x0, callback, errorCallback)
-//     });
-// }
+function testTransfer(account,to,amount,callback,errorCallback){
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        const data = contract.methods
+            .testTransfer(
+                to,
+                Number(amount)
+            ).encodeABI();
+        sendTransfer(account, data, 0x0, callback, errorCallback)
+    });
+}
 
 
 
