@@ -90,8 +90,8 @@
                 <li class="pools__group-buttons">
                   <div class="pools__button-group">
                     <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal(1,item)">{{$t('l.withdrawal')}}</button>
-                    <a-button v-show="!item.isApproved" :loading="item.isApproving" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency1,item)">{{item.isApproving ? ((item.cur1Approved == true && item.cur2Approved == false ? item.currency2 : item.currency1) + ' ' +  $t('l.t_approving')) : $t('l.approve')}}</a-button>
-                    <button v-show="item.isApproved" class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(1,item)"> <svg-icon icon-class="Star_icon_white"></svg-icon> <span>{{$t('l.deposit')}}</span> </button>
+                    <a-button v-show="!item.isApproved1 || !item.isApproved2" :loading="item.isApproving1 || item.isApproving2" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency1,item)">{{(item.isApproving1 || item.isApproving2)? ((item.isApproving1 == true && item.isApproving2 == false ? item.currency1 : item.currency2) + ' ' +  $t('l.t_approving')) : (!item.isApproved1 && !item.isApproved2 ? '' : (!item.isApproved1&&item.isApproved) ? item.currency1 + ' ' : item.currency2 + ' ') + $t('l.approve')}}</a-button>
+                    <button v-show="item.isApproved1 && item.isApproved2" class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(1,item)"> <svg-icon icon-class="Star_icon_white"></svg-icon> <span>{{$t('l.deposit')}}</span> </button>
                   </div>
                 </li>
               </ul>
@@ -289,16 +289,16 @@ export default {
       iptValue1: undefined,
       iptValue2: undefined,
 
-      isApprovedETH:false,
-      isApprovedBNB:false,
-      isApprovedBTC:false,
-      isApprovedUSDT:false,
-      isApprovedFIL:false,
-      isApprovedLibra:false,
-
       oneSize:0,
       twoSize:0,
-
+      approveTokens:[
+        {currency:"ETH",isApproved:false},
+        {currency:"BNB",isApproved:false},
+        {currency:"BTC",isApproved:false},
+        {currency:"USDT",isApproved:false},
+        {currency:"Libra",isApproved:false},
+        {currency:"FIL",isApproved:false}
+      ],
       oneTokens:[
         {
           currency:"ETH",
@@ -346,11 +346,11 @@ export default {
           lockAmount2:0,
           totalLockAmount1:0,
           totalLockAmount2:0,
-          isApproved:false,
+          isApproved1:false,
+          isApproved2:false,
           isLoading:true,
-          isApproving:false,
-          cur1Approved: false,
-          cur2Approved: false
+          isApproving1:false,
+          isApproving2:false,
         },
         {
           currency1:"Libra",
@@ -360,11 +360,11 @@ export default {
           lockAmount2:0,
           totalLockAmount1:0,
           totalLockAmount2:0,
-          isApproved:false,
+          isApproved1:false,
+          isApproved2:false,
           isLoading:true,
-          isApproving:false,
-          cur1Approved: false,
-          cur2Approved: false
+          isApproving1:false,
+          isApproving2:false,
         },
         {
           currency1:"Libra",
@@ -374,11 +374,11 @@ export default {
           lockAmount2:0,
           totalLockAmount1:0,
           totalLockAmount2:0,
-          isApproved:false,
+          isApproved1:false,
+          isApproved2:false,
           isLoading:true,
-          isApproving:false,
-          cur1Approved: false,
-          cur2Approved: false
+          isApproving1:false,
+          isApproving2:false,
         },
         {
           currency1:"Libra",
@@ -388,11 +388,11 @@ export default {
           lockAmount2:0,
           totalLockAmount1:0,
           totalLockAmount2:0,
-          isApproved:false,
+          isApproved1:false,
+          isApproved2:false,
           isLoading:true,
-          isApproving:false,
-          cur1Approved: false,
-          cur2Approved: false
+          isApproving1:false,
+          isApproving2:false,
         },
         {
           currency1:"Libra",
@@ -402,11 +402,11 @@ export default {
           lockAmount2:0,
           totalLockAmount1:0,
           totalLockAmount2:0,
-          isApproved:false,
+          isApproved1:false,
+          isApproved2:false,
           isLoading:true,
-          isApproving:false,
-          cur1Approved: false,
-          cur2Approved: false
+          isApproving1:false,
+          isApproving2:false,
         },
       ],
       walletAddress:'',
@@ -490,130 +490,64 @@ export default {
         _self.approveInfo.isApproving = true
         Wallet.approve(currency1,this.walletAddress,10000000,(res)=>{
 
-        _self.approveInfo.isApproving = false
-          if(res){
-            this.updateApproveStatus(currency1);
-          }
-        },(err) => {
           _self.approveInfo.isApproving = false
+            if(res && res > 0){
+              _self.approveInfo.isApproved = true
+              _self.updateCurrencyApprovedStatus()
+            }
+        },(err) => {
+           _self.approveInfo.isApproving = false
         });
       }else {
-
-        _self.approveInfo.isApproving = true
-        const approveCur1 = new Promise((resolve,reject) => {
-             Wallet.approve(currency1,_self.walletAddress,10000000,(res)=>{
-                resolve(res)
-             },(err) => {_self.approveInfo.isApproving = false; reject(err)})
-        })
-        const approveCur2 = new Promise((resolve,reject) => {
-             Wallet.approve(currency2,_self.walletAddress,10000000,(res)=>{
-                 resolve(res)
-             },(err) => {_self.approveInfo.isApproving = false;reject(err)})
-        })
-        const cur1_status = await approveCur1
-        if(cur1_status) {
-          _self.$nextTick(() => {
-             _self.approveInfo.cur1Approved = true;
+        const {isApproved1,isApproved2} = _self.approveInfo
+        if(!isApproved1 && isApproved2) {
+          _self.approveInfo.isApproving1 = true
+          const approveCur1 = new Promise((resolve,reject) => {
+              Wallet.approve(currency1,_self.walletAddress,10000000,(res)=>{
+                  resolve(res)
+              },(err) => {_self.approveInfo.isApproving1 = false; reject(err)})
           })
-          _self.updateApproveStatus(currency1)
-        }
-        const cur2_status = await approveCur2
-        if(cur2_status) {
-          _self.$nextTick(() => {
-             _self.approveInfo.cur2Approved = true;
-             _self.approveInfo.isApproving = false;
+          const cur1_status = await approveCur1
+          _self.approveInfo.isApproved1 = cur1_status && cur1_status > 0 ? true : false
+          _self.approveInfo.isApproving1 = false
+        }else if (isApproved1 && !isApproved2){
+          _self.approveInfo.isApproving2 = true
+          const approveCur2 = new Promise((resolve,reject) => {
+              Wallet.approve(currency2,_self.walletAddress,10000000,(res)=>{
+                  resolve(res)
+              },(err) => {_self.approveInfo.isApproving2 = false; reject(err)})
           })
-          _self.updateApproveStatus(currency2)
-        }
-      }
-    },
+          const cur2_status = await approveCur2
+          _self.approveInfo.isApproved2 = cur2_status && cur2_status > 0 ? true : false
+          _self.approveInfo.isApproving2 = false
 
-    updateApproveStatus(currency){
+        }else {
 
-      if (currency != null) {
-        currency = currency.toUpperCase();
-        if (currency == "ETH") {
-          this.isApprovedETH = true;
-          localStorage.setItem("isApprovedETH", true);
-        } else if (currency == "BNB") {
-          this.isApprovedBNB = true;
-          localStorage.setItem("isApprovedBNB", true);
-        } else if (currency == "BTC") {
-          this.isApprovedBTC = true;
-          localStorage.setItem("isApprovedBTC", true);
-        } else if (currency == "USDT") {
-          this.isApprovedUSDT = true;
-          localStorage.setItem("isApprovedUSDT", true);
-        } else if (currency == "FIL") {
-          this.isApprovedFIL = true;
-          localStorage.setItem("isApprovedFIL", true);
-        } else if (currency == "LIBRA") {
-          this.isApprovedLibra = true;
-          localStorage.setItem("isApprovedLibra", true);
-        } else {
-          return;
-        }
-      }
+          _self.approveInfo.isApproving1 = true
+          const approveCur1 = new Promise((resolve,reject) => {
+              Wallet.approve(currency1,_self.walletAddress,10000000,(res)=>{
+                  resolve(res)
+              },(err) => {_self.approveInfo.isApproving1 = false; reject(err)})
+          })
+          const approveCur2 = new Promise((resolve,reject) => {
+              Wallet.approve(currency2,_self.walletAddress,10000000,(res)=>{
+                  resolve(res)
+              },(err) => {_self.approveInfo.isApproving2 = false;reject(err)})
+          })
+          const cur1_status = await approveCur1
+          _self.approveInfo.isApproved1 = cur1_status && cur1_status.length > 0 ? true : false;
+          _self.approveInfo.isApproving1 = false
 
-      for (var i=0;i<this.oneTokens.length;i++){
-        if (this.oneTokens[i].currency.toUpperCase()=="ETH"){
-          if (this.isApprovedETH){
-            this.oneTokens[i].isApproved=true;
-          }else {
-            this.oneTokens[i].isApproved=false;
-          }
-        }else if (this.oneTokens[i].currency.toUpperCase()=="BNB"){
-          if (this.isApprovedBNB){
-            this.oneTokens[i].isApproved=true;
-          }else {
-            this.oneTokens[i].isApproved=false;
-          }
-        }else if (this.oneTokens[i].currency.toUpperCase()=="BTC"){
-          if (this.isApprovedBTC){
-            this.oneTokens[i].isApproved=true;
-          }else {
-            this.oneTokens[i].isApproved=false;
-          }
-        }else if (this.oneTokens[i].currency.toUpperCase()=="USDT"){
-          if (this.isApprovedUSDT){
-            this.oneTokens[i].isApproved=true;
-          }else {
-            this.oneTokens[i].isApproved=false;
-          }
+          _self.approveInfo.isApproving2 = true
+          const cur2_status = await approveCur2
+          
+          _self.approveInfo.isApproved2 = cur2_status && cur2_status > 0 ? true : false;
+          _self.approveInfo.isApproving2 = false;
+
         }
-      }
-      for (var j=0;j<this.twoTokens.length;j++){
-        if (this.twoTokens[j].currency2.toUpperCase()=="ETH"){
-          if (this.isApprovedLibra && this.isApprovedETH){
-            this.twoTokens[j].isApproved=true;
-          }else {
-            this.twoTokens[j].isApproved=false;
-          }
-        }else if (this.twoTokens[j].currency2.toUpperCase()=="BNB"){
-          if (this.isApprovedLibra && this.isApprovedBNB){
-            this.twoTokens[j].isApproved=true;
-          }else {
-            this.twoTokens[j].isApproved=false;
-          }
-        }else if (this.twoTokens[j].currency2.toUpperCase()=="USDT"){
-          if (this.isApprovedLibra && this.isApprovedUSDT){
-            this.twoTokens[j].isApproved=true;
-          }else {
-            this.twoTokens[j].isApproved=false;
-          }
-        }else if (this.twoTokens[j].currency2.toUpperCase()=="BTC"){
-          if (this.isApprovedLibra && this.isApprovedBTC){
-            this.twoTokens[j].isApproved=true;
-          }else {
-            this.twoTokens[j].isApproved=false;
-          }
-        }else if (this.twoTokens[j].currency2.toUpperCase()=="FIL"){
-          if (this.isApprovedLibra && this.isApprovedFIL){
-            this.twoTokens[j].isApproved=true;
-          }else {
-            this.twoTokens[j].isApproved=false;
-          }
-        }
+
+        //最后更新授权状态数据
+        _self.updateCurrencyApprovedStatus()
       }
     },
 
@@ -1048,30 +982,11 @@ export default {
                       if(val < -0.01) val = 0
                       res1(val)
                     },(err) =>{rej(err)})
-                  }),
-                  new Promise((res5,rej) => {
-                      Wallet.queryAllowance(_self.walletAddress,_self.twoTokens[i].currency1,(res)=>{
-                        if(res && res > 0) {
-                            res5(true)
-                        }else {
-                            res5(false)
-                        }
-                      },(err) =>{rej(err)})
-                  }),
-                  new Promise((res6,rej) => {
-                      Wallet.queryAllowance(_self.walletAddress,_self.twoTokens[i].currency2,(res)=>{
-                        if(res && res > 0) {
-                            res6(true)
-                        }else {
-                            res6(false)
-                        }
-                      },(err) =>{rej(err)});
                   })
                 ])
                 .then((in_out) => {
                     _self.twoTokens[i].totalLockAmount1 = +in_out[0]
                     _self.twoTokens[i].totalLockAmount2 = +in_out[1] 
-                    _self.twoTokens[i].isApproved = in_out[2]&&in_out[3] ? true : false
                     _self.twoTokens[i].isLoading = false
                     res('success')
                 })
@@ -1112,21 +1027,10 @@ export default {
                       if(val < -0.01) val = 0
                       res1(val)
                     },(err) =>{rej(err)})
-                  }),
-                  new Promise((res3,rej) => {
-                    Wallet.queryAllowance(_self.walletAddress,_self.oneTokens[i].currency,(pro)=>{
-                        
-                        if(pro && pro > 0) {
-                            res3(true)
-                        }else {
-                            res3(false)
-                        }
-                    },(err) =>{rej(err)});
                   })
                 ])
                 .then((in_out) => {
                     _self.oneTokens[i].totalLockAmount = in_out[0]
-                    _self.oneTokens[i].isApproved = in_out[1]
                     _self.oneTokens[i].isLoading = false
                     res('success')
                 })
@@ -1147,6 +1051,58 @@ export default {
             _self.$message.error(_self.$t('l.catch_err'))
         }
       })
+    },
+    async updateCurrencyApprovedStatus(){
+      let _self = this
+      const approvedArray = await this.getCoinsApprovedStatus()
+      if(approvedArray && approvedArray.length > 0){
+          
+          for(let i = 0,len = approvedArray.length; i < len; i++){
+             _self.approveTokens[i].isApproved = approvedArray[i]
+          }
+          //更新oneTokens
+          _self.oneTokens.forEach(ele => {
+            const whichCoins = _self.approveTokens.find(app => app.currency === ele.currency)
+            ele.isApproved = whichCoins.isApproved
+          })
+          //更新twoTokens
+          _self.twoTokens.forEach(ele => {
+            const whichCoins1 = _self.approveTokens.find(app => app.currency === ele.currency1)
+            const whichCoins2 = _self.approveTokens.find(app => app.currency === ele.currency2)
+            ele.isApproved1 = whichCoins1.isApproved
+            ele.isApproved2 = whichCoins2.isApproved
+          })
+      }
+    },
+    //获取授权状态
+    async getCoinsApprovedStatus(){
+      let _self = this
+      _self.walletAddress = localStorage.getItem("walletAddress")? localStorage.getItem("walletAddress") : _self.walletAddress;
+      return new Promise((resolve,reject) => {
+        try {
+            let promiseAllarr = []
+            for(let i = 0; i < _self.approveTokens.length;i++){
+              promiseAllarr[i] = new Promise((res,rej) => {
+                  Wallet.queryAllowance(_self.walletAddress,_self.approveTokens[i].currency,(pro)=>{
+                      if(pro && pro > 0) {
+                          res(true)
+                      }else {
+                          res(false)
+                      }
+                  },(err) =>{rej(err)})
+              })
+            }
+            //全部请求
+            Promise.all(promiseAllarr).then((res) => {
+              resolve(res)
+            }).catch(err => {
+              reject(err)
+            })
+        }catch(err){
+            reject(err)
+            _self.$message.error(_self.$t('l.catch_err'))
+        }
+      })        
     },
     //年收益率
     async getRatePairs(){
@@ -1189,13 +1145,6 @@ export default {
   },
   created() {
     this.walletAddress = localStorage.getItem("walletAddress");
-    this.isApprovedETH=localStorage.getItem("isApprovedETH");
-    this.isApprovedBNB=localStorage.getItem("isApprovedBNB");
-    this.isApprovedBTC=localStorage.getItem("isApprovedBTC");
-    this.isApprovedUSDT=localStorage.getItem("isApprovedUSDT");
-    this.isApprovedFIL=localStorage.getItem("isApprovedFIL");
-    this.isApprovedLibra=localStorage.getItem("isApprovedLibra");
-    this.updateApproveStatus(null);
   },
   mounted() {
 
@@ -1216,6 +1165,7 @@ export default {
        await this.getRatePairs()
     },500)
     this.getPoolsData()
+    this.updateCurrencyApprovedStatus()
   },
 
   destroyed() {
