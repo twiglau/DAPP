@@ -372,9 +372,8 @@ export default {
         const info_a = await _self.getNodeTeamDown(address,0,total_num,total_num)
         //3. 根据下级地址获得存入记录: 单币记录,双币记录,  返利记录 --> 计算团队业绩,  团队总收益
         if(!info_a || info_a.length == 0) {
-              _self.$t('l.l_noTeamBelowInfo')
-              _self.searching = false
-              return
+            _self.searching = false
+            return
         }
 
         _self.layers++; //层数
@@ -429,7 +428,9 @@ export default {
       }else{
         if(_self.searching){
           //正在查找团队信息
-          _self.$t('l.l_noTeamBelowInfo')
+          _self.$message.error(_self.$t('l.l_noTeamBelowInfo'))
+          _self.team.teamProfit = 0;
+          _self.team.teamProformance = 0;
           _self.searching = false
         }
       }
