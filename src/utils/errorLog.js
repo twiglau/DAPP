@@ -75,5 +75,8 @@ export function error(str){
     if(jsonStr.indexOf('509') !== -1 || jsonStr.indexOf('520') !== -1){
         msg = i18n.t('l.l_error_log_11')
     }
+    if(jsonStr.indexOf('User denied') !== -1){
+        msg = i18n.t('l.l_error_log_12')
+    }
     return msg
 }

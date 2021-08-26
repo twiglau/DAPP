@@ -230,4 +230,5 @@ export const l = {
   l_error_log_9:'上级余额 （必须 大于 1美元 ）',
   l_error_log_10:'没有存入记录',
   l_error_log_11:'余额不足',
+  l_error_log_12:'已拒绝',
 }
