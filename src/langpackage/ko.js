@@ -204,4 +204,5 @@ export const l = {
   l_swapb:'지갑에서 거래 확인',
   l_success:'제출 된',
   swap_setting:'스왑 설정',
+  l_invite:'초대',
 }

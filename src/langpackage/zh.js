@@ -216,4 +216,5 @@ export const l = {
   l_swapb:'确认在钱包中交易',
   l_success:'已提交',
   swap_setting:'交易设置',
+  l_invite:'邀请',
 }

@@ -40,7 +40,7 @@
         <div class="team-level-desc">
           {{$t('l.t_desc1')}}{{team.enjoyRatio}}
         </div>
-        <a-button size="default" class="invite-btn" @click="handleCopyLink">Invite</a-button>
+        <a-button size="default" class="invite-btn" @click="handleCopyLink">{{$t('l.l_invite')}}</a-button>
       </div>
       <div class="team-level">
         <div class="level-desc">
@@ -879,8 +879,8 @@ export default {
   top: 100%;
 }
 .level-item .svg-icon {
-   width: 40px;
-   height: 40px;
+   width: 32px;
+   height: 32px;
 }
 .level-item .team-level-icon {
   width: 80px;

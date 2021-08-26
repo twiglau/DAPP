@@ -216,4 +216,5 @@ export const l = {
   l_swapb:'Confirm transaction in wallet',
   l_success:'Has submitted',
   swap_setting:'Swap Setting',
+  l_invite:'invite',
 }

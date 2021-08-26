@@ -188,4 +188,5 @@ export const l = {
   l_swapb:'ウォレットでのトランザクションの確認',
   l_success:'提出された',
   swap_setting:'スワップ設定',
+  l_invite:'招待',
 }
