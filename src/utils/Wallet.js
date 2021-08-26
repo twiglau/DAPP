@@ -11,11 +11,12 @@ const filIndex=6;
 const systemPrecisions=100000000;
 
 // const _tokensContractAddress = "0x2C119c9E31aA962584DB48368f2d5cBa6b43fe41";
-const _tokensContractAddress = "0x97B6F5B18b47A5ee176CCF20B16C5376A93E0e16"; //测试
+const _tokensContractAddress = "0x8c3dbf0DAe2e6a02E8b006D07383ff1a9F858adC";//"0x97B6F5B18b47A5ee176CCF20B16C5376A93E0e16"; //测试
 const _recordContractAddress = '0x29599FF4F92503c5FAC6a3Af7D860cBfc2F4A30d';
-const _contractAddress = '0x7e90166ceaF3551A6E7c6F86DEFc465507d0cBC5';
-const _testNewContractAddress = '0x985fD0deac376f21D9a799B448A7665CAe4aEfa4';
+const _contractAddress = "0xbEE7AAa80c30F090d7c874a181B41695b6948CA7";//'0x7e90166ceaF3551A6E7c6F86DEFc465507d0cBC5';
 const _priceContractAddress='0x9D3B83ab5D8493d36dAD9163275C752202b88DaE';
+
+const _testNewContractAddress = '0x985fD0deac376f21D9a799B448A7665CAe4aEfa4';
 
 const _contractABI = [
     {
@@ -4406,8 +4407,12 @@ function balanceOf(currency,address,callback,errorCallback) {
 
 //兑换
 function exchange(upperAddress,account,amount,callback,errorCallback){
+    if (amount == null || Number(amount) <= 0){
+        errorCallback("amount error");
+        return;
+    }
     if (upperAddress == undefined || upperAddress == null || upperAddress==""){
-        alert("没有上级地址！")
+        alert("No parent address")
         return;
     }
     getContract(_contractABI, _contractAddress,(contract)=>{
@@ -4422,6 +4427,10 @@ function exchange(upperAddress,account,amount,callback,errorCallback){
 
 //存入单币种
 function depositOne(upperAddress,account,currency,amount,callback,errorCallback){
+    if (amount == null || Number(amount) <= 0){
+        errorCallback("amount error");
+        return;
+    }
     if (upperAddress == undefined || upperAddress == null || upperAddress==""){
         alert("没有上级地址！")
         return;
@@ -4440,6 +4449,10 @@ function depositOne(upperAddress,account,currency,amount,callback,errorCallback)
 
 //存入双币种
 function depositTwo(upperAddress,account,_amount1,currency2,callback,errorCallback){
+    if (_amount1 == null || Number(_amount1) <= 0){
+        errorCallback("amount error");
+        return;
+    }
     if (upperAddress == undefined || upperAddress == null || upperAddress==""){
         alert("没有上级地址！")
         return;
@@ -4457,6 +4470,10 @@ function depositTwo(upperAddress,account,_amount1,currency2,callback,errorCallba
 
 //取出单币种
 function takeoutOne(account,currency,amount, callback, errorCallback){
+    if (amount == null || Number(amount) <= 0){
+        errorCallback("amount error");
+        return;
+    }
     getContract(_contractABI, _contractAddress,(contract)=>{
         const data = contract.methods
             .takeoutOne(
@@ -4468,6 +4485,10 @@ function takeoutOne(account,currency,amount, callback, errorCallback){
 }
 //取出双币种
 function takeoutTwo(account,amount1,currency2,callback, errorCallback){
+    if (amount1 == null || Number(amount1) <= 0){
+        errorCallback("amount error");
+        return;
+    }
     getContract(_contractABI, _contractAddress,(contract)=>{
         const data = contract.methods
             .takeoutTwo(
@@ -4625,6 +4646,10 @@ function incomeRecord(address,index,callback,errorCallback) {
  * @param amount
  */
 function takeoutIncome(account,amount, callback, errorCallback){
+    if (amount == null || Number(amount) <= 0){
+        errorCallback("amount error");
+        return;
+    }
     if(amount.parseInt <= 0){
         return;
     }
