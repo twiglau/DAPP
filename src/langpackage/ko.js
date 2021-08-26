@@ -219,4 +219,5 @@ export const l = {
    l_error_log_9:'상위 레벨 잔액($1보다 커야 함)',
    l_error_log_10:'저장된 레코드 없음',
    l_error_log_11:'잔액 부족',
+   l_error_log_12:'거부됨',
 }
