@@ -4811,7 +4811,7 @@ function queryTakeoutIncomeRecordSize(address,callback,errorCallback) {
 function queryPrice(currency,callback,errorCallback) {
     const cId = getCurrencyIndex(currency);
     if(cId==usdtIndex){
-        return 1;
+        callback(1);
     }else if(cId==libraIndex){
         //从主合约获取
         getContract(_contractABI, _contractAddress,(contract)=>{
