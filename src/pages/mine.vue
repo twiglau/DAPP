@@ -70,7 +70,6 @@
 </template>
 
 <script>
-import {getPrice} from '@/utils/api'
 import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
 export default {
@@ -152,11 +151,9 @@ export default {
     },
     async getPairPrice(){
         let _self = this
-        getPrice({symbol:'librausdt'})
-        .then((res) => {
-            let plc =  res.price
-            _self.price = plc
-        })
+        Wallet.queryPrice('libra',res =>{
+          _self.price = +(res || 1)
+        },err =>{})
     },
     async getIncomeData(){
       let _self = this

@@ -80,7 +80,6 @@
 </template>
 
 <script>
-import {getPrice} from '@/utils/api';
 import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
 export default {
@@ -345,12 +344,9 @@ export default {
       let _self = this
       let promiseCoinRequestArray = this.coins.map(ele => {
           return new Promise((resolve,reject) => {
-               getPrice({symbol:`${ele.coin}usdt`.toLowerCase()})
-               .then((res) => {
-                   let plc =  res.price
-                   resolve(plc)
-               })
-               .catch((err) => reject(err))
+               Wallet.queryPrice(ele.coin.toLowerCase(),res =>{
+                 resolve(Number(res ? res : 1))
+               },err =>{ reject(err)})
           })
       })
       return Promise.all(promiseCoinRequestArray)

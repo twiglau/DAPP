@@ -253,7 +253,7 @@ import Wallet from '@/utils/Wallet.js';
 import OuterDrawer from '@/components/OuterDrawer';
 import InDrawer from '@/components/InDrawer';
 import Loading from '@/components/Loading';
-import {getRate,getPrice,postWithdrawalData} from '@/utils/api'
+import {getRate,postWithdrawalData} from '@/utils/api'
 import {mapGetters} from 'vuex'
 export default {
   name: "Farm",
@@ -725,17 +725,14 @@ export default {
       let currency = _self.depositInfo.currency ? _self.depositInfo.currency : _self.depositInfo.currency2;
       let needData = _self.depositInfo.currency ? [
         new Promise((resolve,rej) => {
-              Wallet.balanceOf(currency,_self.walletAddress,(res)=>{
-                  resolve(Number(res ? res : 0))
-              },(err) =>{rej(err)})
+            Wallet.balanceOf(currency,_self.walletAddress,(res)=>{
+                resolve(Number(res ? res : 0))
+            },(err) =>{rej(err)})
         }),
         new Promise((resolve,rej) => {
-             getPrice({symbol:(_self.depositInfo.currency + 'usdt').toLowerCase()})
-             .then(res => {
-               const {price} = res
-               resolve(+price || 1)
-             })
-             .catch((err) => {
+             Wallet.queryPrice(_self.depositInfo.currency.toLowerCase(),(res)=>{
+               resolve(Number(res ? res : 1))
+             },(res)=>{
                rej(err)
              })
         })
@@ -746,22 +743,16 @@ export default {
               },(err) =>{rej(err)})
         }),
         new Promise((resolve,reject) => {
-             getPrice({symbol:(_self.depositInfo.currency2 + 'usdt').toLowerCase()})
-             .then(res => {
-               const {price} = res
-               resolve(+price || 1)
-             })
-             .catch((err) => {
+             Wallet.queryPrice(_self.depositInfo.currency2.toLowerCase(),(res)=>{
+               resolve(Number(res ? res : 1))
+             },(err)=>{
                reject(err)
              })
         }),
         new Promise((resolve,reject) => {
-             getPrice({symbol:(_self.depositInfo.currency1 + 'usdt').toLowerCase()})
-             .then(res => {
-               const {price} = res
-               resolve(+price || 1)
-             })
-             .catch((err) => {
+             Wallet.queryPrice(_self.depositInfo.currency1.toLowerCase(),(res)=>{
+               resolve(Number(res ? res : 1))
+             },(err)=>{
                reject(err)
              })
         })

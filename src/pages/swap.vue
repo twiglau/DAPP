@@ -58,7 +58,7 @@
     </div>
 </template>
 <script>
-    import {getPrice,postExchangeData} from '@/utils/api'
+    import {postExchangeData} from '@/utils/api'
     import Wallet from '@/utils/Wallet.js';
     import countTo from 'vue-count-to';
     import SwapConfig from '@/components/SwapConfig.vue'
@@ -145,12 +145,10 @@
             },
             async getPairPrice(){
                let _self = this
-               getPrice({symbol:'librausdt'})
-               .then((res) => {
-                   let plc =  res.price
-                   _self.LBR_price = plc
-                   if(plc > 0){
-                       _self.usdt_lbr_p = 1 / +plc
+               Wallet.queryPrice('libra',res =>{
+                   _self.LBR_price = +(res || 1)
+                   if(_self.LBR_price > 0){
+                       _self.usdt_lbr_p = 1 / _self.LBR_price
                    }
                })
             },

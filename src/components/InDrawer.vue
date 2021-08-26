@@ -25,7 +25,7 @@
               </div>
           </div>
           <div class="container__avaiuble">
-              <span>≈<countTo :endVal='model.realS_v' :duration='1000' :decimals="2" prefix="$"></countTo></span>
+              <span>≈<countTo :endVal='model.isSingle == 0? model.realM_v : model.realS_v' :duration='1000' :decimals="2" prefix="$"></countTo></span>
               <span>{{$t('l.balance')}}<countTo :endVal='model.balance' :duration='1000' :decimals="4"></countTo>{{model.currency || model.currency1}}</span>
               <svg-icon class="down-arrow" icon-class="down_icon"></svg-icon>
           </div>
