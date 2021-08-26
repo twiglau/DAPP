@@ -434,7 +434,7 @@ export default {
       }else{
         if(_self.searching){
           //正在查找团队信息
-          _self.$message.error(_self.$t('l.l_noTeamBelowInfo'))
+          // _self.$message.error(_self.$t('l.l_noTeamBelowInfo'))
           _self.team.teamProfit = 0;
           _self.team.teamProformance = 0;
           _self.searching = false
