@@ -19,10 +19,11 @@ const PrecisionsObj = [
     {coin:'FIL',precision:Math.pow(10,18)}
 ]
 
-const _tokensContractAddress = "0x2C119c9E31aA962584DB48368f2d5cBa6b43fe41";
+// const _tokensContractAddress = "0x2C119c9E31aA962584DB48368f2d5cBa6b43fe41";
+const _tokensContractAddress = "0x97B6F5B18b47A5ee176CCF20B16C5376A93E0e16"; //测试
 const _recordContractAddress = '0x29599FF4F92503c5FAC6a3Af7D860cBfc2F4A30d';
 const _contractAddress = '0x7e90166ceaF3551A6E7c6F86DEFc465507d0cBC5';
-
+const _testNewContractAddress = '0x985fD0deac376f21D9a799B448A7665CAe4aEfa4';
 
 const _contractABI = [
     {
@@ -1579,6 +1580,838 @@ const _recordContractABI=[
                 "internalType": "uint256",
                 "name": "takeoutTime",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+];
+const _testNewContractABI=[
+    {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "cIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            }
+        ],
+        "name": "allowance",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "remaining",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "currIndex1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "currIndex2",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "_spender",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "approve",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "success",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "award",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "bnbPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "btcPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "dayDividendAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_upper",
+                "type": "address"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_cIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "depositOne",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_upper",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_c2Index",
+                "type": "uint8"
+            }
+        ],
+        "name": "depositTwo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "dividendRate",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "downsMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "downAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "ethPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_upper",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "exchange",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "exchangeMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "usdtAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "feeRateDayIn30",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "feeRateDayOut30",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "filPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "currIndex",
+                "type": "uint256"
+            }
+        ],
+        "name": "getThePrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "ia_map",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "total",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeout",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "todayDividend",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "todayShareAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "todayGlobalAmount",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "incomeRecord",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "fromAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "latestDividendTime",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "libraPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "oneOrderMap",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "currencyIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "useableAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "depositTime",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "precision",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "queryDepositUserSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_from",
+                "type": "address"
+            }
+        ],
+        "name": "queryDownsSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_from",
+                "type": "address"
+            }
+        ],
+        "name": "queryExchangeSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_from",
+                "type": "address"
+            }
+        ],
+        "name": "queryIncomeSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_from",
+                "type": "address"
+            }
+        ],
+        "name": "queryOnesSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_from",
+                "type": "address"
+            }
+        ],
+        "name": "queryTwosSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "recommendMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "upperAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "bool",
+                "name": "hasDeducted",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "takeoutIncome",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "_currencyIndex",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "takeoutOne",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_amount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_currency2Index",
+                "type": "uint8"
+            }
+        ],
+        "name": "takeoutTwo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "testAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "testTransfer",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "testWithdrawal",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_a",
+                "type": "uint256"
+            }
+        ],
+        "name": "tlip",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "twoOrderMap",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currency1Index",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalAmount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "useableAmount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutAmount1",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currency2Index",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalAmount2",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "useableAmount2",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "takeoutAmount2",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "depositTime",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "users",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -3402,7 +4235,6 @@ function initWallet(callback){
 }
 
 function approve(currency,address,value, callback,errorCallback) {
-    alert(currency+"     "+address+"      "+value);
     //授权
     currency = currency.toUpperCase();
     let contractAddress;
@@ -3464,15 +4296,16 @@ function approve(currency,address,value, callback,errorCallback) {
  * @param address
  */
 function queryAllowance(account,currency,callback,errorCallback){
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.allowance(getCurrencyIndex(currency),account)
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        contract.methods.allowance(getCurrencyIndex(currency),account)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
 }
 
 function balanceOf(currency,address,callback,errorCallback) {
@@ -3502,33 +4335,33 @@ function balanceOf(currency,address,callback,errorCallback) {
         errorCallback(false);
     }
 
-    let contract = new window.web3.eth.Contract(contractABI, contractAddress);
-    contract.methods.balanceOf(address)
-        .call()
-        .then((res) => {
-            let balance = Number(res)/Number("1000000000000000000");
-            callback(balance);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
+    getContract(contractABI, contractAddress,(contract)=>{
+        contract.methods.balanceOf(address)
+            .call()
+            .then((res) => {
+                let balance = Number(res)/Number("1000000000000000000");
+                callback(balance);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
 }
 
 //兑换
 function exchange(upperAddress,account,amount,callback,errorCallback){
-
     if (upperAddress == undefined || upperAddress == null || upperAddress==""){
-        alert("没有上级地址！"+(Number(amount)*systemPrecisions))
+        alert("没有上级地址！")
         return;
     }
-    console.log("本人地址："+account);
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    const data = _contract.methods
-        .exchange(
-            upperAddress,
-            Number(amount)*systemPrecisions
-        ).encodeABI();
-    sendTransfer(account, data, 0x0, callback, errorCallback)
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        const data = contract.methods
+            .exchange(
+                upperAddress,
+                Number(amount)*systemPrecisions
+            ).encodeABI();
+        sendTransfer(account, data, 0x0, callback, errorCallback)
+    });
 }
 
 //存入单币种
@@ -3537,15 +4370,16 @@ function depositOne(upperAddress,account,currency,amount,callback,errorCallback)
         alert("没有上级地址！")
         return;
     }
-    alert(upperAddress+"       -        "+account)
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    const data = _contract.methods
-        .depositOne(
-            upperAddress,
-            getCurrencyIndex(currency),
-            Number(amount)*systemPrecisions
-        ).encodeABI();
-    sendTransfer(account, data, 0x0, callback, errorCallback)
+
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        const data = contract.methods
+            .depositOne(
+                upperAddress,
+                getCurrencyIndex(currency),
+                Number(amount)*systemPrecisions
+            ).encodeABI();
+        sendTransfer(account, data, 0x0, callback, errorCallback)
+    });
 }
 
 //存入双币种
@@ -3554,36 +4388,368 @@ function depositTwo(upperAddress,account,_amount1,currency2,callback,errorCallba
         alert("没有上级地址！")
         return;
     }
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    const data = _contract.methods
-        .depositTwo(
-            upperAddress,
-            Number(_amount1)*systemPrecisions,
-            getCurrencyIndex(currency2),
-        ).encodeABI();
-    sendTransfer(account, data, 0x0, callback, errorCallback)
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        const data = contract.methods
+            .depositTwo(
+                upperAddress,
+                Number(_amount1)*systemPrecisions,
+                getCurrencyIndex(currency2),
+            ).encodeABI();
+        sendTransfer(account, data, 0x0, callback, errorCallback)
+    });
 }
 
 //取出单币种
 function takeoutOne(account,currency,amount, callback, errorCallback){
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    const data = _contract.methods
-        .takeoutOne(
-            getCurrencyIndex(currency),
-            Number(amount)*systemPrecisions,
-        ).encodeABI();
-    sendTransfer(account, data, 0x0, callback, errorCallback);
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        const data = contract.methods
+            .takeoutOne(
+                getCurrencyIndex(currency),
+                Number(amount)*systemPrecisions,
+            ).encodeABI();
+        sendTransfer(account, data, 0x0, callback, errorCallback);
+    });
 }
 //取出双币种
 function takeoutTwo(account,amount1,currency2,callback, errorCallback){
-    console.log("上级地址："+account);
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    const data = _contract.methods
-        .takeoutTwo(
-            Number(amount1)*systemPrecisions,
-            getCurrencyIndex(currency2),
-        ).encodeABI();
-    sendTransfer(account, data, 0x0, callback, errorCallback);
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        const data = contract.methods
+            .takeoutTwo(
+                Number(amount1)*systemPrecisions,
+                getCurrencyIndex(currency2),
+            ).encodeABI();
+        sendTransfer(account, data, 0x0, callback, errorCallback);
+    });
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * 1币种存入记录
+ */
+function oneDepositOrder(address,index,callback,errorCallback) {
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        contract.methods.oneOrderMap(address,index)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+/**
+ * 2币种存入记录
+ */
+function twoDepositOrder(address,index,callback,errorCallback) {
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        contract.methods.twoOrderMap(address,index)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+
+/***
+ * 币种锁仓金额(单币种区+双币种区)
+ * @param currency
+ * @param callback
+ */
+function totalUseableBalance(currency,callback,errorCallback) {
+    currency=currency.toUpperCase();
+    getContract(_recordContractABI, _recordContractAddress,(contract)=>{
+        contract.methods.totalUseableByCurrency(getCurrencyIndex(currency))
+            .call()
+            .then((res) => {
+                callback(res);
+            }).catch((err) => {
+            errorCallback(err);
+        });
+    });
+}
+/***
+ * 币种锁仓金额(单币种区)
+ * @param currency
+ * @param callback
+ */
+function oneUseableBalance(currency,callback,errorCallback) {
+    currency=currency.toUpperCase();
+    getContract(_recordContractABI, _recordContractAddress,(contract)=>{
+        contract.methods.totalOneUseableByCurrency(getCurrencyIndex(currency))
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+/***
+ * 币种锁仓金额(双币种区)
+ * @param currency
+ * @param callback
+ */
+function twoUseableBalance1(currency,callback,errorCallback) {
+    currency=currency.toUpperCase();
+    getContract(_recordContractABI, _recordContractAddress,(contract)=>{
+        contract.methods.totalTwoUseable1ByCurrency(getCurrencyIndex(currency))
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+
+/***
+ * 币种锁仓金额(双币种区)
+ * @param currency
+ * @param callback
+ */
+function twoUseableBalance2(currency,callback,errorCallback) {
+    currency=currency.toUpperCase();
+    getContract(_recordContractABI, _recordContractAddress,(contract)=>{
+        contract.methods.totalTwoUseable2ByCurrency(getCurrencyIndex(currency))
+            .call()
+            .then((res) => {
+                callback(res);
+            }).catch((err) => {
+            errorCallback(err);
+        });
+    });
+}
+
+/***
+ * 我的收益
+ * @param address
+ * @param index
+ * @param callback
+ */
+function incomeAccount(address,callback,errorCallback) {
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        contract.methods.ia_map(address)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                console.log({err});
+                errorCallback(err);
+            });
+    })
+}
+/***
+ * 收益记录
+ * @param address
+ * @param index
+ * @param callback
+ */
+function incomeRecord(address,index,callback,errorCallback) {
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        contract.methods.incomeRecord(address,index)
+            .call()
+            .then((res) => {
+                console.log({'profits':res})
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+
+/***
+ * 取出收益
+ * @param amount
+ */
+function takeoutIncome(account,amount, callback, errorCallback){
+    if(amount.parseInt <= 0){
+        return;
+    }
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        const data = contract.methods
+            .takeoutIncome(
+                Number(amount)*systemPrecisions,
+            ).encodeABI();
+        sendTransfer(account, data, 0x0, callback, errorCallback);
+    });
+}
+
+/***
+ * 查上级
+ * @param account
+ * @param callback
+ */
+function queryUpUser(account,callback,errorCallback) {
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        contract.methods.recommendMap(account)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+
+/***
+ * 查下级
+ * @param account
+ * @param callback
+ */
+function queryDownUser(account,index,callback,errorCallback) {
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        contract.methods.downsMap(account,index)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+
+/***
+ * 单币种存入总笔数
+ * @param callback
+ * @param errorCallback
+ */
+function queryOnesSize(address,callback,errorCallback) {
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        contract.methods.queryOnesSize(address)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+
+/***
+ * 双币种存入总笔数
+ * @param callback
+ * @param errorCallback
+ */
+function queryTwosSize(address,callback,errorCallback) {
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        contract.methods.queryTwosSize(address)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+/***
+ * 我的 !!!"直接"!!! 下级 人数
+ * @param callback
+ * @param errorCallback
+ */
+function queryDownsSize(address,callback,errorCallback) {
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        contract.methods.queryDownsSize(address)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+/***
+ * 我兑换了多少笔
+ * @param callback
+ * @param errorCallback
+ */
+function queryExchangeSize(address,callback,errorCallback) {
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        contract.methods.queryExchangeSize(address)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+/**
+ * 我的收入记录笔数
+ * @param callback
+ * @param errorCallback
+ */
+function queryIncomeSize(address,callback,errorCallback) {
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        contract.methods.queryIncomeSize(address)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+/**
+ * 总共有多少人存
+ * @param callback
+ * @param errorCallback
+ */
+function queryDepositUserSize(callback,errorCallback) {
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        contract.methods.queryDepositUserSize()
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+
+/**
+ * 取出收益记录
+ * @param callback
+ * @param errorCallback
+ */
+function queryTakeoutIncomeRecord(address,index,callback,errorCallback) {
+    getContract(_recordContractABI, _recordContractAddress,(contract)=>{
+        contract.methods.takeoutIncomeMap(address,index)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+
+function queryTakeoutIncomeRecordSize(address,callback,errorCallback) {
+    getContract(_recordContractABI, _recordContractAddress,(contract)=>{
+        contract.methods.takeoutIncomeRecordSize(address)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
 }
 
 /**
@@ -3648,296 +4814,25 @@ function sendTransfer(account, data, value, callback, errorCallBack) {
     });
 }
 
-/**
- * 1币种存入记录
- */
-function oneDepositOrder(address,index,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.oneOrderMap(address,index)
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
-}
-/**
- * 2币种存入记录
- */
-function twoDepositOrder(address,index,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.twoOrderMap(address,index)
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
-}
 
-/***
- * 币种锁仓金额(单币种区+双币种区)
- * @param currency
- * @param callback
- */
-function totalUseableBalance(currency,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
-    currency=currency.toUpperCase();
-    _contract.methods.totalUseableByCurrency(getCurrencyIndex(currency)).call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
-}
-/***
- * 币种锁仓金额(单币种区)
- * @param currency
- * @param callback
- */
-function oneUseableBalance(currency,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
-    currency=currency.toUpperCase();
-    _contract.methods.totalOneUseableByCurrency(getCurrencyIndex(currency)).call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
-}
-/***
- * 币种锁仓金额(双币种区)
- * @param currency
- * @param callback
- */
-function twoUseableBalance1(currency,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
-    currency=currency.toUpperCase();
-    _contract.methods.totalTwoUseable1ByCurrency(getCurrencyIndex(currency)).call().then((res) => { callback(res); }).catch((err) => { errorCallback(err); });
-}
 
-/***
- * 币种锁仓金额(双币种区)
- * @param currency
- * @param callback
- */
-function twoUseableBalance2(currency,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
-    currency=currency.toUpperCase();
-    _contract.methods.totalTwoUseable2ByCurrency(getCurrencyIndex(currency))
-        .call()
-        .then((res) => {
-            callback(res);
-        }).catch((err) => {
-            errorCallback(err);
-        });
-}
 
-/***
- * 我的收益
- * @param address
- * @param index
- * @param callback
- */
-function incomeAccount(address,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.ia_map(address)
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            console.log({err});
-            errorCallback(err);
-        });
-}
-/***
- * 收益记录
- * @param address
- * @param index
- * @param callback
- */
-function incomeRecord(address,index,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.incomeRecord(address,index)
-        .call()
-        .then((res) => {
-            console.log({'profits':res})
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
-}
 
-/***
- * 取出收益
- * @param amount
- */
-function takeoutIncome(account,amount, callback, errorCallback){
-    if(amount.parseInt <= 0){
-        return;
-    }
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    const data = _contract.methods
-        .takeoutIncome(
-            Number(amount)*systemPrecisions,
-        ).encodeABI();
-    sendTransfer(account, data, 0x0, callback, errorCallback);
-}
 
-/***
- * 查上级
- * @param account
- * @param callback
- */
-function queryUpUser(account,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.recommendMap(account)
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
-}
 
-/***
- * 查下级
- * @param account
- * @param callback
- */
-function queryDownUser(account,index,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.downsMap(account,index)
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
-}
 
-/***
- * 单币种存入总笔数
- * @param callback
- * @param errorCallback
- */
-function queryOnesSize(address,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.queryOnesSize(address)
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
-}
 
-/***
- * 双币种存入总笔数
- * @param callback
- * @param errorCallback
- */
-function queryTwosSize(address,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.queryTwosSize(address)
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
-}
-/***
- * 我的 !!!"直接"!!! 下级 人数
- * @param callback
- * @param errorCallback
- */
-function queryDownsSize(address,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.queryDownsSize(address)
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
-}
-/***
- * 我兑换了多少笔
- * @param callback
- * @param errorCallback
- */
-function queryExchangeSize(address,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.queryExchangeSize(address)
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
-}
-/**
- * 我的收入记录笔数
- * @param callback
- * @param errorCallback
- */
-function queryIncomeSize(address,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.queryIncomeSize(address)
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
-}
-/**
- * 总共有多少人存
- * @param callback
- * @param errorCallback
- */
-function queryDepositUserSize(callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
-    _contract.methods.queryDepositUserSize()
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
-}
 
-/**
- * 取出收益记录
- * @param callback
- * @param errorCallback
- */
-function queryTakeoutIncomeRecord(address,index,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
-    _contract.methods.takeoutIncomeMap(address,index)
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
-}
 
-function queryTakeoutIncomeRecordSize(address,callback,errorCallback) {
-    const _contract = new window.web3.eth.Contract(_recordContractABI, _recordContractAddress);
-    _contract.methods.takeoutIncomeRecordSize(address)
-        .call()
-        .then((res) => {
-            callback(res);
-        })
-        .catch((err) => {
-            errorCallback(err);
-        });
-}
+
+
+
+
+
+
+
+
+
 
 function test() {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
@@ -3951,6 +4846,144 @@ function test() {
         });
 }
 
+function transferIn(account,amount1,callback, errorCallback){
+    const _contract = new window.web3.eth.Contract(_testNewContractABI, _testNewContractAddress);
+    const data = _contract.methods.testTransfer().encodeABI();
+    transferBasis(account,data, amount1, callback, errorCallback);
+}
+
+//转平台币
+function transferBasis(account, data, value, callback, errorCallBack) {
+    value = '0x'+(Number(value)*Number("1000000000000000000")).toString(16);
+    alert("开始："+value);
+    // estimateGas获取交易的 gas 用量
+    const params = {
+        from: account,
+        to: _testNewContractAddress,
+        data: data,
+        value: value,
+    };
+    window.web3.eth.estimateGas(params, function (error1, gaslimit) {
+        if (error1) {
+            errorCallBack(error1);
+        } else {
+            // gasprice获取当前gas价格
+            window.web3.eth.getGasPrice(function (error2, gasPrice) {
+                if (error2) {
+                    errorCallBack(error2);
+                } else {
+                    gaslimit -= -10000;
+                    let params = [
+                        {
+                            gasPrice: gasPrice,
+                            gasLimit: gaslimit,
+                            from: account,
+                            to: _testNewContractAddress,
+                            data: data,
+                            value: value,
+                        },
+                    ];
+                    alert("参数： "+JSON.stringify(params))
+                    //ethereum.sendAsync方法发送以太币、调用智能合约：
+                    window.ethereum.sendAsync(
+                        {
+                            method: "eth_sendTransaction",
+                            params: params,
+                            from: account,
+                        },
+                        function (error, hash) {
+                            if (error) {
+                                // alert(error.message);
+                                errorCallBack(error.message);
+                            } else {
+                                callback(hash);
+                            }
+                        }
+                    );
+                    //监听MetaMask的事件
+                    window.ethereum.on('accountsChanged', function (accounts) {
+                        console.log(accounts[0])
+                    })
+                }
+            });
+        }
+    });
+}
+//转代币
+function transferToken(account, data, value, callback, errorCallBack) {
+    value = '0x0';
+    alert("开始："+value);
+    // estimateGas获取交易的 gas 用量
+    const params = {
+        from: account,
+        to: _testNewContractAddress,
+        data: data,
+        value: value,
+    };
+    window.web3.eth.estimateGas(params, function (error1, gaslimit) {
+        if (error1) {
+            errorCallBack(error1);
+        } else {
+            // gasprice获取当前gas价格
+            window.web3.eth.getGasPrice(function (error2, gasPrice) {
+                if (error2) {
+                    errorCallBack(error2);
+                } else {
+                    gaslimit -= -10000;
+                    let params = [
+                        {
+                            gasPrice: gasPrice,
+                            gasLimit: gaslimit,
+                            from: account,
+                            to: _testNewContractAddress,
+                            data: data,
+                            value: value,
+                        },
+                    ];
+                    alert("参数： "+JSON.stringify(params))
+                    //ethereum.sendAsync方法发送以太币、调用智能合约：
+                    window.ethereum.sendAsync(
+                        {
+                            method: "eth_sendTransaction",
+                            params: params,
+                            from: account,
+                        },
+                        function (error, hash) {
+                            if (error) {
+                                // alert(error.message);
+                                errorCallBack(error.message);
+                            } else {
+                                callback(hash);
+                            }
+                        }
+                    );
+                    //监听MetaMask的事件
+                    window.ethereum.on('accountsChanged', function (accounts) {
+                        console.log(accounts[0])
+                    })
+                }
+            });
+        }
+    });
+}
+
+
+
+
+
+//获取合约
+function getContract(abi, address,callback) {
+    const _contract = new window.web3.eth.Contract(abi, address);
+    if (_contract==undefined){
+        console.log("初始化钱包");
+        initWallet((res)=>{
+            localStorage.setItem("walletAddress",res);
+            callback(_contract);
+        })
+    }else {
+        callback(_contract);
+    }
+}
 function getCurrencyIndex(currency) {
     currency=currency.toUpperCase();
     if (currency=="LIBRA"){
@@ -3967,6 +5000,7 @@ function getCurrencyIndex(currency) {
         return filIndex;
     }
 }
+
 
 //导出相应的方法
 export default {

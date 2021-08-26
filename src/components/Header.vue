@@ -197,7 +197,7 @@
       this.$store.dispatch('accounts/ethereumListener');
     },
     created() {
-
+      this.initWallet();
     },
     watch: {
       '$route'(to) {
