@@ -214,5 +214,5 @@ export const l = {
   l_next:'下一步',
   l_swaps:'用 {0}{1} 兑换 {2}{3}',
   l_swapb:'确认在钱包中交易',
-  l_success:'兑换成功',
+  l_success:'已提交',
 }

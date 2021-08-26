@@ -94,11 +94,9 @@
         },
         mounted(){
 
-            let inviteAddress = this.$route.query.address ? this.$route.query.address : ''
-            if(inviteAddress && inviteAddress.length > 0) {
-                this.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)
-            }
-            this.inviteAddress = this.$getCookie('inviteAddress') ? this.$getCookie('inviteAddress') : this.inviteAddress
+            let inviteAddress = this.$route.query.address
+            if(inviteAddress && inviteAddress.length > 0) { this.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60) }
+            this.inviteAddress = this.$getCookie('inviteAddress')
 
 
             this.getPairPrice()

@@ -185,11 +185,9 @@ export default {
   async mounted() {
       let _self = this
       _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      let inviteAddress = _self.$route.query.address ? _self.$route.query.address : ''
-      if(inviteAddress && inviteAddress.length > 0) {
-          _self.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)
-      }
-      _self.inviteAddress = _self.$getCookie('inviteAddress') ? _self.$getCookie('inviteAddress') : _self.inviteAddress
+      let inviteAddress = _self.$route.query.address
+      if(inviteAddress && inviteAddress.length > 0) {_self.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)}
+      _self.inviteAddress = _self.$getCookie('inviteAddress')
 
       _self.getPairPrice()
       const res = await _self.getIncomeData()

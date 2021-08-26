@@ -186,5 +186,5 @@ export const l = {
   l_next:'Next',
   l_swaps:'{0} {1}を使用して{2} {3}を交換します',
   l_swapb:'ウォレットでのトランザクションの確認',
-  l_success:'交換に成功しました',
+  l_success:'提出された',
 }

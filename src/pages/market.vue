@@ -59,17 +59,17 @@
             <div class="info-item">
               <svg-icon icon-class="team_icon_01"></svg-icon>
               <span>{{$t('l.t_num')}}</span>
-              <span><countTo :endVal='team.teamPeople' :duration='3000'></countTo></span>
+              <span><countTo :endVal='team.teamPeople' :duration='1000'></countTo></span>
             </div>
             <div class="info-item">
               <svg-icon icon-class="team_icon_02"></svg-icon>
               <span>{{$t('l.t_ttt')}}</span>
-              <span><countTo :endVal='team.teamProformance' :duration='3000' :decimals="2"></countTo></span>
+              <span><countTo :endVal='team.teamProformance' :duration='1000' :decimals="2"></countTo></span>
             </div>
             <div class="info-item">
               <svg-icon icon-class="team_icon_03"></svg-icon>
               <span>{{$t('l.t_tre')}}</span>
-              <span><countTo :endVal='team.teamProfit' :duration='3000' :decimals="2"></countTo></span>
+              <span><countTo :endVal='team.teamProfit' :duration='1000' :decimals="2"></countTo></span>
             </div>
         </div>
         </a-spin>
@@ -94,18 +94,24 @@ export default {
       spinStatus:false,
       walletAddress:'',
       inviteAddress:'',
+      isSearchData:false,
       team:{
         totalProfit:0,
         todayProfit:0,
         teamPeople:0,
         teamProformance:0,
-        needTeamProfor:0,
+        needTeamProfor:13*Math.pow(10,5),
         teamProfit:0,
         leftLevel:'LV1',
         level:'LV2',
         enjoyRatio:'3%',
         rightLevel:'LV3',
         status:this.$t('l.l_unfinished'),
+      },
+      currentTeam:{
+        teamPeople:0,
+        teamProformance:0,
+        teamProfit:0,
       },
       layers:0,
       teamLevels:[
@@ -150,15 +156,22 @@ export default {
    onSearchTeam(value){
       console.log({searchValue:value})
       let _self = this
-      if(!value) return
+      if(!value){
+          this.team.teamProfit = this.currentTeam.teamProfit;
+          this.team.teamProformance = this.currentTeam.teamProformance;
+          this.team.teamPeople = this.currentTeam.teamPeople;
+          return
+      } 
       let genrateAddr = this.$emptyAddress()
       if(value && value.length < genrateAddr.length){
         this.$message.error({content:this.$t('l.l_enterrightaddress'),top:`300px`})
         return
       }
+      this.isSearchData = true
       this.searching = true
       this.teamSearching = true
       setTimeout(async ()=>{
+        _self.removeInfo() //搜索前移除信息
         await _self.calculateTeamInfo(value,true);
         _self.teamSearching = false
       },);
@@ -249,10 +262,14 @@ export default {
                                   usdt_amount * _self.coins[3].price +
                                   bnb_amount * _self.coins[4].price +
                                   fil_amount * _self.coins[5].price;
+      
 
       //团队收益
       _self.team.teamProfit = libra_profit_amount * _self.coins[0].price;  
-      
+      if(!_self.isSearchData){
+        _self.currentTeam.teamProformance = _self.team.teamProformance + 0
+        _self.currentTeam.teamProfit = _self.team.teamProfit + 0
+      }
       //检查完成状态
       this.checkTeam()
     },
@@ -269,7 +286,6 @@ export default {
       let level = `LV${this.curLevelIndex}`
       this.team.level = level
       this.checkTeam()
-
     },
     checkTeam(){
       const {teamProformance,level} = this.team
@@ -351,6 +367,9 @@ export default {
       const total_a = await _self.checkNodeCount(address)
       
       _self.team.teamPeople += Number(total_a)
+      if(!_self.isSearchData){
+        _self.currentTeam.teamPeople = _self.team.teamPeople + 0
+      }
       const total_num = +total_a
       if(total_num > 0){
         //2. 获得 address 下直推下级的地址信息, 获得团队人数
@@ -698,20 +717,26 @@ export default {
         this.$message.error('复制失败,请重试！')
       })
     },
+    removeInfo(){
+      this.team.teamPeople = 0
+      localStorage.removeItem('ONE-RECORD')
+      localStorage.removeItem('TWO-RECORD')
+      localStorage.removeItem('PROFIT-RECORD')
+
+    },
   },
   created() {
   },
   async mounted() {
       let _self = this
       _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      let inviteAddress = _self.$route.query.address ? _self.$route.query.address : ''
-      if(inviteAddress && inviteAddress.length > 0) {
-          _self.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)
-      }
-      _self.inviteAddress = _self.$getCookie('inviteAddress') ? _self.$getCookie('inviteAddress') : _self.inviteAddress
-
+      let inviteAddress = _self.$route.query.address
+      if(inviteAddress && inviteAddress.length > 0) { _self.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)}
+      _self.inviteAddress = _self.$getCookie('inviteAddress')
+      
       setTimeout(async ()=>{
         if(!_self.walletAddress) return
+         _self.removeInfo() //清除信息
          await _self.calculateTeamInfo(_self.walletAddress,true);
          const res = await _self.getCoinsPrice();
         //更新价格
@@ -719,7 +744,6 @@ export default {
           _self.coins[index].price = (+ele || 1)
         })
       },);
-
       const res = await _self.getIncomeData()
       if(res){
           const {
@@ -735,9 +759,7 @@ export default {
 
   },
   beforeDestroy(){
-    localStorage.removeItem('ONE-RECORD')
-    localStorage.removeItem('TWO-RECORD')
-    localStorage.removeItem('PROFIT-RECORD')
+    this.removeInfo()
   },
   destroyed() {
   }

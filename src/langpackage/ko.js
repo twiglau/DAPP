@@ -202,5 +202,5 @@ export const l = {
   l_next:'다음',
   l_swaps:'{0}{1}을(를) 사용하여 {2}{3} 교환',
   l_swapb:'지갑에서 거래 확인',
-  l_success:'교환 성공',
+  l_success:'제출 된',
 }

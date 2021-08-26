@@ -214,5 +214,5 @@ export const l = {
   l_swapm: `If the transaction is output, you will receive at least {0}{1}, otherwise the transaction will resume. `,
   l_swaps:'Use {0}{1} to exchange {2}{3}',
   l_swapb:'Confirm transaction in wallet',
-  l_success:'Exchange successful',
+  l_success:'Has submitted',
 }
