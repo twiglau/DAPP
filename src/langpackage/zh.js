@@ -217,4 +217,6 @@ export const l = {
   l_success:'已提交',
   swap_setting:'交易设置',
   l_invite:'邀请',
+
+  l_error_upper:'上级地址不正确',
 }

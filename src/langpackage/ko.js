@@ -205,4 +205,7 @@ export const l = {
   l_success:'제출 된',
   swap_setting:'스왑 설정',
   l_invite:'초대',
+
+
+  l_error_upper:'상위 레벨 주소가 잘못되었습니다',
 }

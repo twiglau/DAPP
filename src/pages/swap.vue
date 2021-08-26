@@ -193,6 +193,7 @@
             },
             handleSwap(amount){
                 let _self = this
+                console.log({amount})
                 //TODO 上级地址,从URL获取
                 let walletAddress = localStorage.getItem("walletAddress");
                 let upperAddress = _self.inviteAddress;
@@ -219,7 +220,11 @@
                     }
                 },(err)=>{
                     _self.spinStatus = false
-                    _self.$refs.loading.failed({title:err.message || 'err'})
+                    let msg = JSON.stringify(err.message)
+                    if(msg.indexOf('10001') !== -1){
+                        msg = _self.$t('l.l_error_upper')
+                    }
+                    _self.$refs.loading.failed({title:msg || 'err'})
                 });
             },
             async handleApprovedFor() {

@@ -189,4 +189,7 @@ export const l = {
   l_success:'提出された',
   swap_setting:'スワップ設定',
   l_invite:'招待',
+
+
+  l_error_upper:'上位アドレスが正しくありません',
 }

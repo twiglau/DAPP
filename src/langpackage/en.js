@@ -217,4 +217,7 @@ export const l = {
   l_success:'Has submitted',
   swap_setting:'Swap Setting',
   l_invite:'invite',
+
+
+  l_error_upper:'The upper-level address is incorrect',
 }
