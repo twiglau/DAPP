@@ -65,6 +65,7 @@
     import clickoutside from '@/utils/clickoutside.js'
     import SwapDrawer from '@/components/SwapDrawer'
     import Loading from '@/components/Loading'
+    import {error} from '@/utils/errorLog'
     export default {
         name:'swap',
         components: {
@@ -121,6 +122,7 @@
             }
         },
         methods: {
+            error,
             showConfig(){
                this.$refs.config.show()
             },
@@ -221,10 +223,8 @@
                 },(err)=>{
                     _self.spinStatus = false
                     let msg = JSON.stringify(err.message)
-                    if(msg.indexOf('10001') !== -1){
-                        msg = _self.$t('l.l_error_upper')
-                    }
-                    _self.$refs.loading.failed({title:msg || 'err'})
+                    let msg_log = _self.error(msg)
+                    _self.$refs.loading.failed({title:(msg_log || msg) || 'err'})
                 });
             },
             async handleApprovedFor() {

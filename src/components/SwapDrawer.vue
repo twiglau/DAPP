@@ -102,7 +102,6 @@ export default {
           this.model = this.info
         })
         this.visible = true
-        
     },
     input_num(index) {
       this['currentPerIndex' + index] = -1

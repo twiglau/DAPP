@@ -219,4 +219,15 @@ export const l = {
   l_invite:'邀请',
 
   l_error_upper:'上级地址不正确',
+  l_error_log_1:'服务错误',
+  l_error_log_2:'未知错误',
+  l_error_log_3:'团队关系不正确',
+  l_error_log_4:'上级地址不正确',
+  l_error_log_5:'上级余额 （必须 大于 1美元 ）',
+  l_error_log_6:'钱包余额 （libra）不足',
+  l_error_log_7:'钱包余额 （usdt）不足',
+  l_error_log_8:'存入总价值需大于 100美金',
+  l_error_log_9:'上级余额 （必须 大于 1美元 ）',
+  l_error_log_10:'没有存入记录',
+  l_error_log_11:'余额不足',
 }

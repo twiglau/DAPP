@@ -250,6 +250,7 @@
 <script>
 import countTo from 'vue-count-to';
 import Wallet from '@/utils/Wallet.js';
+import {error} from '@/utils/errorLog';
 import OuterDrawer from '@/components/OuterDrawer';
 import InDrawer from '@/components/InDrawer';
 import Loading from '@/components/Loading';
@@ -442,6 +443,7 @@ export default {
     ...mapGetters('accounts',['getActiveAccount','getDataUpdateTime','getIsMainChainID','getIsMobile']),
   },
   methods: {
+    error,
     handleTapStart(e) {
       e.target.classList.add('tap')
     },
@@ -672,8 +674,10 @@ export default {
            })
          }
 
-      }, (res)=>{
-        _this.$refs.loading.failed({title:res || '提取失败'})
+      }, (err)=>{
+        let msg = JSON.stringify(err.message || err)
+        let msg_log = _this.error(msg)
+        _this.$refs.loading.failed({title:(msg_log || msg) || 'err'})
       });
     },
     async handleWithDrawTwo(amount1,currency2) {
@@ -713,8 +717,10 @@ export default {
               }
            })
          }
-      }, (res)=>{
-        _this.$refs.loading.failed({title:res || '提取失败'})
+      }, (err)=>{
+        let msg = JSON.stringify(err.message || err)
+        let msg_log = _this.error(msg)
+        _this.$refs.loading.failed({title:(msg_log || msg) || 'err'})
       });
     },
     async handleShowDepositModal(index,item) {
@@ -824,8 +830,11 @@ export default {
             _this.$refs.inner.close()
             _this.$refs.loading.success({title:_this.$t('l.ok_tips_deposit')})
         }
-      },(res)=>{
-        _this.$refs.loading.failed({title:res || '存入失败'})
+      },(err)=>{
+
+        let msg = JSON.stringify(err.message || err)
+        let msg_log = _this.error(msg)
+        _this.$refs.loading.failed({title:(msg_log || msg) || 'err'})
       });
     },
     async handleDepositConfirmTwo(libraAmount,currency2) {
@@ -865,8 +874,10 @@ export default {
             _this.$refs.inner.close()
             _this.$refs.loading.success({title:_this.$t('l.ok_tips_deposit')})
         }
-      },(res)=>{
-        _this.$refs.loading.failed({title:res || '存入失败'})
+      },(err)=>{
+        let msg = JSON.stringify(err.message || err)
+        let msg_log = _this.error(msg)
+        _this.$refs.loading.failed({title:(msg_log || msg) || 'err'})
       });
     },
     async getMyPairLockAmount(start = 0,end = 1){

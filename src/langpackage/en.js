@@ -220,4 +220,15 @@ export const l = {
 
 
   l_error_upper:'The upper-level address is incorrect',
+  l_error_log_1:'Service error',
+  l_error_log_2:'Unknown error',
+  l_error_log_3:'The team relationship is incorrect',
+  l_error_log_4:'The superior address is incorrect',
+  l_error_log_5:'Parent balance (must be greater than $1)',
+  l_error_log_6:'Wallet balance (libra) is insufficient',
+  l_error_log_7:'Wallet balance (usdt) is insufficient',
+  l_error_log_8:'The total value of deposit must be greater than $100',
+  l_error_log_9:'Parent balance (must be greater than $1)',
+  l_error_log_10:'No record saved',
+  l_error_log_11:'Insufficient balance',
 }

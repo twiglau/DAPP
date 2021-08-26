@@ -1,6 +1,6 @@
 <template>
   <div class="loading">
-    <a-modal v-model="visible" :closable="false" :footer="null" :width="!$store.state.accounts.isMobile ? '600px' : '75%'" :centered="true">
+    <a-modal v-model="visible" :zIndex="1100" :closable="false" :footer="null" :width="!$store.state.accounts.isMobile ? '600px' : '75%'" :centered="true">
          <div class="container">
              <div class="container__close" @click="close">
                <svg-icon icon-class="close_icon"></svg-icon>

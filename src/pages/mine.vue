@@ -76,6 +76,7 @@ import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
 import ProfitDrawer from '@/components/ProfitDrawer'
 import Loading from '@/components/Loading'
+import {error} from '@/utils/errorLog'
 export default {
   name: "Mine",
   components: {
@@ -109,6 +110,7 @@ export default {
     }
   },
   methods: {
+    error,
     detailClick(path){
       this.$router.push({path:path,query:{}})
     },
@@ -159,9 +161,10 @@ export default {
            _self.$refs.loading.success({title:_self.$t('l.ok_tips_withdraw')})
          }
        },(err)=>{
-         console.log({err})
          _self.pLoading = false
-         _self.$refs.loading.failed({title:err || 'error'})
+        let msg = JSON.stringify(err.message || err)
+        let msg_log = _self.error(msg)
+        _self.$refs.loading.failed({title:(msg_log || msg) || 'err'})
        })
 
     },

@@ -208,4 +208,15 @@ export const l = {
 
 
   l_error_upper:'상위 레벨 주소가 잘못되었습니다',
+  l_error_log_1:'서비스 오류',
+   l_error_log_2:'알 수 없는 오류',
+   l_error_log_3:'팀 관계가 잘못되었습니다',
+   l_error_log_4:'상위 주소가 잘못되었습니다',
+   l_error_log_5:'상위 레벨 잔액($1보다 커야 함)',
+   l_error_log_6:'지갑 잔고(천칭자리)가 부족합니다',
+   l_error_log_7:'지갑 잔고(usdt)가 부족합니다',
+   l_error_log_8:'총 입금액은 $100보다 커야 합니다',
+   l_error_log_9:'상위 레벨 잔액($1보다 커야 함)',
+   l_error_log_10:'저장된 레코드 없음',
+   l_error_log_11:'잔액 부족',
 }
