@@ -102,10 +102,10 @@ export default {
             this.model.realS_v = (+newVal) * (+this.model.sPrice)
             //计算主流币 = 存入代币数量 * 代币单价 *4 / 主流币单价
             this.model.nAmount1 = (+newVal)
-            this.model.nAmount2 = this.model.mPrice > 0 ? this.model.realS_v * 4 / (+this.model.mPrice)
+            this.model.nAmount2 = this.model.lockAmount1 > 0 ? this.model.nAmount1 * this.model.lockAmount2 / this.model.lockAmount1
                                                           : 0
-            this.model.nResult1 = (+newVal)
-            this.model.nResult2 = 0
+            this.model.nResult1 = this.model.nAmount1
+            this.model.nResult2 = this.model.nAmount2
           }
         }
       }
