@@ -839,8 +839,7 @@ export default {
       border: none;
       height: 32px;
       line-height: 32px;
-      width: 80px;
-      min-width:70px;
+      min-width:80px;
       padding: 0px;
       font-size: 12px;
       font-weight: 700;

@@ -11,7 +11,7 @@
           </div>
           <div class="detail-c">
             <div class="detail" @click="detailClick('/income-detail')"><span>{{$t('l.t_de')}}</span><svg-icon icon-class="enter_icon"></svg-icon></div>
-            <a-button class="g-button" @click="isModalShowProfit=true">{{$t("l.claim")}}</a-button>
+            <a-button class="g-button" @click="withDrawelClick">{{$t("l.claim")}}</a-button>
           </div>
       </div>
       <div class="sepertor-line"></div>
@@ -39,7 +39,7 @@
          <svg-icon icon-class="enter_icon"></svg-icon>
        </div>
     </div>
-    <svg-icon class="bottom-logo" icon-class="logo-gray"></svg-icon>
+    <svg-icon  class="bottom-logo" icon-class="logo_gray"></svg-icon>
 
       <!-- 提取收益 -->
       <a-modal v-model="isModalShowProfit" :footer="null" :width="!$store.state.accounts.isMobile ? '600px' : '90%'" @cancel="handleMCancel" :centered="true">
@@ -66,16 +66,22 @@
           </ul>
         </div>
       </a-modal>
+      <profit-drawer :info="model" ref="profit" @sure="sureProfit"/>
+      <loading ref="loading" />
   </div>
 </template>
 
 <script>
 import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
+import ProfitDrawer from '@/components/ProfitDrawer'
+import Loading from '@/components/Loading'
 export default {
   name: "Mine",
   components: {
     countTo,
+    ProfitDrawer,
+    Loading
   },
   data() {
     return {
@@ -88,6 +94,10 @@ export default {
       pLoading:false,
       isModalShowProfit:false,
       iptValue1:null,
+      model:{
+        currency:'LBR',
+        lockAmount:0
+      },
     }
   },
   computed: {
@@ -113,6 +123,17 @@ export default {
       this.iptValue1 = undefined
       this.isModalShowProfit = false
     },
+    withDrawelClick(){
+      if(this.$store.state.accounts.isMobile){
+        this.$refs.profit.show()
+      }else{
+        this.isModalShowProfit=true
+      }
+    },
+    sureProfit(amount){
+      this.iptValue1 = amount
+      this.handleProfitAction()
+    },
     handleProfitAction(){
        const {useableProfit,walletAddress,iptValue1} = this
        let _self = this
@@ -128,24 +149,19 @@ export default {
          this.$message.error(_self.$t('l.l_numerror'))
          return
        }
-       console.log({walletAddress})
        _self.pLoading = true
+       _self.$refs.loading.show({title:_self.$t('l.claim'),content:`${_self.$t('l.claim')} ${_self.$t('l.l_numing')}  ${iptValue1} ${_self.model.currency}`})
        Wallet.takeoutIncome(walletAddress,iptValue1,(res) => {
          if(res){
            _self.handleMCancel()
            _self.getIncomeData()
-           _self.$success({
-             title:_self.$t('l.claim'),
-             content:_self.$t('.ok_tips_withdraw')
-           })
+           _self.$refs.profit.close()
+           _self.$refs.loading.success({title:_self.$t('l.ok_tips_withdraw')})
          }
        },(err)=>{
          console.log({err})
          _self.pLoading = false
-         _self.$error({
-           title:_self.$t('l.claim'),
-           content:err || '错误'
-         })
+         _self.$refs.loading.failed({title:err || 'error'})
        })
 
     },
@@ -196,6 +212,7 @@ export default {
                 } = res
           _self.totalProfit = Number(total)/Wallet.Precisions() || 0
           _self.useableProfit = _self.totalProfit - (Number(takeout)/Wallet.Precisions() || 0)
+          _self.model.lockAmount = _self.useableProfit
       }
   },
   destroyed() {
@@ -203,11 +220,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
   .mine {
     width: 100%;
     min-height: 100vh;
     background: #f5f5f5;
+    display: flex;
+    flex-direction: column;
   }
   .pools__dialog-inner {
     width: 100%;
@@ -240,7 +259,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 86px;
+    min-width: 86px;
     height: 36px;
     outline: none;
     border: solid 1px #43318C;
@@ -430,7 +449,7 @@ export default {
     border:none
   }
 .income-info {
-  padding: 20px 20px;
+  padding: 24px;
   display: flex;
   align-items: center;
   margin: 0 auto;
@@ -481,6 +500,7 @@ export default {
 .total div:nth-of-type(2) {
    color: #43318C;
    font-size: 24px;
+   font-weight: 500;
    margin: 8px 0px;
 }
 .total div:nth-of-type(2) > span:nth-of-type(2) {
@@ -522,6 +542,7 @@ export default {
 }
 .mine-detail {
   margin-top: 30px;
+  padding: 0px 24px;
 }
 .detail-item {
   display: flex;
@@ -546,6 +567,7 @@ export default {
   width: 101px;
   height: 32px;
   margin: 80px auto;
+  color: #D8D8D8;
 }
 
 
@@ -554,6 +576,7 @@ export default {
   .income-info {
     border-radius: 0px;
     flex-direction: column;
+    border-top: solid 2px #f5f5f5;
   }
   .mine-detail {
     margin-top: 10px;
@@ -565,7 +588,7 @@ export default {
     width: 100%;
     height: 1px;
     margin: 30px 0px;
-    background: #e1e1e1;
+    background: #f5f5f5;
   }
   .invite-detail {
     width: 100%;
@@ -579,13 +602,13 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    padding: 10px 0px;
+    padding: 14px 0px;
     font-size: 14px;
   }
 
   .detail-item + .detail-item{
     border-left: solid 1px transparent;
-    border-top: solid 1px #e1e1e1;
+    border-top: solid 1px #f5f5f5;
   }
   .detail-item .svg-icon {
     margin-top: 0px;

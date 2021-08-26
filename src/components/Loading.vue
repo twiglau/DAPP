@@ -73,6 +73,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+/deep/.ant-modal-content {
+    border-radius: 8px!important;
+}
 /deep/.ant-modal-mask {
     background-color: rgba(255, 255, 255, 0.7);
     filter: alpha(opacity=50);

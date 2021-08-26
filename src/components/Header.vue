@@ -3,7 +3,7 @@
     <div class="header_inner_wrap">
       <div class="left_nav">
         <div class="logo_wrap">
-          <svg-icon :icon-class="logoImg" alt="" class="logo" />
+          <img :src="logoImg" alt="">
         </div>
         <ul class="nav_text" v-if="!getIsMobile">
           <li class="nav_item" :class="currentIndex == 1 ? 'clickedWhiteNav': ''"><a @click="handleJump('home',1)">{{$t('l.h_n1')}}</a><div class="whiteLine"></div></li>
@@ -172,9 +172,9 @@
       ...mapGetters('accounts',['getLangType','getIsMobile',"getActiveAccount", "isUserConnected",'getIsMainChainID']),
       logoImg:function(){
         if(this.currentIndex == 1){
-          return 'logo_white'
+          return require('@/assets/logo_white.png')
         }else{
-          return 'logo'
+          return require('@/assets/logo.png')
         }
       },
       menuImg:function(){
@@ -336,7 +336,7 @@
     display: inline-block;
     width: 100%;
     height: 100%;
-    font-size: 14px;
+    font-size: 12px;
     text-align: center;
     border-radius: 4px;
   }
@@ -379,7 +379,7 @@
     width: 76px;
     height: 24px;
   }
-  .logo_wrap .svg-icon {
+  .logo_wrap img {
     width: 100%;
     height: 100%;
   }

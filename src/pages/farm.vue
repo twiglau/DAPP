@@ -1408,7 +1408,7 @@ export default {
     font-size: 24px;
     color: #19A569;
     font-weight: 700;
-    font-family: DINPro-Black;
+    /* font-family: DINPro-Black; */
   }
   .pools__label-value {
     font-size: 14px;
@@ -1583,11 +1583,12 @@ export default {
     }
     .vault_nav {
       font-size: 16px;
+      max-width:100%;
       width: 94%;
       justify-content: flex-start;
     }
     #donghuaBox {
-      background:white;
+      background:transparent;
     }
     .valut_nav_item {
       flex: none;
@@ -1707,8 +1708,8 @@ export default {
     }
     .copy_wrap {
       display: none;
-      max-width:40%;
-      margin: 0px 15px 0px 30px;
+      max-width:10%;
+      margin: 0px;
       height: 28px;
       padding: 0px;
     }

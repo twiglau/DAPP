@@ -257,7 +257,7 @@ export default {
     align-items: center;
     padding: 0 16px;
     box-sizing: border-box;
-    width: 100px;
+    min-width: 100px;
     height: 48px;
     background-color: #fff;
     border-radius: 8px;

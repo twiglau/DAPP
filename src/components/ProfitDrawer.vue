@@ -13,42 +13,18 @@
               <div @click="close"><svg-icon icon-class="close_icon"></svg-icon></div>
           </div>
           <div class="container__coin">
-              <svg-icon class="left-icon"  :icon-class="(model.currency || model.currency1) + '_coin'"></svg-icon>
-              <svg-icon class="right-icon" v-if="model.isSingle == 1" :icon-class="model.currency2 + '_coin'"></svg-icon>
-              <span>{{model.isSingle == 1? `${model.currency1}/${model.currency2}` : `${model.currency}`}}</span>
+              <svg-icon class="left-icon"  :icon-class="model.currency + '_coin'"></svg-icon>
+              <span>{{`${model.currency}`}}</span>
           </div>
           <div class="container__desc">
-              <span>{{$t('l.deposited')}}({{model.currency || model.currency1}})</span><span><countTo :endVal='( model.isSingle == 0? model.lockAmount : model.lockAmount1)' :duration='1000' :decimals="4"></countTo></span>
+              <span>{{$t('l.l_unprofit')}}({{model.currency}})</span><span><countTo :endVal='model.lockAmount' :duration='1000' :decimals="4"></countTo></span>
           </div>
           <div class="container__input">
               <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
               <div class="input__info">
-                  <span>{{model.isSingle == 1? `${model.currency1}/${model.currency2}` : `${model.currency}`}}</span>
-                  <a-button class="max-btn" @click="iptValue1 = (model.isSingle == 0? model.lockAmount : model.lockAmount1).toFixed(4)">{{$t('l.l_maxa')}}</a-button>
+                  <span>{{`${model.currency}`}}</span>
+                  <a-button class="max-btn" @click="iptValue1 = model.lockAmount.toFixed(4)">{{$t('l.l_maxa')}}</a-button>
               </div>
-          </div>
-          <div class="container__detail">
-              {{$t('l.l_ming')}}
-          </div>
-          <div class="container__info" style="margin-top:8px">
-              <div class="info-l">
-                  <span>{{model.currency || model.currency1}}</span>{{$t('l.withdrawal')}}
-              </div>
-              <div class="info-r">
-                  <countTo :endVal='model.nAmount1 || model.nAmount' :duration='1000' :decimals="4"></countTo>
-              </div>
-          </div>
-          <div class="container__info" v-if="model.isSingle == 1">
-              <div class="info-l">
-                  <span>{{model.currency2}}</span>{{$t('l.withdrawal')}}
-              </div>
-              <div class="info-r">
-                  <countTo :endVal='model.nAmount2' :duration='1000' :decimals="4"></countTo>
-              </div>
-          </div>
-          <div class="container__ratio">
-              <span>{{$t('l.l_you')}}</span>
-              <span>{{model.isSingle == 0? `${model.nResult} ${model.currency}` : `${model.nResult1} ${model.currency1} + ${model.nResult2} ${model.currency2}`}}</span>
           </div>
           <a-button class="container__sure" @click="sureClick">{{$t('l.l_sureIt')}}</a-button>
       </div>
@@ -60,7 +36,7 @@
 
 import countTo from 'vue-count-to';
 export default {
-  name:'OutDrawer',
+  name:'ProfitDrawer',
   props:{
       info:{
           type:Object,
@@ -71,7 +47,7 @@ export default {
     return {
       visible: false,
       iptValue1:null,
-      drawerHeight:440,
+      drawerHeight:314,
       model:{}
     }
   },
@@ -93,21 +69,6 @@ export default {
             this.model.nResult = +newVal
           }
         }
-        if(this.model && this.model.currency1){
-          if(!newVal){
-            this.model.realS_v = 0;this.model.realM_v = 0;
-            this.model.nAmount1 = 0;this.model.nAmount2 = 0;
-            this.model.nResult1 = 0;this.model.nResult2 = 0;
-          }else{
-            this.model.realS_v = (+newVal) * (+this.model.sPrice)
-            //计算主流币 = 存入代币数量 * 代币单价 *4 / 主流币单价
-            this.model.nAmount1 = (+newVal)
-            this.model.nAmount2 = this.model.mPrice > 0 ? this.model.realS_v * 4 / (+this.model.mPrice)
-                                                          : 0
-            this.model.nResult1 = (+newVal)
-            this.model.nResult2 = 0
-          }
-        }
       }
     }
   },
@@ -121,7 +82,6 @@ export default {
     show(){
         this.$nextTick(()=>{
           this.model = this.info
-          this.drawerHeight = this.model.isSingle == 0 ? 450 : 476
         })
         this.visible = true
     },

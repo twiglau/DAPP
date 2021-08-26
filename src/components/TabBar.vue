@@ -86,10 +86,11 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 13px;
+    font-size: 12px;
     color: #43318C;
     position: relative;
     border-top: solid 1px transparent;
+    text-align: center;
 }
 .tab-item .svg-icon {
     margin-top: -10px;
@@ -98,8 +99,8 @@ export default {
 }
 .tab-item span {
     position: absolute;
-    top: 64%;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 60%;
+    transform: scale(0.8);
+    font-weight: 600;
 }
 </style>

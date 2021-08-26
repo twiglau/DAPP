@@ -1,48 +1,50 @@
 <template>
-    <div class="config">
-         <div class="bar">
-             <span>Swap Settings</span>
-             <img src="../assets/close_icon.png" alt="">
-         </div>
-         <div class="tip-info">
-             <span>{{$t('l.Slippage_tolerance')}}</span>
-             <img src="../assets/qs_icon.png" alt="">
-         </div>
-         <div class="slide">
-             <button class="slide_btn" type="button">0.1%</button>
-             <button class="slide_btn" type="button">0.5%</button>
-             <button class="slide_btn" type="button">1%</button>
-             <button class="slide_btn slide_last" type="button">
-                 <div class="last-conf">
-                    <span role="img" aria-label="warning">⚠️</span>
-                    <input @input="input_num(0)" :placeholder="0.0" v-model="iptValue0">
-                    %
-                 </div>
-             </button>
-         </div>
-         <div class="tip-info">
-             <span>{{$t('l.Transaction_deadline')}}</span>
-             <img src="../assets/qs_icon.png" alt="">
-         </div>
-         <div class="slide">
-             <button class="slide_btn slide_last" style="max-width:120px;" type="button">
-                 <div class="last-conf">
-                    <input @input="input_num(1)" :placeholder="0.0" v-model="iptValue1">
-                 </div>
-             </button>
-             <span>{{$t('l.minute_swap')}}</span>
-         </div>
-         <div class="bar">
-             <span>{{$t('l.Interface_Settings')}}</span>
-         </div>
-         <div class="tip-info tip-bw">
-             <span>{{$t('l.Slippage_tolerance')}}</span>
-             <a-switch :checked-children="$t('l.swap_on')" :un-checked-children="$t('l.swap_off')" default-checked />
-         </div>
-
-
-
+    <div class="container">
+        <a-modal v-model="visible" :footer="null" :width="!$store.state.accounts.isMobile ? '600px' : '90%'" :closable="false" :centered="true">
+            <div class="config">
+                <div class="bar">
+                    <span>{{$t('l.swap_setting')}}</span>
+                    <div @click="close"><img src="../assets/close_icon.png" alt=""></div>
+                </div>
+                <div class="tip-info">
+                    <span>{{$t('l.Slippage_tolerance')}}</span>
+                    <img src="../assets/qs_icon.png" alt="">
+                </div>
+                <div class="slide">
+                    <button class="slide_btn" type="button">0.1%</button>
+                    <button class="slide_btn" type="button">0.5%</button>
+                    <button class="slide_btn" type="button">1%</button>
+                    <button class="slide_btn slide_last" type="button">
+                        <div class="last-conf">
+                            <span role="img" aria-label="warning">⚠️</span>
+                            <input @input="input_num(0)" :placeholder="0.0" v-model="iptValue0">
+                            %
+                        </div>
+                    </button>
+                </div>
+                <div class="tip-info">
+                    <span>{{$t('l.Transaction_deadline')}}</span>
+                    <img src="../assets/qs_icon.png" alt="">
+                </div>
+                <div class="slide">
+                    <button class="slide_btn slide_last" style="max-width:120px;" type="button">
+                        <div class="last-conf">
+                            <input @input="input_num(1)" :placeholder="0.0" v-model="iptValue1">
+                        </div>
+                    </button>
+                    <span>{{$t('l.minute_swap')}}</span>
+                </div>
+                <div class="bar" style="margin-top:20px">
+                    <span>{{$t('l.Interface_Settings')}}</span>
+                </div>
+                <div class="tip-info tip-bw">
+                    <span>{{$t('l.Slippage_tolerance')}}</span>
+                    <a-switch :checked-children="$t('l.swap_on')" :un-checked-children="$t('l.swap_off')" default-checked />
+                </div>
+            </div>
+      </a-modal>
     </div>
+    
 </template>
 <script>
 export default {
@@ -51,37 +53,46 @@ export default {
         return {
             iptValue0:null,
             iptValue1:null,
+            visible:false,
         }
     },
     methods:{
         input_num(index) {
-            let dot = 
+            
             this['iptValue' + index] = this['iptValue' + index].replace(/[^\d.]/g, "")
             this['iptValue' + index] = index == 0 ? this['iptValue' + index].replace(/\.{2,}/g, ".") : `${parseInt(this['iptValue' + index]? this['iptValue' + index] : 0)}`
             this['iptValue' + index] = this['iptValue' + index].replace(/^\./g, "")
             this['iptValue' + index] = this['iptValue' + index].replace(".", "$#$").replace(/\./g, "").replace("$#$", ".")
             this['iptValue' + index] = index == 0 ? this['iptValue' + index].replace(/^(-)*(\d+)\.(\d\d).*$/, '$1$2.$3') : `${parseInt(this['iptValue' + index]? this['iptValue' + index] : 0)}` 
         },
+        close(){
+            this.iptValue0 = null
+            this.iptValue1 = null
+            this.visible = false
+        },
+        show(){
+            this.visible = true
+        }
     }
     
 }
 </script>
-<style scoped>
+<style scoped lang="less">
+/deep/.ant-modal-content {
+    border-radius: 8px!important;
+}
+/deep/.ant-modal-mask {
+    background-color: rgba(255, 255, 255, 0.7);
+    filter: alpha(opacity=50);
+}
 .config {
     width:100%;
     max-width: 422px;
     background-color: rgb(255, 255, 255);
-    box-shadow: rgb(0 0 0 / 1%) 0px 0px 1px, rgb(0 0 0 / 4%) 0px 4px 8px, rgb(0 0 0 / 4%) 0px 16px 24px, rgb(0 0 0 / 1%) 0px 24px 32px;
-    border: 1px solid rgb(237, 238, 242);
-    border-radius: 0.5rem;
     display: flex;
     flex-direction: column;
     font-size: 1rem;
-    position: fixed;
-    top: 3rem;
-    right: 0rem;
-    z-index: 100;
-    padding: 20px;
+    padding: 0px;
 }
 .bar {
     display: flex;
@@ -97,7 +108,7 @@ export default {
     height: 20px;
 }
 .tip-info {
-    margin-top: 18px;
+    margin-top: 15px;
     color: #9c9c9c;
     font-size: 12px;
     display: flex;

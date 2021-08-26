@@ -776,12 +776,13 @@ export default {
   background: #43318C;
   height: 126px;
   position: relative;
+  overflow: hidden;
 }
 .team-icon {
   width:64px;
   height: 48px;
   position: absolute;
-  bottom:0px;
+  bottom:-21px;
   left:50%;
   transform: translateX(-50%);
 }
@@ -845,6 +846,7 @@ export default {
 .level-desc span:nth-child(1) {
   color: #000;
   font-size: 16px;
+  font-weight: 500;
   flex: 1;
 }
 .level-desc span:nth-child(2) {
@@ -897,10 +899,13 @@ export default {
 }
 .team-level-desc {
   font-size: 14px;
+  text-align: center;
   color: #000;
 }
 .invite-btn {
   margin-top: 24px;
+  width: 148px;
+  height: 40px;
   color: white;
   background: #000;
 }
@@ -916,6 +921,7 @@ export default {
   justify-content: center;
   align-items: center;
   color:#9c9c9c;
+  text-align: center;
 }
 .info-item .svg-icon {
   width: 32px;
@@ -924,7 +930,7 @@ export default {
 .info-item span:nth-of-type(1) {
   color: #9c9c9c;
   font-size: 14px;
-  margin: 10px 0px;
+  margin: 10px 0px 1px 0px;
 }
 .info-item span:nth-of-type(2) {
   color: #000;

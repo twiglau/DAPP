@@ -215,4 +215,5 @@ export const l = {
   l_swaps:'用 {0}{1} 兑换 {2}{3}',
   l_swapb:'确认在钱包中交易',
   l_success:'已提交',
+  swap_setting:'交易设置',
 }

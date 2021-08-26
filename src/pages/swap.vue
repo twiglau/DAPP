@@ -10,9 +10,8 @@
                             <span>{{$t('l.t_SWAP') + ' ' + (iptValue0 || 0) + ' ' + iptCoin0 + $t('l.t_Duic') + ' ' + (iptValue1 || 0) + ' ' + iptCoin1}}</span>
                         </div>
                     </div>
-                    <div class="top_info_right" v-clickoutside="handleSetting">
-                        <img @click="showConfig = !showConfig" src="../assets/Setting_icon.png" alt="">
-                        <swap-config v-show="showConfig"></swap-config>
+                    <div class="top_info_right">
+                        <img @click="showConfig" src="../assets/Setting_icon.png" alt="">
                     </div>
                 </div>
                 <div class="text-label">
@@ -53,6 +52,7 @@
                 </li>
             </a-spin>
         </div>
+        <swap-config ref="config"></swap-config>
         <swap-drawer ref="swap" :info="swap" @sure="handleSwap"></swap-drawer>
         <loading ref="loading"/>
     </div>
@@ -114,7 +114,6 @@
                 usdt_lbr_p:0,
                 LBR_price:0,
                 usdtAmount:0,
-                showConfig:false,
                 isApprovedUSDT:false,
                 isApproving:false,
                 inviteAddress:'',
@@ -122,6 +121,9 @@
             }
         },
         methods: {
+            showConfig(){
+               this.$refs.config.show()
+            },
             async queryBalance(){
                 let _self = this
                 let walletAddress = localStorage.getItem("walletAddress");
@@ -202,9 +204,9 @@
                            address:walletAddress,
                            parentAddress:upperAddress,
                            fromAmount:amount,
-                           fromToken:_this.iptCoin0,
-                           toAmount:_this.iptValue1,
-                           toToken:_this.iptCoin1
+                           fromToken:_self.iptCoin0,
+                           toAmount:_self.iptValue1,
+                           toToken:_self.iptCoin1
                         })
                         .then((result) => {
                             const {status} = result
@@ -245,7 +247,7 @@
         background: rgb(255, 255, 255);
         box-shadow: rgb(171 133 115 / 16%) 0px 2px 10px;
         border-radius: 20px;
-        padding: 20px;
+        padding: 24px;
         border: 2px solid #43318C;
         margin: 0 auto;
     }
@@ -260,6 +262,7 @@
     .top_info-title {
         color: black;
         font-size: 16px;
+        font-weight: 500;
     }
     .top_info-sub {
         color: #3C3C3C;
@@ -319,6 +322,7 @@
         justify-content: flex-end;
         color: #000;
         font-size: 12px;
+        font-weight: 500;
     }
     .input_right span {
         margin: 0px 6px;
@@ -371,8 +375,9 @@
 @media (max-width: 768px) {
     .swap-info {
         border-radius: 0px;
-        padding: 20px;
+        padding: 24px;
         border: 0px solid transparent;
+        border-top: solid 2px #f5f5f5;
         margin: 0 auto;
     }
 

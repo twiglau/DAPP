@@ -203,4 +203,5 @@ export const l = {
   l_swaps:'{0}{1}을(를) 사용하여 {2}{3} 교환',
   l_swapb:'지갑에서 거래 확인',
   l_success:'제출 된',
+  swap_setting:'스왑 설정',
 }

@@ -35,15 +35,4 @@ export default {
 </script>
 
 <style>
-
-.route_view {
-  /*padding: 64px 0 64px 240px;*/
-  padding: 76px 0 0 0;
-}
-.route_view.pt_mobile {
-  padding: 60px 0 0 0;
-}
-.route_view.pt_more {
-  padding: 130px 0 0 0;
-}
 </style>

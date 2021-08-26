@@ -7,10 +7,6 @@
     </div>
     <template v-slot:overlay>
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
-        <a-menu-item key="1" @click="changeLangType">
-          <svg-icon icon-class="Lang_cn"></svg-icon>
-          简体中文
-        </a-menu-item>
         <a-menu-item key="2" @click="changeLangType">
           <svg-icon icon-class="Lang_en"></svg-icon>
           English
@@ -22,6 +18,10 @@
         <a-menu-item key="4" @click="changeLangType">
           <svg-icon icon-class="Lang_ja"></svg-icon>
           Japan
+        </a-menu-item>
+        <a-menu-item key="1" @click="changeLangType">
+          <svg-icon icon-class="Lang_cn"></svg-icon>
+          简体中文
         </a-menu-item>
       </a-menu>
     </template>
