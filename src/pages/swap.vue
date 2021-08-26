@@ -222,7 +222,7 @@
                     }
                 },(err)=>{
                     _self.spinStatus = false
-                    let msg = JSON.stringify(err.message)
+                    let msg = JSON.stringify(err.message || err)
                     let msg_log = _self.error(msg)
                     _self.$refs.loading.failed({title:(msg_log || msg) || 'err'})
                 });
