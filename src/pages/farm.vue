@@ -866,7 +866,7 @@ export default {
         _this.$message.error(_this.$t('l.l_stockvalue'))
         return;
       }
-      _this.$refs.loading.show({title:_this.$t('l.deposit'),content:`${_this.$t('l.deposit')} ${_this.$t('l.l_numing')} ${amount}${_this.depositInfo.currency1}/${currency2}`})
+      _this.$refs.loading.show({title:_this.$t('l.deposit'),content:`${_this.$t('l.deposit')} ${_this.$t('l.l_numing')} ${libraAmount}${_this.depositInfo.currency1}/${currency2}`})
       //调用合约方法存入币种
       Wallet.depositTwo(this.inviteAddress,this.walletAddress,libraAmount,currency2,(res)=>{
         if(res) {
