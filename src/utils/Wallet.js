@@ -10,14 +10,776 @@ const bnbIndex=5;
 const filIndex=6;
 const systemPrecisions=100000000;
 
-// const _tokensContractAddress = "0x2C119c9E31aA962584DB48368f2d5cBa6b43fe41";
-const _tokensContractAddress = "0x8c3dbf0DAe2e6a02E8b006D07383ff1a9F858adC";//"0x97B6F5B18b47A5ee176CCF20B16C5376A93E0e16"; //测试
-const _recordContractAddress = '0x29599FF4F92503c5FAC6a3Af7D860cBfc2F4A30d';
-const _contractAddress = "0xbEE7AAa80c30F090d7c874a181B41695b6948CA7";//'0x7e90166ceaF3551A6E7c6F86DEFc465507d0cBC5';
-const _priceContractAddress='0x9D3B83ab5D8493d36dAD9163275C752202b88DaE';
+const _tokensContractAddress = "0xEe27b82668B17a442284FeFBb83E508527766335";
+const _recordContractAddress = '0xE78065671BaE31f96A0B50065892c5783f00d6BA';
+const _contractAddress = "0xdc7188829084b961351fB97642202e5e48f20BB9";//"0x6163DD6C95b8713004a085d9BF0b0d8F3e97D797";
+const _priceContractAddress='0x54362b3C4B3E6144a7e5284fd076dE67e537a773';
 
-const _testNewContractAddress = '0x985fD0deac376f21D9a799B448A7665CAe4aEfa4';
-
+// const _contractABI = [
+//     {
+//         "inputs": [],
+//         "stateMutability": "nonpayable",
+//         "type": "constructor"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "uint8",
+//                 "name": "cIndex",
+//                 "type": "uint8"
+//             },
+//             {
+//                 "internalType": "address",
+//                 "name": "from",
+//                 "type": "address"
+//             }
+//         ],
+//         "name": "allowance",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "remaining",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "award",
+//         "outputs": [],
+//         "stateMutability": "payable",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "bnbPrice",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "btcPrice",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "dayDividendAmount",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "_upper",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "uint8",
+//                 "name": "_cIndex",
+//                 "type": "uint8"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "_amount",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "name": "depositOne",
+//         "outputs": [],
+//         "stateMutability": "payable",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "_upper",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "_amount1",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint8",
+//                 "name": "_c2Index",
+//                 "type": "uint8"
+//             }
+//         ],
+//         "name": "depositTwo",
+//         "outputs": [],
+//         "stateMutability": "nonpayable",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "dividendRate",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "name": "downsMap",
+//         "outputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "downAddress",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "address",
+//                 "name": "userAddress",
+//                 "type": "address"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "ethPrice",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "_upper",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "_amount",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "name": "exchange",
+//         "outputs": [],
+//         "stateMutability": "payable",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "name": "exchangeMap",
+//         "outputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "user",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "usdtAmount",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "libAmount",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "time",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "feeRateDayIn30",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "feeRateDayOut30",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "filPrice",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "currIndex",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "name": "getThePrice",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "",
+//                 "type": "address"
+//             }
+//         ],
+//         "name": "ia_map",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "total",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "takeout",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "todayDividend",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "todayShareAmount",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "todayGlobalAmount",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "name": "incomeRecord",
+//         "outputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "user",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "address",
+//                 "name": "fromAddress",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "amount",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "time",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "latestDividendTime",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "libraPrice",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "name": "oneOrderMap",
+//         "outputs": [
+//             {
+//                 "internalType": "uint8",
+//                 "name": "currencyIndex",
+//                 "type": "uint8"
+//             },
+//             {
+//                 "internalType": "address",
+//                 "name": "userAddress",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "totalAmount",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "useableAmount",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "takeoutAmount",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "depositTime",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "owner",
+//         "outputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "",
+//                 "type": "address"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "precision",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [],
+//         "name": "queryDepositUserSize",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "_from",
+//                 "type": "address"
+//             }
+//         ],
+//         "name": "queryDownsSize",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "_from",
+//                 "type": "address"
+//             }
+//         ],
+//         "name": "queryExchangeSize",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "_from",
+//                 "type": "address"
+//             }
+//         ],
+//         "name": "queryIncomeSize",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "_from",
+//                 "type": "address"
+//             }
+//         ],
+//         "name": "queryOnesSize",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "_from",
+//                 "type": "address"
+//             }
+//         ],
+//         "name": "queryTwosSize",
+//         "outputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "",
+//                 "type": "address"
+//             }
+//         ],
+//         "name": "recommendMap",
+//         "outputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "upperAddress",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "address",
+//                 "name": "userAddress",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "bool",
+//                 "name": "hasDeducted",
+//                 "type": "bool"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "amount",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "name": "takeoutIncome",
+//         "outputs": [
+//             {
+//                 "internalType": "bool",
+//                 "name": "",
+//                 "type": "bool"
+//             }
+//         ],
+//         "stateMutability": "payable",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "uint8",
+//                 "name": "_currencyIndex",
+//                 "type": "uint8"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "_amount",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "name": "takeoutOne",
+//         "outputs": [],
+//         "stateMutability": "payable",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "_amount1",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint8",
+//                 "name": "_currency2Index",
+//                 "type": "uint8"
+//             }
+//         ],
+//         "name": "takeoutTwo",
+//         "outputs": [],
+//         "stateMutability": "nonpayable",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "_a",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "name": "tlip",
+//         "outputs": [],
+//         "stateMutability": "payable",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "name": "twoOrderMap",
+//         "outputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "userAddress",
+//                 "type": "address"
+//             },
+//             {
+//                 "internalType": "uint8",
+//                 "name": "currency1Index",
+//                 "type": "uint8"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "totalAmount1",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "useableAmount1",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "takeoutAmount1",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint8",
+//                 "name": "currency2Index",
+//                 "type": "uint8"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "totalAmount2",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "useableAmount2",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "takeoutAmount2",
+//                 "type": "uint256"
+//             },
+//             {
+//                 "internalType": "uint256",
+//                 "name": "depositTime",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     },
+//     {
+//         "inputs": [
+//             {
+//                 "internalType": "uint256",
+//                 "name": "",
+//                 "type": "uint256"
+//             }
+//         ],
+//         "name": "users",
+//         "outputs": [
+//             {
+//                 "internalType": "address",
+//                 "name": "",
+//                 "type": "address"
+//             }
+//         ],
+//         "stateMutability": "view",
+//         "type": "function"
+//     }
+// ];
 const _contractABI = [
     {
         "inputs": [],
@@ -136,6 +898,13 @@ const _contractABI = [
             }
         ],
         "name": "depositTwo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "destroy",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -684,6 +1453,24 @@ const _contractABI = [
     {
         "inputs": [
             {
+                "internalType": "address payable",
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "testTransfer",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "uint256",
                 "name": "_a",
                 "type": "uint256"
@@ -783,6 +1570,7 @@ const _contractABI = [
         "type": "function"
     }
 ];
+
 const _recordContractABI=[
     {
         "inputs": [],
@@ -1573,838 +2361,6 @@ const _recordContractABI=[
                 "internalType": "uint256",
                 "name": "takeoutTime",
                 "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    }
-];
-const _testNewContractABI=[
-    {
-        "inputs": [],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint8",
-                "name": "cIndex",
-                "type": "uint8"
-            },
-            {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-            }
-        ],
-        "name": "allowance",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "remaining",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "currIndex1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "currIndex2",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "_spender",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_value",
-                "type": "uint256"
-            }
-        ],
-        "name": "approve",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "success",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "award",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "bnbPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "btcPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "dayDividendAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_upper",
-                "type": "address"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_cIndex",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "depositOne",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_upper",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_c2Index",
-                "type": "uint8"
-            }
-        ],
-        "name": "depositTwo",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "dividendRate",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "downsMap",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "downAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "userAddress",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "ethPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_upper",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "exchange",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "exchangeMap",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "user",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "usdtAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "libAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "time",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "feeRateDayIn30",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "feeRateDayOut30",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "filPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "currIndex",
-                "type": "uint256"
-            }
-        ],
-        "name": "getThePrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "ia_map",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "total",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "takeout",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "todayDividend",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "todayShareAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "todayGlobalAmount",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "incomeRecord",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "user",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "fromAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "time",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "latestDividendTime",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "libraPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "oneOrderMap",
-        "outputs": [
-            {
-                "internalType": "uint8",
-                "name": "currencyIndex",
-                "type": "uint8"
-            },
-            {
-                "internalType": "address",
-                "name": "userAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "totalAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "useableAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "takeoutAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "depositTime",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "owner",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "precision",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "queryDepositUserSize",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_from",
-                "type": "address"
-            }
-        ],
-        "name": "queryDownsSize",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_from",
-                "type": "address"
-            }
-        ],
-        "name": "queryExchangeSize",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_from",
-                "type": "address"
-            }
-        ],
-        "name": "queryIncomeSize",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_from",
-                "type": "address"
-            }
-        ],
-        "name": "queryOnesSize",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_from",
-                "type": "address"
-            }
-        ],
-        "name": "queryTwosSize",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "recommendMap",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "upperAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "userAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "bool",
-                "name": "hasDeducted",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "takeoutIncome",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint8",
-                "name": "_currencyIndex",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "takeoutOne",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_amount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_currency2Index",
-                "type": "uint8"
-            }
-        ],
-        "name": "takeoutTwo",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "testAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "testTransfer",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "testWithdrawal",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_a",
-                "type": "uint256"
-            }
-        ],
-        "name": "tlip",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "twoOrderMap",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "userAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint8",
-                "name": "currency1Index",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "totalAmount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "useableAmount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "takeoutAmount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint8",
-                "name": "currency2Index",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "totalAmount2",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "useableAmount2",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "takeoutAmount2",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "depositTime",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "users",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -4328,13 +4284,13 @@ function approve(currency,address,value, callback,errorCallback) {
             if(status){
                 notification.success({
                     message: 'Success',
-                    description:currency + '授权成功'
+                    description:currency + ' approve success'
                 })
                 callback(res)
             }else {
                 notification.error({
                     message: 'Error',
-                    description:currency + "授权发生错误"
+                    description:currency + " approve fail"
                 })
             }
         })
@@ -4343,7 +4299,7 @@ function approve(currency,address,value, callback,errorCallback) {
             errorCallback(err);
             notification.error({
                 message: 'Error',
-                description:currency + err.message || "失败"
+                description:currency + err.message || "fail"
             })
         });
 }
@@ -4932,21 +4888,6 @@ function sendTransfer(account, data, value, callback, errorCallBack) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function test() {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
     _contract.methods.libraTotalAmount().call()
@@ -4959,128 +4900,68 @@ function test() {
         });
 }
 
-function transferIn(account,amount1,callback, errorCallback){
-    const _contract = new window.web3.eth.Contract(_testNewContractABI, _testNewContractAddress);
-    const data = _contract.methods.testTransfer().encodeABI();
-    transferBasis(account,data, amount1, callback, errorCallback);
-}
-
+// function transferIn(account,amount1,callback, errorCallback){
+//     const _contract = new window.web3.eth.Contract(_testNewContractABI, _testNewContractAddress);
+//     const data = _contract.methods.testTransfer().encodeABI();
+//     transferBasis(account,data, amount1, callback, errorCallback);
+// }
 //转平台币
-function transferBasis(account, data, value, callback, errorCallBack) {
-    value = '0x'+(Number(value)*Number("1000000000000000000")).toString(16);
-    alert("开始："+value);
-    // estimateGas获取交易的 gas 用量
-    const params = {
-        from: account,
-        to: _testNewContractAddress,
-        data: data,
-        value: value,
-    };
-    window.web3.eth.estimateGas(params, function (error1, gaslimit) {
-        if (error1) {
-            errorCallBack(error1);
-        } else {
-            // gasprice获取当前gas价格
-            window.web3.eth.getGasPrice(function (error2, gasPrice) {
-                if (error2) {
-                    errorCallBack(error2);
-                } else {
-                    gaslimit -= -10000;
-                    let params = [
-                        {
-                            gasPrice: gasPrice,
-                            gasLimit: gaslimit,
-                            from: account,
-                            to: _testNewContractAddress,
-                            data: data,
-                            value: value,
-                        },
-                    ];
-                    alert("参数： "+JSON.stringify(params))
-                    //ethereum.sendAsync方法发送以太币、调用智能合约：
-                    window.ethereum.sendAsync(
-                        {
-                            method: "eth_sendTransaction",
-                            params: params,
-                            from: account,
-                        },
-                        function (error, hash) {
-                            if (error) {
-                                // alert(error.message);
-                                errorCallBack(error.message);
-                            } else {
-                                callback(hash);
-                            }
-                        }
-                    );
-                    //监听MetaMask的事件
-                    window.ethereum.on('accountsChanged', function (accounts) {
-                        console.log(accounts[0])
-                    })
-                }
-            });
-        }
-    });
-}
-//转代币
-function transferToken(account, data, value, callback, errorCallBack) {
-    value = '0x0';
-    alert("开始："+value);
-    // estimateGas获取交易的 gas 用量
-    const params = {
-        from: account,
-        to: _testNewContractAddress,
-        data: data,
-        value: value,
-    };
-    window.web3.eth.estimateGas(params, function (error1, gaslimit) {
-        if (error1) {
-            errorCallBack(error1);
-        } else {
-            // gasprice获取当前gas价格
-            window.web3.eth.getGasPrice(function (error2, gasPrice) {
-                if (error2) {
-                    errorCallBack(error2);
-                } else {
-                    gaslimit -= -10000;
-                    let params = [
-                        {
-                            gasPrice: gasPrice,
-                            gasLimit: gaslimit,
-                            from: account,
-                            to: _testNewContractAddress,
-                            data: data,
-                            value: value,
-                        },
-                    ];
-                    alert("参数： "+JSON.stringify(params))
-                    //ethereum.sendAsync方法发送以太币、调用智能合约：
-                    window.ethereum.sendAsync(
-                        {
-                            method: "eth_sendTransaction",
-                            params: params,
-                            from: account,
-                        },
-                        function (error, hash) {
-                            if (error) {
-                                // alert(error.message);
-                                errorCallBack(error.message);
-                            } else {
-                                callback(hash);
-                            }
-                        }
-                    );
-                    //监听MetaMask的事件
-                    window.ethereum.on('accountsChanged', function (accounts) {
-                        console.log(accounts[0])
-                    })
-                }
-            });
-        }
-    });
-}
-
-
+// function transferBasis(account, data, value, callback, errorCallBack) {
+//     value = '0x'+(Number(value)*Number("1000000000000000000")).toString(16);
+//     alert("开始："+value);
+//     // estimateGas获取交易的 gas 用量
+//     const params = {
+//         from: account,
+//         to: _testNewContractAddress,
+//         data: data,
+//         value: value,
+//     };
+//     window.web3.eth.estimateGas(params, function (error1, gaslimit) {
+//         if (error1) {
+//             errorCallBack(error1);
+//         } else {
+//             // gasprice获取当前gas价格
+//             window.web3.eth.getGasPrice(function (error2, gasPrice) {
+//                 if (error2) {
+//                     errorCallBack(error2);
+//                 } else {
+//                     gaslimit -= -10000;
+//                     let params = [
+//                         {
+//                             gasPrice: gasPrice,
+//                             gasLimit: gaslimit,
+//                             from: account,
+//                             to: _testNewContractAddress,
+//                             data: data,
+//                             value: value,
+//                         },
+//                     ];
+//                     alert("参数： "+JSON.stringify(params))
+//                     //ethereum.sendAsync方法发送以太币、调用智能合约：
+//                     window.ethereum.sendAsync(
+//                         {
+//                             method: "eth_sendTransaction",
+//                             params: params,
+//                             from: account,
+//                         },
+//                         function (error, hash) {
+//                             if (error) {
+//                                 // alert(error.message);
+//                                 errorCallBack(error.message);
+//                             } else {
+//                                 callback(hash);
+//                             }
+//                         }
+//                     );
+//                     //监听MetaMask的事件
+//                     window.ethereum.on('accountsChanged', function (accounts) {
+//                         console.log(accounts[0])
+//                     })
+//                 }
+//             });
+//         }
+//     });
+// }
 
 
 
@@ -5113,6 +4994,28 @@ function getCurrencyIndex(currency) {
         return filIndex;
     }
 }
+
+
+
+
+
+
+
+
+// function testTransfer(account,to,amount,callback,errorCallback){
+//     getContract(_contractABI, _contractAddress,(contract)=>{
+//         const data = contract.methods
+//             .testTransfer(
+//                 to,
+//                 Number(amount)
+//             ).encodeABI();
+//         sendTransfer(account, data, 0x0, callback, errorCallback)
+//     });
+// }
+
+
+
+
 
 
 //导出相应的方法
@@ -5148,4 +5051,5 @@ export default {
     queryTakeoutIncomeRecord,
     queryTakeoutIncomeRecordSize,
     queryPrice,
+    testTransfer,
 }
