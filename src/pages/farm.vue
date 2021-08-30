@@ -249,7 +249,6 @@
 
 <script>
 import countTo from 'vue-count-to';
-import Wallet from '@/utils/Wallet.js';
 import {error} from '@/utils/errorLog';
 import OuterDrawer from '@/components/OuterDrawer';
 import InDrawer from '@/components/InDrawer';
@@ -633,7 +632,7 @@ export default {
       this.handleContChange(ptype - 1)
     }
     _self.farms.address = localStorage.getItem("walletAddress")
-    _self.farms.upperAddress = localStorage.getItem("inviteAddress")
+    _self.farms.upperAddress = this.$getCookie('inviteAddress')
     
     //开启定时器线程
     setTimeout(async () => {
