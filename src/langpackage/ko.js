@@ -220,4 +220,5 @@ export const l = {
    l_error_log_10:'저장된 레코드 없음',
    l_error_log_11:'잔액 부족',
    l_error_log_12:'거부됨',
+   l_error_log_13:'불충분한 처리 수수료',
 }

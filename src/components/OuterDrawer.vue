@@ -48,7 +48,9 @@
           </div>
           <div class="container__ratio">
               <span>{{$t('l.l_you')}}</span>
-              <span>{{model.isSingle == 0? `${model.nResult} ${model.currency}` : `${model.nResult1} ${model.currency1} + ${model.nResult2} ${model.currency2}`}}</span>
+              <span>
+                {{model.isSingle == 0? `${model.nResult} ${model.currency}` : `${model.nResult1} ${model.currency1} + ${model.nResult2} ${model.currency2}`}}
+                </span>
           </div>
           <a-button class="container__sure" @click="sureClick">{{$t('l.l_sureIt')}}</a-button>
       </div>
@@ -90,7 +92,7 @@ export default {
           }else {
             this.model.realM_v = (+newVal) * (+this.model.mPrice)
             this.model.nAmount = +newVal
-            this.model.nResult = +newVal
+            this.model.nResult = (+newVal).toFixed(4)
           }
         }
         if(this.model && this.model.currency1){
@@ -104,8 +106,8 @@ export default {
             this.model.nAmount1 = (+newVal)
             this.model.nAmount2 = this.model.lockAmount1 > 0 ? this.model.nAmount1 * this.model.lockAmount2 / this.model.lockAmount1
                                                           : 0
-            this.model.nResult1 = this.model.nAmount1
-            this.model.nResult2 = this.model.nAmount2
+            this.model.nResult1 = this.model.nAmount1.toFixed(4)
+            this.model.nResult2 = this.model.nAmount2.toFixed(4)
           }
         }
       }

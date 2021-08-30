@@ -1,4 +1,26 @@
 import axios from "./axios";
+export function getOneTokens(data){
+   return new Promise((resolve,reject) => {
+       axios.get('../../js/oneTokens.json',data,true)
+       .then(res =>{
+          resolve(res)
+       })
+       .catch((err) =>{
+         reject(err)
+       })
+   })
+}
+export function getTwoTokens(data){
+   return new Promise((resolve,reject) => {
+       axios.get('../../js/twoTokens.json',data,true)
+       .then(res =>{
+          resolve(res)
+       })
+       .catch((err) =>{
+         reject(err)
+       })
+   })
+}
 export function getPrice(data){
    return new Promise((resolve,reject) => {
        axios.get('/bian/querySymbloPriceV2',data)

@@ -232,4 +232,5 @@ export const l = {
   l_error_log_10:'No record saved',
   l_error_log_11:'Insufficient balance',
   l_error_log_12:'Rejected',
+  l_error_log_13:'transaction underpriced',
 }

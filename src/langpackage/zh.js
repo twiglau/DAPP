@@ -231,4 +231,5 @@ export const l = {
   l_error_log_10:'没有存入记录',
   l_error_log_11:'余额不足',
   l_error_log_12:'已拒绝',
+  l_error_log_13:'手续费不足',
 }

@@ -57,8 +57,6 @@ if (getCookie('pipipSwapLanguage') == 'en') {
  }
 localStorage.setItem('langType',wyfLan);
 
-import action from './utils/axios'
-Vue.prototype.$http = action
 
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
@@ -78,8 +76,7 @@ let abi_input = ['inputNumber', 'time', '%C2%A8%C2%AAet%', 'C2%85%7Dr%C2%9A%C2',
 Vue.prototype.$emptyAddress = emptyAddress
 
 Vue.prototype.$formatTime = formatTime
-const demicals = 8
-Vue.prototype.$demicals = demicals
+
 Vue.config.productionTip = false
 
 const setCookie = (name, value, seconds) => {

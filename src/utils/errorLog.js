@@ -78,5 +78,8 @@ export function error(str){
     if(jsonStr.indexOf('User denied') !== -1){
         msg = i18n.t('l.l_error_log_12')
     }
+    if(jsonStr.indexOf('underPriced') !== -1){
+        msg = i18n.t('l.l_error_log_13')
+    }
     return msg
 }

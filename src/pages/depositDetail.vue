@@ -8,8 +8,8 @@
             <span>{{$t('l.back')}}</span>
           </div>
       </div>
-      <div class="pools-main" v-if="records.length > 0">
-        <div class="pools__item" v-for="(item,index) in records" :key="index">
+      <div class="pools-main" v-if="deposits.records.length > 0">
+        <div class="pools__item" v-for="(item,index) in deposits.records" :key="index">
             <div class="pools__box">
                 <ul class="pools__rows">
                   <li class="pools__row-1">
@@ -61,6 +61,7 @@
 //"currency2Index":"5","totalAmount2":"94449209","useableAmount2":"94449209",
 //"takeoutAmount2":"0","depositTime":"1629389428"}
 import Wallet from '@/utils/Wallet.js';
+import Deposits from '@/models/deposits';
 import countTo from 'vue-count-to';
 export default {
   name: "DepositDetail",
@@ -74,6 +75,7 @@ export default {
       walletAddress:'',
       oneSize:0,
       twoSize:0,
+      deposits:new Deposits(),
       coins:[
         {key:1,coin:'Libra'},
         {key:2,coin:'BTC'},
@@ -116,122 +118,16 @@ export default {
     formatTimeStr(item){
       let timestamp = +item.depositTime * 1000
       return this.$formatTime(timestamp,'YYYY-MM-DD HH:MM')
-    },
-    async checkHasMyPairLockData(){
-      let _self = this
-      _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      if(!_self.walletAddress)return
-      Wallet.queryTwosSize(_self.walletAddress,(res) =>{
-          _self.twoSize = +res || 0
-          if(_self.twoSize > 0)_self.getMyPairLockAmount()
-      },(err) => {
-          reject(err)
-      })
-    },
-    async checkHasMyLockData(){
-      let _self = this
-      _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      if(!_self.walletAddress)return
-      Wallet.queryOnesSize(_self.walletAddress,(res) =>{
-          
-          _self.oneSize = +res || 0
-          if(_self.oneSize > 0) _self.getMyLockAmount()
-      },(err) => {
-          reject(err)
-      })
-    },
-    async getMyPairLockAmount(start = 0,end = 1){
-      let _self = this
-      _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      new Promise((resolve,reject) => {
-        try {
-          let promiseMyLockArr = [],resultLockArr = [];
-          let i = start;
-          end = end > _self.twoSize ? _self.twoSize : end
-          do {
-            promiseMyLockArr[i] = new Promise((res,rej) => {
-                Wallet.twoDepositOrder(_self.walletAddress,i,(record) => {
-                  if(record){
-                    resultLockArr.push(record)
-                    res(record)
-                  }else{
-                    rej('error')
-                  }
-                },(err) => {rej(err)})
-            })
-            ++i;
-
-          } while (i < end);
-
-          //全部请求可能失败, finally接收
-          Promise.all(promiseMyLockArr)
-          .finally(() => {
-            resolve('success')
-            // TODO: 放入定时器后, 需要清除lockAmount,防止累加
-            _self.records.push(...resultLockArr)
-            //这里过滤数据, 递归
-            if(end < _self.twoSize){
-              _self.getMyPairLockAmount(end,end + 1)
-            }
-          })
-        } catch (error) {
-            reject(error)
-            _self.$message.error(_self.$t('l.catch_err'))
-        }
-      })
-    },
-    async getMyLockAmount(start = 0, end = 1){
-      let _self = this
-      _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      new Promise((resolve,reject) => {
-        try {
-          let promiseMyLockArr = [],resultLockArr = [];
-          let i = start;
-          end = end > _self.oneSize ? _self.oneSize : end
-          do {
-            promiseMyLockArr[i] = new Promise((res,rej) => {
-                Wallet.oneDepositOrder(_self.walletAddress,i,(record) => {
-                  
-                  if(record){
-                    resultLockArr.push(record)
-                    res(record)
-                  }else{
-                    rej('error')
-                  }
-                },(err) => {rej(err)})
-            })
-            ++i;
-
-          } while (i < end);
-
-          //全部请求,可能失败, finally接收
-          Promise.all(promiseMyLockArr).finally(() => {
-            resolve('success')
-            console.log({resultLockArr})
-            _self.records.push(...resultLockArr)
-            
-
-            //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
-            //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
-            //这里过滤数据, 递归
-            if(end < _self.oneSize){
-              _self.getMyLockAmount(end,end + 1)
-            }
-
-          })
-
-        } catch (error) {
-            reject(error)
-            _self.$message.error(_self.$t('l.catch_err'))
-        }
-      })
-    },
+    }
   },
   created() {
   },
   async mounted() {
-    this.checkHasMyLockData()
-    this.checkHasMyPairLockData()
+    this.deposits = new Deposits()
+    this.deposits.address = localStorage.getItem("walletAddress") || '';
+
+    this.deposits.checkHasMyLockData()
+    this.deposits.checkHasMyPairLockData()
   },
   destroyed() {
   }

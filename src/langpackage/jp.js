@@ -204,4 +204,5 @@ export const l = {
    l_error_log_10:'レコードが保存されていません',
    l_error_log_11:'バランスが不十分です',
    l_error_log_12:'拒否されました',
+   l_error_log_13:'手数料が不十分です',
 }
