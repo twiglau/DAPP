@@ -6,12 +6,15 @@
       :closable="false"
       :visible="visible"
       @close="onClose"
+      :width="'90%'"
     >
     <div class="sider-items">
       
       <div class="top-info">
         <svg-icon icon-class="logo_white_L"></svg-icon>
-        <lang-setting/>
+        <div class="lang-setter">
+           <lang-setting/>
+        </div>
       </div>
       <a-menu
       mode="inline"
@@ -166,7 +169,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+
+/deep/.ant-menu.ant-menu-dark .ant-menu-item-selected, .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+    background-color: transparent;
+}
+
 .sider-items .svg-icon {
   width: 24px;
   height: 24px;
@@ -180,9 +188,22 @@ export default {
 }
 .top-info {
   margin: 90px 0 0 25px;
+  display: flex;
+  flex-direction: column;
 }
 .top-info > .svg-icon {
    width: 102px;
    height: 32px;
+}
+.top-info > .lang-setter {
+  margin-top: 24px;
+  display: inline-block;
+  width: 120px;
+  height: 32px;
+  line-height: 32px;
+  background: white;
+  border-radius: 120px;
+  display: flex;
+  justify-content: center;
 }
 </style>

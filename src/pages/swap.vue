@@ -272,6 +272,9 @@
     .top_info-sub {
         color: #3C3C3C;
         font-size: 12px;
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
     }
     .top_info-sub img {
         width: 16px;

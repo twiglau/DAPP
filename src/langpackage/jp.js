@@ -45,7 +45,7 @@ export const l = {
   e_today: '「今日の収益」', 
   t_level:  'チームレベル', 
   w_cnt:  'ウォレットを接続します', 
-  w_scnt:  'ウォレットが接続されています', 
+  w_scnt:  '接続済み', 
   i_invite:  'invite', 
   t_team:  'チーム', 
   token1: token1, 
