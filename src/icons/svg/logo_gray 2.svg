@@ -9,7 +9,7 @@
             <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.262745 0 0 0 0 0.192157 0 0 0 0 0.549020 0 0 0 1.000000 0"></feColorMatrix>
         </filter>
     </defs>
-    <g id="Dapp" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Dapp_CN" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="logo" transform="translate(-137.000000, -549.000000)" filter="url(#filter-1)">
             <g transform="translate(137.000000, 549.000000)">
                 <g filter="url(#filter-2)" id="编组">
