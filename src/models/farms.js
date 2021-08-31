@@ -62,17 +62,23 @@ Farms.prototype.getMySingleCoinsLockData = async function(){
   let deposit = new Deposits()
   const one = await deposit.checkHasMyLockData()
   if(one && one > 0){
+
+    _self.ones.forEach(ele => {ele.lockAmount = 0;ele.oneRecords = [];})
     deposit.getMyLockAmount()
     .then(res => {
     //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
     //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
     _self.ones[0].lockAmount += _self.caluUseable('ETH','useableAmount',3,-1,res)
+    _self.ones[0].oneRecords.push(...(res.filter(ele => ele.currencyIndex == 3) || []))
 
     _self.ones[1].lockAmount += _self.caluUseable('BNB','useableAmount',5,-1,res)
+    _self.ones[1].oneRecords.push(...(res.filter(ele => ele.currencyIndex == 5) || []))
 
     _self.ones[2].lockAmount += _self.caluUseable('BTC','useableAmount',2,-1,res)
+    _self.ones[2].oneRecords.push(...(res.filter(ele => ele.currencyIndex == 2) || []))
 
     _self.ones[3].lockAmount += _self.caluUseable('USDT','useableAmount',4,-1,res)
+    _self.ones[3].oneRecords.push(...(res.filter(ele => ele.currencyIndex == 4) || []))
     })
   }
   
@@ -86,6 +92,7 @@ Farms.prototype.getMyPairCoinsLockData = async function(){
   let deposit = new Deposits()
   const two = await deposit.checkHasMyPairLockData()
   if(two && two > 0){
+    _self.twos.forEach(ele => {ele.lockAmount1 = 0;ele.lockAmount2 = 0;ele.twoRecords=[];})
     deposit.getMyPairLockAmount()
     .then(res => {
 
@@ -93,18 +100,23 @@ Farms.prototype.getMyPairCoinsLockData = async function(){
       //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
       _self.twos[0].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,3,res)
       _self.twos[0].lockAmount2 += _self.caluUseable('ETH','useableAmount2',1,3,res)
-
+      _self.twos[0].twoRecords.push(...(res.filter(ele => ele.currency1Index == 1 && ele.currency2Index == 3) || []))
+      
       _self.twos[1].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,5,res)
       _self.twos[1].lockAmount2 += _self.caluUseable('BNB','useableAmount2',1,5,res)
+      _self.twos[1].twoRecords.push(...(res.filter(ele => ele.currency1Index == 1 && ele.currency2Index == 5) || []))
 
       _self.twos[2].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,4,res)
       _self.twos[2].lockAmount2 += _self.caluUseable('USDT','useableAmount2',1,4,res)
+      _self.twos[2].twoRecords.push(...(res.filter(ele => ele.currency1Index == 1 && ele.currency2Index == 4) || []))
 
       _self.twos[3].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,2,res)
       _self.twos[3].lockAmount2 += _self.caluUseable('BTC','useableAmount2',1,2,res)
+      _self.twos[3].twoRecords.push(...(res.filter(ele => ele.currency1Index == 1 && ele.currency2Index == 2) || []))
 
       _self.twos[4].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,6,res)
       _self.twos[4].lockAmount2 += _self.caluUseable('FIL','useableAmount2',1,6,res)
+      _self.twos[4].twoRecords.push(...(res.filter(ele => ele.currency1Index == 1 && ele.currency2Index == 6) || []))
     })
   }
 

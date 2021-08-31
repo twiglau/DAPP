@@ -59,7 +59,8 @@ export const l = {
   h_n5 : "My",
   h_n6: "Ranking",
   home_n1: "TVL",
-  home_n2: "DOP Price",
+  home_n2: "Destroy LBR",
+  home_n4: "Charges USDT",
   home_n3: "LBR Price",
   cwallet: "Connect Wallet",
   langtype: "简体中文",
@@ -217,6 +218,9 @@ export const l = {
   l_success:'Has submitted',
   swap_setting:'Swap Setting',
   l_invite:'invite',
+  l_fee:'Fee',
+  l_fee_tip1:'Deposit time> 30 days, needs a fee of 2%',
+  l_fee_tip2:'Deposit time <=30 days, needs a fee of 5%',
 
 
   l_error_upper:'The upper-level address is incorrect',

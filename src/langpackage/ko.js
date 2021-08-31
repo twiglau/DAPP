@@ -58,7 +58,8 @@ export const l = {
   h_n5: "내",
   h_n6: "리더보드",
   home_n1: "총 잠금 금액",
-  home_n2: "DOP 가격",
+  home_n2: "LBR 파괴",
+  home_n4: "취급 수수료 USDT",
   home_n3: "LBR 가격",
   cwallet: "지갑 연결",
   langtype: "English",
@@ -205,6 +206,9 @@ export const l = {
   l_success:'제출 된',
   swap_setting:'스왑 설정',
   l_invite:'초대',
+  l_fee:'취급 수수료',
+  l_fee_tip1:'입금 시간> 30일, 수수료 2% 필요',
+  l_fee_tip2:'입금 시간 <=30일, 수수료 5% 필요',
 
 
   l_error_upper:'상위 레벨 주소가 잘못되었습니다',

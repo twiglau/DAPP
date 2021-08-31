@@ -6,7 +6,8 @@
       "totalLockAmount":0,
       "isApproved":false,
       "isLoading":true,
-      "isApproving":false
+      "isApproving":false,
+      "oneRecords":[]
     },
     {
       "currency":"BNB",
@@ -15,7 +16,8 @@
       "totalLockAmount":0,
       "isApproved":false,
       "isLoading":true,
-      "isApproving":false
+      "isApproving":false,
+      "oneRecords":[]
     },
     {
       "currency":"BTC",
@@ -24,7 +26,8 @@
       "totalLockAmount":0,
       "isApproved":false,
       "isLoading":true,
-      "isApproving":false
+      "isApproving":false,
+      "oneRecords":[]
     },
     {
       "currency":"USDT",
@@ -33,6 +36,7 @@
       "totalLockAmount":0,
       "isApproved":false,
       "isLoading":true,
-      "isApproving":false
+      "isApproving":false,
+      "oneRecords":[]
     }
   ]

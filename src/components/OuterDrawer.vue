@@ -46,6 +46,33 @@
                   <countTo :endVal='model.nAmount2' :duration='1000' :decimals="4"></countTo>
               </div>
           </div>
+          <div class="container__info">
+              <div class="info-l">
+                  <span>{{$t('l.l_fee')}}</span>
+                  <a-tooltip placement="topRight">
+                    <template slot="title">
+                      <div class="tips-title">
+                        <span>{{$t('l.l_fee_tip1')}}</span>
+                        <span>{{$t('l.l_fee_tip2')}}</span>
+                      </div>
+                    </template>
+                    <div class="info-qs">
+                        <svg-icon icon-class="yiwen_icon" />
+                    </div>
+                  </a-tooltip>
+              </div>
+              <div class="info-r">
+                  <div class="info-fee">
+                     <countTo :endVal='fee.fee1' :duration='1000' :decimals="4"></countTo>
+                     <span>{{model.isSingle == 0? model.currency : model.currency1}}</span>
+                  </div>
+                  <div class="info-add" v-if="model.isSingle == 1">+</div>
+                  <div class="info-fee" v-if="model.isSingle == 1">
+                     <countTo :endVal='fee.fee2' :duration='1000' :decimals="4"></countTo>
+                     <span>{{model.currency2}}</span>
+                  </div>
+              </div>
+          </div>
           <div class="container__ratio">
               <span>{{$t('l.l_you')}}</span>
               <span>
@@ -60,6 +87,7 @@
 
 <script>
 
+import Fees from '@/models/fee';
 import countTo from 'vue-count-to';
 export default {
   name:'OutDrawer',
@@ -74,7 +102,8 @@ export default {
       visible: false,
       iptValue1:null,
       drawerHeight:440,
-      model:{}
+      model:{},
+      fee:new Fees()
     }
   },
   components: {
@@ -89,10 +118,13 @@ export default {
             this.model.realM_v = 0
             this.model.nAmount = 0
             this.model.nResult = 0
+            this.fee.fee1 = 0
           }else {
             this.model.realM_v = (+newVal) * (+this.model.mPrice)
             this.model.nAmount = +newVal
-            this.model.nResult = (+newVal).toFixed(4)
+            this.fee.amount1 = +newVal
+            this.fee.calculateOne()
+            this.model.nResult = (+newVal - Number(this.fee.fee1)).toFixed(4)
           }
         }
         if(this.model && this.model.currency1){
@@ -100,14 +132,20 @@ export default {
             this.model.realS_v = 0;this.model.realM_v = 0;
             this.model.nAmount1 = 0;this.model.nAmount2 = 0;
             this.model.nResult1 = 0;this.model.nResult2 = 0;
+            this.fee.fee1 = 0;this.fee.fee2 = 0;
           }else{
             this.model.realS_v = (+newVal) * (+this.model.sPrice)
             //计算主流币 = 存入代币数量 * 代币单价 *4 / 主流币单价
             this.model.nAmount1 = (+newVal)
             this.model.nAmount2 = this.model.lockAmount1 > 0 ? this.model.nAmount1 * this.model.lockAmount2 / this.model.lockAmount1
                                                           : 0
-            this.model.nResult1 = this.model.nAmount1.toFixed(4)
-            this.model.nResult2 = this.model.nAmount2.toFixed(4)
+            if(this.model.lockAmount1 > 0){
+              this.fee.amount1 = this.model.nAmount1
+              this.fee.amount2 = this.model.nAmount2
+              this.fee.calculateTwo()
+              this.model.nResult1 = (this.model.nAmount1 - Number(this.fee.fee1)).toFixed(4)
+              this.model.nResult2 = (this.model.nAmount2 - Number(this.fee.fee2)).toFixed(4)
+            }
           }
         }
       }
@@ -123,7 +161,9 @@ export default {
     show(){
         this.$nextTick(()=>{
           this.model = this.info
-          this.drawerHeight = this.model.isSingle == 0 ? 450 : 476
+          this.drawerHeight = this.model.isSingle == 0 ? 478 : 502
+          this.fee.oneRecords = this.model?.oneRecords || [];
+          this.fee.twoRecords = this.model?.twoRecords || [];
         })
         this.visible = true
     },
@@ -148,6 +188,10 @@ export default {
 }
 /deep/.ant-drawer-body {
     padding: 0;
+}
+.tips-title {
+  display: flex;
+  flex-direction: column;
 }
 .container {
     background: white;
@@ -253,10 +297,26 @@ export default {
         .info-l span {
           padding-right: 4px;
         }
+        .info-l .svg-icon {
+          width: 16px;
+          height: 16px;
+        }
         .info-r {
           color: #3c3c3c;
           font-weight: bold;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
         }
+        .info-add {
+          margin-left: 5px;
+        }
+        .info-fee {
+          margin-left: 5px;
+          display: flex;
+          align-items: center;
+        }
+
     }
 
     &__ratio {

@@ -11,7 +11,8 @@
       "isApproved2":false,
       "isLoading":true,
       "isApproving1":false,
-      "isApproving2":false
+      "isApproving2":false,
+      "twoRecords":[]
     },
     {
       "currency1":"Libra",
@@ -25,7 +26,8 @@
       "isApproved2":false,
       "isLoading":true,
       "isApproving1":false,
-      "isApproving2":false
+      "isApproving2":false,
+      "twoRecords":[]
     },
     {
       "currency1":"Libra",
@@ -39,7 +41,8 @@
       "isApproved2":false,
       "isLoading":true,
       "isApproving1":false,
-      "isApproving2":false
+      "isApproving2":false,
+      "twoRecords":[]
     },
     {
       "currency1":"Libra",
@@ -53,7 +56,8 @@
       "isApproved2":false,
       "isLoading":true,
       "isApproving1":false,
-      "isApproving2":false
+      "isApproving2":false,
+      "twoRecords":[]
     },
     {
       "currency1":"Libra",
@@ -67,6 +71,7 @@
       "isApproved2":false,
       "isLoading":true,
       "isApproving1":false,
-      "isApproving2":false
+      "isApproving2":false,
+      "twoRecords":[]
     }
   ]

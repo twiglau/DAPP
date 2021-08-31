@@ -18,8 +18,8 @@
            <span>{{currentIndex == 0? totalProfit : takeOutProfit}}</span>
         </div>
       </div>
-      <div class="pools-main" v-if="records.length > 0">
-        <div class="pools__item" v-for="(item,index) in records" :key="index">
+      <div class="pools-main" v-if="profit.records.length > 0">
+        <div class="pools__item" v-for="(item,index) in profit.records" :key="index">
             <div class="pools__box">
             <a-spin tips="loading" :spinning="false" size="large">
                 <ul class="pools__rows">
@@ -52,6 +52,7 @@
 
 <script>
 import Wallet from '@/utils/Wallet.js';
+import Profits from '@/models/profits';
 export default {
   name: "IncomeDetail",
   components: {
@@ -66,6 +67,7 @@ export default {
       currentIndex:0,
       totalProfit:0,
       takeOutProfit:0,
+      profit:new Profits()
     }
   },
   computed: {
@@ -76,23 +78,23 @@ export default {
     },
     async handleContChange(index) {
       this.currentIndex = index
-      this.records = []
+      this.profit.records = []
       if(this.currentIndex == 0){
-        const count = await this.checkHasIncomeData()
+        const count = await this.profit.checkHasIncomeData()
         console.log({count})
         if(count > 0){
           this.dataSize = count
           this.spinStatus = true
-          const res = await this.getProfitRecord()
+          const res = await this.profit.getProfitRecord()
           this.spinStatus = false
         }
       }else{
-        const count = await this.checkHasTiquData()
+        const count = await this.profit.checkHasTiquData()
         console.log({count})
         if(count > 0){
           this.dataSize = count
           this.spinStatus = true
-          const res = await this.getTiquRecord()
+          const res = await this.profit.getTiquRecord()
           this.spinStatus = false
         }
       }
@@ -113,114 +115,7 @@ export default {
              resolve(res)
           },(err) => {reject(err)})
       })
-    },
-    async checkHasTiquData(){
-      let _self = this
-      _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      return new Promise((resolve,reject) => {
-        Wallet.queryTakeoutIncomeRecordSize(_self.walletAddress,(res) =>{
-            let result = +res || 0
-            resolve(result)
-        },(err) => {
-            reject(err)
-        })
-
-      })
-    },
-    async getTiquRecord(start = 0, end = 1){
-      let _self = this
-      _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      return new Promise((resolve,reject) => {
-        try {
-          let promiseRecordArr = [],resultRecordArr = [];
-          let i = start;
-          do {
-            end = end > _self.dataSize ? _self.dataSize : end
-            promiseRecordArr[i] = new Promise((res,rej) => {
-                Wallet.queryTakeoutIncomeRecord(_self.walletAddress,i,(record) => {
-                  console.log({record,i})
-                  if(record){
-                    resultRecordArr.push(record)
-                    res(record)
-                  }else{
-                    rej('error')
-                  }
-                },(err) => {rej(err)})
-            })
-            ++i;
-
-          } while (i < end);
-
-          //全部请求,可能失败, finally接收
-          Promise.all(promiseRecordArr).finally(() => {
-            resolve('success')
-            console.log(resultRecordArr)
-            _self.records.push(...resultRecordArr)
-            //这里过滤数据, 递归
-            if(_self.dataSize > end){
-              _self.getTiquRecord(end,end + 1)
-            }
-          })
-
-        } catch (error) {
-            reject(error)
-            _self.$message.error(_self.$t('l.catch_err'))
-        }
-      })
-    },
-    async checkHasIncomeData(){
-      let _self = this
-      _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      return new Promise((resolve,reject) => {
-        Wallet.queryIncomeSize(_self.walletAddress,(res) =>{
-            let result = +res || 0
-            resolve(result)
-        },(err) => {
-            reject(err)
-        })
-      })
-    },
-    async getProfitRecord(start = 0, end = 1){
-      let _self = this
-      _self.walletAddress = localStorage.getItem("walletAddress") || '';
-      return new Promise((resolve,reject) => {
-        try {
-          let promiseRecordArr = [],resultRecordArr = [];
-          let i = start;
-          do {
-            end = end > _self.dataSize ? _self.dataSize : end
-            promiseRecordArr[i] = new Promise((res,rej) => {
-                Wallet.incomeRecord(_self.walletAddress,i,(record) => {
-                  console.log({record,i})
-                  if(record){
-                    resultRecordArr.push(record)
-                    res(record)
-                  }else{
-                    rej('error')
-                  }
-                },(err) => {rej(err)})
-            })
-            ++i;
-
-          } while (i < end);
-
-          //全部请求,可能失败, finally接收
-          Promise.all(promiseRecordArr).finally(() => {
-            resolve('success')
-            console.log(resultRecordArr)
-            _self.records.push(...resultRecordArr)
-            //这里过滤数据, 递归
-            if(_self.dataSize > end){
-              _self.getProfitRecord(end,end + 1)
-            }
-          })
-
-        } catch (error) {
-            reject(error)
-            _self.$message.error(_self.$t('l.catch_err'))
-        }
-      })
-    },
+    }
   },
   created() {
   },

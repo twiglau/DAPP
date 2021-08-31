@@ -14,18 +14,22 @@
           <table id="PCTable">
             <tr class="lightColor">
               <th>{{$t('l.home_n1')}}</th>
-              <!-- <th>{{$t('l.home_n2')}}</th> -->
               <th>{{$t('l.home_n3')}}</th>
+              <th>{{$t('l.home_n2')}}</th>
+              <th>{{$t('l.home_n4')}}</th>
             </tr>
             <tr>
               <td>
                 <countTo :endVal='totalLock' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
-              <!-- <td>
-                <countTo :endVal='20000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
-              </td> -->
               <td>
                 <countTo :endVal='coinPrice' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              </td>
+              <td>
+                <countTo :endVal='20000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              </td>
+              <td>
+                <countTo :endVal='20000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
             </tr>
           </table>
@@ -36,16 +40,22 @@
                 <countTo :endVal='totalLock' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
             </tr>
-            <!-- <tr>
-              <th class="lightColor">{{$t('l.home_n2')}}</th>
-              <td>
-                <countTo :endVal='50000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
-              </td>
-            </tr> -->
             <tr>
               <th class="lightColor">{{$t('l.home_n3')}}</th>
               <td>
                 <countTo :endVal='coinPrice' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              </td>
+            </tr>
+            <tr>
+              <th class="lightColor">{{$t('l.home_n2')}}</th>
+              <td>
+                <countTo :endVal='50000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+              </td>
+            </tr>
+            <tr>
+              <th class="lightColor">{{$t('l.home_n4')}}</th>
+              <td>
+                <countTo :endVal='50000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
             </tr>
           </table>
@@ -54,32 +64,6 @@
       <svg-icon icon-class="logo_bg_img" v-show="$store.state.accounts.isMobile" class="logo_bg" />
     </div>
     <div class="jss107">
-      <div class="jss108 jss109">
-        <div class="jss110">
-          <div class="jss111">
-            <p class="jss112">{{$t('l.home_t1')}}</p>
-            <p class="jss113" @click="handleToMore(1)">
-              <span class="jss114">{{$t("l.home_seemore")}}</span>
-            </p>
-          </div>
-          <div class="jss115" v-for="(item,index) in oneTokens" :key="index">
-            <div class="jss117">
-              <div class="jss118">
-                <svg-icon class="jss119" :icon-class="item.currency + '_coin'" alt="" />
-                <span class="jss121">{{item.currency}}</span>
-              </div>
-              <div class="jss125">
-                <div>
-                  <button class="MuiButtonBase-root MuiButton-root MuiButton-text jss73 jss126" tabindex="0" type="button">
-                    <span class="MuiButton-label" @click="handleToMore(1)">{{$t("l.mining")}}</span>
-                    <span class="MuiTouchRipple-root"></span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="jss108">
         <div class="jss110">
           <div class="jss111">
@@ -88,7 +72,7 @@
               <span class="jss114" @click="handleToMore(2)">{{$t('l.home_seemore')}}</span>
             </p>
           </div>
-          <div class="jss115" v-for="(item,index) in twoTokens" :key="index">
+          <div class="jss115" v-for="(item,index) in homeTokens.twos" :key="index">
             <div class="jss117">
               <div class="jss118">
                 <svg-icon class="jss119 jss120" :icon-class="item.currency1 + '_coin'"  />
@@ -107,6 +91,32 @@
           </div>
         </div>
       </div>
+      <div class="jss108 jss109">
+        <div class="jss110">
+          <div class="jss111">
+            <p class="jss112">{{$t('l.home_t1')}}</p>
+            <p class="jss113" @click="handleToMore(1)">
+              <span class="jss114">{{$t("l.home_seemore")}}</span>
+            </p>
+          </div>
+          <div class="jss115" v-for="(item,index) in homeTokens.ones" :key="index">
+            <div class="jss117">
+              <div class="jss118">
+                <svg-icon class="jss119" :icon-class="item.currency + '_coin'" alt="" />
+                <span class="jss121">{{item.currency}}</span>
+              </div>
+              <div class="jss125">
+                <div>
+                  <button class="MuiButtonBase-root MuiButton-root MuiButton-text jss73 jss126" tabindex="0" type="button">
+                    <span class="MuiButton-label" @click="handleToMore(1)">{{$t("l.mining")}}</span>
+                    <span class="MuiTouchRipple-root"></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -114,6 +124,7 @@
 <script>
 import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
+import Farms from '@/models/farms'
 export default {
   components: {
     countTo
@@ -126,97 +137,7 @@ export default {
       totalLock:0,
       coinPrice:0,
       walletAddress:'',
-      oneTokens:[
-        {
-          currency:"ETH",
-          rateOfAnnualized:12.1101,
-          lockAmount:0,
-          totalLockAmount:0,
-          isApproved:false,
-          isLoading:true,
-        },
-        {
-          currency:"BNB",
-          rateOfAnnualized:22.22,
-          lockAmount:0,
-          totalLockAmount:0,
-          isApproved:false,
-          isLoading:true,
-        },
-        {
-          currency:"BTC",
-          rateOfAnnualized:33.33,
-          lockAmount:0,
-          totalLockAmount:0,
-          isApproved:false,
-          isLoading:true,
-        },
-        {
-          currency:"USDT",
-          rateOfAnnualized:44.44,
-          lockAmount:0,
-          totalLockAmount:0,
-          isApproved:false,
-          isLoading:true,
-        },
-      ],
-      twoTokens:[
-        {
-          currency1:"Libra",
-          currency2:"ETH",
-          rateOfAnnualized:12.1101,
-          lockAmount1:0,
-          lockAmount2:0,
-          totalLockAmount1:0,
-          totalLockAmount2:0,
-          isApproved:false,
-          isLoading:true,
-        },
-        {
-          currency1:"Libra",
-          currency2:"BNB",
-          rateOfAnnualized:22.22,
-          lockAmount1:0,
-          lockAmount2:0,
-          totalLockAmount1:0,
-          totalLockAmount2:0,
-          isApproved:false,
-          isLoading:true,
-        },
-        {
-          currency1:"Libra",
-          currency2:"USDT",
-          rateOfAnnualized:33.33,
-          lockAmount1:0,
-          lockAmount2:0,
-          totalLockAmount1:0,
-          totalLockAmount2:0,
-          isApproved:false,
-          isLoading:true,
-        },
-        {
-          currency1:"Libra",
-          currency2:"BTC",
-          rateOfAnnualized:44.44,
-          lockAmount1:0,
-          lockAmount2:0,
-          totalLockAmount1:0,
-          totalLockAmount2:0,
-          isApproved:false,
-          isLoading:true,
-        },
-        {
-          currency1:"Libra",
-          currency2:"FIL",
-          rateOfAnnualized:55.55,
-          lockAmount1:0,
-          lockAmount2:0,
-          totalLockAmount1:0,
-          totalLockAmount2:0,
-          isApproved:false,
-          isLoading:true,
-        }
-      ],
+      homeTokens:new Farms(),
       coins:[
         {key:1,coin:'Libra',price:1,lockAmount:0},
         {key:2,coin:'BTC',price:1,lockAmount:0},
@@ -311,6 +232,7 @@ export default {
       let inviteAddress = _self.$route.query.address
       if(inviteAddress && inviteAddress.length > 0) {_self.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)}
       _self.inviteAddress = _self.$getCookie('inviteAddress')
+      _self.homeTokens.getTokens()
       _self.getPairPrice()
       _self.getLockAmount()
       _self.getCoinsPrice()
@@ -711,11 +633,11 @@ export default {
     width: 100%;
   }
   #mobileTable tr:nth-child(2) {
-    width: 50%;
+    width: 33%;
     float: left;
   }
   #mobileTable tr:nth-child(3) {
-    width: 50%;
+    width: 40%;
     float: left;
   }
   #mobileTable tr:last-child {

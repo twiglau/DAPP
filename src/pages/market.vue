@@ -51,7 +51,7 @@
                 <svg-icon  icon-class="search_icon" style="width:16px;height:16px;"></svg-icon>
               </a-button>
             </a-input-search>
-    </span>
+          </span>
         </div>
         <div class="team-wrap">
         <a-spin class="team_loading" tip="loading" :spinning="teamSearching" size="large">

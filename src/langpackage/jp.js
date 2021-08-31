@@ -56,7 +56,8 @@ export const l = {
   h_n5: '「私の」', 
   h_n6: 'リーダーボード', 
   home_n1:  "合計ロックアップ量", 
-  home_n2:  "DOP価格", 
+  home_n2: "LBRを破壊する",
+  home_n4: "「手数料USDT」",
   home_n3:  "LBR価格", 
   cwallet:  "Connect Wallet", 
   langtype:  "英語", 
@@ -189,6 +190,9 @@ export const l = {
   l_success:'提出された',
   swap_setting:'スワップ設定',
   l_invite:'招待',
+  l_fee:'「手数料」',
+  l_fee_tip1:'入金期間> 30日、2％の手数料が必要',
+  l_fee_tip2:'入金期間<= 30日、5％の手数料が必要',
 
 
   l_error_upper:'上位アドレスが正しくありません',
