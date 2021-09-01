@@ -115,12 +115,12 @@ export default {
       layers:0,
       teamLevels:[
         {level:'LV1',value:Math.pow(10,5),ratio:'2%'},
-        {level:'LV2',value:13*Math.pow(10,5),ratio:'3%'},
-        {level:'LV3',value:19*Math.pow(10,5),ratio:'4%'},
-        {level:'LV4',value:27*Math.pow(10,5),ratio:'5%'},
-        {level:'LV5',value:81*Math.pow(10,5),ratio:'6%'},
-        {level:'LV6',value:243*Math.pow(10,5),ratio:'7%'},
-        {level:'LV7',value:729*Math.pow(10,5),ratio:'8%'},
+        {level:'LV2',value:5*Math.pow(10,5),ratio:'3%'},
+        {level:'LV3',value:10*Math.pow(10,5),ratio:'4%'},
+        {level:'LV4',value:20*Math.pow(10,5),ratio:'5%'},
+        {level:'LV5',value:30*Math.pow(10,5),ratio:'6%'},
+        {level:'LV6',value:40*Math.pow(10,5),ratio:'7%'},
+        {level:'LV7',value:50*Math.pow(10,5),ratio:'8%'},
       ],
       curLevelIndex:2,
       coins:[
