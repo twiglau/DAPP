@@ -47,7 +47,7 @@ Deposits.prototype.getMyLockAmount = function(start = 0, end = 1){
           resolve(res)
           console.log({resultLockArr})
           _self.records.push(...resultLockArr)
-          
+          _self.records.sort((a,b) => b.depositTime - a.depositTime)
 
           //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
           //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
@@ -105,6 +105,7 @@ Deposits.prototype.getMyPairLockAmount = function(start = 0,end = 1){
           resolve(res)
           // TODO: 放入定时器后, 需要清除lockAmount,防止累加
           _self.records.push(...resultLockArr)
+          _self.records.sort((a,b) => b.depositTime - a.depositTime)
           //这里过滤数据, 递归
           if(end < _self.twoSize){
             _self.getMyPairLockAmount(end,end + 1)

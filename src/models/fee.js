@@ -32,6 +32,8 @@ Fees.prototype.constructor = Fees
 
 Fees.prototype.calculateOne = function(){
     let _self = this
+    //1.对记录排序
+    _self.oneRecords.sort((a,b) => b.depositTime - a.depositTime)
     let nowTime = new Date().getDate()/1000
     //4、扣除订单中的可用数量 (计算手续费)
     let out = 0;
@@ -68,6 +70,7 @@ Fees.prototype.calculateOne = function(){
 
 Fees.prototype.calculateTwo = function(){
     let _self = this
+    _self.twoRecords.sort((a,b) => b.depositTime - a.depositTime)
     let nowTime = new Date().getDate()/1000
     //4、扣除订单中的可用数量 (计算手续费)
     let out1 = 0;

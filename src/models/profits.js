@@ -93,7 +93,9 @@ Profits.prototype.getProfitRecord = function(start = 0, end = 1){
         //全部请求,可能失败, finally接收
         Promise.all(promiseRecordArr).then((res) => {
           resolve(res)
-          _self.records.push(...resultRecordArr)
+          _self.records.push(...resultRecordArr)//takeoutTime
+          _self.records.sort((a,b) => b?.time - a?.time)
+          _self.records.sort((a,b) => b?.takeoutTime - a?.takeoutTime)
           //这里过滤数据, 递归
           if(_self.dataSize > end){
             _self.getProfitRecord(end,end + 1)
