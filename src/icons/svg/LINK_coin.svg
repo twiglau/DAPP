@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>link</title>
+    <g id="Dapp" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Coin" transform="translate(-231.000000, -260.000000)">
+            <g id="link" transform="translate(231.000000, 260.000000)">
+                <rect id="矩形" fill="#FFFFFF" x="0" y="0" width="32" height="32" rx="16"></rect>
+                <path d="M16,4 L13.8835979,5.26605505 L8.11640212,8.73394495 L6,10 L6,22 L8.11640212,23.266055 L13.9365079,26.733945 L16.0529101,28 L18.1693122,26.733945 L23.8835979,23.266055 L26,22 L26,10 L23.8835979,8.73394495 L18.1164021,5.26605505 L16,4 Z M10.2328042,19.4678899 L10.2328042,12.5321101 L16,9.06422018 L21.7671958,12.5321101 L21.7671958,19.4678899 L16,22.9357798 L10.2328042,19.4678899 Z" id="形状" fill="#2A5ADA" fill-rule="nonzero"></path>
+            </g>
+        </g>
+    </g>
+</svg>

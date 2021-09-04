@@ -1,4 +1,4 @@
-import {getRate,postWithdrawalData,getOneTokens,getTwoTokens} from '@/utils/api'
+import {getRate,postWithdrawalData,getOneTokens,getTwoTokens,getCurrencyIndex} from '@/utils/api'
 import Wallet from '@/utils/Wallet.js';
 import Deposits from './deposits'
 
@@ -66,19 +66,13 @@ Farms.prototype.getMySingleCoinsLockData = async function(){
     _self.ones.forEach(ele => {ele.lockAmount = 0;ele.oneRecords = [];})
     deposit.getMyLockAmount()
     .then(res => {
-    //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
-    //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
-    _self.ones[0].lockAmount += _self.caluUseable('ETH','useableAmount',3,-1,res)
-    _self.ones[0].oneRecords.push(...(res.filter(ele => ele.currencyIndex == 3) || []))
-
-    _self.ones[1].lockAmount += _self.caluUseable('BNB','useableAmount',5,-1,res)
-    _self.ones[1].oneRecords.push(...(res.filter(ele => ele.currencyIndex == 5) || []))
-
-    _self.ones[2].lockAmount += _self.caluUseable('BTC','useableAmount',2,-1,res)
-    _self.ones[2].oneRecords.push(...(res.filter(ele => ele.currencyIndex == 2) || []))
-
-    _self.ones[3].lockAmount += _self.caluUseable('USDT','useableAmount',4,-1,res)
-    _self.ones[3].oneRecords.push(...(res.filter(ele => ele.currencyIndex == 4) || []))
+      //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
+      //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
+      for(let i = 0,len = _self.ones.length; i < len; i++){
+        let index = getCurrencyIndex(_self.ones[i].currency)
+        _self.ones[i].lockAmount += _self.caluUseable(_self.ones[i].currency,'useableAmount',index,-1,res)
+        _self.ones[i].oneRecords.push(...(res.filter(ele => ele.currencyIndex == index) || []))
+      }
     })
   }
   
@@ -95,28 +89,16 @@ Farms.prototype.getMyPairCoinsLockData = async function(){
     _self.twos.forEach(ele => {ele.lockAmount1 = 0;ele.lockAmount2 = 0;ele.twoRecords=[];})
     deposit.getMyPairLockAmount()
     .then(res => {
+      for(let i = 0,len = _self.twos.length; i < len; i++){
+          let index1 = getCurrencyIndex(_self.twos[i].currency1)
+          let index2 = getCurrencyIndex(_self.twos[i].currency2)
+          _self.twos[i].lockAmount1 += _self.caluUseable(_self.twos[i].currency1,'useableAmount1',index1,index2,res)
+          _self.twos[i].lockAmount2 += _self.caluUseable(_self.twos[i].currency2,'useableAmount2',index1,index2,res)
+          _self.twos[i].twoRecords.push(...(res.filter(ele => ele.currency1Index == index1 && ele.currency2Index == index2) || []))
 
+      }
       //格式化数据 0-Libra/ETH  1-Libra/BNB 3-Libar/USDT 4-Libra/BTC 5-Libra/FIL
       //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
-      _self.twos[0].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,3,res)
-      _self.twos[0].lockAmount2 += _self.caluUseable('ETH','useableAmount2',1,3,res)
-      _self.twos[0].twoRecords.push(...(res.filter(ele => ele.currency1Index == 1 && ele.currency2Index == 3) || []))
-      
-      _self.twos[1].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,5,res)
-      _self.twos[1].lockAmount2 += _self.caluUseable('BNB','useableAmount2',1,5,res)
-      _self.twos[1].twoRecords.push(...(res.filter(ele => ele.currency1Index == 1 && ele.currency2Index == 5) || []))
-
-      _self.twos[2].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,4,res)
-      _self.twos[2].lockAmount2 += _self.caluUseable('USDT','useableAmount2',1,4,res)
-      _self.twos[2].twoRecords.push(...(res.filter(ele => ele.currency1Index == 1 && ele.currency2Index == 4) || []))
-
-      _self.twos[3].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,2,res)
-      _self.twos[3].lockAmount2 += _self.caluUseable('BTC','useableAmount2',1,2,res)
-      _self.twos[3].twoRecords.push(...(res.filter(ele => ele.currency1Index == 1 && ele.currency2Index == 2) || []))
-
-      _self.twos[4].lockAmount1 += _self.caluUseable('LIBRA','useableAmount1',1,6,res)
-      _self.twos[4].lockAmount2 += _self.caluUseable('FIL','useableAmount2',1,6,res)
-      _self.twos[4].twoRecords.push(...(res.filter(ele => ele.currency1Index == 1 && ele.currency2Index == 6) || []))
     })
   }
 

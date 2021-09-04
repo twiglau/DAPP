@@ -46,21 +46,9 @@
 </template>
 
 <script>
-//{"0":"4","1":"0xFaC462928525FAEA834d8000796B7843f822AF1d",
-//"2":"10000000000","3":"10000000000","4":"0","5":"1629387212",
-//"currencyIndex":"4","userAddress":"0xFaC462928525FAEA834d8000796B7843f822AF1d",
-//"totalAmount":"10000000000","useableAmount":"10000000000","takeoutAmount":"0",
-//"depositTime":"1629387212"}
 
-//{"0":"0xFaC462928525FAEA834d8000796B7843f822AF1d","1":"1","2":"10000000000",
-//"3":"10000000000","4":"0","5":"5","6":"94449209",
-//"7":"94449209","8":"0","9":"1629389428",
-//"userAddress":"0xFaC462928525FAEA834d8000796B7843f822AF1d",
-//"currency1Index":"1","totalAmount1":"10000000000",
-//"useableAmount1":"10000000000","takeoutAmount1":"0",
-//"currency2Index":"5","totalAmount2":"94449209","useableAmount2":"94449209",
-//"takeoutAmount2":"0","depositTime":"1629389428"}
 import Wallet from '@/utils/Wallet.js';
+import { getCurrencyName } from '@/utils/api';
 import Deposits from '@/models/deposits';
 import countTo from 'vue-count-to';
 export default {
@@ -76,14 +64,6 @@ export default {
       oneSize:0,
       twoSize:0,
       deposits:new Deposits(),
-      coins:[
-        {key:1,coin:'Libra'},
-        {key:2,coin:'BTC'},
-        {key:3,coin:'ETH'},
-        {key:4,coin:'USDT'},
-        {key:5,coin:'BNB'},
-        {key:6,coin:'FIL'},
-      ]
     }
   },
   computed: {
@@ -94,26 +74,21 @@ export default {
     },
     coin1(item){
       let index = item.currencyIndex ? item.currencyIndex : item.currency1Index
-      return this.coins.find(ele => ele.key == index).coin
+      let name = getCurrencyName(index)
+      return name || 'None'
     },
     coin2(item){
       let index = item.currency2Index
-      let item_a = this.coins.find(ele => ele.key == index)
-      if(item_a){
-        return item_a.coin
-      }else {
-        return 'Libra'
-      }
+      let name = getCurrencyName(index)
+      return name || 'Libra'
     },
     amt1(item){
-      let coin = this.coin1(item)
       let amount = item.useableAmount ? item.useableAmount : item.useableAmount1
-      return  (amount / Wallet.Precisions(coin.toUpperCase())).toFixed(4)
+      return  (amount / Wallet.Precisions()).toFixed(4)
     },
     amt2(item){
-      let coin = this.coin2(item)
       let amount = item.useableAmount2
-      return  (amount / Wallet.Precisions(coin.toUpperCase())).toFixed(4)
+      return  (amount / Wallet.Precisions()).toFixed(4)
     },
     formatTimeStr(item){
       let timestamp = +item.depositTime * 1000

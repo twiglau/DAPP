@@ -1,6 +1,7 @@
 import Wallet from '@/utils/Wallet.js';
 function Profits(address){
     this.address = address || localStorage.getItem('walletAddress');
+    this.dataSize = 0;
     this.records = [];
 }
 
@@ -10,7 +11,8 @@ Profits.prototype.checkHasTiquData = function(){
     return new Promise((resolve,reject) => {
       Wallet.queryTakeoutIncomeRecordSize(_self.address,(res) =>{
           let result = +res || 0
-          resolve(result)
+          _self.dataSize = result
+          resolve(_self.dataSize)
       },(err) => {
           reject(err)
       })
@@ -61,7 +63,8 @@ Profits.prototype.checkHasIncomeData = function(){
     return new Promise((resolve,reject) => {
       Wallet.queryIncomeSize(_self.address,(res) =>{
           let result = +res || 0
-          resolve(result)
+          _self.dataSize = result
+          resolve(_self.dataSize)
       },(err) => {
           reject(err)
       })

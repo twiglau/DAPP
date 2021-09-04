@@ -124,7 +124,8 @@
 <script>
 import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
-import Farms from '@/models/farms'
+import Farms from '@/models/farms';
+import {currencyMap} from '@/utils/api';
 export default {
   components: {
     countTo
@@ -138,14 +139,7 @@ export default {
       coinPrice:0,
       walletAddress:'',
       homeTokens:new Farms(),
-      coins:[
-        {key:1,coin:'Libra',price:1,lockAmount:0},
-        {key:2,coin:'BTC',price:1,lockAmount:0},
-        {key:3,coin:'ETH',price:1,lockAmount:0},
-        {key:4,coin:'USDT',price:1,lockAmount:0},
-        {key:5,coin:'BNB',price:1,lockAmount:0},
-        {key:6,coin:'FIL',price:1,lockAmount:0},
-      ]
+      coins:currencyMap
     }
   },
   methods: {
@@ -161,7 +155,7 @@ export default {
             for(let i = 0; i < _self.coins.length;i++){
               console.log(i)
               promiseAllarr[i] = new Promise((res1,rej1) => {
-                    Wallet.totalUseableBalance(_self.coins[i].coin,(in_a)=>{
+                    Wallet.totalUseableBalance(_self.coins[i].currency,(in_a)=>{
                       let val = +in_a
                       in_a > 0 && (val = Number(in_a / Wallet.Precisions()))
                       val < -0.01 && (val = 0)
@@ -186,7 +180,7 @@ export default {
      console.log({amounts})
      if(amounts){
        for(let i = 0, len = this.coins.length; i < len; i++){
-          this.coins[i].lockAmount = amounts[i]
+          this.coins[i].amount = amounts[i]
        }
        this.calculateTeamPerformance()
      }
@@ -203,7 +197,7 @@ export default {
       var totala = 0;
       for(let i = 0,len = _self.coins.length; i < len; i++){
         let item = _self.coins[i]
-        totala += item.price * item.lockAmount
+        totala += item.price * item.amount
       }
       _self.totalLock = totala
       
@@ -212,7 +206,7 @@ export default {
       let _self = this
       let promiseCoinRequestArray = this.coins.map(ele => {
           return new Promise((resolve,reject) => {
-               Wallet.queryPrice(ele.coin.toLowerCase(),(res)=>{
+               Wallet.queryPrice(ele.currency.toLowerCase(),(res)=>{
                   resolve(Number(res? res : 1))
                },err => reject(err))
           })

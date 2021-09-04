@@ -82,6 +82,9 @@
 <script>
 import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
+import { getCurrencyIndex,getCurrencyName,currencyMap } from '@/utils/api';
+import Deposits from '@/models/deposits';
+import Profits from '@/models/profits';
 export default {
   name: "Market",
   components: {
@@ -123,14 +126,7 @@ export default {
         {level:'LV7',value:50*Math.pow(10,5),ratio:'8%'},
       ],
       curLevelIndex:2,
-      coins:[
-        {key:1,coin:'Libra',price:1},
-        {key:2,coin:'BTC',price:1},
-        {key:3,coin:'ETH',price:1},
-        {key:4,coin:'USDT',price:1},
-        {key:5,coin:'BNB',price:1},
-        {key:6,coin:'FIL',price:1},
-      ],
+      currencyInfos:currencyMap,
       searching:false,
       teamSearching:false,
     }
@@ -138,20 +134,7 @@ export default {
   computed: {
   },
   methods: {
-    //{"0":"4","1":"0xFaC462928525FAEA834d8000796B7843f822AF1d",
-//"2":"10000000000","3":"10000000000","4":"0","5":"1629387212",
-//"currencyIndex":"4","userAddress":"0xFaC462928525FAEA834d8000796B7843f822AF1d",
-//"totalAmount":"10000000000","useableAmount":"10000000000","takeoutAmount":"0",
-//"depositTime":"1629387212"}
 
-//{"0":"0xFaC462928525FAEA834d8000796B7843f822AF1d","1":"1","2":"10000000000",
-//"3":"10000000000","4":"0","5":"5","6":"94449209",
-//"7":"94449209","8":"0","9":"1629389428",
-//"userAddress":"0xFaC462928525FAEA834d8000796B7843f822AF1d",
-//"currency1Index":"1","totalAmount1":"10000000000",
-//"useableAmount1":"10000000000","takeoutAmount1":"0",
-//"currency2Index":"5","totalAmount2":"94449209","useableAmount2":"94449209",
-//"takeoutAmount2":"0","depositTime":"1629389428"}
    onSearchTeam(value){
       console.log({searchValue:value})
       let _self = this
@@ -173,7 +156,7 @@ export default {
         _self.removeInfo() //搜索前移除信息
         await _self.calculateTeamInfo(value,true);
         _self.teamSearching = false
-      },);
+      },0);
 
    },
    async calculateTeamPerformance(){
@@ -186,85 +169,57 @@ export default {
       const layers_profit_Record = JSON.parse(layers_profit_storeage) || []
       //2.1. Libra 数量
       // 1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
-      var libra_amount = 0, btc_amount_two = 0,eth_amount_two = 0,
-      usdt_amount_two = 0,bnb_amount_two = 0,fil_amount_two = 0;
       for(let i = 0,len = layers_two_Record.length; i < len; i++){
-        let item = layers_two_Record[i]
-        if(item.currency1Index == 1){
-           libra_amount += Number(item.useableAmount1) / Wallet.Precisions()
-        }
-        if(item.currency2Index == 2){
-          btc_amount_two += Number(item.useableAmount2) / Wallet.Precisions()
-        }
-        if(item.currency2Index == 3){
-          eth_amount_two += Number(item.useableAmount2) / Wallet.Precisions()
-        }
-        if(item.currency2Index == 4){
-          usdt_amount_two += Number(item.useableAmount2) / Wallet.Precisions()
-        }
-        if(item.currency2Index == 5){
-          bnb_amount_two += Number(item.useableAmount2) / Wallet.Precisions()
-        }
-        if(item.currency2Index == 6){
-          fil_amount_two += Number(item.useableAmount2) / Wallet.Precisions()
+        let item = layers_two_Record[i];
+
+        for(let j = 0,len_j = _self.currencyInfos.length; j < len_j; j++){
+
+          let currency = _self.currencyInfos[j];
+          if(item.currency1Index == currency.id){
+            _self.currencyInfos[i].amount += Number(item.useableAmount1) / Wallet.Precisions()
+          }
+          if(item.currency2Index == currency.id){
+            _self.currencyInfos[i].amount += Number(item.useableAmount2) / Wallet.Precisions()
+          }
         }
       }
 
       //1.2. BTC 数量
-      var btc_amount_one = 0, eth_amount_one = 0, usdt_amount_one = 0,
-      bnb_amount_one = 0, fil_amount_one = 0;
       for(let i = 0, len = layers_one_Record.length; i < len; i++){
         let item = layers_one_Record[i]
-        if(item.currencyIndex == 1){
-           libra_amount += Number(item.useableAmount) / Wallet.Precisions()
-        }
-        if(item.currencyIndex == 2){
-          btc_amount_one += Number(item.useableAmount) / Wallet.Precisions()
-        }
-        if(item.currencyIndex == 3){
-          eth_amount_one += Number(item.useableAmount) / Wallet.Precisions()
-        }
-        if(item.currencyIndex == 4){
-          usdt_amount_one += Number(item.useableAmount) / Wallet.Precisions()
-        }
-        if(item.currencyIndex == 5){
-          bnb_amount_one += Number(item.useableAmount) / Wallet.Precisions()
-        }
-        if(item.currencyIndex == 6){
-          fil_amount_one += Number(item.useableAmount) / Wallet.Precisions()
+
+        for(let j = 0,len_j = _self.currencyInfos.length; j < len_j; j++){
+          
+          let currency = _self.currencyInfos[j];
+          if(item.currencyIndex == currency.id){
+            _self.currencyInfos[i].amount += Number(item.useableAmount) / Wallet.Precisions()
+          }
         }
       }
       
-      // 2 + 1
-      let btc_amount = btc_amount_two + btc_amount_one;
-      let eth_amount = eth_amount_two + eth_amount_one;
-      let usdt_amount = usdt_amount_two + usdt_amount_one;
-      let bnb_amount = bnb_amount_two + bnb_amount_one;
-      let fil_amount = fil_amount_two + fil_amount_one;   
 
       //3. Libra 收益数量
       let libra_profit_amount = layers_profit_Record.reduce((prev,item) => {
                                                 return prev + Number(item.amount)/Wallet.Precisions()
                                             },0)
-      console.log({libra_amount,btc_amount,eth_amount,usdt_amount,bnb_amount,fil_amount,libra_profit_amount})
-      if(_self.coins[1].price < 3){
+      console.table(_self.currencyInfos);console.log({libra_profit_amount})
+      if(_self.currencyInfos[1].price < 3){
          const res = await _self.getCoinsPrice();
          //更新价格
          res.forEach((ele,index) => {
-           _self.coins[index].price = (+ele || 1)
+           _self.currencyInfos[index].price = (+ele || 1)
          })
       }
       //团队业绩
-      _self.team.teamProformance = libra_amount * _self.coins[0].price +
-                                  btc_amount * _self.coins[1].price + 
-                                  eth_amount * _self.coins[2].price +
-                                  usdt_amount * _self.coins[3].price +
-                                  bnb_amount * _self.coins[4].price +
-                                  fil_amount * _self.coins[5].price;
-      
+      _self.team.teamProformance = 0
+      for(let i = 0,len = _self.currencyInfos.length; i<len;i++){
+        let item = _self.currencyInfos[i]
+        let rValue = item.price * item.amount
+        _self.team.teamProformance += rValue
+      }
 
       //团队收益
-      _self.team.teamProfit = libra_profit_amount * _self.coins[0].price;  
+      _self.team.teamProfit = libra_profit_amount * _self.currencyInfos[0].price;  
       if(!_self.isSearchData){
         _self.currentTeam.teamProformance = _self.team.teamProformance + 0
         _self.currentTeam.teamProfit = _self.team.teamProfit + 0
@@ -342,9 +297,9 @@ export default {
     },
     async getCoinsPrice(){
       let _self = this
-      let promiseCoinRequestArray = this.coins.map(ele => {
+      let promiseCoinRequestArray = this.currencyInfos.map(ele => {
           return new Promise((resolve,reject) => {
-               Wallet.queryPrice(ele.coin.toLowerCase(),res =>{
+               Wallet.queryPrice(ele.currency.toLowerCase(),res =>{
                  resolve(Number(res ? res : 1))
                },err =>{ reject(err)})
           })
@@ -385,9 +340,11 @@ export default {
           setTimeout(async function(i){
               let item = info_a[i]
               const item_address = item.downAddress
-              const oneCount = await _self.checkHasMyLockData(item_address)
+              //存入信息
+              let item_deposit = new Deposits(item_address)
+              const oneCount = await item_deposit.checkHasMyLockData()
               if(oneCount > 0){
-                const oneRecord = await _self.getMyLockAmount(item_address,0,oneCount,oneCount)
+                const oneRecord = await item_deposit.getMyLockAmount(0,oneCount) // _self.getMyLockAmount(item_address,0,oneCount,oneCount)
                 console.log({item_address,oneRecord,a: i + 'MyLockData'})
                 if(oneRecord && oneRecord.length > 0){
                   const oneStr = localStorage.getItem('ONE-RECORD')
@@ -397,10 +354,10 @@ export default {
                 }
               }
               //3.2
-              const twoCount = await _self.checkHasMyPairLockData(item_address)
+              const twoCount = await item_deposit.checkHasMyPairLockData() // _self.checkHasMyPairLockData(item_address)
               console.log({item_address,twoCount,a: i + 'checkHasMyPairLockData'})
               if(twoCount > 0){
-                const twoRecord = await _self.getMyPairLockAmount(item_address,0,twoCount,twoCount)
+                const twoRecord = await item_deposit.getMyPairLockAmount(0,twoCount) // _self.getMyPairLockAmount(item_address,0,twoCount,twoCount)
                 console.log({item_address,twoRecord,a: i + 'MyPairLock'})
                 if(twoRecord && twoRecord.length > 0){
                     const twoStr = localStorage.getItem('TWO-RECORD')
@@ -410,10 +367,11 @@ export default {
                 }
               }
               //3.3
-              const profitCount = await _self.checkHasIncomeData(item_address)
+              let item_profit = new Profits(item_address)
+              const profitCount = await item_profit.checkHasIncomeData() // _self.checkHasIncomeData(item_address)
               console.log({item_address,profitCount,a: i + 'checkHasIncomeData'})
               if(profitCount > 0){
-                const profitRecord = await _self.getProfitRecord(item_address,0,profitCount,profitCount)
+                const profitRecord = await item_profit.getProfitRecord(0,profitCount) // _self.getProfitRecord(item_address,0,profitCount,profitCount)
                 console.log({item_address,profitRecord,a: i + 'getProfitRecord'})
                 if(profitRecord && profitRecord.length > 0){
                     const profitStr = localStorage.getItem('PROFIT-RECORD')
@@ -507,161 +465,6 @@ export default {
           })
       })
     },
-    //2币判断
-    async checkHasMyPairLockData(address){
-      let _self = this
-      return new Promise((resolve,reject) => {
-          Wallet.queryTwosSize(address,(res) =>{
-              resolve(+res || 0)
-          },(err) => {
-              reject(err)
-          })
-
-      })
-    },
-    //1币判断
-    async checkHasMyLockData(address){
-      let _self = this
-      return new Promise((resolve,reject) => {
-        Wallet.queryOnesSize(address,(res) =>{
-            resolve(+res || 0) 
-        },(err) => {
-            reject(err)
-        })
-      })
-    },
-    //2币记录
-    async getMyPairLockAmount(address,start = 0,end = 1,twoSize = 1){
-      let _self = this
-      return new Promise((resolve,reject) => {
-        try {
-          let promiseMyLockArr = [],resultLockArr = [];
-          let i = start;
-          end = end > twoSize ? twoSize : end
-          do {
-            promiseMyLockArr[i] = new Promise((res,rej) => {
-                Wallet.twoDepositOrder(address,i,(record) => {
-                  if(record){
-                    resultLockArr.push(record)
-                    res(record)
-                  }else{
-                    rej('error')
-                  }
-                },(err) => {rej(err)})
-            })
-            ++i;
-
-          } while (i < end);
-
-          //全部请求可能失败, finally接收
-          Promise.all(promiseMyLockArr)
-          .then((res) => {
-            resolve(res)
-            //这里过滤数据, 递归
-            if(end < twoSize){
-              _self.getMyPairLockAmount(address,end,end + 1,twoSize)
-            }
-          })
-          .catch((err) => {reject(err)})
-        } catch (error) {
-            reject(error)
-        }
-      })
-    },
-    //1币记录
-    async getMyLockAmount(address,start = 0, end = 1,oneSize){
-      let _self = this
-      return  new Promise((resolve,reject) => {
-        try {
-          let promiseMyLockArr = [],resultLockArr = [];
-          let i = start;
-          end = end > oneSize ? oneSize : end
-          do {
-            promiseMyLockArr[i] = new Promise((res,rej) => {
-                Wallet.oneDepositOrder(address,i,(record) => {
-                  
-                  if(record){
-                    resultLockArr.push(record)
-                    res(record)
-                  }else{
-                    rej('error')
-                  }
-                },(err) => {rej(err)})
-            })
-            ++i;
-
-          } while (i < end);
-
-          //全部请求,可能失败
-          Promise.all(promiseMyLockArr).then((res) => {
-            
-            resolve(res)
-            //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
-            //这里过滤数据, 递归
-            if(end < oneSize){
-              _self.getMyLockAmount(address,end,end + 1,oneSize)
-            }
-
-          })
-          .catch((err) => {
-            reject(err)
-          })
-        } catch (error) {
-            reject(error)
-        }
-      })
-    },
-    //返利判断
-    async checkHasIncomeData(address){
-      let _self = this
-      return new Promise((resolve,reject) => {
-        Wallet.queryIncomeSize(address,(res) =>{
-            resolve(+res || 0) 
-        },(err) => {
-            reject(err)
-        })
-      })
-    },
-    //返利记录
-    async getProfitRecord(address,start = 0, end = 1,dataSize = 1){
-      let _self = this
-      return new Promise((resolve,reject) => {
-        try {
-          let promiseRecordArr = [],resultRecordArr = [];
-          let i = start;
-          do {
-            end = end > dataSize ? dataSize : end
-            promiseRecordArr[i] = new Promise((res,rej) => {
-                Wallet.incomeRecord(address,i,(record) => {
-                  if(record){
-                    resultRecordArr.push(record)
-                    res(record)
-                  }else{
-                    rej('error')
-                  }
-                },err => rej(err))
-            })
-            ++i;
-
-          } while (i < end);
-
-          //全部请求,可能失败, finally接收
-          Promise.all(promiseRecordArr).then((res) => {
-            resolve(res)
-            //这里过滤数据, 递归
-            if(dataSize > end){
-              _self.getProfitRecord(end,end + 1)
-            }
-          })
-          .catch((err) => {
-            reject(err)
-          })
-
-        } catch (error) {
-            reject(error)
-        }
-      })
-    },
     handleCopyLink() {
 
       this.walletAddress = localStorage.getItem("walletAddress") || '';
@@ -693,15 +496,17 @@ export default {
       _self.inviteAddress = _self.$getCookie('inviteAddress')
       
       setTimeout(async ()=>{
+
+         const res = await _self.getCoinsPrice();
+         
+        //更新价格
+        res.forEach((ele,index) => {
+          _self.currencyInfos[index].price = (+ele || 1)
+        })
         if(!_self.walletAddress) return
          _self.removeInfo() //清除信息
          await _self.calculateTeamInfo(_self.walletAddress,true);
-         const res = await _self.getCoinsPrice();
-        //更新价格
-        res.forEach((ele,index) => {
-          _self.coins[index].price = (+ele || 1)
-        })
-      },);
+      },500);
       const res = await _self.getIncomeData()
       if(res){
           const {
