@@ -27,7 +27,18 @@ function Farms(address,upperAddress){
       {currency:"BTC",isApproved:false},
       {currency:"USDT",isApproved:false},
       {currency:"Libra",isApproved:false},
-      {currency:"FIL",isApproved:false}
+      {currency:"FIL",isApproved:false},
+      
+      {currency:"ADA",isApproved:false},
+      {currency:"XRP",isApproved:false},
+      {currency:"DOGE",isApproved:false},
+      {currency:"DOT",isApproved:false},
+      {currency:"SOL",isApproved:false},
+      {currency:"UNI",isApproved:false},
+      {currency:"BCH",isApproved:false},
+      {currency:"LTC",isApproved:false},
+      {currency:"LINK",isApproved:false},
+      {currency:"EOS",isApproved:false},
     ];
     //某个币种授权信息
     this.approveInfo = {};
