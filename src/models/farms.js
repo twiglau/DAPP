@@ -131,7 +131,7 @@ Farms.prototype.getRatePairs = async function(){
   const result1 = res[0].result, result2 = res[1].result;
   _self.ones = _self.ones.map(ele => {
     const data = {...ele}
-    const find = result1.find(fd => fd.token1 == ele.currency).rate || 0
+    const find = result1.find(fd => fd.token1 == ele.currency)?.rate || 0
     data.rateOfAnnualized = find
     return data
   })
@@ -254,14 +254,14 @@ Farms.prototype.updateCurrencyApprovedStatus = async function(){
         //更新oneTokens
         _self.ones.forEach(ele => {
           const whichCoins = _self.approveTokens.find(app => app.currency === ele.currency)
-          ele.isApproved = whichCoins.isApproved
+          ele.isApproved = whichCoins?.isApproved
         })
         //更新twoTokens
         _self.twos.forEach(ele => {
           const whichCoins1 = _self.approveTokens.find(app => app.currency === ele.currency1)
           const whichCoins2 = _self.approveTokens.find(app => app.currency === ele.currency2)
-          ele.isApproved1 = whichCoins1.isApproved
-          ele.isApproved2 = whichCoins2.isApproved
+          ele.isApproved1 = whichCoins1?.isApproved
+          ele.isApproved2 = whichCoins2?.isApproved
         })
     }
 }
