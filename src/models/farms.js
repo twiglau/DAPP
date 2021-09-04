@@ -54,6 +54,7 @@ Farms.prototype.refreshData = function(){
    _self.getLockAmount()
    _self.getPairLockAmount()
 }
+
 Farms.prototype.caluUseable = function(currency,key,index1,index2,array){
     let libra_eth_1 = array.filter(ele => index2 == -1 ? ele.currencyIndex == index1 :  ele.currency1Index == index1 && ele.currency2Index == index2)
                                     .reduce((currentTotal,item) => {
@@ -149,7 +150,7 @@ Farms.prototype.getRatePairs = async function(){
 
   _self.twos = _self.twos.map(ele => {
     const data = {...ele}
-    const find = result2.find(fd => fd.token1 == ele.currency2.toUpperCase() && fd.token2 == ele.currency1.toUpperCase()).rate || 0
+    const find = result2.find(fd => fd.token1 == ele.currency2.toUpperCase() && fd.token2 == ele.currency1.toUpperCase())?.rate || 0
     data.rateOfAnnualized = find
     return data
   })
