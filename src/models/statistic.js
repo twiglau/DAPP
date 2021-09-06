@@ -4,7 +4,7 @@ import {currencyMap} from '@/utils/api';
 function Statistic(){
    this.coins = currencyMap;
    this.totalLock = 0;
-   this.destoryAmount = 0;
+   this.destroyedAmount = 0;
    this.feeAmount = 0;
 }
 
@@ -38,7 +38,7 @@ Statistic.prototype.getPlatformLockAmount = function(){
     })
 }
 
-Statistic.prototype.calculateTeamPerformance = function(){
+Statistic.prototype.calculateStatisticData = async function(){
     let _self = this;
     if(_self.coins[1].price < 3){
        const res = await _self.getCoinsPrice();
@@ -47,22 +47,48 @@ Statistic.prototype.calculateTeamPerformance = function(){
          _self.coins[index].price = (+ele || 1)
        })
     }
+    //1. 总锁仓
     var totala = 0;
     for(let i = 0,len = _self.coins.length; i < len; i++){
       let item = _self.coins[i]
       totala += item.price * item.amount
     }
     _self.totalLock = totala
-    
+    //2. 总手续费
+    const feeAmount = await _self.getFeeTotal()
+    _self.feeAmount = feeAmount
+
+    //3. destroyed数量
+    const destroyedA = await _self.getDestroyAmount()
+    _self.destroyedAmount = destroyedA
 }
+//获取币种价格
 Statistic.prototype.getCoinsPrice = function(){
     let _self = this
     let promiseCoinRequestArray = this.coins.map(ele => {
         return new Promise((resolve,reject) => {
              Wallet.queryPrice(ele.currency.toLowerCase(),(res)=>{
                 resolve(Number(res? res : 1))
-             },err => reject(err))
+             },err => {console.log({'getCoinsPrice':err});reject(err);})
         })
     })
     return Promise.all(promiseCoinRequestArray)
 }
+
+Statistic.prototype.getFeeTotal = function(){
+    let _self = this
+    return new Promise((resolve,reject) => {
+        Wallet.queryFeeBalance(res => {
+            resolve(res)
+        },err => { reject(err);console.log({'getFeeTotal':err});})
+    })
+}
+Statistic.prototype.getDestroyAmount = function(){
+    return new Promise((resolve,reject) => {
+        Wallet.queryLibraDestroyAmount(res => {
+            resolve(res)
+        },err => { reject(err);console.log({'getDestroyAmount':err});})
+    })
+}
+
+export default Statistic;

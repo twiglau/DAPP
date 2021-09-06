@@ -20,16 +20,16 @@
             </tr>
             <tr>
               <td>
-                <countTo :endVal='totalLock' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+                <countTo :endVal='statistic.totalLock' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
               <td>
                 <countTo :endVal='coinPrice' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
               <td>
-                <countTo :endVal='20000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+                <countTo :endVal='statistic.destroyedAmount*coinPrice' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
               <td>
-                <countTo :endVal='20000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+                <countTo :endVal='statistic.feeAmount' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
             </tr>
           </table>
@@ -37,7 +37,7 @@
             <tr>
               <th class="lightColor">{{$t('l.home_n1')}}</th>
               <td>
-                <countTo :endVal='totalLock' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+                <countTo :endVal='statistic.totalLock' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
             </tr>
             <tr>
@@ -49,13 +49,13 @@
             <tr>
               <th class="lightColor">{{$t('l.home_n2')}}</th>
               <td>
-                <countTo :endVal='50000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+                <countTo :endVal='statistic.destroyedAmount*coinPrice' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
             </tr>
             <tr>
               <th class="lightColor">{{$t('l.home_n4')}}</th>
               <td>
-                <countTo :endVal='50000' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
+                <countTo :endVal='statistic.feeAmount' :duration='1000' :decimals="2" suffix="" prefix="$"></countTo>
               </td>
             </tr>
           </table>
@@ -125,7 +125,7 @@
 import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
 import Farms from '@/models/farms';
-import {currencyMap} from '@/utils/api';
+import Statistic from '@/models/statistic';
 export default {
   components: {
     countTo
@@ -139,79 +139,23 @@ export default {
       coinPrice:0,
       walletAddress:'',
       homeTokens:new Farms(),
-      coins:currencyMap
+      statistic:new Statistic(),
     }
   },
   methods: {
     handleToMore(index) {
       this.$router.push({path: '/farm',query: {ptype: index}})
     },
-    //计算总锁仓
-    async getPlatformLockAmount(){
-      let _self = this
-      return new Promise((resolve,reject) => {
-        try {
-            let promiseAllarr = []
-            for(let i = 0; i < _self.coins.length;i++){
-              console.log(i)
-              promiseAllarr[i] = new Promise((res1,rej1) => {
-                    Wallet.totalUseableBalance(_self.coins[i].currency,(in_a)=>{
-                      let val = +in_a
-                      in_a > 0 && (val = Number(in_a / Wallet.Precisions()))
-                      val < -0.01 && (val = 0)
-                      res1(val)
-                    },(err) =>{rej1(err)})
-                  })
-            }
-            //全部请求
-            Promise.all(promiseAllarr).then((res) => {
-              resolve(res)
-            }).catch(err => {
-              reject(err)
-            })
-        }catch(err){
-            reject(err)
-            _self.$message.error(_self.$t('l.catch_err'))
-        }
-      })
-    },
     async getLockAmount(){
-     const amounts = await this.getPlatformLockAmount()
-     console.log({amounts})
-     if(amounts){
-       for(let i = 0, len = this.coins.length; i < len; i++){
-          this.coins[i].amount = amounts[i]
-       }
-       this.calculateTeamPerformance()
-     }
-    },
-   async calculateTeamPerformance(){
-      let _self = this;
-      if(_self.coins[1].price < 3){
-         const res = await _self.getCoinsPrice();
-         //更新价格
-         res.forEach((ele,index) => {
-           _self.coins[index].price = (+ele || 1)
-         })
-      }
-      var totala = 0;
-      for(let i = 0,len = _self.coins.length; i < len; i++){
-        let item = _self.coins[i]
-        totala += item.price * item.amount
-      }
-      _self.totalLock = totala
-      
-    },
-    async getCoinsPrice(){
       let _self = this
-      let promiseCoinRequestArray = this.coins.map(ele => {
-          return new Promise((resolve,reject) => {
-               Wallet.queryPrice(ele.currency.toLowerCase(),(res)=>{
-                  resolve(Number(res? res : 1))
-               },err => reject(err))
-          })
-      })
-      return Promise.all(promiseCoinRequestArray)
+      const amounts = await _self.statistic.getPlatformLockAmount()
+      console.log({amounts})
+      if(amounts){
+        for(let i = 0, len = _self.statistic.coins.length; i < len; i++){
+            _self.statistic.coins[i].amount = amounts[i]
+        }
+        _self.statistic.calculateStatisticData()
+      }
     },
     async getPairPrice(){
         let _self = this
@@ -227,9 +171,9 @@ export default {
       if(inviteAddress && inviteAddress.length > 0) {_self.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)}
       _self.inviteAddress = _self.$getCookie('inviteAddress')
       _self.homeTokens.getTokens()
+      _self.statistic.getCoinsPrice()
       _self.getPairPrice()
       _self.getLockAmount()
-      _self.getCoinsPrice()
 
   },
   destroyed() {
