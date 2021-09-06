@@ -5428,6 +5428,75 @@ function queryLibraDestroyAmount(callback,errorCallback) {
 }
 
 /***
+ * 取出1币种记录总条数
+ * @param callback
+ * @param errorCallback
+ */
+function queryOneTakeoutSize(address,callback,errorCallback) {
+    getContract(_recordContractABI, _recordContractAddress,(contract)=>{
+        contract.methods.userOneTakeoutSize(address)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+/***
+ * 取出2币种记录总条数
+ * @param callback
+ * @param errorCallback
+ */
+function queryTwoTakeoutSize(address,callback,errorCallback) {
+    getContract(_recordContractABI, _recordContractAddress,(contract)=>{
+        contract.methods.userTwoTakeoutSize(address)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+/***
+ * 取出1币种记录
+ * @param callback
+ * @param errorCallback
+ */
+function queryOneTakeoutRecord(address,index,callback,errorCallback) {
+    getContract(_recordContractABI, _recordContractAddress,(contract)=>{
+        contract.methods.userOneTakeoutMap(address,index)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+/***
+ * 取出2币种记录
+ * @param callback
+ * @param errorCallback
+ */
+function queryTwoTakeoutRecord(address,index,callback,errorCallback) {
+    getContract(_recordContractABI, _recordContractAddress,(contract)=>{
+        contract.methods.userTwoTakeoutMap(address,index)
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+
+/***
  * 查手续费总金额
  * @param callback
  * @param errorCallback
@@ -5710,5 +5779,9 @@ export default {
     queryPrice,
     queryFeeBalance,
     queryLibraDestroyAmount,
+    queryOneTakeoutSize,
+    queryTwoTakeoutSize,
+    queryOneTakeoutRecord,
+    queryTwoTakeoutRecord,
     testTransfer,
 }
