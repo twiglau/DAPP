@@ -320,15 +320,8 @@ Farms.prototype.approveTokensAction = async function(type,item,callBack){
         _self.approveInfo.isApproving = false
           if(res){
             _self.approveInfo.isApproved = true
-            
-            _self.ones.forEach(function(item, index) {
-
-              Object.defineProperty(_self.ones, index, {
-                set: function(value) {
-                  if(value.currency == _self.currency1)value.isApproved = true
-                  item = value
-                }
-              })
+            _self.ones.forEach(ele => {
+              if(ele.currency == _self.currency1)ele.isApproved1 = true
             })
             callBack(type,_self.currency1,true)
             _self.updateCurrencyApprovedStatus()

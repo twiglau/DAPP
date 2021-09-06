@@ -378,7 +378,7 @@ export default {
         //数组嵌套太深,遍历方法,检测不到
         if(type == 1){
           //更新 1
-          _self.$set(_self.farms.approveInfo, isApproved, isAppr)
+          // _self.$set(_self.farms.approveInfo, isApproved, isAppr)
           //更新 2
 
         }else{
@@ -388,7 +388,7 @@ export default {
           // _self.$set(_self.farms.approveInfo, isApproved2, isAppr)
           }
         }
-        _self.$forceUpdate()
+        // _self.$forceUpdate()
       })
     },
     async handleShowWithdrawModal(index,currency) {
