@@ -8,13 +8,24 @@ const ethIndex=3;
 const usdtIndex=4;
 const bnbIndex=5;
 const filIndex=6;
+//new
+const adaId=7;
+const xrpId=8;
+const dogeId=9;
+const dotId=10;
+const solId=11;
+const uniId=12;
+const bchId=13;
+const ltcId=14;
+const linkId=15;
+const eosId=16;
+
 const systemPrecisions=100000000;
 
-const _tokensContractAddress = "0xEe27b82668B17a442284FeFBb83E508527766335";
-const _recordContractAddress = '0xE78065671BaE31f96A0B50065892c5783f00d6BA';
-const _contractAddress = "0xdc7188829084b961351fB97642202e5e48f20BB9";//测试
-const _contractAddress2 = "0xd9753C784121Ac46a5112aA85B83572d80142676";//临时
-const _priceContractAddress='0x54362b3C4B3E6144a7e5284fd076dE67e537a773';
+const _tokensContractAddress = "0xcD18d0Bd276CfAd5A10A903793ae964Dfee5b2c9";
+const _recordContractAddress = "0x05491dE7e53Bb3e8a38Dfbff5982026CeF938176";
+const _contractAddress = "0x38Ca3326863FFda84f239980dFEdc41DE897e604";
+const _priceContractAddress='0xE06432b1390828bC00429bc09262DF484066aE7D';
 
 const _contractABI = [
     {
@@ -781,30 +792,20 @@ const _contractABI = [
         "type": "function"
     }
 ];
-const _contractABI2 = [
+
+const _recordContractABI=[
     {
         "inputs": [],
         "stateMutability": "nonpayable",
         "type": "constructor"
     },
     {
-        "inputs": [
-            {
-                "internalType": "uint8",
-                "name": "cIndex",
-                "type": "uint8"
-            },
-            {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-            }
-        ],
-        "name": "allowance",
+        "inputs": [],
+        "name": "adaFeeAmount",
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "remaining",
+                "name": "",
                 "type": "uint256"
             }
         ],
@@ -813,14 +814,72 @@ const _contractABI2 = [
     },
     {
         "inputs": [],
-        "name": "award",
-        "outputs": [],
-        "stateMutability": "payable",
+        "name": "adaPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "bchFeeAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "bchPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "bnbFeeAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [],
         "name": "bnbPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "btcFeeAmount",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -846,7 +905,7 @@ const _contractABI2 = [
     },
     {
         "inputs": [],
-        "name": "dayDividendAmount",
+        "name": "dogeFeeAmount",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -858,61 +917,8 @@ const _contractABI2 = [
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_upper",
-                "type": "address"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_cIndex",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "depositOne",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_upper",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_c2Index",
-                "type": "uint8"
-            }
-        ],
-        "name": "depositTwo",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
         "inputs": [],
-        "name": "destroy",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "dividendRate",
+        "name": "dogePrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -924,29 +930,65 @@ const _contractABI2 = [
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
+        "inputs": [],
+        "name": "dotFeeAmount",
+        "outputs": [
             {
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
             }
         ],
-        "name": "downsMap",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "dotPrice",
         "outputs": [
             {
-                "internalType": "address",
-                "name": "downAddress",
-                "type": "address"
-            },
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "eosFeeAmount",
+        "outputs": [
             {
-                "internalType": "address",
-                "name": "userAddress",
-                "type": "address"
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "eosPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "ethFeeAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -968,35 +1010,12 @@ const _contractABI2 = [
     {
         "inputs": [
             {
-                "internalType": "address",
-                "name": "_upper",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "exchange",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
             }
         ],
-        "name": "exchangeMap",
+        "name": "feeRecord",
         "outputs": [
             {
                 "internalType": "address",
@@ -1004,13 +1023,13 @@ const _contractABI2 = [
                 "type": "address"
             },
             {
-                "internalType": "uint256",
-                "name": "usdtAmount",
-                "type": "uint256"
+                "internalType": "uint8",
+                "name": "currencyIndex",
+                "type": "uint8"
             },
             {
                 "internalType": "uint256",
-                "name": "libAmount",
+                "name": "feeAmount",
                 "type": "uint256"
             },
             {
@@ -1024,20 +1043,7 @@ const _contractABI2 = [
     },
     {
         "inputs": [],
-        "name": "feeRateDayIn30",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "feeRateDayOut30",
+        "name": "filFeeAmount",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1064,64 +1070,6 @@ const _contractABI2 = [
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "currIndex",
-                "type": "uint256"
-            }
-        ],
-        "name": "getThePrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "ia_map",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "total",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "takeout",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "todayDividend",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "todayShareAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "todayGlobalAmount",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
@@ -1134,6 +1082,11 @@ const _contractABI2 = [
         ],
         "name": "incomeRecord",
         "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "incomeType",
+                "type": "uint256"
+            },
             {
                 "internalType": "address",
                 "name": "user",
@@ -1159,8 +1112,47 @@ const _contractABI2 = [
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+            }
+        ],
+        "name": "init",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
         "inputs": [],
-        "name": "latestDividendTime",
+        "name": "internalAddress",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "libraDestroyAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "libraFee1",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1185,70 +1177,8 @@ const _contractABI2 = [
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "oneOrderMap",
-        "outputs": [
-            {
-                "internalType": "uint8",
-                "name": "currencyIndex",
-                "type": "uint8"
-            },
-            {
-                "internalType": "address",
-                "name": "userAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "totalAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "useableAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "takeoutAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "depositTime",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [],
-        "name": "owner",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "precision",
+        "name": "linkFeeAmount",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1261,7 +1191,7 @@ const _contractABI2 = [
     },
     {
         "inputs": [],
-        "name": "queryDepositUserSize",
+        "name": "linkPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1270,335 +1200,81 @@ const _contractABI2 = [
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_from",
-                "type": "address"
-            }
-        ],
-        "name": "queryDownsSize",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_from",
-                "type": "address"
-            }
-        ],
-        "name": "queryExchangeSize",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_from",
-                "type": "address"
-            }
-        ],
-        "name": "queryIncomeSize",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_from",
-                "type": "address"
-            }
-        ],
-        "name": "queryOnesSize",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_from",
-                "type": "address"
-            }
-        ],
-        "name": "queryTwosSize",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "recommendMap",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "upperAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "userAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "bool",
-                "name": "hasDeducted",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "takeoutIncome",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint8",
-                "name": "_currencyIndex",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "takeoutOne",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_amount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_currency2Index",
-                "type": "uint8"
-            }
-        ],
-        "name": "takeoutTwo",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address payable",
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "testTransfer",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_a",
-                "type": "uint256"
-            }
-        ],
-        "name": "tlip",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "twoOrderMap",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "userAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint8",
-                "name": "currency1Index",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "totalAmount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "useableAmount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "takeoutAmount1",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint8",
-                "name": "currency2Index",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "totalAmount2",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "useableAmount2",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "takeoutAmount2",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "depositTime",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "users",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    }
-];
-
-const _recordContractABI=[
-    {
-        "inputs": [],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "addr",
-                "type": "address"
-            }
-        ],
-        "name": "init",
-        "outputs": [],
-        "stateMutability": "payable",
         "type": "function"
     },
     {
         "inputs": [],
-        "name": "internalAddress",
+        "name": "ltcFeeAmount",
         "outputs": [
             {
-                "internalType": "address",
+                "internalType": "uint256",
                 "name": "",
-                "type": "address"
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "ltcPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneAdaTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneAdaTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneBchTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneBchTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -1658,6 +1334,84 @@ const _recordContractABI=[
     },
     {
         "inputs": [],
+        "name": "oneDogeTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneDogeTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneDotTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneDotTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneEosTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneEosTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "oneEthTakeoutAmount",
         "outputs": [
             {
@@ -1683,8 +1437,118 @@ const _recordContractABI=[
         "type": "function"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
         "name": "oneFee",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneLinkTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneLinkTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneLtcTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneLtcTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneSolTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneSolTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneUniTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneUniTotalAmount",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1723,12 +1587,83 @@ const _recordContractABI=[
     },
     {
         "inputs": [],
+        "name": "oneXrpTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneXrpTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "owner",
         "outputs": [
             {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "precision",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "queryFeeBalance",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_from",
+                "type": "address"
+            }
+        ],
+        "name": "queryIncomeSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -1771,6 +1706,90 @@ const _recordContractABI=[
             }
         ],
         "name": "saveDepositTwoRecord",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currencyId",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "feeAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "saveFee1",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "destroyAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "currencyId",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "feeAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "saveFee2",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_type",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "_userAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_fromAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_incomeAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_time",
+                "type": "uint256"
+            }
+        ],
+        "name": "saveIncome",
         "outputs": [],
         "stateMutability": "payable",
         "type": "function"
@@ -1872,6 +1891,32 @@ const _recordContractABI=[
         "name": "saveTakeoutTwoRecord",
         "outputs": [],
         "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "solFeeAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "solPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -1990,6 +2035,19 @@ const _recordContractABI=[
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "totalUseable",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "uint8",
@@ -2002,6 +2060,98 @@ const _recordContractABI=[
             {
                 "internalType": "uint256",
                 "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoAdaTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoAdaTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoBchTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoBchTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
                 "type": "uint256"
             }
         ],
@@ -2102,6 +2252,144 @@ const _recordContractABI=[
     },
     {
         "inputs": [],
+        "name": "twoDogeTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoDogeTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoDotTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoDotTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoEosTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoEosTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "twoEthTakeout",
         "outputs": [
             {
@@ -2147,21 +2435,14 @@ const _recordContractABI=[
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "twoFee1",
-        "outputs": [
+        "inputs": [
             {
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
             }
         ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "twoFee2",
+        "name": "twoFee",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -2198,6 +2479,190 @@ const _recordContractABI=[
     {
         "inputs": [],
         "name": "twoFilTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoLinkTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoLinkTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoLtcTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoLtcTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoSolTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoSolTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoUniTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoUniTotal",
         "outputs": [
             {
                 "internalType": "uint8",
@@ -2265,6 +2730,91 @@ const _recordContractABI=[
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "twoXrpTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoXrpTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "uniFeeAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "uniPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "usdtFeeAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "address",
@@ -2302,6 +2852,25 @@ const _recordContractABI=[
             {
                 "internalType": "uint256",
                 "name": "takeoutTime",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+            }
+        ],
+        "name": "userOneTakeoutSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
                 "type": "uint256"
             }
         ],
@@ -2366,9 +2935,78 @@ const _recordContractABI=[
         ],
         "stateMutability": "view",
         "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+            }
+        ],
+        "name": "userTwoTakeoutSize",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "xrpFeeAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "xrpPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
     }
 ];
 const _priceContractABI=[
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "userAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "teamBalance",
+                "type": "uint256"
+            }
+        ],
+        "name": "getLevelRate",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "levelRate",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+    },
     {
         "inputs": [],
         "stateMutability": "nonpayable",
@@ -2387,25 +3025,6 @@ const _priceContractABI=[
             {
                 "internalType": "uint256",
                 "name": "rate",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "pure",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "teamBalance",
-                "type": "uint256"
-            }
-        ],
-        "name": "getLevelRate",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "levelRate",
                 "type": "uint256"
             }
         ],
@@ -4790,6 +5409,42 @@ function queryTakeoutIncomeRecordSize(address,callback,errorCallback) {
     });
 }
 
+/***
+ * 查销毁Libra数量
+ * @param callback
+ * @param errorCallback
+ */
+function queryLibraDestroyAmount(callback,errorCallback) {
+    getContract(_recordContractABI, _recordContractAddress,(contract)=>{
+        contract.methods.libraDestroyAmount()
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+
+/***
+ * 查手续费总金额
+ * @param callback
+ * @param errorCallback
+ */
+function queryFeeBalance(callback,errorCallback) {
+    getContract(_recordContractABI, _recordContractAddress,(contract)=>{
+        contract.methods.queryFeeBalance()
+            .call()
+            .then((res) => {
+                callback(res);
+            })
+            .catch((err) => {
+                errorCallback(err);
+            });
+    });
+}
+
 function queryPrice(currency,callback,errorCallback) {
     const cId = getCurrencyIndex(currency);
     if(cId==usdtIndex){
@@ -4820,7 +5475,6 @@ function queryPrice(currency,callback,errorCallback) {
         });
     }
 }
-
 
 /**
  * 发送交易
@@ -4960,8 +5614,6 @@ function test() {
 //     });
 // }
 
-
-
 //获取合约
 function getContract(abi, address,callback) {
     const _contract = new window.web3.eth.Contract(abi, address);
@@ -4989,15 +5641,28 @@ function getCurrencyIndex(currency) {
         return bnbIndex;
     }else if (currency=="FIL"){
         return filIndex;
+    }else if (currency=="ADA"){
+        return adaId;
+    }else if (currency=="XRP"){
+        return xrpId;
+    }else if (currency=="DOGE"){
+        return dogeId;
+    }else if (currency=="DOT"){
+        return dotId;
+    }else if (currency=="SOL"){
+        return solId;
+    }else if (currency=="UNI"){
+        return uniId;
+    }else if (currency=="BCH"){
+        return bchId;
+    }else if (currency=="LTC"){
+        return ltcId;
+    }else if (currency=="LINK"){
+        return linkId;
+    }else if (currency=="EOS"){
+        return eosId;
     }
 }
-
-
-
-
-
-
-
 
 function testTransfer(account,to,amount,callback,errorCallback){
     getContract(_contractABI, _contractAddress,(contract)=>{
@@ -5009,11 +5674,6 @@ function testTransfer(account,to,amount,callback,errorCallback){
         sendTransfer(account, data, 0x0, callback, errorCallback)
     });
 }
-
-
-
-
-
 
 //导出相应的方法
 export default {
@@ -5048,5 +5708,7 @@ export default {
     queryTakeoutIncomeRecord,
     queryTakeoutIncomeRecordSize,
     queryPrice,
+    queryFeeBalance,
+    queryLibraDestroyAmount,
     testTransfer,
 }
