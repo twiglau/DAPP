@@ -90,7 +90,7 @@
                 <li class="pools__group-buttons">
                   <div class="pools__button-group">
                     <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal(1,item)">{{$t('l.withdrawal')}}</button>
-                    <a-button v-show="!item.isApproved1 || !item.isApproved2" :loading="item.isApproving1 || item.isApproving2" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency1,item)">{{(item.isApproving1 || item.isApproving2)? ((item.isApproving1 == true && item.isApproving2 == false ? item.currency1 : item.currency2) + ' ' +  $t('l.t_approving')) : (!item.isApproved1 && !item.isApproved2 ? '' : (!item.isApproved1&&item.isApproved) ? item.currency1 + ' ' : item.currency2 + ' ') + $t('l.approve')}}</a-button>
+                    <a-button v-show="!item.isApproved1 || !item.isApproved2" :loading="item.isApproving1 || item.isApproving2" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency1,item)">{{(item.isApproving1 || item.isApproving2)? ((item.isApproving1 == true && item.isApproving2 == false ? item.currency1 : item.currency2) + ' ' +  $t('l.t_approving')) : (!item.isApproved1 && !item.isApproved2 == true ? '' : (!item.isApproved1&&item.isApproved) == true ? item.currency1 + ' ' : item.currency2 + ' ') + $t('l.approve')}}</a-button>
                     <button v-show="item.isApproved1 && item.isApproved2" class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(1,item)"> <svg-icon icon-class="Star_icon_white"></svg-icon> <span>{{$t('l.deposit')}}</span> </button>
                   </div>
                 </li>
@@ -355,10 +355,9 @@ export default {
       _self.farms.address = localStorage.getItem('walletAddress')
       _self.farms.upperAddress = _self.$getCookie('inviteAddress')
       _self.farms.currency1 = currency1
-      _self.farms.currency2 = item.currency2
-      _self.farms.approveTokens(item.currency2? 2 : 1,item)
+      _self.farms.currency2 = item?.currency2
+      _self.farms.approveTokensAction(item?.currency2 ? 2 : 1,item)
     },
-
     async handleShowWithdrawModal(index,currency) {
       this.withdrawalInfo = currency;
       this.withdrawalInfo.nAmount = 0; this.withdrawalInfo.nAmount1 = 0; this.withdrawalInfo.nAmount2 = 0;
@@ -535,7 +534,7 @@ export default {
       //调用合约方法存入币种
       _this.farms.address = localStorage.getItem('walletAddress')
       _this.farms.upperAddress = _this.$getCookie('inviteAddress')
-      _this.farms.amount = this.amount
+      _this.farms.amount = amount
       _this.farms.depositOneCurrency()
       .then(res => {
         if(res) {

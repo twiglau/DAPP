@@ -275,6 +275,7 @@ Farms.prototype.updateCurrencyApprovedStatus = async function(){
           ele.isApproved1 = whichCoins1?.isApproved
           ele.isApproved2 = whichCoins2?.isApproved
         })
+        console.log(_self.twos)
     }
 }
 
@@ -310,7 +311,7 @@ Farms.prototype.getCoinsApprovedStatus = function(){
  * @param {*} type  //1 - 单币 2 - 双币
  * @param {*} item  //某个币种信息
  */
-Farms.prototype.approveTokens = async function(type,item){
+Farms.prototype.approveTokensAction = async function(type,item){
     let _self = this
     _self.approveInfo = item
     if (type == 1){
@@ -320,6 +321,9 @@ Farms.prototype.approveTokens = async function(type,item){
         _self.approveInfo.isApproving = false
           if(res && res > 0){
             _self.approveInfo.isApproved = true
+            _self.ones.forEach(ele => {
+              if(ele.currency == _self.currency1)ele.isApproved = true
+            })
           }
       },(err) => {
          _self.approveInfo.isApproving = false
@@ -334,7 +338,13 @@ Farms.prototype.approveTokens = async function(type,item){
             },(err) => {_self.approveInfo.isApproving1 = false; reject(err)})
         })
         const cur1_status = await approveCur1
-        _self.approveInfo.isApproved1 = cur1_status && cur1_status > 0 ? true : false
+        if(cur1_status && cur1_status > 0){
+          _self.approveInfo.isApproved1 = true
+          _self.twos.forEach(ele => {
+            if(ele.currency1 == _self.currency1)ele.isApproved1 = true
+          })
+        }
+
         _self.approveInfo.isApproving1 = false
       }else if (isApproved1 && !isApproved2){
         _self.approveInfo.isApproving2 = true
@@ -344,7 +354,13 @@ Farms.prototype.approveTokens = async function(type,item){
             },(err) => {_self.approveInfo.isApproving2 = false; reject(err)})
         })
         const cur2_status = await approveCur2
-        _self.approveInfo.isApproved2 = cur2_status && cur2_status > 0 ? true : false
+
+        if(cur2_status && cur2_status > 0){
+          _self.approveInfo.isApproved2 = true
+          _self.twos.forEach(ele => {
+            if(ele.currency2 == _self.currency2)ele.isApproved2 = true
+          })
+        }
         _self.approveInfo.isApproving2 = false
 
       }else {
@@ -361,19 +377,28 @@ Farms.prototype.approveTokens = async function(type,item){
             },(err) => {_self.approveInfo.isApproving2 = false;reject(err)})
         })
         const cur1_status = await approveCur1
-        _self.approveInfo.isApproved1 = cur1_status && cur1_status.length > 0 ? true : false;
+        if(cur1_status && cur1_status > 0){
+          _self.approveInfo.isApproved1 = true
+          _self.twos.forEach(ele => {
+            if(ele.currency1 == _self.currency1)ele.isApproved1 = true
+          })
+        }
         _self.approveInfo.isApproving1 = false
+
 
         _self.approveInfo.isApproving2 = true
         const cur2_status = await approveCur2
-        
-        _self.approveInfo.isApproved2 = cur2_status && cur2_status > 0 ? true : false;
+
+        if(cur2_status && cur2_status > 0){
+          _self.approveInfo.isApproved2 = true
+          _self.twos.forEach(ele => {
+            if(ele.currency2 == _self.currency2)ele.isApproved2 = true
+          })
+        }
         _self.approveInfo.isApproving2 = false;
 
       }
     }
-    //最后更新授权状态数据
-    _self.updateCurrencyApprovedStatus()
 }
 
 /**
@@ -436,6 +461,7 @@ Farms.prototype.depositOneCurrency = function(){
         Wallet.depositOne(this.upperAddress,this.address,this.currency1,this.amount,(res)=>{
             resolve(res)
           },(err)=>{
+            console.log({err})
             reject(err)
         })
     })

@@ -8,25 +8,37 @@
             <span>{{$t('l.back')}}</span>
           </div>
       </div>
-      <div class="pools-main" v-if="records.length > 0">
-        <div class="pools__item" v-for="(item,index) in records" :key="index">
+      <div class="pools-main" v-if="tiqus.records.length > 0">
+        <div class="pools__item" v-for="(item,index) in tiqus.records" :key="index">
             <div class="pools__box">
                 <ul class="pools__rows">
                   <li class="pools__row-1">
                     <div class="pools__logo-name">
-                      <svg-icon class="pools__coin-logo" :icon-class="item.token1 + '_coin'"/>
-                      <svg-icon v-if="item.token2" class="pools__coin-logo logo_lp_2" :icon-class="item.token2 + '_coin'"/>
-                      <div class="pools__coin-name" :class="item.token2 ? 'name_lp_2' : ''">{{item.token2 ? `${item.token1}/${item.token2}` : `${item.token1}`}}</div>
+                      <svg-icon class="pools__coin-logo" :icon-class="coin1(item) + '_coin'"/>
+                      <svg-icon v-if="item.currency2Index && item.currency2Index.length > 0" class="pools__coin-logo logo_lp_2" :icon-class="coin2(item) + '_coin'"/>
+                      <div class="pools__coin-name" :class="item.currency2Index&& item.currency2Index.length > 0 ? 'name_lp_2' : ''">{{item.currency2Index&& item.currency2Index.length > 0 ? `${coin1(item) + '/' + coin2(item)}` : coin1(item)}}</div>
                     </div>
                     <div class="pools__info">{{$t('l.reward')}} Libra</div>
                   </li>
                   <li class="pools__row pools__apy">
-                    <div class="pools__labe-field">{{item.token1}} {{$t('l.t_transA')}}</div>
-                    <div class="pools__label-value pools__label-value--black">{{item.amount}}</div>
+                    <div class="pools__labe-field">{{coin1(item)}} {{$t('l.t_transA')}}</div>
+                    <div class="pools__label-value pools__label-value--black">{{amt1(item)}}</div>
+                  </li>
+                  <li class="pools__row" v-if="item.currency2Index && item.currency2Index.length > 0">
+                    <div class="pools__labe-field">{{coin2(item)}} {{$t('l.t_transA')}}</div>
+                    <div class="pools__label-value pools__label-value--black">{{amt2(item)}}</div>
+                  </li>
+                  <li class="pools__row pools__apy">
+                    <div class="pools__labe-field">{{coin1(item)}} {{$t('l.t_servicege')}}</div>
+                    <div class="pools__label-value pools__label-value--black">{{fee1(item)}}</div>
+                  </li>
+                  <li class="pools__row" v-if="item.currency2Index && item.currency2Index.length > 0">
+                    <div class="pools__labe-field">{{coin2(item)}} {{$t('l.t_servicege')}}</div>
+                    <div class="pools__label-value pools__label-value--black">{{fee2(item)}}</div>
                   </li>
                   <li class="pools__row">
                     <div class="pools__labe-field">{{$t('l.t_transdate')}}</div>
-                    <div class="pools__label-value">{{formatTimeStr(item.createDateTime)}}</div>
+                    <div class="pools__label-value">{{formatTimeStr(item)}}</div>
                   </li>
                 </ul>
                 <div class="pools__mao-logo__wrap">
@@ -47,8 +59,10 @@
 <script>
 import {queryWithdrawalRecords} from '@/utils/api'
 import countTo from 'vue-count-to';
+import { getCurrencyName } from '@/utils/api';
+import Withdrawal from '@/models/withdrawal';
 export default {
-  name: "SwapDetail",
+  name: "withdrawelDetail",
   components: {
     countTo,
   },
@@ -61,6 +75,7 @@ export default {
       pageNo:1,
       showMoreBtn:true,
       loading:false,
+      tiqus:new Withdrawal(),
     }
   },
   computed: {
@@ -78,8 +93,35 @@ export default {
     goBack(){
       this.$router.go(-1);
     },
-    formatTimeStr(time){
-      return this.$formatTime(time,'YYYY-MM-DD HH:MM')
+    coin1(item){
+      let index = item.currencyIndex ? item.currencyIndex : item.currency1Index
+      let name = getCurrencyName(index)
+      return name || 'None'
+    },
+    coin2(item){
+      let index = item.currency2Index
+      let name = getCurrencyName(index)
+      return name || 'Libra'
+    },
+    amt1(item){
+      let amount = item.takeoutAmount ? item.takeoutAmount : item.takeoutAmount1
+      return  (amount / Wallet.Precisions()).toFixed(4)
+    },
+    amt2(item){
+      let amount = item.takeoutAmount2
+      return  (amount / Wallet.Precisions()).toFixed(4)
+    },
+    fee1(item){
+      let amount = item.feeAmount ? item.feeAmount : item.fee1Amount
+      return  (amount / Wallet.Precisions()).toFixed(4)
+    },
+    fee2(item){
+      let amount = item.fee2Amount
+      return  (amount / Wallet.Precisions()).toFixed(4)
+    },
+    formatTimeStr(item){
+      let timestamp = +item.takeoutTime * 1000
+      return this.$formatTime(timestamp,'YYYY-MM-DD HH:MM')
     },
     loadMore(){
       this.pageNo += 1;
@@ -112,7 +154,11 @@ export default {
   created() {
   },
   async mounted() {
-    this.queryRecords()
+    this.tiqus = new Withdrawal()
+    this.tiqus.address = localStorage.getItem("walletAddress") || '';
+
+    this.tiqus.checkWithdrawalOneData()
+    this.tiqus.checkWithdrawalTwoData()
   },
   destroyed() {
   }
