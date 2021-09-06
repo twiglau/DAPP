@@ -3059,16 +3059,16 @@ const usdtContractAddress = '0x106F04642B9c62Ea1A2Bc50fadF0897E32fAcD6c';
 const filContractAddress = '0xEbdDdd143d18865164F6353F09aB595eB76C6153';
 const libraContractAddress = '0xE21e5CA7985E1ED751D4396246a4BFc56656A055';
 //new
-const adaContractAddress = 0x0961F2129099cEc67515244E6bbA9356e5593aA8;
-const xrpContractAddress = 0x0a9a84D51c553fbF9ebb66CE6B656E594ef471c6;
-const dogeContractAddress = 0x124B41e3CB66771d0aaE320Be1Af49Da932fA01e;
-const dotContractAddress = 0xE4E595Ffa4960FE3485d63088F0a23fC7C9d0fa2;
-const solContractAddress = 0x58C6C8B9DC757bE534a71840340dC70055F3a258;
-const uniContractAddress = 0x1D90Cf62994a00D440ecEaB25C82f1c73Ac5d615;
-const bchContractAddress = 0x0Ab6D53596fe437058f139bF10636ed7B89da063;
-const ltcContractAddress = 0xB7ca0341699889e6be1E7152ad177B33162fC19F;
-const linkContractAddress = 0x76151EC1148C93495Fd522Ef411d0C348166f58A;
-const eosContractAddress = 0x7c73098F95633d4D99E74536AdA1c8E7E3D5F05f;
+const adaContractAddress = '0x0961F2129099cEc67515244E6bbA9356e5593aA8';
+const xrpContractAddress = '0x0a9a84D51c553fbF9ebb66CE6B656E594ef471c6';
+const dogeContractAddress = '0x124B41e3CB66771d0aaE320Be1Af49Da932fA01e';
+const dotContractAddress = '0xE4E595Ffa4960FE3485d63088F0a23fC7C9d0fa2';
+const solContractAddress = '0x58C6C8B9DC757bE534a71840340dC70055F3a258';
+const uniContractAddress = '0x1D90Cf62994a00D440ecEaB25C82f1c73Ac5d615';
+const bchContractAddress = '0x0Ab6D53596fe437058f139bF10636ed7B89da063';
+const ltcContractAddress = '0xB7ca0341699889e6be1E7152ad177B33162fC19F';
+const linkContractAddress = '0x76151EC1148C93495Fd522Ef411d0C348166f58A';
+const eosContractAddress = '0x7c73098F95633d4D99E74536AdA1c8E7E3D5F05f';
 /////////////////////////////////////////////////////////////////////////////币安测试网测试 - end
 const erc20TokenContractABI=[
     {
@@ -3365,12 +3365,6 @@ const erc20TokenContractABI=[
         "type": "event"
     }
 ];
-// const ethContractABI=Erc20TokenContractABI;
-// const bnbContractABI=Erc20TokenContractABI;
-// const btcContractABI=Erc20TokenContractABI;
-// const usdtContractABI=Erc20TokenContractABI;
-// const filContractABI=Erc20TokenContractABI;
-// const libraContractABI=Erc20TokenContractABI;
 
 function Precisions(){
     return systemPrecisions //  PrecisionsObj.find(ele => ele.coin === currency.toUpperCase()).precision;
@@ -3410,6 +3404,7 @@ function initWallet(callback){
 }
 
 function approve(currency,address,value, callback,errorCallback) {
+    alert(address)
     //授权
     currency = currency.toUpperCase();
     let contractAddress;
