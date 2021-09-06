@@ -3404,7 +3404,6 @@ function initWallet(callback){
 }
 
 function approve(currency,address,value, callback,errorCallback) {
-    alert(address)
     //授权
     currency = currency.toUpperCase();
     let contractAddress;
