@@ -275,7 +275,6 @@ Farms.prototype.updateCurrencyApprovedStatus = async function(){
           ele.isApproved1 = whichCoins1?.isApproved
           ele.isApproved2 = whichCoins2?.isApproved
         })
-        console.log(_self.twos)
     }
 }
 
@@ -311,7 +310,7 @@ Farms.prototype.getCoinsApprovedStatus = function(){
  * @param {*} type  //1 - 单币 2 - 双币
  * @param {*} item  //某个币种信息
  */
-Farms.prototype.approveTokensAction = async function(type,item){
+Farms.prototype.approveTokensAction = async function(type,item,callBack){
     let _self = this
     _self.approveInfo = item
     if (type == 1){
@@ -324,6 +323,9 @@ Farms.prototype.approveTokensAction = async function(type,item){
             _self.ones.forEach(ele => {
               if(ele.currency == _self.currency1)ele.isApproved = true
             })
+            _self.ones.splice(_self.ones.length)
+            callBack(type,_self.currency1,true)
+            _self.updateCurrencyApprovedStatus()
           }
       },(err) => {
          _self.approveInfo.isApproving = false
@@ -343,6 +345,9 @@ Farms.prototype.approveTokensAction = async function(type,item){
           _self.twos.forEach(ele => {
             if(ele.currency1 == _self.currency1)ele.isApproved1 = true
           })
+          _self.twos.splice(_self.twos.length)
+          callBack(type,_self.currency1,true)
+          _self.updateCurrencyApprovedStatus()
         }
 
         _self.approveInfo.isApproving1 = false
@@ -360,6 +365,9 @@ Farms.prototype.approveTokensAction = async function(type,item){
           _self.twos.forEach(ele => {
             if(ele.currency2 == _self.currency2)ele.isApproved2 = true
           })
+          _self.twos.splice(_self.twos.length)
+          callBack(type,_self.currency2,true)
+          _self.updateCurrencyApprovedStatus()
         }
         _self.approveInfo.isApproving2 = false
 
@@ -379,9 +387,12 @@ Farms.prototype.approveTokensAction = async function(type,item){
         const cur1_status = await approveCur1
         if(cur1_status && cur1_status > 0){
           _self.approveInfo.isApproved1 = true
+          callBack(type,_self.currency1,true)
           _self.twos.forEach(ele => {
             if(ele.currency1 == _self.currency1)ele.isApproved1 = true
           })
+          _self.twos.splice(_self.twos.length)
+          callBack(type,_self.currency1,true)
         }
         _self.approveInfo.isApproving1 = false
 
@@ -394,8 +405,11 @@ Farms.prototype.approveTokensAction = async function(type,item){
           _self.twos.forEach(ele => {
             if(ele.currency2 == _self.currency2)ele.isApproved2 = true
           })
+          _self.twos.splice(_self.twos.length)
+          callBack(type,_self.currency2,true)
         }
         _self.approveInfo.isApproving2 = false;
+        _self.updateCurrencyApprovedStatus()
 
       }
     }

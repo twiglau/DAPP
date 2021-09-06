@@ -356,7 +356,22 @@ export default {
       _self.farms.upperAddress = _self.$getCookie('inviteAddress')
       _self.farms.currency1 = currency1
       _self.farms.currency2 = item?.currency2
-      _self.farms.approveTokensAction(item?.currency2 ? 2 : 1,item)
+      _self.farms.approveTokensAction(item?.currency2 ? 2 : 1,item,(type,currency,isAppr) => {
+        //数组嵌套太深,遍历方法,检测不到
+        if(type == 1){
+          //更新 1
+          _self.$set(_self.farms.approveInfo, isApproved, isAppr)
+          //更新 2
+
+        }else{
+          if(currency == currency1){
+          _self.$set(_self.farms.approveInfo, isApproved1, isAppr)
+          }else{
+          _self.$set(_self.farms.approveInfo, isApproved2, isAppr)
+          }
+        }
+        // _self.$forceUpdate()
+      })
     },
     async handleShowWithdrawModal(index,currency) {
       this.withdrawalInfo = currency;
