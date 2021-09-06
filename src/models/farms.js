@@ -318,12 +318,18 @@ Farms.prototype.approveTokensAction = async function(type,item,callBack){
       Wallet.approve(_self.currency1.toUpperCase(),_self.address,10000000,(res)=>{
 
         _self.approveInfo.isApproving = false
-          if(res && res > 0){
+          if(res){
             _self.approveInfo.isApproved = true
-            _self.ones.forEach(ele => {
-              if(ele.currency == _self.currency1)ele.isApproved = true
+            
+            _self.ones.forEach(function(item, index) {
+
+              Object.defineProperty(_self.ones, index, {
+                set: function(value) {
+                  if(value.currency == _self.currency1)value.isApproved = true
+                  item = value
+                }
+              })
             })
-            _self.ones.splice(_self.ones.length)
             callBack(type,_self.currency1,true)
             _self.updateCurrencyApprovedStatus()
           }
@@ -340,12 +346,13 @@ Farms.prototype.approveTokensAction = async function(type,item,callBack){
             },(err) => {_self.approveInfo.isApproving1 = false; reject(err)})
         })
         const cur1_status = await approveCur1
-        if(cur1_status && cur1_status > 0){
+        
+        if(cur1_status){
           _self.approveInfo.isApproved1 = true
+
           _self.twos.forEach(ele => {
             if(ele.currency1 == _self.currency1)ele.isApproved1 = true
           })
-          _self.twos.splice(_self.twos.length)
           callBack(type,_self.currency1,true)
           _self.updateCurrencyApprovedStatus()
         }
@@ -360,12 +367,11 @@ Farms.prototype.approveTokensAction = async function(type,item,callBack){
         })
         const cur2_status = await approveCur2
 
-        if(cur2_status && cur2_status > 0){
+        if(cur2_status){
           _self.approveInfo.isApproved2 = true
           _self.twos.forEach(ele => {
             if(ele.currency2 == _self.currency2)ele.isApproved2 = true
           })
-          _self.twos.splice(_self.twos.length)
           callBack(type,_self.currency2,true)
           _self.updateCurrencyApprovedStatus()
         }
@@ -385,13 +391,12 @@ Farms.prototype.approveTokensAction = async function(type,item,callBack){
             },(err) => {_self.approveInfo.isApproving2 = false;reject(err)})
         })
         const cur1_status = await approveCur1
-        if(cur1_status && cur1_status > 0){
+        if(cur1_status){
           _self.approveInfo.isApproved1 = true
           callBack(type,_self.currency1,true)
           _self.twos.forEach(ele => {
             if(ele.currency1 == _self.currency1)ele.isApproved1 = true
           })
-          _self.twos.splice(_self.twos.length)
           callBack(type,_self.currency1,true)
         }
         _self.approveInfo.isApproving1 = false
@@ -400,12 +405,11 @@ Farms.prototype.approveTokensAction = async function(type,item,callBack){
         _self.approveInfo.isApproving2 = true
         const cur2_status = await approveCur2
 
-        if(cur2_status && cur2_status > 0){
+        if(cur2_status){
           _self.approveInfo.isApproved2 = true
           _self.twos.forEach(ele => {
             if(ele.currency2 == _self.currency2)ele.isApproved2 = true
           })
-          _self.twos.splice(_self.twos.length)
           callBack(type,_self.currency2,true)
         }
         _self.approveInfo.isApproving2 = false;

@@ -90,7 +90,7 @@
                 <li class="pools__group-buttons">
                   <div class="pools__button-group">
                     <button class="g-button pools__dialog__option g-button-heco-theme  g-button--normal" @click="handleShowWithdrawModal(1,item)">{{$t('l.withdrawal')}}</button>
-                    <a-button v-show="!item.isApproved1 || !item.isApproved2" :loading="item.isApproving1 || item.isApproving2" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency1,item)">{{(item.isApproving1 || item.isApproving2)? ((item.isApproving1 == true && item.isApproving2 == false ? item.currency1 : item.currency2) + ' ' +  $t('l.t_approving')) : (!item.isApproved1 && !item.isApproved2 == true ? '' : (!item.isApproved1&&item.isApproved) == true ? item.currency1 + ' ' : item.currency2 + ' ') + $t('l.approve')}}</a-button>
+                    <a-button v-show="!item.isApproved1 || !item.isApproved2" :loading="item.isApproving1 || item.isApproving2" class="g-button pools__dialog__option g-button-heco-theme " @click="handleApprovedFor(item.currency1,item)">{{formatApproveStatus(item)}}</a-button>
                     <button v-show="item.isApproved1 && item.isApproved2" class="g-button pools__dialog__option g-button--approved" @click="handleShowDepositModal(1,item)"> <svg-icon icon-class="Star_icon_white"></svg-icon> <span>{{$t('l.deposit')}}</span> </button>
                   </div>
                 </li>
@@ -350,6 +350,24 @@ export default {
       this.iptValue1 = undefined
       this.iptValue2 = undefined
     },
+    formatApproveStatus(item){
+      const {isApproving1,isApproving2,currency1,currency2,isApproved1,isApproved2} = item
+      if(isApproving1 || isApproving2) {
+        if(isApproving1 && !isApproving2){
+          return currency1 + ' ' + this.$t('l.t_approving')
+        }else {
+          return currency2 + ' ' + this.$t('l.t_approving')
+        }
+      }else {
+        if(!isApproved1 && !isApproved2){
+           return this.$t('l.approve')
+        }else if(!isApproved1 && isApproved2){
+          return currency1 + ' ' + this.$t('l.approve')
+        }else {
+          return currency2 + ' ' + this.$t('l.approve')
+        }
+      }
+    },
     async handleApprovedFor(currency1,item) {
       let _self = this
       _self.farms.address = localStorage.getItem('walletAddress')
@@ -365,12 +383,12 @@ export default {
 
         }else{
           if(currency == currency1){
-          _self.$set(_self.farms.approveInfo, isApproved1, isAppr)
+          // _self.$set(_self.farms.approveInfo, isApproved1, isAppr)
           }else{
-          _self.$set(_self.farms.approveInfo, isApproved2, isAppr)
+          // _self.$set(_self.farms.approveInfo, isApproved2, isAppr)
           }
         }
-        // _self.$forceUpdate()
+        _self.$forceUpdate()
       })
     },
     async handleShowWithdrawModal(index,currency) {
