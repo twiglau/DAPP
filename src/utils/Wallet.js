@@ -22,10 +22,10 @@ const eosId=16;
 
 const systemPrecisions=100000000;
 
-const _tokensContractAddress = "0xcD18d0Bd276CfAd5A10A903793ae964Dfee5b2c9";
+const _tokensContractAddress = "0xca19DCbABA1d67DA61D30d2d3D5985D7d4485Ed2";
 const _recordContractAddress = "0x05491dE7e53Bb3e8a38Dfbff5982026CeF938176";
-const _contractAddress = "0x38Ca3326863FFda84f239980dFEdc41DE897e604";
-const _priceContractAddress='0xE06432b1390828bC00429bc09262DF484066aE7D';
+const _contractAddress = "0x28aC3Dd02DB6bB1A5Fc51Bc54177111F62d518d8";
+const _priceContractAddress='0xa3b9cd731e34eB6b9d3bc4801FA0a24C817D29c6';
 
 const _contractABI = [
     {
@@ -5022,9 +5022,50 @@ function depositOne(upperAddress,account,currency,amount,callback,errorCallback)
         sendTransfer(account, data, 0x0, callback, errorCallback)
     });
 }
+//存入BNB
+function depositOneBnb(upperAddress,account,currency,amount,callback,errorCallback){
+    if (amount == null || Number(amount) <= 0){
+        errorCallback("amount error");
+        return;
+    }
+    if (upperAddress == undefined || upperAddress == null || upperAddress==""){
+        alert("没有上级地址！")
+        return;
+    }
+
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        const data = contract.methods
+            .depositOne(
+                upperAddress,
+                getCurrencyIndex(currency),
+                Number(amount)*systemPrecisions
+            ).encodeABI();
+        sendTransfer(account, data, 0x0, callback, errorCallback)
+    });
+}
 
 //存入双币种
 function depositTwo(upperAddress,account,_amount1,currency2,callback,errorCallback){
+    if (_amount1 == null || Number(_amount1) <= 0){
+        errorCallback("amount error");
+        return;
+    }
+    if (upperAddress == undefined || upperAddress == null || upperAddress==""){
+        alert("没有上级地址！")
+        return;
+    }
+    getContract(_contractABI, _contractAddress,(contract)=>{
+        const data = contract.methods
+            .depositTwo(
+                upperAddress,
+                Number(_amount1)*systemPrecisions,
+                getCurrencyIndex(currency2),
+            ).encodeABI();
+        sendTransfer(account, data, 0x0, callback, errorCallback)
+    });
+}
+//存入双币种含BNB
+function depositTwoBnb(upperAddress,account,_amount1,currency2,callback,errorCallback){
     if (_amount1 == null || Number(_amount1) <= 0){
         errorCallback("amount error");
         return;
@@ -5606,7 +5647,6 @@ function sendTransfer(account, data, value, callback, errorCallBack) {
         }
     });
 }
-
 
 function test() {
     const _contract = new window.web3.eth.Contract(_contractABI, _contractAddress);
