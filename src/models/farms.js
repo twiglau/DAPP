@@ -101,7 +101,7 @@ Farms.prototype.getMyPairCoinsLockData = async function(){
     _self.twos.forEach(ele => {ele.lockAmount1 = 0;ele.lockAmount2 = 0;ele.twoRecords=[];})
     deposit.getMyPairLockAmount(0,two)
     .then(res => {
-      console.log({'getMyPairLockAmount':res})
+      
       for(let i = 0,len = _self.twos.length; i < len; i++){
           let index1 = getCurrencyIndex(_self.twos[i].currency1)
           let index2 = getCurrencyIndex(_self.twos[i].currency2)

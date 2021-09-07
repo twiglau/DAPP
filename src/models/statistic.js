@@ -54,13 +54,15 @@ Statistic.prototype.calculateStatisticData = async function(){
       totala += item.price * item.amount
     }
     _self.totalLock = totala
-    //2. 总手续费
-    const feeAmount = await _self.getFeeTotal()
-    _self.feeAmount = feeAmount
 
     //3. destroyed数量
     const destroyedA = await _self.getDestroyAmount()
-    _self.destroyedAmount = destroyedA
+    _self.destroyedAmount = destroyedA/Wallet.Precisions()
+
+    //2. 总手续费
+    const feeAmount = await _self.getFeeTotal()
+    _self.feeAmount = feeAmount/Wallet.Precisions()
+
 }
 //获取币种价格
 Statistic.prototype.getCoinsPrice = function(){
@@ -80,8 +82,7 @@ Statistic.prototype.getFeeTotal = function(){
     return new Promise((resolve,reject) => {
         Wallet.queryFeeBalance(res => {
             resolve(res)
-        },err => { reject(err);
-            // alert(JSON.stringify(err));
+        },err => { resolve(0);
         })
     })
 }
@@ -89,8 +90,7 @@ Statistic.prototype.getDestroyAmount = function(){
     return new Promise((resolve,reject) => {
         Wallet.queryLibraDestroyAmount(res => {
             resolve(res)
-        },err => { reject(err);
-            // alert(JSON.stringify(err))
+        },err => { resolve(0);
         })
     })
 }
