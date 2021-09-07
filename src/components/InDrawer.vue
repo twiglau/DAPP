@@ -130,7 +130,8 @@ export default {
       this['iptValue' + index] = this['iptValue' + index].replace(/^(-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3')
     },
     sureClick(){
-        this.$emit('sure',this.iptValue1)
+        let cunru_amount = this.model?.currency2 == 'BNB'? this.model.nAmount2 : this.iptValue1;
+        this.$emit('sure',cunru_amount)
     },
   }
 }
