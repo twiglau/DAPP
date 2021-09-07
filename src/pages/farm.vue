@@ -470,7 +470,7 @@ export default {
         _this.$message.error("币种错误");
         return ;
       }
-      if (!amount1 || amount1 > _this.withdrawalInfo.lockAmount1){
+      if (currency2 != 'BNB' && (!amount1 || amount1 > _this.withdrawalInfo.lockAmount1)){
         _this.$message.error(_this.$t('l.l_numerror'))
         return ;
       }
@@ -559,7 +559,7 @@ export default {
       }
       //TODO 获取币种currency的价格price，amount*price 必须 大于 100美元
       let value = (+_this.depositInfo.mPrice) * (+amount)
-      if(value < 100){
+      if(currency !== 'BNB' && value < 100){
         _this.$message.error(_this.$t('l.l_stockvalue'))
         return;
       }
@@ -607,7 +607,7 @@ export default {
       }
       //TOoneDepositOrderDO (libraAmount*libraPrice)+currency2Amount*currency2Price 必须大于 100美元
       let needMinDollar = (+libraAmount)*(+_this.depositInfo.sPrice) + (_this.depositInfo.nAmount2 * _this.depositInfo.mPrice)
-      if(needMinDollar < 100){
+      if(currency2 !== 'BNB' && needMinDollar < 100){
         _this.$message.error(_this.$t('l.l_stockvalue'))
         return;
       }
