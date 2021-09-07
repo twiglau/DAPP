@@ -22,10 +22,10 @@ const eosId=16;
 
 const systemPrecisions=100000000;
 
-const _tokensContractAddress = "0xca19DCbABA1d67DA61D30d2d3D5985D7d4485Ed2";
-const _recordContractAddress = "0x05491dE7e53Bb3e8a38Dfbff5982026CeF938176";
-const _contractAddress = "0x28aC3Dd02DB6bB1A5Fc51Bc54177111F62d518d8";
-const _priceContractAddress='0xa3b9cd731e34eB6b9d3bc4801FA0a24C817D29c6';
+const _priceContractAddress='0xB1e2ABDAcdB13830332917DbC2f43EBac668b8A7';
+const _recordContractAddress = "0x313800b5e94Fd4597389E027653d02184a2a6F77";
+const _tokensContractAddress = "0xA44263F26432A663Bb37eC0Ced9E4965cF4d54c8";
+const _contractAddress = "0x2DEE32140db036A1DcAB79f0055F3E09d92bEE8e";
 
 const _contractABI = [
     {
@@ -62,32 +62,6 @@ const _contractABI = [
         "name": "award",
         "outputs": [],
         "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "bnbPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "btcPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -135,7 +109,7 @@ const _contractABI = [
             },
             {
                 "internalType": "uint256",
-                "name": "_amount1",
+                "name": "_amount",
                 "type": "uint256"
             },
             {
@@ -145,6 +119,13 @@ const _contractABI = [
             }
         ],
         "name": "depositTwo",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "destroy",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -186,19 +167,6 @@ const _contractABI = [
                 "internalType": "address",
                 "name": "userAddress",
                 "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "ethPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -288,8 +256,14 @@ const _contractABI = [
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "filPrice",
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "currIndex",
+                "type": "uint256"
+            }
+        ],
+        "name": "getThePrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -301,14 +275,8 @@ const _contractABI = [
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "currIndex",
-                "type": "uint256"
-            }
-        ],
-        "name": "getThePrice",
+        "inputs": [],
+        "name": "gratefulRate",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -351,46 +319,12 @@ const _contractABI = [
             },
             {
                 "internalType": "uint256",
+                "name": "todayGratefulAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
                 "name": "todayGlobalAmount",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "incomeRecord",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "user",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "fromAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "time",
                 "type": "uint256"
             }
         ],
@@ -557,25 +491,6 @@ const _contractABI = [
                 "type": "address"
             }
         ],
-        "name": "queryIncomeSize",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_from",
-                "type": "address"
-            }
-        ],
         "name": "queryOnesSize",
         "outputs": [
             {
@@ -655,6 +570,19 @@ const _contractABI = [
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "takeoutIncomeFee",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "uint8",
@@ -681,13 +609,13 @@ const _contractABI = [
             },
             {
                 "internalType": "uint8",
-                "name": "_currency2Index",
+                "name": "_c2Index",
                 "type": "uint8"
             }
         ],
         "name": "takeoutTwo",
         "outputs": [],
-        "stateMutability": "nonpayable",
+        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -3494,30 +3422,43 @@ function balanceOf(currency,address,callback,errorCallback) {
     //授权
     currency = currency.toUpperCase();
     let contractAddress;
-    let contractABI;
     if(currency == "ETH"){
         contractAddress=ethContractAddress;
-        contractABI=ethContractABI;
     }else if(currency == "BNB"){
         contractAddress=bnbContractAddress;
-        contractABI=bnbContractABI;
     }else if(currency == "BTC"){
         contractAddress=btcContractAddress;
-        contractABI=btcContractABI;
     }else if(currency == "USDT"){
         contractAddress=usdtContractAddress;
-        contractABI=usdtContractABI;
     }else if(currency == "FIL"){
         contractAddress=filContractAddress;
-        contractABI=filContractABI;
     }else if(currency == "LIBRA"){
         contractAddress=libraContractAddress;
-        contractABI=libraContractABI;
+    }else if(currency == "ADA"){
+        contractAddress=adaContractAddress;
+    }else if(currency == "XRP"){
+        contractAddress=xrpContractAddress;
+    }else if(currency == "DOGE"){
+        contractAddress=dogeContractAddress;
+    }else if(currency == "DOT"){
+        contractAddress=dotContractAddress;
+    }else if(currency == "SOL"){
+        contractAddress=solContractAddress;
+    }else if(currency == "UNI"){
+        contractAddress=uniContractAddress;
+    }else if(currency == "BCH"){
+        contractAddress=bchContractAddress;
+    }else if(currency == "LTC"){
+        contractAddress=ltcContractAddress;
+    }else if(currency == "LINK"){
+        contractAddress=linkContractAddress;
+    }else if(currency == "EOS"){
+        contractAddress=eosContractAddress;
     }else {
         errorCallback(false);
     }
 
-    getContract(contractABI, contractAddress,(contract)=>{
+    getContract(erc20TokenContractABI, contractAddress,(contract)=>{
         contract.methods.balanceOf(address)
             .call()
             .then((res) => {
