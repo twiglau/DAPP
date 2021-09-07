@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import Wallet from '@/utils/Wallet.js';
 import {queryWithdrawalRecords} from '@/utils/api'
 import countTo from 'vue-count-to';
 import { getCurrencyName } from '@/utils/api';
