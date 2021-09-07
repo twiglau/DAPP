@@ -113,6 +113,9 @@ export default {
     iptValue1:{
       immediate:true,
       handler:function(newVal) {
+        
+        this.fee.fee1 = 0;
+        this.fee.fee2 = 0;
         if(this.model && this.model.currency){
           if(!newVal){
             this.model.realM_v = 0

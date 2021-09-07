@@ -16,8 +16,8 @@ Statistic.prototype.getPlatformLockAmount = function(){
         try {
             let promiseAllarr = []
             for(let i = 0; i < _self.coins.length;i++){
-            console.log(i)
-            promiseAllarr[i] = new Promise((res1,rej1) => {
+
+                promiseAllarr[i] = new Promise((res1,rej1) => {
                     Wallet.totalUseableBalance(_self.coins[i].currency,(in_a)=>{
                     let val = +in_a
                     in_a > 0 && (val = Number(in_a / Wallet.Precisions()))

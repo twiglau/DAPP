@@ -34,31 +34,31 @@ Fees.prototype.calculateOne = function(){
     let _self = this
     //1.对记录排序
     _self.oneRecords.sort((a,b) => b.depositTime - a.depositTime)
-    let nowTime = new Date().getDate()/1000
+    let nowTime = new Date().getTime()/1000
     //4、扣除订单中的可用数量 (计算手续费)
     let out = 0;
     for(let i=0;i<_self.oneRecords.length;i++){
         
-        if(out < _self.amount1){
-            let i_use = _self.oneRecords[i].useableAmount/Wallet.Precisions();
-            if(out + i_use < _self.amount1){
+        if(out < _self.amount1*Wallet.Precisions()){
+            let i_use = _self.oneRecords[i].useableAmount;
+            if(out + i_use < _self.amount1*Wallet.Precisions()){
                 //没有完成需要计算下一笔 
                 out += i_use;
                 //计算手续费
                 if(nowTime - _self.oneRecords[i].depositTime <= 2592000){//小于30天 
-                    _self.fee1 += i_use*feeRateDayIn30;
+                    _self.fee1 += i_use*feeRateDayIn30/Wallet.Precisions();
                 }else{
-                    _self.fee1 += i_use*feeRateDayOut30;
+                    _self.fee1 += i_use*feeRateDayOut30/Wallet.Precisions();
                 }
             }else{
                 //需转出数量
-                let needOut = _self.amount1 - out;
+                let needOut = _self.amount1*Wallet.Precisions() - out;
                 out += needOut;
                 //计算手续费
                 if(nowTime - _self.oneRecords[i].depositTime <= 2592000){//小于30天 
-                    _self.fee1 += needOut*feeRateDayIn30;
+                    _self.fee1 += needOut*feeRateDayIn30/Wallet.Precisions();
                 }else{
-                    _self.fee1 += needOut*feeRateDayOut30;
+                    _self.fee1 += needOut*feeRateDayOut30/Wallet.Precisions();
                 }
             }
         }else{
@@ -71,40 +71,40 @@ Fees.prototype.calculateOne = function(){
 Fees.prototype.calculateTwo = function(){
     let _self = this
     _self.twoRecords.sort((a,b) => b.depositTime - a.depositTime)
-    let nowTime = new Date().getDate()/1000
+    let nowTime = new Date().getTime()/1000
     //4、扣除订单中的可用数量 (计算手续费)
     let out1 = 0;
     let out2 = 0;
     for(let i=0;i<_self.twoRecords.length;i++){
-        if(out2 < _self.amount2){
-            let i_use_1 = _self.twoRecords[i].useableAmount1/Wallet.Precisions();
-            let i_use_2 = _self.twoRecords[i].useableAmount2/Wallet.Precisions();
-            if(out2 + i_use_2 < _self.amount2){
+        
+        if(out2 < _self.amount2*Wallet.Precisions()){
+            let i_use_1 = _self.twoRecords[i].useableAmount1;
+            let i_use_2 = _self.twoRecords[i].useableAmount2;
+            if(out2 + i_use_2 < _self.amount2*Wallet.Precisions()){
                 //没有完成需要计算下一笔 
                 out1 += i_use_1;
                 out2 += i_use_2;
                 //计算手续费
                 if(nowTime - _self.twoRecords[i].depositTime <= 2592000){//小于30天 
-                    _self.fee1 += i_use_1*feeRateDayIn30;
-                    _self.fee2 += i_use_2*feeRateDayIn30;
+                    _self.fee1 += i_use_1*feeRateDayIn30/Wallet.Precisions();
+                    _self.fee2 += i_use_2*feeRateDayIn30/Wallet.Precisions();
                 }else{
-                    _self.fee1 += i_use_1*feeRateDayOut30;
-                    _self.fee2 += i_use_2*feeRateDayOut30;
+                    _self.fee1 += i_use_1*feeRateDayOut30/Wallet.Precisions();
+                    _self.fee2 += i_use_2*feeRateDayOut30/Wallet.Precisions();
                 }
             }else{
                 //已完成 
-                let needOut1 = _self.amount1 - out1;
-                let needOut2 = _self.amount2 - out2;
+                let needOut1 = _self.amount1*Wallet.Precisions() - out1;
+                let needOut2 = _self.amount2*Wallet.Precisions() - out2;
                 out1 += needOut1;
                 out2 += needOut2;
-                
                 //计算手续费
                 if(nowTime - _self.twoRecords[i].depositTime <= 2592000){//小于30天 
-                    _self.fee1 += needOut1*feeRateDayIn30;
-                    _self.fee2 += needOut2*feeRateDayIn30;
+                    _self.fee1 += needOut1*feeRateDayIn30/Wallet.Precisions();
+                    _self.fee2 += needOut2*feeRateDayIn30/Wallet.Precisions();
                 }else{
-                    _self.fee1 += needOut1*feeRateDayOut30;
-                    _self.fee2 += needOut2*feeRateDayOut30;
+                    _self.fee1 += needOut1*feeRateDayOut30/Wallet.Precisions();
+                    _self.fee2 += needOut2*feeRateDayOut30/Wallet.Precisions();
                 }
                 break;
             }
