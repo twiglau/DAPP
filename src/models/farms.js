@@ -422,17 +422,10 @@ Farms.prototype.withDrawOne = function(){
         Wallet.takeoutOne(_self.address,_self.currency1,_self.amount, (res)=>{
             console.log(res)
             if(res){
-                postWithdrawalData({address:_self.address,amount:_self.amount,parentAddress:_self.upperAddress,token1:_self.currency1})
-                .then(res => {
-                    const {status} = res
-                    if(status == 200){
-                        resolve('success')
-                    }else{
-                        reject('network error')
-                    }
-                })
+              resolve('success')
+            }else{
+              reject('network error')
             }
-
         }, (err)=>{
             reject(err)
         })
@@ -449,15 +442,9 @@ Farms.prototype.withDrawTwo = function(){
         Wallet.takeoutTwo(_self.address,_self.amount,_self.currency2,(res)=>{
 
             if(res){
-            postWithdrawalData({address:_self.address,amount:_self.amount,parentAddress:_self.upperAddress,token1:_self.currency1,token2:_self.currency2})
-            .then(res => {
-                const {status} = res
-                if(status == 200){
-                    resolve('success')
-                }else{
-                    reject('network error')
-                }
-            })
+              resolve('success')
+            }else{
+              reject('network error')
             }
         }, (err)=>{
            reject(err)
