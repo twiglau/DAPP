@@ -444,7 +444,7 @@ export default {
           console.log(res)
           _this.isModalShowWithOne = false
           _this.$refs.outer.close()
-          _this.$refs.loading.success({title:_this.$t('l.ok_tips_withdraw')})
+          _this.$refs.loading.success({title:_this.$t('l.l_success')})
       })
       .catch(err => {
           let msg = JSON.stringify(err.message || err)
@@ -486,7 +486,7 @@ export default {
           console.log(res)
           _this.isModalShowWithTwo = false
           _this.$refs.outer.close()
-          _this.$refs.loading.success({title:_this.$t('l.ok_tips_withdraw')})
+          _this.$refs.loading.success({title:_this.$t('l.l_success')})
       })
       .catch(err => {
           let msg = JSON.stringify(err.message || err)
@@ -573,7 +573,7 @@ export default {
         if(res) {
             _this.isModalShowSaveOne = false
             _this.$refs.inner.close()
-            _this.$refs.loading.success({title:_this.$t('l.ok_tips_deposit')})
+            _this.$refs.loading.success({title:_this.$t('l.l_success')})
         }
       })
       .catch(err => {
@@ -622,7 +622,7 @@ export default {
         if(res) {
             _this.isModalShowSaveTwo = false
             _this.$refs.inner.close()
-            _this.$refs.loading.success({title:_this.$t('l.ok_tips_deposit')})
+            _this.$refs.loading.success({title:_this.$t('l.l_success')})
         }
       })
       .catch(err => {
