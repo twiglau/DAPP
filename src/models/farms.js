@@ -61,7 +61,7 @@ Farms.prototype.caluUseable = function(currency,key,index1,index2,array){
                                         let num = +item[key]
                                         return num + currentTotal
                                     },0)  || 0
-    console.log(currency,key,index1,index2,libra_eth_1)
+    // console.log(currency,key,index1,index2,libra_eth_1)
     if(libra_eth_1){ libra_eth_1 = Number(libra_eth_1 / Wallet.Precisions(currency)) }
     return libra_eth_1
 },
@@ -76,7 +76,7 @@ Farms.prototype.getMySingleCoinsLockData = async function(){
   if(one && one > 0){
 
     _self.ones.forEach(ele => {ele.lockAmount = 0;ele.oneRecords = [];})
-    deposit.getMyLockAmount()
+    deposit.getMyLockAmount(0,one)
     .then(res => {
       //格式化数据 0-ETH  1-BNB 3-BTC 4-USDT
       //返回  1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
@@ -99,8 +99,9 @@ Farms.prototype.getMyPairCoinsLockData = async function(){
   const two = await deposit.checkHasMyPairLockData()
   if(two && two > 0){
     _self.twos.forEach(ele => {ele.lockAmount1 = 0;ele.lockAmount2 = 0;ele.twoRecords=[];})
-    deposit.getMyPairLockAmount()
+    deposit.getMyPairLockAmount(0,two)
     .then(res => {
+      console.log({'getMyPairLockAmount':res})
       for(let i = 0,len = _self.twos.length; i < len; i++){
           let index1 = getCurrencyIndex(_self.twos[i].currency1)
           let index2 = getCurrencyIndex(_self.twos[i].currency2)
@@ -493,7 +494,7 @@ Farms.prototype.configDepositInfo = function(type){
              Wallet.queryPrice(_self.currency1.toLowerCase(),(res)=>{
                resolve(Number(res ? res : 1))
              },(res)=>{
-               rej(err)
+              resolve(Number(0))
              })
         })
       ] : [
@@ -506,14 +507,14 @@ Farms.prototype.configDepositInfo = function(type){
              Wallet.queryPrice(_self.currency2.toLowerCase(),(res)=>{
                resolve(Number(res ? res : 1))
              },(err)=>{
-               reject(err)
+              resolve(Number(0))
              })
         }),
         new Promise((resolve,reject) => {
              Wallet.queryPrice(_self.currency1.toLowerCase(),(res)=>{
                resolve(Number(res ? res : 1))
              },(err)=>{
-               reject(err)
+              resolve(Number(0))
              })
         })
       ]

@@ -301,7 +301,7 @@ export default {
           return new Promise((resolve,reject) => {
                Wallet.queryPrice(ele.currency.toLowerCase(),res =>{
                  resolve(Number(res ? res : 1))
-               },err =>{ reject(err)})
+               },err =>{ resolve(0)})
           })
       })
       return Promise.all(promiseCoinRequestArray)

@@ -69,7 +69,7 @@ Statistic.prototype.getCoinsPrice = function(){
         return new Promise((resolve,reject) => {
              Wallet.queryPrice(ele.currency.toLowerCase(),(res)=>{
                 resolve(Number(res? res : 1))
-             },err => {console.log({'getCoinsPrice':err});reject(err);})
+             },err => {resolve(1)})
         })
     })
     return Promise.all(promiseCoinRequestArray)
