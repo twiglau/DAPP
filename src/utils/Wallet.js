@@ -22,7 +22,7 @@ const eosId=16;
 
 const systemPrecisions=100000000;
 
-const _priceContractAddress='0xB1e2ABDAcdB13830332917DbC2f43EBac668b8A7';
+const _priceContractAddress='0x73F9F28c719EEBb629536Cb5672A8B9B707b89cC';
 const _recordContractAddress = "0x313800b5e94Fd4597389E027653d02184a2a6F77";
 const _tokensContractAddress = "0xA44263F26432A663Bb37eC0Ced9E4965cF4d54c8";
 const _contractAddress = "0x2DEE32140db036A1DcAB79f0055F3E09d92bEE8e";
@@ -3491,6 +3491,7 @@ function exchange(upperAddress,account,amount,callback,errorCallback){
     });
 }
 
+
 //存入单币种
 function depositOne(upperAddress,account,currency,amount,callback,errorCallback){
     if (amount == null || Number(amount) <= 0){
@@ -3502,15 +3503,19 @@ function depositOne(upperAddress,account,currency,amount,callback,errorCallback)
         return;
     }
 
-    getContract(_contractABI, _contractAddress,(contract)=>{
-        const data = contract.methods
-            .depositOne(
-                upperAddress,
-                getCurrencyIndex(currency),
-                Number(amount)*systemPrecisions
-            ).encodeABI();
-        sendTransfer(account, data, 0x0, callback, errorCallback)
-    });
+    if(currency == 'BNB'){
+        depositOneBnb(upperAddress,account,currency,amount,callback,errorCallback);
+    }else{
+        getContract(_contractABI, _contractAddress,(contract)=>{
+            const data = contract.methods
+                .depositOne(
+                    upperAddress,
+                    getCurrencyIndex(currency),
+                    Number(amount)*systemPrecisions
+                ).encodeABI();
+            sendTransfer(account, data, 0x0, callback, errorCallback)
+        });
+    }
 }
 //存入BNB
 function depositOneBnb(upperAddress,account,currency,amount,callback,errorCallback){
@@ -3522,7 +3527,7 @@ function depositOneBnb(upperAddress,account,currency,amount,callback,errorCallba
         alert("没有上级地址！")
         return;
     }
-
+    let value = '0x'+(Number(value)*Number("1000000000000000000")).toString(16);
     getContract(_contractABI, _contractAddress,(contract)=>{
         const data = contract.methods
             .depositOne(
@@ -3530,29 +3535,33 @@ function depositOneBnb(upperAddress,account,currency,amount,callback,errorCallba
                 getCurrencyIndex(currency),
                 Number(amount)*systemPrecisions
             ).encodeABI();
-        sendTransfer(account, data, 0x0, callback, errorCallback)
+        sendTransfer(account, data, value, callback, errorCallback)
     });
 }
 
 //存入双币种
 function depositTwo(upperAddress,account,_amount1,currency2,callback,errorCallback){
-    if (_amount1 == null || Number(_amount1) <= 0){
-        errorCallback("amount error");
-        return;
+    if(currency2.toUpperCase() == 'BNB'){
+        depositTwoBnb(upperAddress,account,_amount1,currency2,callback,errorCallback);
+    }else{
+        if (_amount1 == null || Number(_amount1) <= 0){
+            errorCallback("amount error");
+            return;
+        }
+        if (upperAddress == undefined || upperAddress == null || upperAddress==""){
+            alert("没有上级地址！")
+            return;
+        }
+        getContract(_contractABI, _contractAddress,(contract)=>{
+            const data = contract.methods
+                .depositTwo(
+                    upperAddress,
+                    Number(_amount1)*systemPrecisions,
+                    getCurrencyIndex(currency2),
+                ).encodeABI();
+            sendTransfer(account, data, 0x0, callback, errorCallback)
+        });
     }
-    if (upperAddress == undefined || upperAddress == null || upperAddress==""){
-        alert("没有上级地址！")
-        return;
-    }
-    getContract(_contractABI, _contractAddress,(contract)=>{
-        const data = contract.methods
-            .depositTwo(
-                upperAddress,
-                Number(_amount1)*systemPrecisions,
-                getCurrencyIndex(currency2),
-            ).encodeABI();
-        sendTransfer(account, data, 0x0, callback, errorCallback)
-    });
 }
 //存入双币种含BNB
 function depositTwoBnb(upperAddress,account,_amount1,currency2,callback,errorCallback){
@@ -3564,6 +3573,7 @@ function depositTwoBnb(upperAddress,account,_amount1,currency2,callback,errorCal
         alert("没有上级地址！")
         return;
     }
+    let value = '0x'+(Number(value)*Number("1000000000000000000")).toString(16);
     getContract(_contractABI, _contractAddress,(contract)=>{
         const data = contract.methods
             .depositTwo(
@@ -3571,7 +3581,7 @@ function depositTwoBnb(upperAddress,account,_amount1,currency2,callback,errorCal
                 Number(_amount1)*systemPrecisions,
                 getCurrencyIndex(currency2),
             ).encodeABI();
-        sendTransfer(account, data, 0x0, callback, errorCallback)
+        sendTransfer(account, data, value, callback, errorCallback)
     });
 }
 
