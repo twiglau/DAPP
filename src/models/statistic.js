@@ -80,14 +80,18 @@ Statistic.prototype.getFeeTotal = function(){
     return new Promise((resolve,reject) => {
         Wallet.queryFeeBalance(res => {
             resolve(res)
-        },err => { reject(err);console.log({'getFeeTotal':err});})
+        },err => { reject(err);
+            // alert(JSON.stringify(err));
+        })
     })
 }
 Statistic.prototype.getDestroyAmount = function(){
     return new Promise((resolve,reject) => {
         Wallet.queryLibraDestroyAmount(res => {
             resolve(res)
-        },err => { reject(err);console.log({'getDestroyAmount':err});})
+        },err => { reject(err);
+            // alert(JSON.stringify(err))
+        })
     })
 }
 

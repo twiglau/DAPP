@@ -611,6 +611,7 @@ export default {
         _this.$message.error(_this.$t('l.l_stockvalue'))
         return;
       }
+      console.log({libraAmount})
       _this.$refs.loading.show({title:_this.$t('l.deposit'),content:`${_this.$t('l.deposit')} ${_this.$t('l.l_numing')} ${libraAmount}${_this.depositInfo.currency1}/${currency2}`})
       //调用合约方法存入币种
       _this.farms.address = localStorage.getItem('walletAddress')
