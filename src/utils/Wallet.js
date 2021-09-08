@@ -3404,6 +3404,7 @@ function balanceOf(currency,address,callback,errorCallback) {
 
 //兑换
 function exchange(currency,upperAddress,account,amount,callback,errorCallback){
+    currency = currency.toUpperCase();
     if (amount == null || Number(amount) <= 0){
         errorCallback("amount error");
         return;
@@ -3413,8 +3414,7 @@ function exchange(currency,upperAddress,account,amount,callback,errorCallback){
         return;
     }
     getContract(_contractABI, _contractAddress,(contract)=>{
-        const data = contract.methods
-            .exchange(
+        const data = contract.methods.exchange(
                 upperAddress,
                 getCurrencyIndex(currency),
                 Number(amount)*systemPrecisions
@@ -4063,69 +4063,6 @@ function test() {
             console.log('获取失败：', err);
         });
 }
-
-// function transferIn(account,amount1,callback, errorCallback){
-//     const _contract = new window.web3.eth.Contract(_testNewContractABI, _testNewContractAddress);
-//     const data = _contract.methods.testTransfer().encodeABI();
-//     transferBasis(account,data, amount1, callback, errorCallback);
-// }
-//转平台币
-// function transferBasis(account, data, value, callback, errorCallBack) {
-//     value = '0x'+(Number(value)*Number("1000000000000000000")).toString(16);
-//     alert("开始："+value);
-//     // estimateGas获取交易的 gas 用量
-//     const params = {
-//         from: account,
-//         to: _testNewContractAddress,
-//         data: data,
-//         value: value,
-//     };
-//     window.web3.eth.estimateGas(params, function (error1, gaslimit) {
-//         if (error1) {
-//             errorCallBack(error1);
-//         } else {
-//             // gasprice获取当前gas价格
-//             window.web3.eth.getGasPrice(function (error2, gasPrice) {
-//                 if (error2) {
-//                     errorCallBack(error2);
-//                 } else {
-//                     gaslimit -= -10000;
-//                     let params = [
-//                         {
-//                             gasPrice: gasPrice,
-//                             gasLimit: gaslimit,
-//                             from: account,
-//                             to: _testNewContractAddress,
-//                             data: data,
-//                             value: value,
-//                         },
-//                     ];
-//                     alert("参数： "+JSON.stringify(params))
-//                     //ethereum.sendAsync方法发送以太币、调用智能合约：
-//                     window.ethereum.sendAsync(
-//                         {
-//                             method: "eth_sendTransaction",
-//                             params: params,
-//                             from: account,
-//                         },
-//                         function (error, hash) {
-//                             if (error) {
-//                                 // alert(error.message);
-//                                 errorCallBack(error.message);
-//                             } else {
-//                                 callback(hash);
-//                             }
-//                         }
-//                     );
-//                     //监听MetaMask的事件
-//                     window.ethereum.on('accountsChanged', function (accounts) {
-//                         console.log(accounts[0])
-//                     })
-//                 }
-//             });
-//         }
-//     });
-// }
 
 //获取合约
 function getContract(abi, address,callback) {
