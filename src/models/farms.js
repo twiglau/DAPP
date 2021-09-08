@@ -23,7 +23,7 @@ function Farms(address,upperAddress){
     //授权状态
     this.approveTokens = [
       {currency:"ETH",isApproved:false},
-      {currency:"BNB",isApproved:false},
+      {currency:"BNB",isApproved:true},
       {currency:"BTC",isApproved:false},
       {currency:"USDT",isApproved:false},
       {currency:"Libra",isApproved:false},
@@ -262,6 +262,8 @@ Farms.prototype.updateCurrencyApprovedStatus = async function(){
         
         //更新 approvedArray
         for(let i = 0,len = approvedArray.length; i < len; i++){
+          let isBNB = _self.approveTokens[i].currency == 'BNB';
+          if(!isBNB)
            _self.approveTokens[i].isApproved = approvedArray[i]
         }
         //更新oneTokens
@@ -292,7 +294,7 @@ Farms.prototype.getCoinsApprovedStatus = function(){
                     }else {
                         res(false)
                     }
-                },(err) =>{rej(err)})
+                },(err) =>{res(false)})
             })
           }
           //全部请求

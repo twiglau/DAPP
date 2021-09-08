@@ -35,9 +35,10 @@
                 <li class="pools__dialog__input">
                     <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
                     <div class="input_right">
-                        <svg-icon icon-class="LBR_coin" alt="" />
+                        <coin-select></coin-select>
+                        <!-- <svg-icon icon-class="LBR_coin" alt="" />
                         <span>{{iptCoin1}}</span>
-                        <img src="../assets/down_arrow.png" alt="">
+                        <img src="../assets/down_arrow.png" alt=""> -->
                     </div>
                 </li>
                 <div class="span-info">
@@ -65,6 +66,7 @@
     import clickoutside from '@/utils/clickoutside.js'
     import SwapDrawer from '@/components/SwapDrawer'
     import Loading from '@/components/Loading'
+    import CoinSelect from '@/components/CoinSelect'
     import {error} from '@/utils/errorLog'
     export default {
         name:'swap',
@@ -73,6 +75,7 @@
             SwapConfig,
             SwapDrawer,
             Loading,
+            CoinSelect
         },
         directives:{clickoutside},
         computed: {
@@ -113,6 +116,7 @@
                 iptCoin1:'LBR',
                 isDui_sToken:true,
                 usdt_lbr_p:0,
+                daiBiPriceArray:[],
                 LBR_price:0,
                 usdtAmount:0,
                 isApprovedUSDT:false,
@@ -149,10 +153,23 @@
             },
             async getPairPrice(){
                let _self = this
-               Wallet.queryPrice('libra',res =>{
-                   _self.LBR_price = +(res || 1)
-                   if(_self.LBR_price > 0){
-                       _self.usdt_lbr_p = 1 / _self.LBR_price
+               Promise.all([
+                   new Promise((resolve) => {
+                       Wallet.queryPrice('libra',res =>{
+                            resolve(+(res || 1)) 
+                        },err => resolve(0))
+                   }),
+                   new Promise((resolve) => {
+                       Wallet.queryPrice('diem',res =>{
+                            resolve(+(res || 1)) 
+                        },err => resolve(0))
+                   })
+               ])
+               .then(res => {
+                   _self.daiBiPriceArray = res
+                   if(!_self.usdt_lbr_p){
+                       _self.LBR_price = _self.daiBiPriceArray[0]
+                       _self.usdt_lbr_p = _self.LBR_price > 0 ? 1 / _self.LBR_price : 0;
                    }
                })
             },
