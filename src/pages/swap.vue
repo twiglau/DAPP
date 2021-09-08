@@ -35,14 +35,14 @@
                 <li class="pools__dialog__input">
                     <input @input="input_num(1)" :placeholder="$t('l.iptPlace')" v-model="iptValue1">
                     <div class="input_right">
-                        <coin-select></coin-select>
+                        <coin-select @selectA="changeDui"></coin-select>
                         <!-- <svg-icon icon-class="LBR_coin" alt="" />
                         <span>{{iptCoin1}}</span>
                         <img src="../assets/down_arrow.png" alt=""> -->
                     </div>
                 </li>
                 <div class="span-info">
-                    <span>{{$t('l.t_Price')}}</span><span>1 USDT = <countTo :endVal='usdt_lbr_p' :duration='1000' :decimals="4"></countTo> LBR</span>
+                    <span>{{$t('l.t_Price')}}</span><span>1 USDT = <countTo :endVal='usdt_lbr_p' :duration='1000' :decimals="4"></countTo> {{iptCoin1}}</span>
                 </div>
                 <!-- <div class="span-info">
                     <span>{{$t('l.t_MinPA')}}</span><span>100 USDT</span>
@@ -130,6 +130,19 @@
             showConfig(){
                this.$refs.config.show()
             },
+            changeDui(e){
+                let _self = this
+                if(e == 'Libra'){
+                    this.iptCoin1 = 'LBR'
+                    _self.LBR_price = _self.daiBiPriceArray[0]
+                }
+                if(e == 'Diem'){
+                    this.iptCoin1 = 'Diem'
+                    _self.LBR_price = _self.daiBiPriceArray[0]
+                }
+                _self.usdt_lbr_p = _self.LBR_price > 0 ? 1 / _self.LBR_price : 0;
+                _self.iptValue0 = 0;
+            },
             async queryBalance(){
                 let _self = this
                 let walletAddress = localStorage.getItem("walletAddress");
@@ -160,12 +173,13 @@
                         },err => resolve(0))
                    }),
                    new Promise((resolve) => {
-                       Wallet.queryPrice('diem',res =>{
+                       Wallet.queryPrice('libra',res =>{
                             resolve(+(res || 1)) 
                         },err => resolve(0))
                    })
                ])
                .then(res => {
+                   debugger
                    _self.daiBiPriceArray = res
                    if(!_self.usdt_lbr_p){
                        _self.LBR_price = _self.daiBiPriceArray[0]
@@ -217,7 +231,7 @@
                 let walletAddress = localStorage.getItem("walletAddress");
                 let upperAddress = _self.inviteAddress;
                 _self.$refs.loading.show({title:_self.$t('l.l_duiing'),content:_self.$t('l.l_swaps',[this.iptValue0,this.iptCoin0,this.iptValue1,this.iptCoin1]),desc:_self.$t('l.l_swapb')})
-                Wallet.exchange(upperAddress,walletAddress,amount,(res)=>{
+                Wallet.exchange(_self.iptCoin1,upperAddress,walletAddress,amount,(res)=>{
                     _self.spinStatus = false
                     if(res){
                         postExchangeData({
