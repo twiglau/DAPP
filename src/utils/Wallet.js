@@ -23,9 +23,9 @@ const eosId=16;
 const systemPrecisions=100000000;
 
 const _priceContractAddress='0x28bBEA401e43a5868822C845DD6A1B9a39a60D19';
-const _recordContractAddress = "0xda43457497c965abe5326E4A7ec046d7a2A8ABA3";
+const _recordContractAddress = "0xd6BC354B58F255e5fCbe157Eb8531D93E695c862";
 const _tokensContractAddress = "0xD82551fd59E7e33CA342f713C1773bd9fcCbD94e";
-const _contractAddress = "0x7f1008BCCD2D92594A12B5e16584F2bcA7dBe46B";
+const _contractAddress = "0x0A8f967EC91b3BE24618Bd8e00797aEEA06fE963";
 
 const _contractABI = [
     {
@@ -3879,7 +3879,7 @@ function queryExchangeSize(address,callback,errorCallback) {
  * @param errorCallback
  */
 function queryIncomeSize(address,callback,errorCallback) {
-    getContract(_contractABI, _contractAddress,(contract)=>{
+    getContract(_recordContractABI, _recordContractAddress,(contract)=>{
         contract.methods.queryIncomeSize(address)
             .call()
             .then((res) => {
