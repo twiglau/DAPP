@@ -12,7 +12,7 @@
           Libra
         </a-menu-item>
         <a-menu-item key="2" @click="changeLangType">
-          <svg-icon icon-class="USDT_coin"></svg-icon>
+          <svg-icon icon-class="Diem_coin"></svg-icon>
           Diem
         </a-menu-item>
       </a-menu>
@@ -41,8 +41,9 @@ export default {
           this.lanImg = 'Libra_coin'
         }else if (key == 2) {
           this.lanc = "Diem";
-          this.lanImg = 'USDT_coin'
+          this.lanImg = 'Diem_coin'
         }
+        this.$emit('selectA',this.lanc)
       },
   }
 }

@@ -16,7 +16,6 @@ Profits.prototype.checkHasTiquData = function(){
       },(err) => {
           reject(err)
       })
-
     })
   }
 Profits.prototype.getTiquRecord = function(start = 0, end = 1){

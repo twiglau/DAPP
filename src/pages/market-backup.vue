@@ -46,7 +46,7 @@
         <div class="level-desc">
           <span>{{$t('l.t_info')}}</span>
           <span>
-            <a-input-search :loading="team.searching" :allowClear="true" :placeholder="$t('l.l_teamlink')" @search="onSearchTeam">
+            <a-input-search :loading="searching" :allowClear="true" :placeholder="$t('l.l_teamlink')" @search="onSearchTeam">
               <a-button slot="enterButton" >
                 <svg-icon  icon-class="search_icon" style="width:16px;height:16px;"></svg-icon>
               </a-button>
@@ -54,7 +54,7 @@
           </span>
         </div>
         <div class="team-wrap">
-        <a-spin class="team_loading" tip="loading" :spinning="team.teamSearching" size="large">
+        <a-spin class="team_loading" tip="loading" :spinning="teamSearching" size="large">
         <div class="team-info">
             <div class="info-item">
               <svg-icon icon-class="team_icon_01"></svg-icon>
@@ -82,7 +82,9 @@
 <script>
 import Wallet from '@/utils/Wallet.js';
 import countTo from 'vue-count-to';
-import Teams from '@/models/teams';
+import { getCurrencyIndex,getCurrencyName,currencyMap } from '@/utils/api';
+import Deposits from '@/models/deposits';
+import Profits from '@/models/profits';
 export default {
   name: "Market",
   components: {
@@ -94,8 +96,25 @@ export default {
       spinStatus:false,
       walletAddress:'',
       inviteAddress:'',
-      team:new Teams(),
-      currentTeam:new Teams(),
+      isSearchData:false,
+      team:{
+        totalProfit:0,
+        todayProfit:0,
+        teamPeople:0,
+        teamProformance:0,
+        needTeamProfor:13*Math.pow(10,5),
+        teamProfit:0,
+        leftLevel:'LV1',
+        level:'LV2',
+        enjoyRatio:'3%',
+        rightLevel:'LV3',
+        status:this.$t('l.l_unfinished'),
+      },
+      currentTeam:{
+        teamPeople:0,
+        teamProformance:0,
+        teamProfit:0,
+      },
       layers:0,
       teamLevels:[
         {level:'LV1',value:Math.pow(10,5),ratio:'2%'},
@@ -107,6 +126,9 @@ export default {
         {level:'LV7',value:50*Math.pow(10,5),ratio:'8%'},
       ],
       curLevelIndex:2,
+      currencyInfos:currencyMap,
+      searching:false,
+      teamSearching:false,
     }
   },
   computed: {
@@ -127,16 +149,84 @@ export default {
         this.$message.error({content:this.$t('l.l_enterrightaddress'),top:`300px`})
         return
       }
-      this.team.isSearchData = true
-      this.team.searching = true
-      this.team.teamSearching = true
+      this.isSearchData = true
+      this.searching = true
+      this.teamSearching = true
       setTimeout(async ()=>{
         _self.removeInfo() //搜索前移除信息
-        await _self.team.searchNode(value);
-        _self.team.teamSearching = false
+        await _self.calculateTeamInfo(value,true);
+        _self.teamSearching = false
       },0);
 
    },
+   async calculateTeamPerformance(){
+      let _self = this;
+      const layers_two_storeage = localStorage.getItem('TWO-RECORD')
+      const layers_two_Record = JSON.parse(layers_two_storeage) || []
+      const layers_one_storeage = localStorage.getItem('ONE-RECORD')
+      const layers_one_Record = JSON.parse(layers_one_storeage) || []
+      const layers_profit_storeage = localStorage.getItem('PROFIT-RECORD')
+      const layers_profit_Record = JSON.parse(layers_profit_storeage) || []
+      //2.1. Libra 数量
+      // 1libra.   2btc. 3eth.  4usdt.  5bnb.  6fil
+      for(let i = 0,len = layers_two_Record.length; i < len; i++){
+        let item = layers_two_Record[i];
+
+        for(let j = 0,len_j = _self.currencyInfos.length; j < len_j; j++){
+
+          let currency = _self.currencyInfos[j];
+          if(item.currency1Index == currency.id){
+            _self.currencyInfos[i].amount += Number(item.useableAmount1) / Wallet.Precisions()
+          }
+          if(item.currency2Index == currency.id){
+            _self.currencyInfos[i].amount += Number(item.useableAmount2) / Wallet.Precisions()
+          }
+        }
+      }
+
+      //1.2. BTC 数量
+      for(let i = 0, len = layers_one_Record.length; i < len; i++){
+        let item = layers_one_Record[i]
+
+        for(let j = 0,len_j = _self.currencyInfos.length; j < len_j; j++){
+          
+          let currency = _self.currencyInfos[j];
+          if(item.currencyIndex == currency.id){
+            _self.currencyInfos[i].amount += Number(item.useableAmount) / Wallet.Precisions()
+          }
+        }
+      }
+      
+
+      //3. Libra 收益数量
+      let libra_profit_amount = layers_profit_Record.reduce((prev,item) => {
+                                                return prev + Number(item.amount)/Wallet.Precisions()
+                                            },0)
+      console.table(_self.currencyInfos);console.log({libra_profit_amount})
+      if(_self.currencyInfos[1].price < 3){
+         const res = await _self.getCoinsPrice();
+         //更新价格
+         res.forEach((ele,index) => {
+           _self.currencyInfos[index].price = (+ele || 1)
+         })
+      }
+      //团队业绩
+      _self.team.teamProformance = 0
+      for(let i = 0,len = _self.currencyInfos.length; i<len;i++){
+        let item = _self.currencyInfos[i]
+        let rValue = item.price * item.amount
+        _self.team.teamProformance += rValue
+      }
+
+      //团队收益
+      _self.team.teamProfit = libra_profit_amount * _self.currencyInfos[0].price;  
+      if(!_self.isSearchData){
+        _self.currentTeam.teamProformance = _self.team.teamProformance + 0
+        _self.currentTeam.teamProfit = _self.team.teamProfit + 0
+      }
+      //检查完成状态
+      this.checkTeam()
+    },
     leftTeamClick(){
       //减一
       this.curLevelIndex -= 1;
@@ -205,6 +295,167 @@ export default {
         this.team.status = teamProformance < this.teamLevels[6].value ? this.$t('l.l_unfinished') : this.$t('l.l_completed')
       }
     },
+    async getCoinsPrice(){
+      let _self = this
+      let promiseCoinRequestArray = this.currencyInfos.map(ele => {
+          return new Promise((resolve,reject) => {
+               Wallet.queryPrice(ele.currency.toLowerCase(),res =>{
+                 resolve(Number(res ? res : 1))
+               },err =>{ resolve(0)})
+          })
+      })
+      return Promise.all(promiseCoinRequestArray)
+    },
+    async calculateTeamInfo(address,isTop) {
+      let _self = this
+      //-1. 打印地址
+      console.log({'layer-show':this.layers,address})
+      //0. 
+      if(isTop){ //本人自己
+        //----------------
+      }
+      //1. 获得 address 下直接数量
+      const total_a = await _self.checkNodeCount(address)
+      console.log({address,total_a,a:'直接数量'})
+      _self.team.teamPeople += Number(total_a)
+      if(!_self.isSearchData){
+        _self.currentTeam.teamPeople = _self.team.teamPeople + 0
+      }
+      const total_num = +total_a
+      if(total_num > 0){
+        //2. 获得 address 下直推下级的地址信息, 获得团队人数
+        const info_a = await _self.getNodeTeamDown(address,0,total_num,total_num)
+        console.log({address,info_a,a:'团队地址详情'})
+        //3. 根据下级地址获得存入记录: 单币记录,双币记录,  返利记录 --> 计算团队业绩,  团队总收益
+        if(!info_a || info_a.length == 0) {
+            _self.searching = false
+            return
+        }
+
+        _self.layers++; //层数
+        //3.x
+        for(let i = 0,len = info_a.length; i < len; i++){
+          
+          //3.1
+          setTimeout(async function(i){
+              let item = info_a[i]
+              const item_address = item.downAddress
+              //存入信息
+              let item_deposit = new Deposits(item_address)
+              const oneCount = await item_deposit.checkHasMyLockData()
+              if(oneCount > 0){
+                const oneRecord = await item_deposit.getMyLockAmount(0,oneCount) // _self.getMyLockAmount(item_address,0,oneCount,oneCount)
+                console.log({item_address,oneRecord,a: i + 'MyLockData'})
+                if(oneRecord && oneRecord.length > 0){
+                  const oneStr = localStorage.getItem('ONE-RECORD')
+                  const historyOneRecord = JSON.parse(oneStr) || []
+                  historyOneRecord.push(...oneRecord)
+                  localStorage.setItem('ONE-RECORD',JSON.stringify(historyOneRecord))
+                }
+              }
+              //3.2
+              const twoCount = await item_deposit.checkHasMyPairLockData() // _self.checkHasMyPairLockData(item_address)
+              console.log({item_address,twoCount,a: i + 'checkHasMyPairLockData'})
+              if(twoCount > 0){
+                const twoRecord = await item_deposit.getMyPairLockAmount(0,twoCount) // _self.getMyPairLockAmount(item_address,0,twoCount,twoCount)
+                console.log({item_address,twoRecord,a: i + 'MyPairLock'})
+                if(twoRecord && twoRecord.length > 0){
+                    const twoStr = localStorage.getItem('TWO-RECORD')
+                    const historyTwoRecord = JSON.parse(twoStr) || []
+                    historyTwoRecord.push(...twoRecord)
+                    localStorage.setItem('TWO-RECORD',JSON.stringify(historyTwoRecord))
+                }
+              }
+              //3.3
+              let item_profit = new Profits(item_address)
+              const profitCount = await item_profit.checkHasIncomeData() // _self.checkHasIncomeData(item_address)
+              console.log({item_address,profitCount,a: i + 'checkHasIncomeData'})
+              if(profitCount > 0){
+                const profitRecord = await item_profit.getProfitRecord(0,profitCount) // _self.getProfitRecord(item_address,0,profitCount,profitCount)
+                console.log({item_address,profitRecord,a: i + 'getProfitRecord'})
+                if(profitRecord && profitRecord.length > 0){
+                    const profitStr = localStorage.getItem('PROFIT-RECORD')
+                    const historyProfitRecord = JSON.parse(profitStr) || []
+                    historyProfitRecord.push(...profitRecord)
+                    localStorage.setItem('PROFIT-RECORD',JSON.stringify(historyProfitRecord))
+                }
+              }
+              _self.calculateTeamPerformance()
+          }.bind(_self),0,i)
+          let nextLayer_whichAddress = info_a[i].downAddress
+          if(nextLayer_whichAddress && nextLayer_whichAddress.length > 0 && address.toLowerCase() !== nextLayer_whichAddress.toLowerCase()){
+            //3.4 --> 节点地址往下递归
+            _self.calculateTeamInfo(nextLayer_whichAddress,false)
+          }
+        }
+  
+      }else{
+        if(_self.searching){
+          //正在查找团队信息
+          // _self.$message.error(_self.$t('l.l_noTeamBelowInfo'))
+          _self.team.teamProfit = 0;
+          _self.team.teamProformance = 0;
+          _self.searching = false
+        }
+      }
+    },
+    /**
+     * 节点 address 直推下级 所有数量
+     */
+    async checkNodeCount(address){
+      let _self = this
+      return new Promise((resolve,reject) => {
+          Wallet.queryDownsSize(address,(res) =>{
+            resolve(res)
+          },(err) => {
+            reject(err)
+          })
+      })
+    },
+
+    /**
+     * 节点 address 下级信息
+     * "upperAddress":"0x678B95f105c414A5A6014Db225930b1B0fd93f88",
+     * "userAddress":"0x678B95f105c414A5A6014Db225930b1B0fd93f88",
+     * "hasDeducted":true}
+     */
+    async getNodeTeamDown(address,start = 0, end = 1,total = 1){
+      let _self = this
+      return new Promise((resolve,reject) => {
+        try {
+          let promiseDownArr = [],resultDownArr = [];
+          let i = start;
+          end = end > total ? total : end
+          do {
+            promiseDownArr[i] = new Promise((res,rej) => {
+                Wallet.queryDownUser(address,i,(info) => {
+                  if(info){
+                    resultDownArr.push(info)
+                    res(info)
+                  }else{
+                    rej('error')
+                  }
+                },(err) => {rej(err)})
+            })
+            ++i;
+
+          } while (i < end);
+
+          Promise.all(promiseDownArr)
+          .then((res) => {
+            resolve(res)
+            //这里过滤数据, 递归,或者 total == end 时,不用递归
+            if(resultDownArr.length == end && total > end){
+              _self.getTeamDown(end,end + 1)
+            }
+          })
+          .catch((err) => { reject(err)})
+        } catch (error) {
+            reject(error)
+            _self.$message.error(_self.$t('l.catch_err'))
+        }
+      })
+    },
     async getIncomeData(){
       let _self = this
       _self.walletAddress = localStorage.getItem("walletAddress") || '';
@@ -229,11 +480,16 @@ export default {
     },
     removeInfo(){
       this.team.teamPeople = 0
+      localStorage.removeItem('ONE-RECORD')
+      localStorage.removeItem('TWO-RECORD')
+      localStorage.removeItem('PROFIT-RECORD')
+
     },
+  },
+  created() {
   },
   async mounted() {
       let _self = this
-      _self.team.status = this.$t('l.l_unfinished');
       _self.walletAddress = localStorage.getItem("walletAddress") || '';
       let inviteAddress = _self.$route.query.address
       if(inviteAddress && inviteAddress.length > 0) { _self.$setCookie('inviteAddress',inviteAddress,30 * 24 * 60 * 60)}
@@ -241,13 +497,15 @@ export default {
       
       setTimeout(async ()=>{
 
-         const res = await _self.team.getCoinsPrice();
+         const res = await _self.getCoinsPrice();
+         
+        //更新价格
         res.forEach((ele,index) => {
-          _self.team.currencyInfos[index].price = (+ele || 1)
+          _self.currencyInfos[index].price = (+ele || 1)
         })
         if(!_self.walletAddress) return
          _self.removeInfo() //清除信息
-         await _self.team.searchNode(_self.walletAddress);
+         await _self.calculateTeamInfo(_self.walletAddress,true);
       },500);
       const res = await _self.getIncomeData()
       if(res){
