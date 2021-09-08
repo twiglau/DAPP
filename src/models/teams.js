@@ -25,16 +25,15 @@ function Aline(line,ones,twos,profits,currencys,proformanceValue,profitValue,add
     this.address = address
 } 
 
-Aline.prototype.calculateDetail = async function(item_address,aline){
+Aline.prototype.calculateDetail = async function(item_address){
     let _self = this
-    let index = +aline.line
     //存入信息
     let item_deposit = new Deposits(item_address)
     const oneCount = await item_deposit.checkHasMyLockData()
     if(oneCount > 0){
         const oneRecord = await item_deposit.getMyLockAmount(0,oneCount)
         if(oneRecord && oneRecord.length > 0){
-            _self.TeamLines[index].ones.push(...oneRecord)
+            _self.ones.push(...oneRecord)
         }
     }
     //3.2
@@ -42,7 +41,7 @@ Aline.prototype.calculateDetail = async function(item_address,aline){
     if(twoCount > 0){
         const twoRecord = await item_deposit.getMyPairLockAmount(0,twoCount)
         if(twoRecord && twoRecord.length > 0){
-            _self.TeamLines[index].twos.push(...twoRecord)
+            _self.twos.push(...twoRecord)
         }
     }
     //3.3
@@ -51,68 +50,56 @@ Aline.prototype.calculateDetail = async function(item_address,aline){
     if(profitCount > 0){
         const profitRecord = await item_profit.getProfitRecord(0,profitCount)
         if(profitRecord && profitRecord.length > 0){
-            _self.TeamLines[index].profits.push(...profitRecord)
+            _self.profits.push(...profitRecord)
         }
     }
 }
 
-Aline.prototype.calculateTeamPerformance = function(){
+Aline.prototype.calculateAlinePerformance = function(){
     let _self = this;
-    for(let a = 0,len_a = _self.TeamLines.length; a < len_a; a++){
-        //每条线计算
-        let a_line = _self.TeamLines[a];
-        console.log({0:a_line})
-        //一条线下的记录
-
-        //2.1. 双币记录计算,币的数量 存入 currencys
-        for(let i = 0,len = a_line.twos.length; i < len; i++){
-            let item = a_line.twos[i];
-            for(let j = 0,len_j = currencys.length; j < len_j; j++){
-                
-                let currency = currencys[j];
-                if(item.currency1Index == currency.id){
-                    _self.TeamLines[a].currencys[j].amount += Number(item.useableAmount1) / Wallet.Precisions()
-                }
-                if(item.currency2Index == currency.id){
-                    _self.TeamLines[a].currencys[j].amount += Number(item.useableAmount2) / Wallet.Precisions()
-                }
+    //2.1. 双币记录计算,币的数量 存入 currencys
+    for(let i = 0,len = _self.twos.length; i < len; i++){
+        let item = _self.twos[i];
+        for(let j = 0,len_j = _self.currencys.length; j < len_j; j++){
+            
+            let currency = _self.currencys[j];
+            if(item.currency1Index == currency.id){
+                _self.currencys[j].amount += Number(item.useableAmount1) / Wallet.Precisions()
+            }
+            if(item.currency2Index == currency.id){
+                _self.currencys[j].amount += Number(item.useableAmount2) / Wallet.Precisions()
             }
         }
-
-        //2.2. 单币记录计算,币的数量 存入 currencys
-        for(let i = 0, len = a_line.ones.length; i < len; i++){
-            let item = a_line.ones[i]
-            for(let j = 0,len_j = currencys.length; j < len_j; j++){
-                
-                let currency = currencys[j];
-                if(item.currencyIndex == currency.id){
-                    _self.TeamLines[a].currencys[j].amount += Number(item.useableAmount) / Wallet.Precisions()
-                }
-            }
-        }
-
-        //3. 收益数量
-        let libra_profit_amount = a_line.profits.reduce((prev,item) => {
-                                                return prev + Number(item.amount)/Wallet.Precisions()
-                                            },0)
-        
-        //4. 某条线的团队业绩
-        _self.TeamLines[a].proformanceValue = 0
-        for(let i = 0,len = _self.TeamLines[a].currencys.length; i<len;i++){
-            let item = _self.TeamLines[a].currencys[i]
-            let rValue = item.price * item.amount
-            _self.TeamLines[a].proformanceValue += rValue
-        }
-
-        //5. 某条线团队收益
-        _self.TeamLines[a].profitValue = libra_profit_amount * _self.TeamLines[a].currencys[0].price; 
     }
-    // if(!_self.isSearchData){
-    //     _self.currentTeam.teamProformance = _self.team.teamProformance + 0
-    //     _self.currentTeam.teamProfit = _self.team.teamProfit + 0
-    // }
-    // //检查完成状态
-    // this.checkTeam()
+
+    //2.2. 单币记录计算,币的数量 存入 currencys
+    for(let i = 0, len = _self.ones.length; i < len; i++){
+        let item = _self.ones[i]
+        for(let j = 0,len_j = _self.currencys.length; j < len_j; j++){
+            
+            let currency = _self.currencys[j];
+            if(item.currencyIndex == currency.id){
+                _self.currencys[j].amount += Number(item.useableAmount) / Wallet.Precisions()
+            }
+        }
+    }
+
+    //3. 收益数量
+    let libra_profit_amount = a_line.profits.reduce((prev,item) => {
+                                            return prev + Number(item.amount)/Wallet.Precisions()
+                                        },0)
+    
+    //4. 某条线的团队业绩
+    _self.proformanceValue = 0
+    for(let i = 0,len = _self.currencys.length; i<len;i++){
+        let item = _self.currencys[i]
+        let rValue = item.price * item.amount
+        _self.proformanceValue += rValue
+    }
+
+    //5. 某条线团队收益
+    _self.profitValue = libra_profit_amount * _self.currencys[0].price; 
+    
 }
 
 function Teams(address){
@@ -217,13 +204,28 @@ Teams.prototype.searchNode = async function(address){
     }
     
 }
+Teams.prototype.calculateTeamPerformance = function(){
 
+    for(let a = 0,len_a = _self.TeamLines.length; a < len_a; a++){
+        //每条线计算
+        let a_line = _self.TeamLines[a];
+        console.log({0:a_line})
+        //一条线下的记录
+        aline.calculateAlinePerformance()
+    }
+    // if(!_self.isSearchData){
+    //     _self.currentTeam.teamProformance = _self.team.teamProformance + 0
+    //     _self.currentTeam.teamProfit = _self.team.teamProfit + 0
+    // }
+    // //检查完成状态
+    // this.checkTeam()
+}
 Teams.prototype.calculateTeamInfo_whichLine = async function(address,isTop,aline) {
     let _self = this
     //0. 
     if(isTop){ //顶级节点
       //----------------
-      _self.calculateDetail(address,aline)
+      aline.calculateDetail(address)
       _self.calculateTeamPerformance()
       
     }

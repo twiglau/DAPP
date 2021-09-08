@@ -48,8 +48,8 @@
                     <span>{{$t('l.t_MinPA')}}</span><span>100 USDT</span>
                 </div> -->
                 <li>
-                    <a-button v-show="!isApprovedUSDT" :loading="isApproving" class="g-button" @click="handleApprovedFor()">{{isApproving ? $t('l.t_approving') : $t('l.approve')}}</a-button>
-                    <button v-show="isApprovedUSDT" class="g-button" @click="handleSwapAction(iptValue0)">{{$t('l.t_Duic')}}</button>
+                    <a-button v-show="!isApproved" :loading="isApproving" class="g-button" @click="handleApprovedFor()">{{isApproving ? $t('l.t_approving') : $t('l.approve')}}</a-button>
+                    <button v-show="isApproved" class="g-button" @click="handleSwapAction(iptValue0)">{{$t('l.t_Duic')}}</button>
                 </li>
             </a-spin>
         </div>
@@ -79,6 +79,14 @@
         },
         directives:{clickoutside},
         computed: {
+            isApproved:function(){
+                const {isApprovedUSDT,isApprovedDiem,iptCoin1} = this
+                if(iptCoin1 == 'Libra'){
+                    return isApprovedUSDT
+                }else {
+                    return isApprovedUSDT && isApprovedDiem
+                }
+            }
         },
         watch:{
             iptValue0:{
@@ -113,13 +121,14 @@
                 iptValue0:null,
                 iptCoin0:'USDT',
                 iptValue1:null,
-                iptCoin1:'LBR',
+                iptCoin1:'Libra',
                 isDui_sToken:true,
                 usdt_lbr_p:0,
                 daiBiPriceArray:[],
                 LBR_price:0,
                 usdtAmount:0,
                 isApprovedUSDT:false,
+                isApprovedDiem:false,
                 isApproving:false,
                 inviteAddress:'',
                 swap:{},
@@ -133,12 +142,12 @@
             changeDui(e){
                 let _self = this
                 if(e == 'Libra'){
-                    this.iptCoin1 = 'LBR'
+                    this.iptCoin1 = 'Libra'
                     _self.LBR_price = _self.daiBiPriceArray[0]
                 }
                 if(e == 'Diem'){
                     this.iptCoin1 = 'Diem'
-                    _self.LBR_price = _self.daiBiPriceArray[0]
+                    _self.LBR_price = _self.daiBiPriceArray[1]
                 }
                 _self.usdt_lbr_p = _self.LBR_price > 0 ? 1 / _self.LBR_price : 0;
                 _self.iptValue0 = 0;
@@ -155,12 +164,29 @@
                 let _self = this
                 let walletAddress = localStorage.getItem("walletAddress");
                 _self.walletAddress = walletAddress;
-                Wallet.queryAllowance(_self.walletAddress,'USDT',(res)=>{
-                    if(res && res > 0) {
-                        _self.isApprovedUSDT = true
-                    }else {
-                        _self.isApprovedUSDT = false
-                    }
+                Promise.all([
+                    new Promise((resolve) => {
+                        Wallet.queryAllowance(_self.walletAddress,'USDT',(res)=>{
+                            if(res && res > 0) {
+                                resolve(true)
+                            }else {
+                                resolve(false)
+                            }
+                        },err => resolve(false))
+                    }),
+                    new Promise((resolve) => {
+                        Wallet.queryAllowance(_self.walletAddress,'Diem',(res)=>{
+                            if(res && res > 0) {
+                                resolve(true)
+                            }else {
+                                resolve(false)
+                            }
+                        },err => resolve(false))
+                    }),
+                ])
+                .then(res => {
+                    _self.isApprovedUSDT = res[0]
+                    _self.isApprovedDiem = res[1]
                 })
 
             },
@@ -179,6 +205,7 @@
                    })
                ])
                .then(res => {
+                   console.log({res})
                    _self.daiBiPriceArray = res
                    if(!_self.usdt_lbr_p){
                        _self.LBR_price = _self.daiBiPriceArray[0]
@@ -261,15 +288,55 @@
                 let _self = this
                 _self.isApproving = true
                 this.walletAddress = localStorage.getItem("walletAddress");
-                Wallet.approve('USDT',this.walletAddress,10000000,(res)=>{
-                    _self.isApproving = false
-                    if(res){
-                        _self.updateApproveStatus('USDT');
-                    }
-                },(err) => {});
-            },
-            updateApproveStatus(){
-                this.isApprovedUSDT = true;
+                if(_self.iptCoin1 == 'Libra'){
+                    Wallet.approve('USDT',this.walletAddress,10000000,(res)=>{
+                        _self.isApproving = false
+                        if(res){
+                            this.isApprovedUSDT = true;
+                        }
+                    },(err) => {
+                        _self.isApproving = false
+                        _self.isApprovedUSDT = false;
+                    });
+
+                }else {
+                    Promise.all([
+                        new Promise((resolve,reject) => {
+                            Wallet.approve('libra',this.walletAddress,res =>{
+                                    resolve(res)
+                                },err => reject(reject))
+                        }),
+                        new Promise((resolve,reject) => {
+                            Wallet.approve('diem',this.walletAddress,res =>{
+                                    resolve(res) 
+                                },err => reject(err))
+                        })
+                    ])
+                    .then(res => {
+                        _self.isApproving = false
+                        let res0 = res[0];
+                        let res1 = res[1];
+                        if(res0){
+                            this.isApprovedUSDT = true;
+                        }else{
+                            this.isApprovedUSDT = false;
+                        }
+                        if(res1){
+                            this.isApprovedDiem = true;
+                        }else{
+                            this.isApprovedDiem = false;
+                        }
+
+                        
+                    })
+                    .catch(err => {
+                        _self.isApproving = false
+                        _self.isApprovedUSDT = false;
+                        _self.isApprovedDiem = false;
+
+                    })
+
+                }
             },
         }
     }
