@@ -99,6 +99,8 @@ Aline.prototype.calculateAlinePerformance = function(){
 
     //5. 某条线团队收益
     _self.profitValue = libra_profit_amount * _self.currencys[0].price; 
+    const {twos,ones,profits} = this
+    console.log({twos,ones,profits})
     
 }
 
@@ -197,6 +199,7 @@ Teams.prototype.searchNode = async function(address){
         for(let i = 0, len = _self.TeamLines.length;i<len;i++){
             let aline = _self.TeamLines[i]
             _self.calculateTeamInfo_whichLine(aline.address,true,aline)
+
         }
 
     }else {
@@ -209,9 +212,8 @@ Teams.prototype.calculateTeamPerformance = function(){
     for(let a = 0,len_a = _self.TeamLines.length; a < len_a; a++){
         //每条线计算
         let a_line = _self.TeamLines[a];
-        console.log({0:a_line})
         //一条线下的记录
-        aline.calculateAlinePerformance()
+        a_line.calculateAlinePerformance()
     }
     // if(!_self.isSearchData){
     //     _self.currentTeam.teamProformance = _self.team.teamProformance + 0
@@ -222,10 +224,12 @@ Teams.prototype.calculateTeamPerformance = function(){
 }
 Teams.prototype.calculateTeamInfo_whichLine = async function(address,isTop,aline) {
     let _self = this
+    debugger
     //0. 
     if(isTop){ //顶级节点
       //----------------
       aline.calculateDetail(address)
+      console.log({isTop:aline})
       _self.calculateTeamPerformance()
       
     }
@@ -249,7 +253,8 @@ Teams.prototype.calculateTeamInfo_whichLine = async function(address,isTop,aline
         setTimeout(async function(i){
             let item = info_a[i]
             let item_address = item.downAddress
-            _self.calculateDetail(item_address,aline)
+            aline.calculateDetail(item_address)
+            console.log({item:aline})
             _self.calculateTeamPerformance()
         }.bind(_self),0,i)
         let nextLayer_whichAddress = info_a[i].downAddress

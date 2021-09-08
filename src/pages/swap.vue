@@ -80,9 +80,9 @@
         directives:{clickoutside},
         computed: {
             isApproved:function(){
-                const {isApprovedUSDT,isApprovedDiem,iptCoin1} = this
+                const {isApprovedUSDT,isApprovedDiem,isApprovedLibra,iptCoin1} = this
                 if(iptCoin1 == 'Libra'){
-                    return isApprovedUSDT
+                    return isApprovedUSDT && isApprovedLibra
                 }else {
                     return isApprovedUSDT && isApprovedDiem
                 }
@@ -129,6 +129,7 @@
                 usdtAmount:0,
                 isApprovedUSDT:false,
                 isApprovedDiem:false,
+                isApprovedLibra:false,
                 isApproving:false,
                 inviteAddress:'',
                 swap:{},
@@ -183,10 +184,20 @@
                             }
                         },err => resolve(false))
                     }),
+                    new Promise((resolve) => {
+                        Wallet.queryAllowance(_self.walletAddress,'Libra',(res)=>{
+                            if(res && res > 0) {
+                                resolve(true)
+                            }else {
+                                resolve(false)
+                            }
+                        },err => resolve(false))
+                    })
                 ])
                 .then(res => {
                     _self.isApprovedUSDT = res[0]
                     _self.isApprovedDiem = res[1]
+                    _self.isApprovedLibra = res[2]
                 })
 
             },
@@ -289,15 +300,66 @@
                 _self.isApproving = true
                 this.walletAddress = localStorage.getItem("walletAddress");
                 if(_self.iptCoin1 == 'Libra'){
-                    Wallet.approve('USDT',this.walletAddress,10000000,(res)=>{
-                        _self.isApproving = false
-                        if(res){
-                            this.isApprovedUSDT = true;
-                        }
-                    },(err) => {
-                        _self.isApproving = false
-                        _self.isApprovedUSDT = false;
-                    });
+                    
+                    if(_self.isApprovedUSDT && !_self.isApprovedLibra){
+                        Wallet.approve('libra',this.walletAddress,10000000,(res)=>{
+                            _self.isApproving = false
+                            if(res){
+                                this.isApprovedLibra = true;
+                            }
+                        },(err) => {
+                            _self.isApproving = false
+                            _self.isApprovedLibra = false;
+                        });
+
+                    }else if(!_self.isApprovedUSDT && _self.isApprovedLibra){
+                        Wallet.approve('USDT',this.walletAddress,10000000,(res)=>{
+                            _self.isApproving = false
+                            if(res){
+                                this.isApprovedUSDT = true;
+                            }
+                        },(err) => {
+                            _self.isApproving = false
+                            _self.isApprovedUSDT = false;
+                        });
+
+                    }else{
+                        Promise.all([
+                            new Promise((resolve,reject) => {
+                                Wallet.approve('USDT',this.walletAddress,res =>{
+                                        resolve(res)
+                                    },err => reject(reject))
+                            }),
+                            new Promise((resolve,reject) => {
+                                Wallet.approve('libra',this.walletAddress,res =>{
+                                        resolve(res) 
+                                    },err => reject(err))
+                            })
+                        ])
+                        .then(res => {
+                            _self.isApproving = false
+                            let res0 = res[0];
+                            let res1 = res[1];
+                            if(res0){
+                                this.isApprovedUSDT = true;
+                            }else{
+                                this.isApprovedUSDT = false;
+                            }
+                            if(res1){
+                                this.isApprovedLibra = true;
+                            }else{
+                                this.isApprovedLibra = false;
+                            }
+
+                            
+                        })
+                        .catch(err => {
+                            _self.isApproving = false
+                            _self.isApprovedUSDT = false;
+                            _self.isApprovedLibra = false;
+                        })
+
+                    }
 
                 }else {
                     if(_self.isApprovedUSDT && !_self.isApprovedDiem){
