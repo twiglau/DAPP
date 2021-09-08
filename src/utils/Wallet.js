@@ -19,13 +19,13 @@ const bchId=13;
 const ltcId=14;
 const linkId=15;
 const eosId=16;
-
+const diemId=17;
 const systemPrecisions=100000000;
 
-const _priceContractAddress='0x28bBEA401e43a5868822C845DD6A1B9a39a60D19';
-const _recordContractAddress = "0xd6BC354B58F255e5fCbe157Eb8531D93E695c862";
-const _tokensContractAddress = "0xD82551fd59E7e33CA342f713C1773bd9fcCbD94e";
-const _contractAddress = "0x0A8f967EC91b3BE24618Bd8e00797aEEA06fE963";
+const _priceContractAddress='0x9259CcDe80F7B6eA81D6c95F09ccCfD724559b35';
+const _recordContractAddress = "0x622Fcf34C1Cd7906e65139a19a6F6182256F2b01";
+const _tokensContractAddress = "0xf981E55c20C35F84faC28135A2767600b6588BC4";
+const _contractAddress = "0x266825dDD0163B1657725730A47E69d03B5d3348";
 
 const _contractABI = [
     {
@@ -180,6 +180,11 @@ const _contractABI = [
                 "type": "address"
             },
             {
+                "internalType": "uint8",
+                "name": "currencyIndex",
+                "type": "uint8"
+            },
+            {
                 "internalType": "uint256",
                 "name": "_amount",
                 "type": "uint256"
@@ -205,6 +210,11 @@ const _contractABI = [
         ],
         "name": "exchangeMap",
         "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "currencyIndex",
+                "type": "uint8"
+            },
             {
                 "internalType": "address",
                 "name": "user",
@@ -334,19 +344,6 @@ const _contractABI = [
     {
         "inputs": [],
         "name": "latestDividendTime",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "libraPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -621,19 +618,6 @@ const _contractABI = [
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "_a",
-                "type": "uint256"
-            }
-        ],
-        "name": "tlip",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
@@ -742,33 +726,7 @@ const _recordContractABI=[
     },
     {
         "inputs": [],
-        "name": "adaPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "bchFeeAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "bchPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -794,19 +752,6 @@ const _recordContractABI=[
     },
     {
         "inputs": [],
-        "name": "bnbPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "btcFeeAmount",
         "outputs": [
             {
@@ -820,7 +765,7 @@ const _recordContractABI=[
     },
     {
         "inputs": [],
-        "name": "btcPrice",
+        "name": "diemFeeAmount",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -846,33 +791,7 @@ const _recordContractABI=[
     },
     {
         "inputs": [],
-        "name": "dogePrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "dotFeeAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "dotPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -898,33 +817,7 @@ const _recordContractABI=[
     },
     {
         "inputs": [],
-        "name": "eosPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "ethFeeAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "ethPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -972,19 +865,6 @@ const _recordContractABI=[
     {
         "inputs": [],
         "name": "filFeeAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "filPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1093,19 +973,6 @@ const _recordContractABI=[
     },
     {
         "inputs": [],
-        "name": "libraPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "linkFeeAmount",
         "outputs": [
             {
@@ -1119,33 +986,7 @@ const _recordContractABI=[
     },
     {
         "inputs": [],
-        "name": "linkPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "ltcFeeAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "ltcPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1250,6 +1091,32 @@ const _recordContractABI=[
     {
         "inputs": [],
         "name": "oneBtcTotalAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneDiemTakeoutAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oneDiemTotalAmount",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1809,11 +1676,6 @@ const _recordContractABI=[
                 "internalType": "uint256",
                 "name": "fee2",
                 "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "time",
-                "type": "uint256"
             }
         ],
         "name": "saveTakeoutTwoRecord",
@@ -1824,19 +1686,6 @@ const _recordContractABI=[
     {
         "inputs": [],
         "name": "solFeeAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "solPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1968,11 +1817,11 @@ const _recordContractABI=[
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "",
+                "name": "totalBalance",
                 "type": "uint256"
             }
         ],
-        "stateMutability": "payable",
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -2158,6 +2007,52 @@ const _recordContractABI=[
     {
         "inputs": [],
         "name": "twoBtcTotal",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoDiemTakeout",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "id",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint256",
+                "name": "libraAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount2",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "twoDiemTotal",
         "outputs": [
             {
                 "internalType": "uint8",
@@ -2718,19 +2613,6 @@ const _recordContractABI=[
     },
     {
         "inputs": [],
-        "name": "uniPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "usdtFeeAmount",
         "outputs": [
             {
@@ -2895,10 +2777,17 @@ const _recordContractABI=[
         ],
         "stateMutability": "view",
         "type": "function"
+    }
+];
+const _priceContractABI=[
+    {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
     },
     {
         "inputs": [],
-        "name": "xrpPrice",
+        "name": "diemPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -2908,9 +2797,39 @@ const _recordContractABI=[
         ],
         "stateMutability": "view",
         "type": "function"
-    }
-];
-const _priceContractABI=[
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+            }
+        ],
+        "name": "dp",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "floor",
+                "type": "uint256"
+            }
+        ],
+        "name": "getFloorRate",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "rate",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
     {
         "inputs": [
             {
@@ -2936,30 +2855,6 @@ const _priceContractABI=[
         "type": "function"
     },
     {
-        "inputs": [],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "floor",
-                "type": "uint256"
-            }
-        ],
-        "name": "getFloorRate",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "rate",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "pure",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -2976,6 +2871,32 @@ const _priceContractABI=[
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "libraPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+            }
+        ],
+        "name": "lp",
+        "outputs": [],
+        "stateMutability": "payable",
         "type": "function"
     }
 ];
@@ -2997,6 +2918,7 @@ const bchContractAddress = '0x0Ab6D53596fe437058f139bF10636ed7B89da063';
 const ltcContractAddress = '0xB7ca0341699889e6be1E7152ad177B33162fC19F';
 const linkContractAddress = '0x76151EC1148C93495Fd522Ef411d0C348166f58A';
 const eosContractAddress = '0x7c73098F95633d4D99E74536AdA1c8E7E3D5F05f';
+const diemContractAddress = '0xc5387759ede4DaffD8bF5D7e8a435dc5cFA5c9a1';
 /////////////////////////////////////////////////////////////////////////////币安测试网测试 - end
 const erc20TokenContractABI=[
     {
@@ -3368,6 +3290,8 @@ function approve(currency,address,value, callback,errorCallback) {
         contractAddress=linkContractAddress;
     }else if(currency == "EOS"){
         contractAddress=eosContractAddress;
+    }else if(currency == "DIEM"){
+        contractAddress=diemContractAddress;
     }else {
         errorCallback(false);
         return;
@@ -3459,6 +3383,8 @@ function balanceOf(currency,address,callback,errorCallback) {
         contractAddress=linkContractAddress;
     }else if(currency == "EOS"){
         contractAddress=eosContractAddress;
+    }else if(currency == "DIEM"){
+        contractAddress=diemContractAddress;
     }else {
         errorCallback(false);
     }
@@ -3477,7 +3403,7 @@ function balanceOf(currency,address,callback,errorCallback) {
 }
 
 //兑换
-function exchange(upperAddress,account,amount,callback,errorCallback){
+function exchange(currency,upperAddress,account,amount,callback,errorCallback){
     if (amount == null || Number(amount) <= 0){
         errorCallback("amount error");
         return;
@@ -3490,6 +3416,7 @@ function exchange(upperAddress,account,amount,callback,errorCallback){
         const data = contract.methods
             .exchange(
                 upperAddress,
+                getCurrencyIndex(currency),
                 Number(amount)*systemPrecisions
             ).encodeABI();
         sendTransfer(account, data, 0x0, callback, errorCallback)
@@ -4259,6 +4186,8 @@ function getCurrencyIndex(currency) {
         return linkId;
     }else if (currency=="EOS"){
         return eosId;
+    }else if (currency=="DIEM"){
+        return diemId;
     }
 }
 
