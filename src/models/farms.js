@@ -501,7 +501,7 @@ Farms.prototype.configDepositInfo = function(type){
         })
       ] : [
         new Promise((resolve) => {
-              Wallet.balanceOf(_self.currency1,_self.address,(res)=>{
+              Wallet.balanceOf(_self.currency2 == 'BNB'? _self.currency2 : _self.currency1,_self.address,(res)=>{
                   resolve(Number(res ? res : 0))
               },(err) =>{rej(err)})
         }),

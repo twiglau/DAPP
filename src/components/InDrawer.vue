@@ -26,7 +26,7 @@
           </div>
           <div class="container__avaiuble">
               <span>≈<countTo :endVal='model.isSingle == 0? model.realM_v : model.realS_v' :duration='1000' :decimals="2" prefix="$"></countTo></span>
-              <span>{{$t('l.balance')}}<countTo :endVal='model.balance' :duration='1000' :decimals="4"></countTo>{{model.currency || model.currency1}}</span>
+              <span>{{$t('l.balance')}}<countTo :endVal='model.balance' :duration='1000' :decimals="4"></countTo>{{balanceStr()}}</span>
               <svg-icon class="down-arrow" icon-class="down_icon"></svg-icon>
           </div>
           <div class="container__info">
@@ -97,11 +97,21 @@ export default {
             this.model.realS_v = 0;this.model.realM_v = 0;
             this.model.nAmount1 = 0;this.model.nAmount2 = 0;
           }else{
-            this.model.realS_v = (+newVal) * (+this.model.sPrice)
-            //计算主流币 = 存入代币数量 * 代币单价 *4 / 主流币单价
-            this.model.nAmount1 = (+newVal)
-            this.model.nAmount2 = this.model.mPrice > 0 ? this.model.realS_v * 4 / (+this.model.mPrice)
-                                                          : 0
+            if(this.model.currency2 == 'BNB'){ //输入的为主流币
+              this.model.realM_v = (+newVal) * (+this.model.mPrice)
+              //计算主流币 = 存入代币数量 * 代币单价 *4 / 主流币单价
+              this.model.nAmount2 = (+newVal)
+              this.model.nAmount1 = this.model.sPrice > 0 ? this.model.realM_v / ((+this.model.sPrice)*4)
+                                                            : 0
+
+            }else{
+              this.model.realS_v = (+newVal) * (+this.model.sPrice)
+              //计算主流币 = 存入代币数量 * 代币单价 *4 / 主流币单价
+              this.model.nAmount1 = (+newVal)
+              this.model.nAmount2 = this.model.mPrice > 0 ? this.model.realS_v * 4 / (+this.model.mPrice)
+                                                            : 0
+
+            }
           }
         }
       }
@@ -130,9 +140,23 @@ export default {
       this['iptValue' + index] = this['iptValue' + index].replace(/^(-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3')
     },
     sureClick(){
-        let cunru_amount = this.model?.currency2 == 'BNB'? this.model.nAmount2 : this.iptValue1;
+        let cunru_amount = this.iptValue1;
         this.$emit('sure',cunru_amount)
     },
+    balanceStr(){
+      let cur
+      
+      if(this.model.currency1){
+        if(this.model.currency2 == 'BNB'){
+          cur = this.model.currency2
+        }else{
+          cur = this.model.currency1
+        }
+      }else{
+        cur = this.model.currency
+      }
+      return cur
+    }
   }
 }
 </script>
