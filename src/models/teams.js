@@ -224,7 +224,6 @@ Teams.prototype.calculateTeamPerformance = function(){
 }
 Teams.prototype.calculateTeamInfo_whichLine = async function(address,isTop,aline) {
     let _self = this
-    debugger
     //0. 
     if(isTop){ //顶级节点
       //----------------
