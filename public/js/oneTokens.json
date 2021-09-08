@@ -10,6 +10,16 @@
       "oneRecords":[]
     },
     {
+      "currency":"Diem",
+      "rateOfAnnualized":0,
+      "lockAmount":0,
+      "totalLockAmount":0,
+      "isApproved":false,
+      "isLoading":true,
+      "isApproving":false,
+      "oneRecords":[]
+    },
+    {
       "currency":"BNB",
       "rateOfAnnualized":22.22,
       "lockAmount":0,

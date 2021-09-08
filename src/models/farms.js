@@ -23,6 +23,7 @@ function Farms(address,upperAddress){
     //授权状态
     this.approveTokens = [
       {currency:"ETH",isApproved:false},
+      {currency:"Diem",isApproved:true},
       {currency:"BNB",isApproved:true},
       {currency:"BTC",isApproved:false},
       {currency:"USDT",isApproved:false},

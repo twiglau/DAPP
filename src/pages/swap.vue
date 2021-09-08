@@ -300,41 +300,66 @@
                     });
 
                 }else {
-                    Promise.all([
-                        new Promise((resolve,reject) => {
-                            Wallet.approve('libra',this.walletAddress,res =>{
-                                    resolve(res)
-                                },err => reject(reject))
-                        }),
-                        new Promise((resolve,reject) => {
-                            Wallet.approve('diem',this.walletAddress,res =>{
-                                    resolve(res) 
-                                },err => reject(err))
+                    if(_self.isApprovedUSDT && !_self.isApprovedDiem){
+                        Wallet.approve('diem',this.walletAddress,10000000,(res)=>{
+                            _self.isApproving = false
+                            if(res){
+                                this.isApprovedDiem = true;
+                            }
+                        },(err) => {
+                            _self.isApproving = false
+                            _self.isApprovedDiem = false;
+                        });
+
+                    }else if(!_self.isApprovedUSDT && _self.isApprovedDiem){
+                        Wallet.approve('USDT',this.walletAddress,10000000,(res)=>{
+                            _self.isApproving = false
+                            if(res){
+                                this.isApprovedUSDT = true;
+                            }
+                        },(err) => {
+                            _self.isApproving = false
+                            _self.isApprovedUSDT = false;
+                        });
+
+                    }else{
+                        Promise.all([
+                            new Promise((resolve,reject) => {
+                                Wallet.approve('USDT',this.walletAddress,res =>{
+                                        resolve(res)
+                                    },err => reject(reject))
+                            }),
+                            new Promise((resolve,reject) => {
+                                Wallet.approve('diem',this.walletAddress,res =>{
+                                        resolve(res) 
+                                    },err => reject(err))
+                            })
+                        ])
+                        .then(res => {
+                            _self.isApproving = false
+                            let res0 = res[0];
+                            let res1 = res[1];
+                            if(res0){
+                                this.isApprovedUSDT = true;
+                            }else{
+                                this.isApprovedUSDT = false;
+                            }
+                            if(res1){
+                                this.isApprovedDiem = true;
+                            }else{
+                                this.isApprovedDiem = false;
+                            }
+
+                            
                         })
-                    ])
-                    .then(res => {
-                        _self.isApproving = false
-                        let res0 = res[0];
-                        let res1 = res[1];
-                        if(res0){
-                            this.isApprovedUSDT = true;
-                        }else{
-                            this.isApprovedUSDT = false;
-                        }
-                        if(res1){
-                            this.isApprovedDiem = true;
-                        }else{
-                            this.isApprovedDiem = false;
-                        }
+                        .catch(err => {
+                            _self.isApproving = false
+                            _self.isApprovedUSDT = false;
+                            _self.isApprovedDiem = false;
 
-                        
-                    })
-                    .catch(err => {
-                        _self.isApproving = false
-                        _self.isApprovedUSDT = false;
-                        _self.isApprovedDiem = false;
+                        })
 
-                    })
+                    }
 
                 }
             },

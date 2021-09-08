@@ -1,6 +1,7 @@
 import axios from "./axios";
 export const currencyMap = [
    {id:1,currency:'Libra',price:0,amount:0},
+   {id:2,currency:'Diem',price:0,amount:0},
    {id:2,currency:'BTC',price:0,amount:0},
    {id:3,currency:'ETH',price:0,amount:0},
    {id:4,currency:'USDT',price:0,amount:0},
