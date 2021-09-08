@@ -361,6 +361,8 @@ export default {
       }else {
         if(!isApproved1 && !isApproved2){
            return this.$t('l.approve')
+        }else if(!isApproved1 && currency2 == 'BNB'){
+          return this.$t('l.approve')
         }else if(!isApproved1 && isApproved2){
           return currency1 + ' ' + this.$t('l.approve')
         }else {

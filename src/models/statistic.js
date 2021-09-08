@@ -23,7 +23,7 @@ Statistic.prototype.getPlatformLockAmount = function(){
                     in_a > 0 && (val = Number(in_a / Wallet.Precisions()))
                     val < -0.01 && (val = 0)
                     res1(val)
-                    },(err) =>{rej1(err)})
+                    },(err) =>{res1(0)})
                 })
             }
             //全部请求
@@ -62,7 +62,6 @@ Statistic.prototype.calculateStatisticData = async function(){
     //2. 总手续费
     const feeAmount = await _self.getFeeTotal()
     _self.feeAmount = feeAmount/Wallet.Precisions()
-
 }
 //获取币种价格
 Statistic.prototype.getCoinsPrice = function(){

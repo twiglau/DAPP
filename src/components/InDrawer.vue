@@ -140,7 +140,7 @@ export default {
       this['iptValue' + index] = this['iptValue' + index].replace(/^(-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3')
     },
     sureClick(){
-        let cunru_amount = this.iptValue1;
+        let cunru_amount = +this.iptValue1;
         this.$emit('sure',cunru_amount)
     },
     balanceStr(){
