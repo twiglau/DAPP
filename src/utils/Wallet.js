@@ -25,7 +25,7 @@ const systemPrecisions=100000000;
 const _priceContractAddress='0x9259CcDe80F7B6eA81D6c95F09ccCfD724559b35';
 const _recordContractAddress = "0x622Fcf34C1Cd7906e65139a19a6F6182256F2b01";
 const _tokensContractAddress = "0xf981E55c20C35F84faC28135A2767600b6588BC4";
-const _contractAddress = "0x266825dDD0163B1657725730A47E69d03B5d3348";
+const _contractAddress = "0x54b2F40E37904BD1FBdCCB3eD54A6D187db06a14";
 
 const _contractABI = [
     {
@@ -3975,18 +3975,6 @@ function queryPrice(currency,callback,errorCallback) {
     const cId = getCurrencyIndex(currency);
     if(cId==usdtIndex){
         callback(1);
-    }else if(cId==libraIndex){
-        //从主合约获取
-        getContract(_contractABI, _contractAddress,(contract)=>{
-            contract.methods.libraPrice()
-                .call()
-                .then((res) => {
-                    callback(Number(res)/100000000.0);
-                })
-                .catch((err) => {
-                    errorCallback(err);
-                });
-        });
     }else{
         //从价格合约获取
         getContract(_priceContractABI, _priceContractAddress,(contract)=>{
