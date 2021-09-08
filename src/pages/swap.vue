@@ -173,13 +173,12 @@
                         },err => resolve(0))
                    }),
                    new Promise((resolve) => {
-                       Wallet.queryPrice('libra',res =>{
+                       Wallet.queryPrice('diem',res =>{
                             resolve(+(res || 1)) 
                         },err => resolve(0))
                    })
                ])
                .then(res => {
-                   debugger
                    _self.daiBiPriceArray = res
                    if(!_self.usdt_lbr_p){
                        _self.LBR_price = _self.daiBiPriceArray[0]
