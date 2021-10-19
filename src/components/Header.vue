@@ -1,0 +1,514 @@
+<template>
+  <div class="header_wrap" :style="[{backgroundColor:currentIndex == 1? '#43318C':'white'}]">
+    <div class="header_inner_wrap">
+      <div class="left_nav">
+        <div class="logo_wrap">
+          <img :src="logoImg" alt="">
+        </div>
+        <ul class="nav_text" v-if="!getIsMobile">
+          <li class="nav_item" :class="currentIndex == 1 ? 'clickedWhiteNav': ''"><a @click="handleJump('home',1)">{{$t('l.h_n1')}}</a><div class="whiteLine"></div></li>
+          <li class="nav_item" :class="currentIndex == 2 ? 'clickedNav': ''"><a @click="handleJump('farm',2)">{{$t('l.h_n2')}}</a><div class="line"></div></li>
+          <li class="nav_item" :class="currentIndex == 3 ? 'clickedNav': ''"><a @click="handleJump('swap',3)">{{$t('l.h_n3')}}</a><div class="line"></div></li>
+          <li class="nav_item" :class="currentIndex == 4 ? 'clickedNav': ''"><a @click="handleJump('market',4)">{{$t('l.h_n4')}}</a><div class="line"></div></li>
+          <li class="nav_item" :class="currentIndex == 5 ? 'clickedNav': ''"><a @click="handleJump('mine',5)">{{$t('l.h_n5')}}</a><div class="line"></div></li>
+        </ul>
+      </div>
+      <div class="right_nav">
+        <a v-if="!isUserConnected" @touchstart="handleTapStart" @touchend="handleTapEnd" class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"  @click="handleConnectWeb3Modal"><span class="c_btn_text">{{$t('l.cwallet')}}</span></a>
+        <a v-if="isUserConnected"  @click="disconnectWeb3Modal"  class="c_btn" :class="currentIndex == 1 ? 'c_bg':''"><span class="c_btn_text">{{formatAddress(getActiveAccount)}}</span></a>
+        <a  @click="activeUpper"  class="c_btn" :class="currentIndex == 1 ? 'c_bg':''" style="margin-left:6px;"><span class="c_btn_text">{{getIsActiveUpper? $t('l.activeUpper'):$t('l.inactiveUpper')}}</span></a>
+        <a class="lang_change" v-if="!getIsMobile" @click="showLangBox" :class="currentIndex == 1 ? 'c_bg':''" ><i class="icon"></i>{{this.lanc}}
+          <div id="languageBox" v-show="languageShow" >
+            <li :class="this.$i18n.locale == 'en-US' ? 'active' : ''" @click.stop.prevent="changeLangType(1)">English</li>
+            <li :class="this.$i18n.locale == 'zh-CN' ? 'active' : ''" @click.stop.prevent="changeLangType(2)">简体中文</li>
+            <li :class="this.$i18n.locale == 'ko' ? 'active' : ''" @click.stop.prevent="changeLangType(3)">Korea</li>
+            <li :class="this.$i18n.locale == 'jp' ? 'active' : ''" @click.stop.prevent="changeLangType(4)">Japan</li>
+          </div>
+        </a>
+        <div @click="switchMenu" class="menu-c"><svg-icon :icon-class="menuImg" v-if="getIsMobile" alt="" class="menu-icon" /></div>
+        
+      </div>
+    </div>
+    <a-alert
+        v-if="!getIsMainChainID"
+        :style="{'margin-left':getIsMobile? '-2%' : '-1%','width':'100%'}"
+        :message="$t('l.notmainnet_title')"
+        :description="$t('l.notmainnet_tips')"
+        type="warning"
+        show-icon
+      />
+    <active-drawer ref="active" :inviteAddr="inviteAddress" @sure="activeAction"></active-drawer>
+    <loading ref="loading"/>
+  </div>
+</template>
+
+<script>
+
+  import Vue from 'vue'
+  import Web3 from 'web3'
+  import Wallet from '@/utils/Wallet.js'
+  import ActiveDrawer from './ActiveDrawer.vue'
+  import { mapGetters,mapActions } from 'vuex'
+  import Activate from "@/models/activate";
+  import Loading from '@/components/Loading'
+  export default {
+    data() {
+      return {
+        currentHref: window.location.origin+window.location.pathname,
+        currentIndex: 1,
+        languageShow: false,
+        lanc:'简体中文',
+        currentHost: '',
+        showConnectBtn: true,
+        walletAddress:'',
+        inviteAddress:'',
+        activiteObj:null,
+      }
+    },
+    components:{ActiveDrawer,Loading},
+    methods: {
+      ...mapActions('accounts',["initWeb3Modal","connectWeb3Modal", "disconnectWeb3Modal"]),
+      switchMenu() {
+        console.log('Clicked Menu')
+        this.$store.commit('accounts/setDrawer',true)
+      },
+      showLangBox(){
+        this.languageShow = !this.languageShow;
+      },
+      setLan(){
+        if (this.getLangType == 'zh-CN') {
+          this.lanc = "简体中文";
+        }else if(this.getLangType == 'en-US'){
+          this.lanc = "English";
+        }else if(this.getLangType == 'ko'){
+          this.lanc = "Korea"
+        }else if(this.getLangType == 'ja'){
+          this.lanc = "Japan"
+        }
+      },
+      setCookie(key,value){
+        var oDate=new Date();
+        oDate.setDate(oDate.getDate()+36000);
+        document.cookie=key+"="+value+"; expires="+oDate.toDateString();
+      },
+      changeLangType(type) {
+        console.log(type)
+        var llWYf='';
+        if (type == 1) {
+          this.$i18n.locale = 'en-US';
+          this.lanc = "English";
+          llWYf = 'en';
+        }else if (type == 2) {
+          this.$i18n.locale = 'zh-CN';
+          this.lanc = "简体中文";
+          llWYf = 'zh';
+        }else if(this.getLangType == 'ko'){
+          this.$i18n.locale = 'ko';
+          this.lanc = "Korea"
+          llWYf = 'ko';
+        }else if(this.getLangType == 'ja'){
+          this.$i18n.locale = 'ja';
+          this.lanc = "Japan"
+          llWYf = 'ja';
+        }
+        this.showLangBox();
+        this.$store.commit('accounts/setLangType',this.$i18n.locale)
+        localStorage.setItem('langType',this.$i18n.locale);
+        this.$setCookie('pipipSwapLanguage',llWYf);
+      },
+      handleTapStart(e) {
+        e.target.classList.toggle('tap')
+      },
+      handleTapEnd(e) {
+        e.target.classList.toggle('tap')
+      },
+      async handleConnectWeb3Modal() {
+        this.initWallet();
+
+        let result = await this.connectWeb3Modal()
+        if(result && result.status == 400) {
+          this.$message.warning(this.$t('l.no_metamask_tips'))
+        }
+      },
+      initWallet(){
+        Vue.prototype.Web3 = Web3;
+        Wallet.initWallet((address)=>{
+          if(address.indexOf('Error-title') !== -1){
+            // this.$notification.error({ message: this.$t('l.notmainnet_title'),description:this.$t('l.no_dapp_liulanqi')})
+          }else if (address.indexOf('signing you in') !== -1){
+            // this.$notification.error({ message: this.$t('l.notmainnet_title'),description:this.$t('l.no_signin_liu')})
+          }else {
+            this.walletAddress = address;
+            this.showConnectBtn = false;
+            localStorage.setItem("walletAddress",address);
+          }
+        })
+      },
+      formatAddress(address) {
+        if(!address || address.length < 10) {
+          return ''
+        }else {
+          let pre = address.slice(0,6)
+          let suf = address.slice(-4)
+          return  `${pre}...${suf}`
+        }
+      },
+      getIndex(){
+        let str = window.location.href;
+        if (str.indexOf("home") != -1 ) {
+          this.currentIndex = 1
+        }else if (str.indexOf("farm") != -1 ) {
+          this.currentIndex = 2
+        }else if (str.indexOf("market") != -1) {
+          this.currentIndex = 4
+        }else if (str.indexOf("swap") != -1) {
+          this.currentIndex = 3
+        }else if (str.indexOf("mine") != -1) {
+          this.currentIndex = 5
+        }else{
+          this.currentIndex = 1
+        }
+      },
+      handleJump(path,index) {
+        this.currentIndex = index;
+        this.$router.push({path: '/'+path})
+        this.getIndex();
+      },
+      clearLocalStorage(){
+        localStorage.removeItem("walletAddress");
+      },
+      activeUpper(){
+        //激活账户
+        if(!this.getIsActiveUpper){
+          this.inviteAddress = this.$route.query.address
+          this.$refs.active.show()
+        }
+      },
+      activeAction(inviteAddr){ 
+        let _self = this
+        let genrateAddr = this.$emptyAddress()
+        if(!inviteAddr || inviteAddr.length < genrateAddr.length){
+          this.$message.error({content:this.$t('l.l_enterrightaddress'),top:`300px`})
+          return
+        }
+        _self.$refs.loading.show({title:_self.$t('l.active_a'),content:`${_self.$t('l.l_uppper')} ${inviteAddr}`})
+        _self.activate = new Activate(_self.getActiveAccount,inviteAddr)
+        _self.activate.activateUser()
+        .then(res => {
+          const {result} = res
+          if(result && result.length > 0) {
+              _self.inviteAddress = inviteAddr
+              _self.$store.commit('accounts/setUpperAccount',inviteAddr)
+              _self.$store.commit('accounts/setIsActiveUpper',true)
+              _self.$refs.active.close()
+              _self.$refs.loading.success({title:_self.$t('l.ok_tips_withdraw_a')})
+          }else {
+              _self.inviteAddress = null
+              _self.$store.commit('accounts/setUpperAccount',null)
+              _self.$store.commit('accounts/setIsActiveUpper',false)
+              _self.$refs.loading.failed({title:'err'})
+          }
+        })
+        .catch(err => {
+            _self.inviteAddress = null
+            _self.$store.commit('accounts/setUpperAccount',null)
+            _self.$store.commit('accounts/setIsActiveUpper',false)
+
+            let msg = JSON.stringify(error.message || error)
+            import("../utils/errorLog").then(({error}) => {
+              let msg_log = error(msg)
+              _self.$refs.loading.failed({title:(msg_log || msg) || 'err'})
+            })
+
+        })
+      }
+    },
+    computed: {
+      ...mapGetters('accounts',['getLangType','getIsMobile',"getActiveAccount", "isUserConnected",'getIsMainChainID','getIsActiveUpper','getUpperAccount']),
+      logoImg:function(){
+        if(this.currentIndex == 1){
+          return require('@/assets/logo_white.png')
+        }else{
+          return require('@/assets/logo.png')
+        }
+      },
+      menuImg:function(){
+        if(this.currentIndex == 1){
+          return 'menu_white_icon'
+        }else{
+          return 'menu_black_icon'
+        }
+      }
+    },
+    mounted() {
+      this.currentHost = location.host
+      this.getIndex();
+      this.setLan();
+      //
+      this.clearLocalStorage();
+
+      this.initWallet();
+      this.$store.dispatch('accounts/initWeb3Modal');
+      this.$store.dispatch('accounts/ethereumListener');
+    },
+    created() {
+      this.initWallet();
+    },
+    watch: {
+      '$route'(to) {
+        this.currentIndex = to.meta.index
+      }
+    }
+  }
+</script>
+<style scoped>
+  .dashedLine{
+    width: 100vw;
+    border-bottom: 2px dashed #359A6C;
+    position: absolute;
+    left: 0;
+    top: 65px;
+  }
+  #languageBox{
+    margin-top: 12px;
+    padding: 20px 0;
+    background-color: white;
+    border-radius: 10px;
+  }
+  #languageBox li{
+    list-style: none;
+    color: black;
+    height: 30px;
+    line-height: 30px;
+  }
+  #languageBox li.active {
+    color: rgb(81, 204, 197);
+  }
+  #languageBox li:firstk-child {
+    margin-bottom: 24px;
+  }
+  .clickedNav a{
+    color: #43318C!important;
+    /*font-weight: bold;*/
+  }
+  .clickedWhiteNav a{
+    color: white !important;
+    /*font-weight: bold;*/
+  }
+  .line{
+    width: 100%;
+    height: 3px;
+    background-color: #43318C;
+    position: absolute;
+    bottom: -10px;
+    display: none;
+  }
+  .whiteLine {
+    width: 100%;
+    height: 3px;
+    background-color: white;
+    position: absolute;
+    bottom: -10px;
+    display: none;
+  }
+  .clickedNav .line{
+    display: block;
+  }
+  .clickedWhiteNav .whiteLine{
+    display: block;
+  }
+  .icon6{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    top: 2px;
+    border-radius: 4px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    /* background-image: url(../assets/exIco.svg); */
+    position: absolute;
+    top: 8px;
+    right: 10px;
+  }
+  .header_wrap {
+    /*background-color: rgb(61, 61, 61);*/
+    background-color: #fff;
+    position: fixed;
+    top: 0;left: 0;
+    right: 0;
+    z-index: 90;
+    /*padding: 10px 24px;*/
+    padding: 0 0px 0 24px;
+    height: 60px;
+  }
+  .header_inner_wrap {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    /* flex-wrap: wrap; */
+    margin-top: 10px;
+  }
+  .left_nav {
+    display: flex;
+    flex-wrap: flex-start;
+    margin-right: auto;
+    align-items: center;
+  }
+  .nav_text {
+    display: flex;
+    flex-wrap: nowrap;
+    list-style: none;
+  }
+  .nav_text .nav_item {
+    margin-right: 24px;
+    position: relative;
+    white-space: nowrap;
+  }
+  .nav_text .nav_item:hover a {
+    color: #43318C;
+  }
+  .nav_text a {
+    color: black;
+  }
+  .header_wrap .c_btn {
+    height: 24px;
+    line-height: 24px;
+    width: 104px;
+    background-color: transparent;
+    font-size: 16px;
+    color: rgb(68, 62, 62);
+    border-radius: 4px;
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+  .c_btn_text {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 4px;
+  }
+  .header_wrap .c_btn:hover {
+    /* background-color: #20C7D3; */
+    color: rgb(68, 62, 62);
+  }
+  .header_wrap .c_btn:active {
+    /* background-color: #1AA7B1; */
+    color: rgb(68, 62, 62);
+    /* border-color: #1AA7B1; */
+  }
+  .right_nav {
+    max-width: 70%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: row;
+    margin-top: 5px!important;
+  }
+  .right_nav .c_btn{
+    background: #f6f6f6;
+    color: #43318C;
+    margin-right: 10px;
+  }
+
+  .right_nav .c_bg{
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+  }
+  .menu-c {
+    display: inline-block;
+  }
+  .menu-c .menu-icon {
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+  }
+  .logo_wrap {
+    margin-right: 42px;
+    width: 76px;
+    height: 24px;
+  }
+  .logo_wrap img {
+    width: 100%;
+    height: 100%;
+  }
+  .lang_change {
+    height: 32px;
+    width: 90px;
+    border-radius: 100px;
+    line-height: 30px;
+    float: right;
+    /*display: flex;*/
+    text-align: center;
+    align-items: center;
+    text-decoration: none;
+    color: rgb(68, 62, 62);
+    font-size: 14px;
+    border:2px solid #43318C;
+  }
+  @media (max-width: 768px) {
+    .logo_wrap {
+      margin-right: 0px;
+      width: 76px;
+      height: 24px;
+    }
+    .header_wrap .c_btn {
+      margin: 0 16px 0 auto;
+      font-size: 14px;
+      float: left;
+    }
+    .header_inner_wrap {
+      height: 100%;
+      padding-left: 0;
+      display: flex;
+      align-items: center;
+      margin-top: 0;
+    }
+    .dashedLine{
+      top: 55px;
+    }
+    .menu_icon {
+      display: inline-block;
+    }
+    .header_wrap .c_btn {
+      margin-right: 0px;
+    }
+    .header_wrap .c_btn:hover {
+      color: rgb(68, 62, 62);
+      background-color: #fff;
+    }
+    .header_wrap .c_btn:active {
+      background-color: #fff;
+      color: rgb(68, 62, 62);
+      border-color:  #43318C;
+    }
+    .header_wrap .c_btn.tap {
+      background-color: #43318C;
+      color: #ffffff;
+      color: rgb(68, 62, 62);
+    }
+    .header_wrap {
+      padding: 0px 10px 0px 24px;
+      height: 60px !important;
+    }
+    .lang_change{
+      float: right;
+    }
+  }
+</style>
+<style>
+  .ant-alert {
+    width: 100%;
+    max-width: 100vw;
+  }
+  ul {
+    margin-bottom: 0!important;
+  }
+</style>

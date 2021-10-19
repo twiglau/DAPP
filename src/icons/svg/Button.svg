@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="113px" height="40px" viewBox="0 0 113 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Button</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="113" height="40" rx="8"></rect>
+    </defs>
+    <g id="Dapp" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Account" transform="translate(-238.000000, -272.000000)">
+            <g id="编组-4备份" transform="translate(0.000000, 224.000000)">
+                <g id="Button" transform="translate(238.000000, 48.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="矩形" fill="#43318C" xlink:href="#path-1"></use>
+                    <circle id="椭圆形" fill="#278289" mask="url(#mask-2)" cx="3" cy="60" r="35"></circle>
+                    <circle id="椭圆形" fill="#19A569" mask="url(#mask-2)" cx="-2" cy="50" r="25"></circle>
+                    <path d="M23.2,14 C23.5182598,14 23.8234845,14.1264282 24.0485281,14.3514719 C24.2735718,14.5765155 24.4,14.8817402 24.4,15.2 L24.4,17.6 L26.8,17.6 C27.1182598,17.6 27.4234845,17.7264282 27.6485281,17.9514719 C27.8735718,18.1765155 28,18.4817402 28,18.8 L28,24.8 C28,25.1182598 27.8735718,25.4234845 27.6485281,25.6485281 C27.4234845,25.8735718 27.1182598,26 26.8,26 L20.8,26 C20.4817402,26 20.1765155,25.8735718 19.9514719,25.6485281 C19.7264282,25.4234845 19.6,25.1182598 19.6,24.8 L19.6,22.4 L17.2,22.4 C16.8817402,22.4 16.5765155,22.2735718 16.3514719,22.0485281 C16.1264282,21.8234845 16,21.5182598 16,21.2 L16,15.2 C16,14.8817402 16.1264282,14.5765155 16.3514719,14.3514719 C16.5765155,14.1264282 16.8817402,14 17.2,14 L23.2,14 Z M26.8,18.8 L24.4,18.8 L24.4,21.2 C24.4,21.5182598 24.2735718,21.8234845 24.0485281,22.0485281 C23.8234845,22.2735718 23.5182598,22.4 23.2,22.4 L20.8,22.4 L20.8,24.8 L26.8,24.8 L26.8,18.8 Z M23.2,15.2 L17.2,15.2 L17.2,21.2 L23.2,21.2 L23.2,15.2 Z" id="copy_icon" fill="#FFFFFF" fill-rule="nonzero" mask="url(#mask-2)"></path>
+                    <text id="Copy-link" mask="url(#mask-2)" font-family="PingFangSC-Semibold, PingFang SC" font-size="14" font-weight="500" fill="#FFFFFF">
+                        <tspan x="34.308" y="25">Copy link</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

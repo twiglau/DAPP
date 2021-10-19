@@ -1,0 +1,503 @@
+.vault_top_nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .copy_wrap {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+  .copy_wrap .copy_text {
+    white-space: nowrap;
+  }
+  .copy_wrap .link_text {
+    width: 100%;
+    height: 28px;
+    line-height: 28px;
+    border: 1px solid #43318C;
+    border-radius: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 40px 0 12px;
+    box-sizing: border-box;
+    margin-left: auto;
+    position: relative;
+    margin-left: 12px;
+  }
+  .copy_wrap .link_text img {
+    position: absolute;
+    right: 12px;
+    top: 4px;
+    cursor: pointer;
+    width: 21px;
+    height: 21px;
+  }
+  #donghuaBox{
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    background-color: #43318C;
+    border-radius: 100px;
+    transition: 0.5s;
+  }
+  .vault_nav {
+    position: relative;
+    background-color: #fff;
+    width: 232px;
+    max-width: 232px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #666666;
+    overflow: hidden;
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    margin: 0;padding: 0;
+  }
+  .valut_nav_item {
+    flex: 1;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: 0.5s;
+  }
+  .valut_nav_item.active {
+    color: #fff;
+    /*background-color: #B98DCF;*/
+    /*donghuaBox取代了这个*/
+    border-radius: 16px;
+  }
+  li {
+    list-style: none;
+  }
+  .copy_wrap {
+    width: 354px;
+    height: 48px;
+    background-color: #fff;
+    border-radius: 8px;
+  }
+
+  .vault_inner_wrap {
+    text-align: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0 48px 0;
+  }
+  .pools-main {
+    width: calc(100% + 15px);
+    max-width: 1230px;
+    margin: 20px 0 0 -7.5px;
+    overflow: hidden;
+  }
+  .pools__item {
+    width: calc(100% / 3 - 15px);
+    box-sizing: border-box;
+    display: flex;
+    position: relative;
+    margin: 0 7.5px 30px;
+    float: left;
+  }
+  .pools__box {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 28px 28px;
+    border-radius: 16px;
+    background-color: hsla(0,0%,100%,.7);
+    border: 1px solid #fff;
+    position: relative;
+  }
+  .pools__rows {
+    position: relative;
+    z-index: 1;
+    list-style: none;
+  }
+  .pools__rows>li {
+    margin-bottom: 16px;
+  }
+  .pools__rows>li:last-child {
+    margin-bottom: 0;
+  }
+  .pools__row, .pools__row-1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .pools__row_a {
+    position: relative;
+  }
+  .pools__row_a > .down-arrow {
+    width: 32px;
+    height:32px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%);
+  }
+  .pools__row {
+    flex-wrap: wrap;
+  }
+  .pools__logo-name {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  .logo_lp_2 {
+    position: absolute;
+    top: 0;left: 10%;
+  }
+  .pools__coin-name {
+    margin-left: 12px;
+    font-size: 24px;
+    color: #131d32;
+    font-weight: 700;
+  }
+  .name_lp_2 {
+    margin-left: 40px;
+  }
+  .pools__info, .pools__labe-field {
+    color: #9C9C9C;
+    display: flex;
+    align-items: center;
+  }
+  .pools__info {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    font-family: MicrosoftYaHei;
+    margin-top: 4px;
+  }
+  .pools__apy {
+    align-items: flex-end;
+  }
+  .pools__info, .pools__labe-field {
+    color: #9C9C9C;
+    display: flex;
+    align-items: center;
+  }
+  .pools__labe-field, .ques__labe-field {
+    color: #9C9C9C;
+    display: flex;
+    align-items: center;
+  }
+  .pools__apy-value {
+    font-size: 24px;
+    color: #19A569;
+    font-weight: 700;
+    /* font-family: DINPro-Black; */
+  }
+  .pools__label-value {
+    font-size: 14px;
+    color: #9C9C9C;
+    font-weight: bolder;
+    margin-left: auto;
+  }
+  .pools__label-value--black {
+    color: #131d32;
+  }
+  .pools__label-value--gray {
+    color: #9C9C9C;
+    font-size: 12px;
+  }
+  .pools__button-group {
+    padding-top:16px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .pools__button-group .g-button {
+    width: 47.5%;
+  }
+  .g-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 40px;
+    outline: none;
+    border: none;
+    background-color: #43318C;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .g-button--approved {
+    background-image: none;
+    background-color: #19A569;
+    display: flex;
+    justify-content: center;
+  }
+  .g-button--approved .svg-icon {
+    width: 16px;
+    height:16px;
+    margin-right:8px;
+  }
+  .g-button--normal {
+    background-image: none;
+    background-color: #fff;
+    color: #43318C;
+    border: 1px solid #43318C;
+  }
+  .pools__mao-logo__wrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    overflow: hidden;
+    border-radius: 16px;
+  }
+  .pools__mao-logo {
+    -webkit-filter: blur(50px);
+    filter: blur(50px);
+    opacity: .3;
+  }
+  .g-button:hover {
+    background-color: hsl(252, 74%, 21%);
+  }
+  .g-button--approved:hover {
+    background-image: none;
+    background-color: #183f2e;
+  }
+  .g-button--normal:hover{
+    background-color: #1d0c63;
+    color:#fff;
+    border:none
+  }
+  .pools__dialog-inner {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 100%;
+    border-radius: 16px;
+    font-size: 14px;
+  }
+  .pools__dialog__header {
+    font-size: 20px;
+    color: #131d32;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 28px;
+    position: relative;
+  }
+  .pools__income-field {
+    background: rgba(255,163,79,.08);
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 32px;
+  }
+  .pools__income-button {
+    width: 108px;
+  }
+  .pools__dialog__withdraw-field span:first-child {
+    color: #9C9C9C;
+  }
+  .pools__dialog__withdraw-field span:last-child {
+    font-size: 16px;
+    color: #131d32;
+    float: right;
+  }
+  .pools__dialog__input input {
+    box-sizing: border-box;
+    width: 100%;
+    background: #f6f8fb;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    padding: 15px 100px 15px 30px;
+    color: #131d32;
+  }
+  .g-button:disabled {
+    opacity: .5;
+  }
+  .pools__dialog__input {
+    position: relative;
+  }
+  .pools__dialog__deposit-all {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    background: #e0eafa;
+    border-radius: 8px;
+    border: none;
+    width: auto;
+    padding: 0 10px;
+    height: 32px;
+    font-size: 14px;
+    color: #43318C;
+  }
+  .pools__income-text {
+    font-family: DINPro-Bold;
+    font-size: 16px;
+    color: #131d32;
+    letter-spacing: 0;
+    line-height: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .pools__income-button .g-button {
+    height: 36px;
+  }
+  .pools__dialog__fields li {
+    margin-bottom: 22px;
+  }
+  @media (max-width: 768px) {
+    .vault_inner_wrap {
+       padding:0px;
+    }
+    .vault_top_nav {
+      border-top: solid 1px #f1f1f1;
+      border-bottom:solid 1px #f1f1f1;
+      padding: 2px 0px;
+    }
+    .vault_nav {
+      font-size: 16px;
+      max-width:100%;
+      width: 94%;
+      justify-content: flex-start;
+    }
+    #donghuaBox {
+      background:transparent;
+    }
+    .valut_nav_item {
+      flex: none;
+      margin-left: 24px;
+      padding: 0px;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      color:#9C9C9C;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .valut_nav_item + .valut_nav_item {
+      margin-left:45px;
+    }
+    .valut_nav_item.active {
+      color: #000;
+    }
+
+    /* Animation css */
+    [class*=animation-] {
+        animation-duration: .3s;
+        animation-timing-function: ease-out;
+        animation-fill-mode: both
+    }
+    .animation-scale-up {
+      animation-name: scale-up;
+    }
+
+    .animation-scale-down {
+        animation-name: scale-down;
+    }
+
+    @keyframes scale-up {
+        0% {
+            opacity: 0;
+            transform: scale(1)
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1)
+        }
+    }
+
+    @keyframes scale-down {
+        0% {
+            opacity: 0;
+            transform: scale(1)
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1)
+        }
+    }
+    .pools-main {
+      width: 100%;
+      margin:0px;
+    }
+    .pools__item {
+      width: 100%;
+      padding: 24px;
+      margin:0px;
+      border-bottom: solid 1px #f1f1f1;
+    }
+    .pools__box {
+      width: 100%;
+      padding: 0px;
+    }
+    .pools__rows>li {
+      margin-bottom: 5px;
+    }
+    .pools__row-1 {
+      margin-bottom: 8px !important;
+    }
+    .pools__coin-name {
+      font-size: 20px;
+    }
+    .pools__coin-logo {
+      width: 32px;
+      height: 32px;
+    }
+    .pools__apy-value {
+      font-size: 18px;
+    }
+    .pools__info, .pools__labe-field {
+      font-family: MicrosoftYaHei;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .pools__dialog-inner {
+      width: 100%;
+      min-width: 100%;
+      max-width: 100%;
+    }
+    .pools__dialog__header {
+      font-family: MicrosoftYaHei-Bold;
+      font-size: 16px;
+      color: #131d32;
+      line-height: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .pools__dialog__header__close {
+      right: -26px;
+      top: -23px;
+      width: 48px;
+      height: 48px;
+      background-size: 16px 16px;
+    }
+    .pools__dialog__fields li {
+      margin-bottom: 13px;
+    }
+    .pools__income-field {
+      padding: 10px 10px;
+    }
+    .copy_wrap {
+      display: none;
+      max-width:10%;
+      margin: 0px;
+      height: 28px;
+      padding: 0px;
+    }
+    .copy_wrap .link_text {
+      margin-left: 0px;
+    }
+  }
